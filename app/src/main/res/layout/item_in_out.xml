@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp"
+    android:background="?attr/colorPrimaryVariant"
+    app:cardCornerRadius="10dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimaryVariant">
+
+        <TextView
+            android:id="@+id/itemFlightDateText"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="?attr/colorPrimary"
+            android:gravity="center"
+            android:lineSpacingExtra="2.5dp"
+            android:textAllCaps="true"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="10sp"
+            android:textStyle="bold"
+            app:cardCornerRadius="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_default="percent"
+            app:layout_constraintWidth_percent="0.143"
+            android:text="سه شنبه\n10 اردیبهشت" />
+
+        <!--Colored view divider-->
+        <View
+            android:id="@+id/view8"
+            android:layout_width="4dp"
+            android:layout_height="0dp"
+            android:background="?attr/colorOnPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/itemFlightDateText"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <FrameLayout
+            android:id="@+id/itemFlightDepartureImage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/itemFlightDateText"
+            app:layout_constraintDimensionRatio="W,1:1"
+            app:layout_constraintStart_toEndOf="@id/itemFlightDateText"
+            app:layout_constraintTop_toTopOf="@id/itemFlightDateText">
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical|end"
+                android:src="@drawable/img_in"
+                app:layout_constraintStart_toEndOf="@+id/view8"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="?attr/colorOnSurface" />
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/itemFlightDepartureLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@id/itemFlightDepartureImage"
+            app:layout_constraintDimensionRatio="W,2:1"
+            app:layout_constraintStart_toEndOf="@id/itemFlightDepartureImage"
+            app:layout_constraintTop_toTopOf="@id/itemFlightDepartureImage">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="16sp"
+                android:text="ورود" />
+
+            <TextView
+                android:id="@+id/txt_time_in"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="20dp"
+                android:gravity="center"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="16sp"
+                android:text="14:30" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:id="@+id/itemFlightDestinationImage"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@id/itemFlightDepartureLayout"
+            app:layout_constraintDimensionRatio="W,1:1"
+            app:layout_constraintStart_toEndOf="@id/itemFlightDepartureLayout"
+            app:layout_constraintTop_toTopOf="@id/itemFlightDepartureLayout">
+
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical|end"
+                app:srcCompat="@drawable/img_out"
+                app:tint="?attr/colorOnSurface" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/itemFlightDestinationLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@id/itemFlightDestinationImage"
+            app:layout_constraintDimensionRatio="W,2:1"
+            app:layout_constraintStart_toEndOf="@id/itemFlightDestinationImage"
+            app:layout_constraintTop_toTopOf="@id/itemFlightDestinationImage">
+
+            <TextView
+                android:id="@+id/txt_out"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="16sp"
+                android:text="خروج" />
+
+            <TextView
+                android:id="@+id/txt_time_out"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="16sp"
+                android:text="20:00" />
+        </LinearLayout>
+
+        <!--Departure/Destination dividers-->
+        <View
+            android:id="@+id/view5"
+            android:layout_width="4dp"
+            android:layout_height="0dp"
+            android:background="?attr/colorOnPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/itemFlightDepartureLayout"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.cardview.widget.CardView>

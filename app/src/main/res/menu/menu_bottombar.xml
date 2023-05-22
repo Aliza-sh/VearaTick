@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_home"
+        android:icon="@drawable/ic_home"
+        android:title="شرکت" />
+    <item
+        android:id="@+id/menu_pro_emp"
+        android:icon="@drawable/ic_project_employee_24"
+        android:title="پروژه ها و کارکنان" />
+    <item
+    android:id="@+id/menu_recruitment"
+    android:icon="@drawable/ic_apartment"
+    android:title="امور شرکت" />
+    <item
+        android:id="@+id/menu_chat"
+        android:icon="@drawable/ic_chat"
+        android:title="پیام رسان" />
+    <item
+        android:id="@+id/menu_person"
+        android:icon="@drawable/ic_person"
+        android:title="حساب کاربری" />
+</menu>

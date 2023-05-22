@@ -1,0 +1,25 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.SherkatManage" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/firoze</item>
+        <item name="colorPrimaryVariant">@color/white_light</item>
+        <item name="colorOnPrimary">@color/whity</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/Blue_dark</item>
+        <item name="colorSecondaryVariant">@color/Blue_light</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <!-- Customize your theme here. -->
+        <item name="fontFamily">@font/iransans</item>
+        <!-- backgriund gradiant. -->
+        <item name="paddingStart">@color/Blue_dark</item>
+        <!-- color. -->
+        <item name="colorOnSurfaceVariant">@color/black_light</item>
+        <item name="android:progressBackgroundTint">@color/whity</item>
+
+
+    </style>
+</resources>
