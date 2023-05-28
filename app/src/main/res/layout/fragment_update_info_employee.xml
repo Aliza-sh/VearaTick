@@ -28,7 +28,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/shape_dore_button"
-        android:text="استخدام"
+        android:text="تایید"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
@@ -39,11 +39,11 @@
 
     <TextView
         android:id="@+id/textView36"
-        android:layout_width="280dp"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:text="اینجا میتونی اطلاعات کارمند جدید رو وارد کنی ."
+        android:text="اطلاعات جدید کارمند رو وارد کن ."
         android:textColor="@color/fi_dark"
         android:textSize="28sp"
         android:textStyle="bold"
@@ -54,7 +54,7 @@
     <ScrollView
         android:id="@+id/scrollView3"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:elevation="11dp"
         android:scrollbars="none"
         app:layout_constraintBottom_toBottomOf="parent"

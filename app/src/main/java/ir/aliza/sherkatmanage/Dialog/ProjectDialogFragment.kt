@@ -32,7 +32,7 @@ class ProjectDialogFragment(private val project: Project, private val position: 
 
     fun deleteItem(project: Project, position: Int) {
         projectAdapter.removeProject(project, position)
-        projectDao.deleteEmployee(project)
+        projectDao.delete(project)
     }
 
 }

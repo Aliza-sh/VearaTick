@@ -26,6 +26,7 @@
             android:layout_marginTop="14dp"
             app:cpb_background_progressbar_color="@color/white_dark"
             app:cpb_background_progressbar_width="5dp"
+            app:cpb_progress="20"
             app:cpb_progress_max="100"
             app:cpb_progressbar_color="@color/firoze"
             app:cpb_progressbar_width="2dp"

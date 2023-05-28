@@ -9,27 +9,31 @@ import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import ir.aliza.sherkatmanage.DataBase.Employee
+import ir.aliza.sherkatmanage.Position
 import ir.aliza.sherkatmanage.R
-import ir.aliza.sherkatmanage.databinding.FragmentRecruitmentBinding
+import ir.aliza.sherkatmanage.databinding.FragmentUpdateInfoEmployeeBinding
 import ir.aliza.sherkatmanage.employeeAdapter
 import ir.aliza.sherkatmanage.employeeDao
 
-class RecruitmentFragment() : Fragment() {
+class UpdateInfoEmployeeFragment(employee: Employee) : Fragment() {
 
-    lateinit var binding: FragmentRecruitmentBinding
+    lateinit var binding: FragmentUpdateInfoEmployeeBinding
+
+    val employee = employee
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentRecruitmentBinding.inflate(layoutInflater, null, false)
+        binding = FragmentUpdateInfoEmployeeBinding.inflate(layoutInflater, null, false)
         return binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
         val gender = listOf(
             "مرد",
@@ -41,12 +45,27 @@ class RecruitmentFragment() : Fragment() {
             myAdapteredt
         )
 
+        setdata(employee)
+
         binding.sheetBtnDone.setOnClickListener {
             addNewEmployee()
         }
         binding.btnBck.setOnClickListener {
             onBackPressed()
         }
+    }
+
+    private fun setdata(employee: Employee) {
+        binding.edtNameEpm.setText(employee.name)
+        binding.edtFamEmp.setText(employee.family)
+        binding.edtAgeEmp.setText(employee.age.toString())
+        binding.edtAddressEmp.setText(employee.address)
+        binding.edtGenEmp.setText(employee.gender)
+        binding.edtMaharatEmp.setText(employee.skill)
+        binding.edtNumEmp.setText(employee.cellularPhone.toString())
+        binding.edtTakhasosEmp.setText(employee.specialty)
+        binding.edtNumbhomeEmp.setText(employee.homePhone.toString())
+        binding.edtTimeEmp.setText(employee.watch)
     }
 
     fun onBackPressed() {
@@ -81,8 +100,8 @@ class RecruitmentFragment() : Fragment() {
             val txtMaharat = binding.edtMaharatEmp.text.toString()
             val txtWatch = binding.edtTimeEmp.text.toString()
 
-
             val newEmployee = Employee(
+                employee.idEmployee,
                 name = txtname,
                 family = txtFamily,
                 age = txtAge.toInt(),
@@ -95,8 +114,8 @@ class RecruitmentFragment() : Fragment() {
                 watch = txtWatch
 
             )
-            employeeAdapter.addEmployee(newEmployee)
-            employeeDao.insert(newEmployee)
+            employeeAdapter.updateEmployee(position = Position, newEmployee = newEmployee)
+            employeeDao.update(newEmployee)
 
             onBackPressed()
         } else {

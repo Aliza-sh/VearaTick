@@ -8,12 +8,10 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
-import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.R
-import ir.aliza.sherkatmanage.adapter.AvatarNearAdapter
 import ir.aliza.sherkatmanage.adapter.PagerAdapter
 import ir.aliza.sherkatmanage.adapter.ProjectNearAdapter
 import ir.aliza.sherkatmanage.adapter.ZoomOutPageTransformer
@@ -50,13 +48,13 @@ class CompanyFragment : Fragment(), ProjectNearAdapter.ProjectNearEvents {
         projectNearAdapter = ProjectNearAdapter(ArrayList(projectNearData), this)
         binding.recyclerView.adapter = projectNearAdapter
 
-        val data = arrayListOf<Employee>()
-        data.add(Employee(1, "ali", "hasani", 20, "man", "aa", 0, 9111112134, "bbb"))
-        val adpter = AvatarNearAdapter(data)
+//        val data = arrayListOf<Employee>()
+//        data.add(Employee(1, "ali", "hasani", 20, "man", "aa", 0, 9111112134, "bbb"))
+//        val adpter = AvatarNearAdapter(data)
 //        employeeDao = AppDatabase.getDataBase(view.context).employeeDao
 //        val avatarData = employeeDao.getAllEmployee()
 //        val avatarAdapter = AvatarNearAdapter(ArrayList(avatarData))
-        binding1.recyclerView.adapter = adpter
+        //binding1.recyclerView.adapter = adpter
 
         viewPager2 = binding.viewPager
         pager()

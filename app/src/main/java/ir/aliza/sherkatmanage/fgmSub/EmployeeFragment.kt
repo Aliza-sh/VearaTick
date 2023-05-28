@@ -10,6 +10,7 @@ import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.Dialog.EmployeeDialogFragment
 import ir.aliza.sherkatmanage.MainActivity
+import ir.aliza.sherkatmanage.Position
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.EmployeeAdapter
 import ir.aliza.sherkatmanage.databinding.FragmentEmployeesBinding
@@ -19,6 +20,7 @@ import ir.aliza.sherkatmanage.employeeDao
 class EmployeeFragment : Fragment(), EmployeeAdapter.EmployeeEvents {
 
     lateinit var binding: FragmentEmployeesBinding
+    lateinit var employeeData: List<Employee>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,7 +35,7 @@ class EmployeeFragment : Fragment(), EmployeeAdapter.EmployeeEvents {
         super.onViewCreated(view, savedInstanceState)
 
         employeeDao = AppDatabase.getDataBase(view.context).employeeDao
-        val employeeData = employeeDao.getAllEmployee()
+        employeeData = employeeDao.getAllEmployee()
         employeeAdapter = EmployeeAdapter(ArrayList(employeeData), this)
         binding.recyclerViewEmployee.adapter = employeeAdapter
         binding.recyclerViewEmployee.layoutManager = GridLayoutManager(context, 2)
@@ -60,9 +62,10 @@ class EmployeeFragment : Fragment(), EmployeeAdapter.EmployeeEvents {
         }
     }
 
-    override fun onEmployeeClicked(employee: Employee) {
+    override fun onEmployeeClicked(employee: Employee, position: Int) {
+        Position = position
         val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.frame_layout_main, EmployeeStatisticsFragment())
+        transaction.replace(R.id.frame_layout_main, EmployeeStatisticsFragment(employee))
             .addToBackStack(null)
             .commit()
     }

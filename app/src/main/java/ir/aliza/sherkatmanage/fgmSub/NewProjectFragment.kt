@@ -81,7 +81,7 @@ class NewProjectFragment : Fragment() {
                 informationProject = txtInfo
             )
             projectAdapter.addProject(newProject)
-            projectDao.insertEmployee(newProject)
+            projectDao.insert(newProject)
             onBackPressed()
         } else {
             Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()

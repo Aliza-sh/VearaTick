@@ -2,11 +2,12 @@ package ir.aliza.sherkatmanage.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.fgmSub.CalendarFragment
-import ir.aliza.sherkatmanage.fgmSub.TaskFragment
 import ir.aliza.sherkatmanage.fgmSub.StatisticsFragment
+import ir.aliza.sherkatmanage.fgmSub.TaskFragment
 
-class ViewPagerEmployeeAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
+class ViewPagerEmployeeAdapter(val employee: Employee,fragment: Fragment) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int {
         return 3
     }
@@ -15,7 +16,7 @@ class ViewPagerEmployeeAdapter(fragment: Fragment) : FragmentStateAdapter(fragme
         return when (position) {
             0 -> StatisticsFragment()
 
-            1 -> CalendarFragment()
+            1 -> CalendarFragment(employee)
 
             2 -> TaskFragment()
 

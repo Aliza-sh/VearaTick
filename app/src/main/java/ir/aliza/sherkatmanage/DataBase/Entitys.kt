@@ -31,11 +31,41 @@ data class Employee(
     val family: String,
     val age: Int,
     val gender: String,
-    val Specialty: String,
     val cellularPhone: Long,
     val homePhone: Long,
-    val address: String
+    val address: String,
+    val specialty: String,
+    val skill: String,
 
+    val watch: String
+
+)
+
+@Entity(tableName = "day_table")
+data class Day(
+
+    @PrimaryKey()
+    val idDay: Long = 1,
+
+    val idEmployee: Int? = null,
+    val yearMonth: String,
+
+    val day: String
+)
+
+@Entity(tableName = "time_table")
+data class Time(
+
+    @PrimaryKey(autoGenerate = true)
+    val idTime: Int? = null,
+
+    val idEmployee: Int,
+    val yearMonth: String,
+    val day: String,
+    val arrival: Boolean,
+
+    val entry: String,
+    val exit: String
 )
 
 @Entity(tableName = "eff_table")
@@ -52,20 +82,6 @@ data class Efficiency(
     val efficiencyWeekPresence: Int,
     val efficiencyTotal: Int
 
-)
-
-@Entity(tableName = "time_table")
-data class Time(
-
-    @PrimaryKey(autoGenerate = true)
-    val idTime: Int,
-
-    val idEmployee: Int,
-
-    val day: Int = 2,
-    val entry: String,
-    val Exit: String,
-    val sumTime: Int
 )
 
 @Entity(tableName = "task_table")

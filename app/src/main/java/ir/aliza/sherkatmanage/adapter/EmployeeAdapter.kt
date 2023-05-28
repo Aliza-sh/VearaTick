@@ -20,13 +20,13 @@ class EmployeeAdapter(private val data: ArrayList<Employee>, private val employe
         fun bindData(position: Int) {
 
             binding.txtnameprn.text = data[position].name + " " + data[position].family
-            binding.txttkhprn.text = data[position].Specialty
+            binding.txttkhprn.text = data[position].specialty
             if (data[position].gender == "زن"){
                 binding.imgprn.setImageResource(R.drawable.img_matter);
             }
 
             itemView.setOnClickListener {
-                employeeEvents.onEmployeeClicked(data[position])
+                employeeEvents.onEmployeeClicked(data[position],position)
             }
 
             itemView.setOnLongClickListener {
@@ -58,13 +58,20 @@ class EmployeeAdapter(private val data: ArrayList<Employee>, private val employe
     }
 
     fun addEmployee(newEmployee: Employee) {
-        data.add(0, newEmployee)
-        notifyItemInserted(0)
+        data.add(data.size, newEmployee)
+        notifyItemInserted(data.size)
     }
 
     fun removeEmployee(oldEmployee: Employee, oldPosition: Int) {
         data.remove(oldEmployee)
         notifyItemRemoved(oldPosition)
+    }
+
+    fun updateEmployee(newEmployee: Employee, position: Int) {
+
+        data.set(position,newEmployee)
+        notifyItemChanged(position)
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -75,7 +82,7 @@ class EmployeeAdapter(private val data: ArrayList<Employee>, private val employe
     }
 
     interface EmployeeEvents {
-        fun onEmployeeClicked(employee: Employee)
+        fun onEmployeeClicked(employee: Employee,position: Int)
         fun onEmployeeLongClicked(employee: Employee, position: Int)
     }
 }

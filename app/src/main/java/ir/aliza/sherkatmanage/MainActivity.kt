@@ -3,9 +3,12 @@ package ir.aliza.sherkatmanage
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import ir.aliza.sherkatmanage.DataBase.DayDao
 import ir.aliza.sherkatmanage.DataBase.EmployeeDao
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
+import ir.aliza.sherkatmanage.DataBase.TimeDao
 import ir.aliza.sherkatmanage.adapter.EmployeeAdapter
+import ir.aliza.sherkatmanage.adapter.InOutAdapter
 import ir.aliza.sherkatmanage.adapter.ProjectNearAdapter
 import ir.aliza.sherkatmanage.databinding.ActivityMainBinding
 import ir.aliza.sherkatmanage.fgmMain.AffairsFragment
@@ -15,9 +18,13 @@ import ir.aliza.sherkatmanage.fgmMain.ProAndEmpFragment
 import ir.aliza.sherkatmanage.fgmSub.PersonFragment
 
 lateinit var employeeDao: EmployeeDao
+lateinit var dayDao: DayDao
+lateinit var timeDao: TimeDao
 lateinit var projectDao: ProjectDao
 lateinit var projectAdapter: ProjectNearAdapter
+lateinit var inOutAdapter: InOutAdapter
 lateinit var employeeAdapter: EmployeeAdapter
+var Position: Int = 0
 
 class MainActivity : AppCompatActivity() {
 

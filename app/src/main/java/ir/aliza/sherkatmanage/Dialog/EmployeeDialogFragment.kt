@@ -32,7 +32,7 @@ class EmployeeDialogFragment(private val employee: Employee, private val positio
 
     fun deleteItem(employee: Employee, position: Int) {
         employeeAdapter.removeEmployee(employee, position)
-        employeeDao.deleteEmployee(employee)
+        employeeDao.delete(employee)
     }
 
 }

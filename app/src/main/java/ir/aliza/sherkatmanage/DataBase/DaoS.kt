@@ -1,16 +1,16 @@
 package ir.aliza.sherkatmanage.DataBase
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 
 interface BaceDao<T> {
     @Insert
-    fun insertEmployee(obj: T)
-
+    fun insert(obj: T)
     @Update
-    fun updateEmployee(obj: T)
+    fun update(obj: T)
 
     @Delete
-    fun deleteEmployee(obj: T)
+    fun delete(obj: T)
 }
 
 @Dao
@@ -26,7 +26,24 @@ interface EmployeeDao : BaceDao<Employee> {
     fun searchEmployee(searching: String): List<Employee>
 
 }
+@Dao
+interface DayDao : BaceDao<Day> {
 
+    @Query("SELECT * FROM day_table WHERE idEmployee = :idEmployee")
+    fun getAllDay(idEmployee: Int): LiveData<Day>
+
+    @Query("SELECT * FROM day_table WHERE idDay = :idDay")
+    fun getDay(idDay: Long): Day?
+
+}
+
+@Dao
+interface TimeDao : BaceDao<Time> {
+
+    @Query("SELECT * FROM time_table")
+    fun getAllTime(): List<Time>
+
+}
 @Dao
 interface ProjectDao : BaceDao<Project> {
 
@@ -57,10 +74,4 @@ interface TaskDao : BaceDao<Task> {
 
 }
 
-@Dao
-interface TimeDao : BaceDao<Time> {
 
-    @Query("SELECT * FROM time_table")
-    fun getAllTime(): List<Time>
-
-}

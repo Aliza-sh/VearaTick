@@ -35,7 +35,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/btn_prn"
+            android:id="@+id/btn_info_prn"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_gravity="center|top"
@@ -46,7 +46,7 @@
             app:srcCompat="@drawable/img_male" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/txt_name_emp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -60,7 +60,7 @@
             app:layout_constraintTop_toBottomOf="@+id/progress_circular" />
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/txt_Specialty_emp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -70,9 +70,9 @@
             android:textColor="?attr/colorOnSecondary"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/textView6"
-            app:layout_constraintStart_toStartOf="@+id/textView6"
-            app:layout_constraintTop_toBottomOf="@+id/textView6" />
+            app:layout_constraintEnd_toEndOf="@+id/txt_name_emp"
+            app:layout_constraintStart_toStartOf="@+id/txt_name_emp"
+            app:layout_constraintTop_toBottomOf="@+id/txt_name_emp" />
 
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tablayoutEmp"
