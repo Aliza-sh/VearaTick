@@ -29,7 +29,7 @@ class NewProjectFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val gender = listOf(
+        val typeProject = listOf(
             "اندروید",
             "بک اند",
             "فرانت",
@@ -38,7 +38,7 @@ class NewProjectFragment : Fragment() {
             "فتوشاپ"
         )
 
-        val myAdapteredt = ArrayAdapter(requireContext(), R.layout.item_gender, gender)
+        val myAdapteredt = ArrayAdapter(requireContext(), R.layout.item_gender, typeProject)
         (binding.dialogMainEdtGdrperson.editText as AutoCompleteTextView).setAdapter(
             myAdapteredt
         )

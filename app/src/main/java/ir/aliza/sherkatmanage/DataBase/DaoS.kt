@@ -1,11 +1,11 @@
 package ir.aliza.sherkatmanage.DataBase
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 
 interface BaceDao<T> {
     @Insert
     fun insert(obj: T)
+
     @Update
     fun update(obj: T)
 
@@ -26,14 +26,26 @@ interface EmployeeDao : BaceDao<Employee> {
     fun searchEmployee(searching: String): List<Employee>
 
 }
+
 @Dao
 interface DayDao : BaceDao<Day> {
 
-    @Query("SELECT * FROM day_table WHERE idEmployee = :idEmployee")
-    fun getAllDay(idEmployee: Int): LiveData<Day>
+    @Query("SELECT * FROM day_table ")
+    fun getAllDay(): List<Day>
 
     @Query("SELECT * FROM day_table WHERE idDay = :idDay")
     fun getDay(idDay: Long): Day?
+
+    @Query("SELECT * FROM day_table WHERE idEmployee = :idEmployee AND year = :year AND month = :month AND  nameday = :nameDay")
+    fun getAllNameDay(idEmployee: Int, year: String, month: String, nameDay: String): Day?
+
+    @Query("SELECT * FROM day_table WHERE idEmployee = :idEmployee AND year = :year AND month = :month AND nameday = :nameDay")
+    fun getAllEntryExit(
+        idEmployee: Int,
+        year: String,
+        month: String,
+        nameDay: String
+    ): Day?
 
 }
 
@@ -43,7 +55,17 @@ interface TimeDao : BaceDao<Time> {
     @Query("SELECT * FROM time_table")
     fun getAllTime(): List<Time>
 
+    @Query("SELECT * FROM time_table WHERE idEmployee = :idEmployee AND day = :persianDay ")
+    fun getTime(idEmployee: Int, persianDay: Int): Time?
+
+    @Query("SELECT * FROM time_table WHERE idEmployee = :idEmployee AND day = :day")
+    fun getDayTime(idEmployee: Int, day: String): List<Time>
+
+    @Query("SELECT * FROM time_table WHERE idEmployee = :idEmployee AND year = :year AND month = :month AND day = :day")
+    fun getAllArrivalDay(idEmployee: Int, year: String, month: String, day: String): Time?
+
 }
+
 @Dao
 interface ProjectDao : BaceDao<Project> {
 
@@ -71,6 +93,12 @@ interface TaskDao : BaceDao<Task> {
 
     @Query("SELECT * FROM task_table")
     fun getAllEmployee(): List<Task>
+
+    @Query("SELECT * FROM task_table WHERE idEmployee = :idEmployee AND day = :persianDay ")
+    fun getTaskDay(idEmployee: Int, persianDay: Int): Task?
+
+    @Query("SELECT * FROM task_table WHERE idEmployee = :idEmployee AND year = :year AND month = :month AND day = :day")
+    fun getAllTaskInDay(idEmployee: Int, year: String, month: String, day: String): List<Task>
 
 }
 

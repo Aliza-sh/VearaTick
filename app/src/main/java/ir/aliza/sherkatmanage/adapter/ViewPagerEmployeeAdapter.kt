@@ -14,11 +14,11 @@ class ViewPagerEmployeeAdapter(val employee: Employee,fragment: Fragment) : Frag
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> StatisticsFragment()
+            0 -> StatisticsFragment(employee)
 
             1 -> CalendarFragment(employee)
 
-            2 -> TaskFragment()
+            2 -> TaskFragment(employee)
 
             else -> Fragment()
         }

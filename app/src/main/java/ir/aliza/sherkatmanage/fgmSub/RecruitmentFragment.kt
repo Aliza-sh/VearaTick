@@ -1,5 +1,7 @@
 package ir.aliza.sherkatmanage.fgmSub
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,16 +9,27 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.yalantis.ucrop.UCrop
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.FragmentRecruitmentBinding
 import ir.aliza.sherkatmanage.employeeAdapter
 import ir.aliza.sherkatmanage.employeeDao
+import java.io.File
 
+private val PICK_IMAGE_REQUEST = 1
+private val REQUEST_CODE_CROP_IMAGE = 2
 class RecruitmentFragment() : Fragment() {
 
     lateinit var binding: FragmentRecruitmentBinding
+    var imageUri: Uri? = null
+    lateinit var imageBytes: ByteArray
+    lateinit var newEmployee: Employee
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,9 +57,60 @@ class RecruitmentFragment() : Fragment() {
         binding.sheetBtnDone.setOnClickListener {
             addNewEmployee()
         }
+
+        binding.imgprn2.setOnClickListener {
+            pickImage()
+        }
+
         binding.btnBck.setOnClickListener {
             onBackPressed()
         }
+    }
+
+    fun pickImage() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == AppCompatActivity.RESULT_OK && data != null) {
+            val selectedImageUri: Uri = data.data!!
+            val options = UCrop.Options()
+            options.setCircleDimmedLayer(true)
+            options.setShowCropGrid(false)
+            options.setCompressionQuality(100)
+            options.setToolbarTitle("Crop Image")
+            options.setStatusBarColor(
+                ContextCompat.getColor(
+                    requireActivity(),
+                    R.color.black_light
+                )
+            )
+            options.setToolbarColor(ContextCompat.getColor(requireActivity(), R.color.black_light))
+            options.setActiveControlsWidgetColor(
+                ContextCompat.getColor(
+                    requireActivity(),
+                    R.color.firoze
+                )
+            )
+            options.setToolbarWidgetColor(ContextCompat.getColor(requireActivity(), R.color.white))
+            options.setDimmedLayerColor(ContextCompat.getColor(requireActivity(), R.color.blacke))
+            options.setToolbarCropDrawable(R.drawable.ic_crop)
+            options.setFreeStyleCropEnabled(true)
+            val destinationUri = Uri.fromFile(File(requireActivity().cacheDir, "avatar"))
+            UCrop.of(selectedImageUri, destinationUri)
+                .withAspectRatio(1f, 1f)
+                .withOptions(options)
+                .start(requireActivity(), 2)
+        }
+            imageUri = UCrop.getOutput(data!!)
+            Toast.makeText(context, "$imageUri", Toast.LENGTH_SHORT).show()
+            Glide.with(this)
+                .load(UCrop.getOutput(data))
+                .apply(RequestOptions.circleCropTransform())
+                .into(binding.imgprn2)
     }
 
     fun onBackPressed() {
@@ -66,9 +130,7 @@ class RecruitmentFragment() : Fragment() {
             binding.edtGenEmp.length() > 0 &&
             binding.edtMaharatEmp.length() > 0 &&
             binding.edtNumEmp.length() > 0 &&
-            binding.edtTakhasosEmp.length() > 0 &&
-            binding.edtNumbhomeEmp.length() > 0 &&
-            binding.edtTimeEmp.length() > 0
+            binding.edtTakhasosEmp.length() > 0
         ) {
             val txtname = binding.edtNameEpm.text.toString()
             val txtFamily = binding.edtFamEmp.text.toString()
@@ -79,10 +141,8 @@ class RecruitmentFragment() : Fragment() {
             val txtNumberHome = binding.edtNumbhomeEmp.text.toString()
             val txtAddress = binding.edtAddressEmp.text.toString()
             val txtMaharat = binding.edtMaharatEmp.text.toString()
-            val txtWatch = binding.edtTimeEmp.text.toString()
 
-
-            val newEmployee = Employee(
+            newEmployee = Employee(
                 name = txtname,
                 family = txtFamily,
                 age = txtAge.toInt(),
@@ -92,9 +152,26 @@ class RecruitmentFragment() : Fragment() {
                 address = txtAddress,
                 specialty = txtSpecialty,
                 skill = txtMaharat,
-                watch = txtWatch
-
             )
+
+            if (imageUri != null) {
+                val inputStream = context?.contentResolver?.openInputStream(imageUri!!)
+                imageBytes = inputStream?.readBytes()!!
+
+                newEmployee = Employee(
+                    name = txtname,
+                    family = txtFamily,
+                    age = txtAge.toInt(),
+                    gender = txtGender,
+                    cellularPhone = txtNumber.toLong(),
+                    homePhone = txtNumberHome.toLong(),
+                    address = txtAddress,
+                    specialty = txtSpecialty,
+                    skill = txtMaharat,
+                    imgEmployee = imageBytes
+                )
+            }
+
             employeeAdapter.addEmployee(newEmployee)
             employeeDao.insert(newEmployee)
 

@@ -36,8 +36,9 @@ data class Employee(
     val address: String,
     val specialty: String,
     val skill: String,
+    val imgEmployee: ByteArray? = null,
 
-    val watch: String
+    val watch: Int? = null
 
 )
 
@@ -48,9 +49,12 @@ data class Day(
     val idDay: Long = 1,
 
     val idEmployee: Int? = null,
-    val yearMonth: String,
+    val year: String,
+    val month: String,
+    val nameday: String,
 
-    val day: String
+    val entry: String? = null,
+    val exit: String? = null
 )
 
 @Entity(tableName = "time_table")
@@ -60,7 +64,8 @@ data class Time(
     val idTime: Int? = null,
 
     val idEmployee: Int,
-    val yearMonth: String,
+    val year: String,
+    val month: String,
     val day: String,
     val arrival: Boolean,
 
@@ -88,11 +93,15 @@ data class Efficiency(
 data class Task(
 
     @PrimaryKey(autoGenerate = true)
-    val idTask: Int,
+    val idTask: Int? = null,
 
     val idEmployee: Int,
 
     val nameTask: String,
     val timeTask: String,
-    val explanationTask: String
+    val descriptionTask: String,
+
+    val year: String,
+    val month: String,
+    val day: String,
 )

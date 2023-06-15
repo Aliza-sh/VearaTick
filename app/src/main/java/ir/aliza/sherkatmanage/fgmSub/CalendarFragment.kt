@@ -5,27 +5,29 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
+import androidx.core.view.size
 import androidx.fragment.app.Fragment
-import com.kizitonwose.calendar.core.CalendarDay
-import com.kizitonwose.calendar.core.CalendarMonth
-import com.kizitonwose.calendar.core.DayPosition
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kizitonwose.calendar.core.daysOfWeek
-import com.kizitonwose.calendar.core.nextMonth
-import com.kizitonwose.calendar.core.previousMonth
-import com.kizitonwose.calendar.core.yearMonth
-import com.kizitonwose.calendar.sample.shared.generateFlights
-import com.kizitonwose.calendar.view.MonthDayBinder
-import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
-import com.kizitonwose.calendar.view.ViewContainer
+import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.model.CalendarMonth
+import com.kizitonwose.calendarview.model.DayOwner
+import com.kizitonwose.calendarview.ui.DayBinder
+import com.kizitonwose.calendarview.ui.MonthHeaderFooterBinder
+import com.kizitonwose.calendarview.ui.ViewContainer
+import com.kizitonwose.calendarview.utils.next
+import com.kizitonwose.calendarview.utils.persian.*
+import com.kizitonwose.calendarview.utils.previous
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Day
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.Dialog.ArrivalsAndDeparturesDialogFragment
+import ir.aliza.sherkatmanage.Dialog.EntryAndExitDialogFragment
 import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.InOutAdapter
@@ -35,30 +37,18 @@ import ir.aliza.sherkatmanage.databinding.ItemCalendarDayBinding
 import ir.aliza.sherkatmanage.dayDao
 import ir.aliza.sherkatmanage.inOutAdapter
 import ir.aliza.sherkatmanage.timeDao
+import org.threeten.bp.LocalDate
+import org.threeten.bp.YearMonth
 import java.time.DayOfWeek
-import java.time.LocalDate
-import java.time.YearMonth
 
 class CalendarFragment(employee: Employee) : Fragment() {
 
     val employee = employee
 
     lateinit var binding: FragmentCalendarBinding
-    var selectedDate: LocalDate? = null
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private val month = LocalDate.now()
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private var monthValue = month.monthValue
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private val flight = generateFlights().groupBy { it.time.toLocalDate() }
-
+    private var selectedDate: LocalDate? = null
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentCalendarBinding.inflate(layoutInflater, container, false)
         return binding.root
@@ -67,262 +57,177 @@ class CalendarFragment(employee: Employee) : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        AndroidThreeTen.init(view.context)
 
         dayDao = AppDatabase.getDataBase(view.context).dayDao
         timeDao = AppDatabase.getDataBase(view.context).timeDao
 
-        val timeDao = AppDatabase.getDataBase(view.context).timeDao
-        val timeData = timeDao.getAllTime()
+        val currentMonth = YearMonth.now()
+        binding.exFiveCalendar.setup(
+            currentMonth.minusMonths(12),
+            currentMonth.plusMonths(12),
+            org.threeten.bp.DayOfWeek.SATURDAY
+        )
+        binding.exFiveCalendar.scrollToDate(LocalDate.now())
 
-        inOutAdapter = InOutAdapter(ArrayList(timeData))
-        binding.rcvInOut.adapter = inOutAdapter
-
-        val daysOfWeek = daysOfWeek()
-        var currentMonth = YearMonth.now()
-        var startMonth = currentMonth.minusMonths(0)
-        var endMonth = currentMonth.plusMonths(0)
-        configureBinders(daysOfWeek)
-
-        binding.exFiveCalendar.setup(startMonth, endMonth, DayOfWeek.TUESDAY)
-        binding.exFiveCalendar.scrollToMonth(currentMonth)
-
-        setmonth()
-
-        binding.exFiveCalendar.monthScrollListener = { month ->
-
-            selectedDate?.let {
-                // Clear selection if we scroll to a new month.
-                selectedDate = null
-                binding.exFiveCalendar.notifyDateChanged(it)
-                updateAdapterForDate(null)
-            }
-        }
-
-        binding.exFiveNextMonthImage.setOnClickListener {
-            binding.exFiveCalendar.findFirstVisibleMonth()?.let {
-                binding.exFiveCalendar.smoothScrollToMonth(it.yearMonth.nextMonth)
-                nextMonth()
-            }
-        }
-
-        binding.exFivePreviousMonthImage.setOnClickListener {
-            binding.exFiveCalendar.findFirstVisibleMonth()?.let {
-                binding.exFiveCalendar.smoothScrollToMonth(it.yearMonth.previousMonth)
-                backmonth()
-            }
-        }
-
-
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-
-    private fun nextMonth() {
-        var months: String = ""
-
-        monthValue++
-        if (monthValue == 13)
-            monthValue = 1
-
-        if ("1" == monthValue.toString())
-            months = "دی"
-        if ("2" == monthValue.toString())
-            months = "بهمن"
-        if ("3" == monthValue.toString())
-            months = "اسفند"
-        if ("4" == monthValue.toString())
-            months = "فروردین"
-        if ("5" == monthValue.toString())
-            months = "اردیبهشت"
-        if ("6" == monthValue.toString())
-            months = "خرداد"
-        if ("7" == monthValue.toString())
-            months = "تیر"
-        if ("8" == monthValue.toString())
-            months = "مرداد"
-        if ("9" == monthValue.toString())
-            months = "شهریور"
-        if ("10" == monthValue.toString())
-            months = "مهر"
-        if ("11" == monthValue.toString())
-            months = "آبان"
-        if ("12" == monthValue.toString())
-            months = "آذر"
-        binding.txtYM.text = months
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun setmonth() {
-        val month = LocalDate.now()
-        var months: String = ""
-        if ("1" == month.monthValue.toString())
-            months = "دی"
-        if ("2" == month.monthValue.toString())
-            months = "بهمن"
-        if ("3" == month.monthValue.toString())
-            months = "اسفند"
-        if ("4" == month.monthValue.toString())
-            months = "فروردین"
-        if ("5" == month.monthValue.toString())
-            months = "اردیبهشت"
-        if ("6" == month.monthValue.toString())
-            months = "خرداد"
-        if ("7" == month.monthValue.toString())
-            months = "تیر"
-        if ("8" == month.monthValue.toString())
-            months = "مرداد"
-        if ("9" == month.monthValue.toString())
-            months = "شهریور"
-        if ("10" == month.monthValue.toString())
-            months = "مهر"
-        if ("11" == month.monthValue.toString())
-            months = "آبان"
-        if ("12" == month.monthValue.toString())
-            months = "آذر"
-        binding.txtYM.text = months
-
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun backmonth() {
-
-        var months: String = ""
-
-        monthValue--
-        if (monthValue == 0)
-            monthValue = 12
-
-        if ("1" == monthValue.toString())
-            months = "دی"
-        if ("2" == monthValue.toString())
-            months = "بهمن"
-        if ("3" == monthValue.toString())
-            months = "اسفند"
-        if ("4" == monthValue.toString())
-            months = "فروردین"
-        if ("5" == monthValue.toString())
-            months = "اردیبهشت"
-        if ("6" == monthValue.toString())
-            months = "خرداد"
-        if ("7" == monthValue.toString())
-            months = "تیر"
-        if ("8" == monthValue.toString())
-            months = "مرداد"
-        if ("9" == monthValue.toString())
-            months = "شهریور"
-        if ("10" == monthValue.toString())
-            months = "مهر"
-        if ("11" == monthValue.toString())
-            months = "آبان"
-        if ("12" == monthValue.toString())
-            months = "آذر"
-        binding.txtYM.text = months
-
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun updateAdapterForDate(date: LocalDate?) {
-        //calendarAdapter.data.clear()
-        //calendarAdapter.data.addAll(flights[date].orEmpty())
-        //calendarAdapter.notifyDataSetChanged()
-    }
-
-    private fun configureBinders(daysOfWeek: List<DayOfWeek>) {
-        @RequiresApi(Build.VERSION_CODES.O)
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay // Will be set when this container is bound.
             val binding1 = ItemCalendarDayBinding.bind(view)
+            val viewDaySub = binding1.viewDaySub
+            val textView = binding1.exFiveDayText
+            val layout = binding1.exFiveDayLayout
 
             init {
-                daysOfWeek.reversed()
+
                 view.setOnClickListener {
-                    if (day.position == DayPosition.MonthDate) {
+                    if (day.owner == DayOwner.THIS_MONTH) {
                         if (selectedDate != day.date) {
                             val oldDate = selectedDate
                             selectedDate = day.date
                             binding.exFiveCalendar.notifyDateChanged(day.date)
                             oldDate?.let { binding.exFiveCalendar.notifyDateChanged(it) }
-                            updateAdapterForDate(day.date)
 
-                            val dialog = ArrivalsAndDeparturesDialogFragment(binding1,employee.idEmployee,month.yearMonth.toString(),day.date.dayOfMonth.toString())
-                            dialog.show((activity as MainActivity).supportFragmentManager, null)
+                            val nameDay = dayDao.getAllNameDay(
+                                employee.idEmployee!!,
+                                day.persianCalendar.persianYear.toString(),
+                                day.persianCalendar.persianMonthName,
+                                selectedDate!!.toPersianCalendar().persianWeekDayName
+                            )
+                            //val timeAllData = timeDao.getTime(employee.idEmployee)
+                            val timeDayData = timeDao.getDayTime(
+                                employee.idEmployee,
+                                day.persianCalendar.persianDay.toString()
+                            )
+                            val timeDay = timeDao.getTime(
+                                employee.idEmployee,
+                                selectedDate!!.toPersianCalendar().persianDay
+                            )
+
+                            val entryExit = dayDao.getAllEntryExit(
+                                employee.idEmployee,
+                                selectedDate!!.toPersianCalendar().persianYear.toString(),
+                                selectedDate!!.toPersianCalendar().persianMonthName.toString(),
+                                selectedDate!!.toPersianCalendar().persianWeekDayName.toString(),
+                            )
+
+                            if (nameDay?.nameday == selectedDate!!.toPersianCalendar().persianWeekDayName) {
+
+                                if (timeDay?.day == selectedDate!!.toPersianCalendar().persianDay.toString()) {
+
+                                    inOutAdapter = InOutAdapter(
+                                        ArrayList(timeDayData),
+                                        entryExit,
+                                        day.persianCalendar.persianWeekDayName,
+                                    )
+
+                                    binding.rcvInOut.adapter = inOutAdapter
+                                } else {
+
+                                    if (binding.rcvInOut.size != 0)
+                                        inOutAdapter.clearAll()
+
+                                    Toast.makeText(
+                                        context,
+                                        "اطلاعاتی ثبت نشده!!!",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+
+                            } else {
+
+                                if (binding.rcvInOut.size != 0)
+                                    inOutAdapter.clearAll()
+
+                                Toast.makeText(
+                                    context,
+                                    " این روز برایه کارمند انتخاب نشده!!!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
 
                         }
                     }
                 }
-            }
 
-            init {
                 view.setOnLongClickListener {
 
-                    var days: String = ""
+                    if (day.owner == DayOwner.THIS_MONTH) {
+                        if (selectedDate != day.date) {
+                            val oldDate = selectedDate
+                            selectedDate = day.date
+                            binding.exFiveCalendar.notifyDateChanged(day.date)
+                            oldDate?.let { binding.exFiveCalendar.notifyDateChanged(it) }
 
-                    if ("TUESDAY" == day.date.dayOfWeek.toString())
-                        days = "شنبه"
-                    if ("WEDNESDAY" == day.date.dayOfWeek.toString())
-                        days = "یک شنبه"
-                    if ("THURSDAY" == day.date.dayOfWeek.toString())
-                        days = "دو شنبه"
-                    if ("FRIDAY" == day.date.dayOfWeek.toString())
-                        days = "سه شنبه"
-                    if ("SATURDAY" == day.date.dayOfWeek.toString())
-                        days = "چهار شنبه"
-                    if ("SUNDAY" == day.date.dayOfWeek.toString())
-                        days = " پنج شنبه"
-                    if ("MONDAY" == day.date.dayOfWeek.toString())
-                        days = "جمعه"
+                            val nameDay = dayDao.getAllNameDay(
+                                employee.idEmployee!!,
+                                day.persianCalendar.persianYear.toString(),
+                                day.persianCalendar.persianMonthName,
+                                selectedDate!!.toPersianCalendar().persianWeekDayName
+                            )
 
-                    Toast.makeText(
-                        context,
-                        "$days کارمندت باید بیاد شرکت ",
-                        Toast.LENGTH_SHORT
-                    ).show()
-
+                            if (nameDay?.nameday == selectedDate!!.toPersianCalendar().persianWeekDayName) {
+                                val dialog = ArrivalsAndDeparturesDialogFragment(
+                                    binding1,
+                                    employee.idEmployee,
+                                    day.persianCalendar.persianYear.toString(),
+                                    day.persianCalendar.persianMonthName,
+                                    selectedDate!!.toPersianCalendar().persianDay,
+                                    true,
+                                )
+                                dialog.isCancelable = false
+                                dialog.show((activity as MainActivity).supportFragmentManager, null)
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "این روز برایه کارمند انتخاب نشده!!!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+                    }
                     true
                 }
             }
         }
-        binding.exFiveCalendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
-            @RequiresApi(Build.VERSION_CODES.O)
+
+        binding.exFiveCalendar.dayBinder = object : DayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
+            override fun bind(container: DayViewContainer, day: CalendarDay) {
+                container.day = day
 
-            @RequiresApi(Build.VERSION_CODES.O)
-            override fun bind(container: DayViewContainer, data: CalendarDay) {
-                container.day = data
-                val context = container.binding1.root.context
-                val textView = container.binding1.exFiveDayText
-                val layout = container.binding1.exFiveDayLayout
-                textView.text = data.date.dayOfMonth.toString()
+                val textView = container.textView
+                val layout = container.layout
+                textView.text = day.persianCalendar.persianDay.toString().persianNumbers()
 
-                val dayMain = container.binding1.viewDayMain
-                val daysub = container.binding1.viewDaySub
-                dayMain.background = null
-                daysub.background = null
+                val today = LocalDate.now()
 
-                if (data.position == DayPosition.MonthDate) {
+                if (day.owner == DayOwner.THIS_MONTH) {
 
-                    layout.setBackgroundResource(if (selectedDate == data.date) R.drawable.shape_selected_bg else 0)
+                    layout.setBackgroundResource(if (selectedDate == day.date) R.drawable.shape_selected_bg else if (day.persianCalendar.persianDay == today.toPersianCalendar().persianDay) R.drawable.shape_selected_bg else 0)
 
-                    val time = flight[data.date]
+                    val arrivalDay = timeDao.getAllArrivalDay(
+                        employee.idEmployee!!,
+                        day.persianCalendar.persianYear.toString(),
+                        day.persianCalendar.persianMonthName,
+                        day.persianCalendar.persianDay.toString()
+                    )
 
-                    if (time != null) {
-                        if (time.count() == 1) {
-                             daysub.setBackgroundColor(context.getColor(time[0].color))
-                        } else {
-                            dayMain.setBackgroundColor(context.getColor(time[0].color))
-                            daysub.setBackgroundColor(context.getColor(time[1].color))
-                        }
+                    if (arrivalDay != null && arrivalDay.day == day.persianCalendar.persianDay.toString()) {
+
+                        if (arrivalDay.arrival)
+                            container.viewDaySub.setBackgroundColor(view.context.getColor(R.color.green_700))
+                        else if (!arrivalDay.arrival)
+                            container.viewDaySub.setBackgroundColor(context!!.getColor(R.color.red_800))
                     }
+
                 } else {
                     textView.setTextColor(
                         ContextCompat.getColor(
-                            context,
-                            R.color.example_5_text_grey_light
+                            view.context, R.color.example_5_text_grey_light
                         )
                     )
-                    layout.background = null
+                    //layout.background = null
                 }
-
             }
         }
 
@@ -333,86 +238,103 @@ class CalendarFragment(employee: Employee) : Fragment() {
         binding.exFiveCalendar.monthHeaderBinder =
             object : MonthHeaderFooterBinder<MonthViewContainer> {
                 override fun create(view: View) = MonthViewContainer(view)
-
-                @RequiresApi(Build.VERSION_CODES.O)
-                override fun bind(container: MonthViewContainer, data: CalendarMonth) {
+                override fun bind(container: MonthViewContainer, month: CalendarMonth) {
                     // Setup each header day text if we have not done that already.
                     if (container.legendLayout.tag == null) {
-                        container.legendLayout.tag = data.yearMonth
-                        container.legendLayout.children.map { it as Button }
+                        container.legendLayout.tag = month.yearMonth
+                        container.legendLayout.children.map { it as TextView }
                             .forEachIndexed { index, tv ->
 
+                                val daysOfWeek = daysOfWeek()
+
                                 when (daysOfWeek[index]) {
-                                    DayOfWeek.SUNDAY -> tv.text = "شنبه"
-                                    DayOfWeek.MONDAY -> tv.text = "یکشنبه"
-                                    DayOfWeek.TUESDAY -> tv.text = "دوشنبه"
-                                    DayOfWeek.WEDNESDAY -> tv.text = "سه شنبه"
-                                    DayOfWeek.THURSDAY -> tv.text = "چهارشنبه"
-                                    DayOfWeek.FRIDAY -> tv.text = "پنجشنبه"
-                                    DayOfWeek.SATURDAY -> tv.text = "جمعه"
+
+                                    DayOfWeek.SUNDAY -> tv.text =
+                                        "\u0634\u0646\u0628\u0647" // Shanbeh
+                                    DayOfWeek.MONDAY -> tv.text =
+                                        "\u06cc\u06a9\u200c\u0634\u0646\u0628\u0647"// Yekshanbeh
+                                    DayOfWeek.TUESDAY -> tv.text =
+                                        "\u062f\u0648\u0634\u0646\u0628\u0647"  // Doshanbeh
+                                    DayOfWeek.WEDNESDAY -> tv.text =
+                                        "\u0633\u0647\u200c\u0634\u0646\u0628\u0647"  // Sehshanbeh
+                                    DayOfWeek.THURSDAY -> tv.text =
+                                        "\u0686\u0647\u0627\u0631\u0634\u0646\u0628\u0647"  // Chaharshanbeh
+                                    DayOfWeek.FRIDAY -> tv.text =
+                                        "\u067e\u0646\u062c\u200c\u0634\u0646\u0628\u0647"  // Panjshanbeh
+                                    DayOfWeek.SATURDAY -> tv.text =
+                                        "\u062c\u0645\u0639\u0647" // jome
                                 }
 
-                                val dayData = dayDao.getDay(("${tv.id}${employee.idEmployee}").toLong())
+                                val dayData =
+                                    dayDao.getDay(("${tv.id}${employee.idEmployee}").toLong())
 
-                                if ((dayData?.idDay) == ("${tv.id}${employee.idEmployee}").toLong() && dayData?.idEmployee == employee.idEmployee) {
+                                if ((dayData?.idDay) == ("${tv.id}${employee.idEmployee}").toLong() && dayData.idEmployee == employee.idEmployee) {
                                     tv.setBackgroundColor(
                                         ContextCompat.getColor(
-                                            view!!.context,
-                                            R.color.firoze
+                                            view.context, R.color.firoze
                                         )
                                     )
                                 }
 
                                 tv.setOnClickListener {
 
-//                                    if (dayData?.idDay != tv.id) {
-//                                        tv.setBackgroundColor(
-//                                            ContextCompat.getColor(
-//                                                view!!.context,
-//                                                R.color.blacke
-//                                            )
-//                                        )
-//                                    }
+                                    val dayData =
+                                        dayDao.getDay(("${tv.id}${employee.idEmployee}").toLong())
 
-                                    if (dayData?.idDay == ("${tv.id}${employee.idEmployee}").toLong() && dayData.idEmployee == employee.idEmployee) {
+                                    if (dayData?.idDay != ("${tv.id}${employee.idEmployee}").toLong()) {
+                                        val dialog = EntryAndExitDialogFragment(month, employee, tv)
+                                        dialog.show(
+                                            (activity as MainActivity).supportFragmentManager,
+                                            null
+                                        )
 
+                                    } else if (dayData.idDay == ("${tv.id}${employee.idEmployee}").toLong() && dayData.idEmployee == employee.idEmployee) {
                                         val newDay = employee.idEmployee?.let { it1 ->
                                             Day(
                                                 idDay = ("${tv.id}${employee.idEmployee}").toLong(),
-                                                day = "${tv.text}",
-                                                yearMonth = month.yearMonth.toString(),
-                                                idEmployee = it1
+                                                idEmployee = it1,
+                                                year = month.persianCalendar.persianYear.toString(),
+                                                month = month.persianCalendar.persianMonthName,
+                                                nameday = "${tv.text}",
                                             )
                                         }
-
                                         newDay?.let { it1 -> dayDao.delete(it1) }
                                         tv.setBackgroundColor(
                                             ContextCompat.getColor(
-                                                view!!.context,
-                                                R.color.blacke
-                                            )
-                                        )
-                                    } else if (dayData?.idEmployee != employee.idEmployee) {
-
-                                        val newDay = Day(
-                                            idDay = ("${tv.id}${employee.idEmployee}").toLong(),
-                                            day = "${tv.text}",
-                                            yearMonth = month.yearMonth.toString(),
-                                            idEmployee = employee.idEmployee
-                                        )
-
-                                        dayDao.insert(newDay)
-                                        tv.setBackgroundColor(
-                                            ContextCompat.getColor(
-                                                view!!.context,
-                                                R.color.firoze
+                                                tv.context, R.color.blacke
                                             )
                                         )
                                     }
 
                                 }
-
                             }
+
+                        binding.exFiveCalendar.monthScrollListener = { month ->
+                            val persianlCalendar = month.yearMonth.persianlCalendar()
+                            val monthTitle = "${persianlCalendar.persianMonthName} ${
+                                persianlCalendar.persianYear.toString().persianNumbers()
+                            }"
+                            binding.txtYM.text = monthTitle
+
+                            selectedDate?.let {
+                                // Clear selection if we scroll to a new month.
+                                selectedDate = null
+                                binding.exFiveCalendar.notifyDateChanged(it)
+                            }
+                        }
+
+                        binding.exFiveNextMonthImage.setOnClickListener {
+                            binding.exFiveCalendar.findFirstVisibleMonth()?.let {
+                                binding.exFiveCalendar.smoothScrollToMonth(it.yearMonth.next)
+                            }
+                        }
+
+                        binding.exFivePreviousMonthImage.setOnClickListener {
+                            binding.exFiveCalendar.findFirstVisibleMonth()?.let {
+                                binding.exFiveCalendar.smoothScrollToMonth(it.yearMonth.previous)
+                            }
+                        }
+
                     }
                 }
             }

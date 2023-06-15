@@ -1,4 +1,4 @@
-package ir.aliza.sherkatmanage.fgmSub
+package ir.aliza.sherkatmanage.fgmMain
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -16,6 +16,8 @@ import ir.aliza.sherkatmanage.adapter.EmployeeAdapter
 import ir.aliza.sherkatmanage.databinding.FragmentEmployeesBinding
 import ir.aliza.sherkatmanage.employeeAdapter
 import ir.aliza.sherkatmanage.employeeDao
+import ir.aliza.sherkatmanage.fgmSub.EmployeeStatisticsFragment
+import ir.aliza.sherkatmanage.fgmSub.RecruitmentFragment
 
 class EmployeeFragment : Fragment(), EmployeeAdapter.EmployeeEvents {
 

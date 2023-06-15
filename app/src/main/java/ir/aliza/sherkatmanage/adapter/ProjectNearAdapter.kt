@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.databinding.ItemProjectBinding
-import ir.aliza.sherkatmanage.fgmSub.ProjectFragment
 
 class ProjectNearAdapter(private val data: ArrayList<Project>, private val projectNearEvents: ProjectNearEvents) :
     RecyclerView.Adapter<ProjectNearAdapter.ProjectNearViewHolder>() {

@@ -2,8 +2,8 @@ package ir.aliza.sherkatmanage.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import ir.aliza.sherkatmanage.fgmSub.EmployeeFragment
-import ir.aliza.sherkatmanage.fgmSub.ProjectFragment
+import ir.aliza.sherkatmanage.fgmMain.EmployeeFragment
+import ir.aliza.sherkatmanage.fgmMain.ProjectFragment
 
 class ViewPagerCompanyAdapter(fragment: Fragment) :
     FragmentStateAdapter(fragment) {

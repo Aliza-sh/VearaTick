@@ -4,11 +4,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import ir.aliza.sherkatmanage.DataBase.Day
 import ir.aliza.sherkatmanage.DataBase.Time
 import ir.aliza.sherkatmanage.databinding.FragmentDialogDoneEntryBinding
 import ir.aliza.sherkatmanage.databinding.ItemInOutBinding
 
-class InOutAdapter(val data: ArrayList<Time>) :
+class InOutAdapter(val data: ArrayList<Time>, val entryExit: Day?, val nameDay: String) :
     RecyclerView.Adapter<InOutAdapter.CalendarViewHolder>() {
 
     lateinit var binding: ItemInOutBinding
@@ -18,8 +19,12 @@ class InOutAdapter(val data: ArrayList<Time>) :
 
         fun bindData(position: Int) {
 
-            binding.txtTimeIn.text = binding1.edtEntryEpm.text
-            binding.txtTimeOut.text = binding1.edtExitEmp.text
+            binding.txtTimeOutMust.text = entryExit?.exit
+            binding.txtTimeInMust.text = entryExit?.entry
+
+            binding.txtTimeIn.text = data[position].entry
+            binding.txtTimeOut.text = data[position].exit
+            binding.itemDateText.text = "$nameDay \n ${data[position].day} ${data[position].month}"
 
         }
 
@@ -27,7 +32,8 @@ class InOutAdapter(val data: ArrayList<Time>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarViewHolder {
         binding = ItemInOutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        binding1 = FragmentDialogDoneEntryBinding.inflate(LayoutInflater.from(parent.context), null, false)
+        binding1 =
+            FragmentDialogDoneEntryBinding.inflate(LayoutInflater.from(parent.context), null, false)
         return CalendarViewHolder(binding.root)
     }
 
@@ -55,6 +61,11 @@ class InOutAdapter(val data: ArrayList<Time>) :
     fun removeInOut(oldInOut: Time, oldPosition: Int) {
         data.remove(oldInOut)
         notifyItemRemoved(oldPosition)
+    }
+
+    fun clearAll() {
+        data.clear()
+        notifyDataSetChanged()
     }
 
     fun updateInOut(newInOut: Time, position: Int) {

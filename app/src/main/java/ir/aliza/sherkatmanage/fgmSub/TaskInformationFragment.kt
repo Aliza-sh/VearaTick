@@ -5,9 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import ir.aliza.sherkatmanage.DataBase.Task
 import ir.aliza.sherkatmanage.databinding.FragmentTaskInformationBinding
 
-class TaskInformationFragment : Fragment() {
+class TaskInformationFragment(val task: Task) : Fragment() {
 
     lateinit var binding: FragmentTaskInformationBinding
 
@@ -22,6 +23,8 @@ class TaskInformationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.txtNamePro.text = task.nameTask
+        binding.txtDescription.text = task.descriptionTask
 
 
     }

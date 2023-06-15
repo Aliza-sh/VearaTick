@@ -2,11 +2,10 @@ package ir.aliza.sherkatmanage.fgmSub
 
 import android.os.Build
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
@@ -18,25 +17,34 @@ import com.kizitonwose.calendar.core.DayPosition
 import com.kizitonwose.calendar.core.daysOfWeek
 import com.kizitonwose.calendar.core.nextMonth
 import com.kizitonwose.calendar.core.previousMonth
+import com.kizitonwose.calendar.core.yearMonth
 import com.kizitonwose.calendar.sample.shared.generateFlights
 import com.kizitonwose.calendar.view.MonthDayBinder
 import com.kizitonwose.calendar.view.MonthHeaderFooterBinder
 import com.kizitonwose.calendar.view.ViewContainer
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
+import ir.aliza.sherkatmanage.DataBase.Day
+import ir.aliza.sherkatmanage.DataBase.Employee
+import ir.aliza.sherkatmanage.Dialog.ArrivalsAndDeparturesDialogFragment
+import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.InOutAdapter
 import ir.aliza.sherkatmanage.databinding.CalendarHeaderBinding
 import ir.aliza.sherkatmanage.databinding.FragmentCalendarBinding
 import ir.aliza.sherkatmanage.databinding.ItemCalendarDayBinding
+import ir.aliza.sherkatmanage.dayDao
+import ir.aliza.sherkatmanage.inOutAdapter
+import ir.aliza.sherkatmanage.timeDao
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 
-class CalendarFragment : Fragment() {
+class CalendarFragment(employee: Employee) : Fragment() {
+
+    val employee = employee
 
     lateinit var binding: FragmentCalendarBinding
     var selectedDate: LocalDate? = null
-    lateinit var calendarAdapter: InOutAdapter
 
     @RequiresApi(Build.VERSION_CODES.O)
     private val month = LocalDate.now()
@@ -60,16 +68,19 @@ class CalendarFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        dayDao = AppDatabase.getDataBase(view.context).dayDao
+        timeDao = AppDatabase.getDataBase(view.context).timeDao
+
         val timeDao = AppDatabase.getDataBase(view.context).timeDao
         val timeData = timeDao.getAllTime()
-        calendarAdapter = InOutAdapter(ArrayList())
-        binding.rcvInOut.adapter = calendarAdapter
-        calendarAdapter.notifyDataSetChanged()
+
+        inOutAdapter = InOutAdapter(ArrayList(timeData))
+        binding.rcvInOut.adapter = inOutAdapter
 
         val daysOfWeek = daysOfWeek()
         var currentMonth = YearMonth.now()
-        var startMonth = currentMonth.minusMonths(10)
-        var endMonth = currentMonth.plusMonths(10)
+        var startMonth = currentMonth.minusMonths(0)
+        var endMonth = currentMonth.plusMonths(0)
         configureBinders(daysOfWeek)
 
         binding.exFiveCalendar.setup(startMonth, endMonth, DayOfWeek.TUESDAY)
@@ -88,18 +99,20 @@ class CalendarFragment : Fragment() {
         }
 
         binding.exFiveNextMonthImage.setOnClickListener {
-            nextMonth()
             binding.exFiveCalendar.findFirstVisibleMonth()?.let {
                 binding.exFiveCalendar.smoothScrollToMonth(it.yearMonth.nextMonth)
+                nextMonth()
             }
         }
 
         binding.exFivePreviousMonthImage.setOnClickListener {
-            backmonth()
             binding.exFiveCalendar.findFirstVisibleMonth()?.let {
                 binding.exFiveCalendar.smoothScrollToMonth(it.yearMonth.previousMonth)
+                backmonth()
             }
         }
+
+
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -209,9 +222,9 @@ class CalendarFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun updateAdapterForDate(date: LocalDate?) {
-        calendarAdapter.data.clear()
+        //calendarAdapter.data.clear()
         //calendarAdapter.data.addAll(flights[date].orEmpty())
-        calendarAdapter.notifyDataSetChanged()
+        //calendarAdapter.notifyDataSetChanged()
     }
 
     private fun configureBinders(daysOfWeek: List<DayOfWeek>) {
@@ -230,6 +243,10 @@ class CalendarFragment : Fragment() {
                             binding.exFiveCalendar.notifyDateChanged(day.date)
                             oldDate?.let { binding.exFiveCalendar.notifyDateChanged(it) }
                             updateAdapterForDate(day.date)
+
+                            val dialog = ArrivalsAndDeparturesDialogFragment(binding1,employee.idEmployee,month.yearMonth.toString(),day.date.dayOfMonth.toString())
+                            dialog.show((activity as MainActivity).supportFragmentManager, null)
+
                         }
                     }
                 }
@@ -261,12 +278,10 @@ class CalendarFragment : Fragment() {
                         Toast.LENGTH_SHORT
                     ).show()
 
-                    binding1.viewDayMain.setBackgroundColor(view.context.getColor(R.color.firoze))
                     true
                 }
             }
         }
-
         binding.exFiveCalendar.dayBinder = object : MonthDayBinder<DayViewContainer> {
             @RequiresApi(Build.VERSION_CODES.O)
             override fun create(view: View) = DayViewContainer(view)
@@ -289,12 +304,13 @@ class CalendarFragment : Fragment() {
                     layout.setBackgroundResource(if (selectedDate == data.date) R.drawable.shape_selected_bg else 0)
 
                     val time = flight[data.date]
+
                     if (time != null) {
                         if (time.count() == 1) {
-                            // daysub.setBackgroundColor(context.getColor(time[0].color))
+                             daysub.setBackgroundColor(context.getColor(time[0].color))
                         } else {
-                            // dayMain.setBackgroundColor(context.getColor(time[0].color))
-                            // daysub.setBackgroundColor(context.getColor(time[1].color))
+                            dayMain.setBackgroundColor(context.getColor(time[0].color))
+                            daysub.setBackgroundColor(context.getColor(time[1].color))
                         }
                     }
                 } else {
@@ -323,26 +339,79 @@ class CalendarFragment : Fragment() {
                     // Setup each header day text if we have not done that already.
                     if (container.legendLayout.tag == null) {
                         container.legendLayout.tag = data.yearMonth
-                        container.legendLayout.children.map { it as TextView }
+                        container.legendLayout.children.map { it as Button }
                             .forEachIndexed { index, tv ->
 
                                 when (daysOfWeek[index]) {
                                     DayOfWeek.SUNDAY -> tv.text = "شنبه"
-                                    DayOfWeek.MONDAY -> tv.text = "یک شنبه"
-                                    DayOfWeek.TUESDAY -> tv.text = "دو شنبه"
+                                    DayOfWeek.MONDAY -> tv.text = "یکشنبه"
+                                    DayOfWeek.TUESDAY -> tv.text = "دوشنبه"
                                     DayOfWeek.WEDNESDAY -> tv.text = "سه شنبه"
-                                    DayOfWeek.THURSDAY -> tv.text = "چهار شنبه"
-                                    DayOfWeek.FRIDAY -> tv.text = "پنج شنبه"
+                                    DayOfWeek.THURSDAY -> tv.text = "چهارشنبه"
+                                    DayOfWeek.FRIDAY -> tv.text = "پنجشنبه"
                                     DayOfWeek.SATURDAY -> tv.text = "جمعه"
                                 }
 
-                                tv.setTextColor(
-                                    ContextCompat.getColor(
-                                        view!!.context,
-                                        R.color.white
+                                val dayData = dayDao.getDay(("${tv.id}${employee.idEmployee}").toLong())
+
+                                if ((dayData?.idDay) == ("${tv.id}${employee.idEmployee}").toLong() && dayData?.idEmployee == employee.idEmployee) {
+                                    tv.setBackgroundColor(
+                                        ContextCompat.getColor(
+                                            view!!.context,
+                                            R.color.firoze
+                                        )
                                     )
-                                )
-                                tv.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12f)
+                                }
+
+                                tv.setOnClickListener {
+
+//                                    if (dayData?.idDay != tv.id) {
+//                                        tv.setBackgroundColor(
+//                                            ContextCompat.getColor(
+//                                                view!!.context,
+//                                                R.color.blacke
+//                                            )
+//                                        )
+//                                    }
+
+                                    if (dayData?.idDay == ("${tv.id}${employee.idEmployee}").toLong() && dayData.idEmployee == employee.idEmployee) {
+
+                                        val newDay = employee.idEmployee?.let { it1 ->
+                                            Day(
+                                                idDay = ("${tv.id}${employee.idEmployee}").toLong(),
+                                                day = "${tv.text}",
+                                                yearMonth = month.yearMonth.toString(),
+                                                idEmployee = it1
+                                            )
+                                        }
+
+                                        newDay?.let { it1 -> dayDao.delete(it1) }
+                                        tv.setBackgroundColor(
+                                            ContextCompat.getColor(
+                                                view!!.context,
+                                                R.color.blacke
+                                            )
+                                        )
+                                    } else if (dayData?.idEmployee != employee.idEmployee) {
+
+                                        val newDay = Day(
+                                            idDay = ("${tv.id}${employee.idEmployee}").toLong(),
+                                            day = "${tv.text}",
+                                            yearMonth = month.yearMonth.toString(),
+                                            idEmployee = employee.idEmployee
+                                        )
+
+                                        dayDao.insert(newDay)
+                                        tv.setBackgroundColor(
+                                            ContextCompat.getColor(
+                                                view!!.context,
+                                                R.color.firoze
+                                            )
+                                        )
+                                    }
+
+                                }
+
                             }
                     }
                 }

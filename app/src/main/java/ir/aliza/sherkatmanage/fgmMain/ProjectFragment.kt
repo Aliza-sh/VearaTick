@@ -1,4 +1,4 @@
-package ir.aliza.sherkatmanage.fgmSub
+package ir.aliza.sherkatmanage.fgmMain
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -13,6 +13,8 @@ import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.ProjectNearAdapter
 import ir.aliza.sherkatmanage.databinding.FragmentProjectBinding
+import ir.aliza.sherkatmanage.fgmSub.NewProjectFragment
+import ir.aliza.sherkatmanage.fgmSub.ProjectInformationFragment
 import ir.aliza.sherkatmanage.projectAdapter
 import ir.aliza.sherkatmanage.projectDao
 

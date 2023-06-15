@@ -3,18 +3,21 @@ package ir.aliza.sherkatmanage.Dialog
 import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import ir.aliza.sherkatmanage.DataBase.Time
-import ir.aliza.sherkatmanage.adapter.InOutAdapter
+import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.FragmentCalendarBinding
 import ir.aliza.sherkatmanage.databinding.FragmentDialogDoneEntryBinding
-import ir.aliza.sherkatmanage.inOutAdapter
+import ir.aliza.sherkatmanage.databinding.ItemCalendarDayBinding
 import ir.aliza.sherkatmanage.timeDao
 
 class DoneEntryDialogFragment(
+    var binding2: ItemCalendarDayBinding,
     val idEmployee: Int?,
-    val yearMonth: String,
-    val dayOfMonth: String,
+    val year: String,
+    val month: String,
+    val day: Int,
     val arrival: Boolean
 ) : DialogFragment() {
 
@@ -27,34 +30,47 @@ class DoneEntryDialogFragment(
         binding = FragmentDialogDoneEntryBinding.inflate(layoutInflater, null, false)
         binding1 = FragmentCalendarBinding.inflate(layoutInflater, null, false)
 
+        val timeData = timeDao.getTime(idEmployee!!, day)
+
         val entry = binding.edtEntryEpm.text
         val exit = binding.edtExitEmp.text
-
-        inOutAdapter = InOutAdapter(ArrayList())
-        binding1.rcvInOut.adapter = inOutAdapter
 
         dialog.setView(binding.root)
         dialog.setCancelable(true)
 
         binding.dialogBtnSure.setOnClickListener {
 
-            val newTime = Time(
-                idEmployee = idEmployee!!,
-                yearMonth = yearMonth,
-                day = dayOfMonth,
-                arrival = true,
-                entry = entry.toString(),
-                exit = exit.toString()
-            )
+            if (
+                binding.edtEntryEpm.length() > 0 &&
+                binding.edtExitEmp.length() > 0
 
-            timeDao.insert(newTime)
-            inOutAdapter.addInOut(newTime)
-            dismiss()
-        }
-        binding.dialogBtnCansel.setOnClickListener {
-            dismiss()
-        }
+            ) {
 
+                val newTime = Time(
+                    timeData?.idTime,
+                    idEmployee = idEmployee,
+                    year = year,
+                    month = month,
+                    day = day.toString(),
+                    arrival = true,
+                    entry = entry.toString(),
+                    exit = exit.toString()
+                )
+
+                if (day.toString() == timeData?.day) {
+                    timeDao.update(newTime)
+                    //inOutAdapter.updateInOut(newTime, 0)
+                    binding2.viewDaySub.setBackgroundColor(it.context.getColor(R.color.green_700))
+                } else {
+                    timeDao.insert(newTime)
+                    binding2.viewDaySub.setBackgroundColor(it.context.getColor(R.color.green_700))
+                }
+
+                dismiss()
+            } else {
+                Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()
+            }
+        }
         return dialog.create()
 
     }

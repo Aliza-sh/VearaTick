@@ -9,14 +9,18 @@ import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.FragmentDialogArrivalsAndDeparturesBinding
 import ir.aliza.sherkatmanage.databinding.ItemCalendarDayBinding
+import ir.aliza.sherkatmanage.inOutAdapter
 import ir.aliza.sherkatmanage.timeDao
 
 class ArrivalsAndDeparturesDialogFragment(
-    val binding1: ItemCalendarDayBinding,
-    val idEmployee: Int?,
-    val yearMonth: String,
-    val dayOfMonth: String
-) : DialogFragment() {
+    var binding1: ItemCalendarDayBinding,
+    val idEmployee: Int,
+    val year: String,
+    val month: String,
+    val day: Int,
+    val arrival: Boolean,
+
+    ) : DialogFragment() {
 
     lateinit var binding: FragmentDialogArrivalsAndDeparturesBinding
 
@@ -29,24 +33,35 @@ class ArrivalsAndDeparturesDialogFragment(
         dialog.setView(binding.root)
         dialog.setCancelable(true)
         binding.dialogBtnSure.setOnClickListener {
-            val dialog = DoneEntryDialogFragment(idEmployee, yearMonth, dayOfMonth, true)
+            val dialog = DoneEntryDialogFragment(binding1, idEmployee, year, month, day, true)
             dialog.show((activity as MainActivity).supportFragmentManager, null)
-            binding1.viewDaySub.setBackgroundColor(it.context.getColor(R.color.green_700))
+            dialog.isCancelable = false
             dismiss()
         }
         binding.dialogBtnCansel.setOnClickListener {
 
-            val newTime = Time(
-                idEmployee = idEmployee!!,
-                yearMonth = yearMonth,
-                day = dayOfMonth,
-                arrival = false,
-                entry = "",
-                exit = ""
-            )
-            timeDao.insert(newTime)
+            val timeData = timeDao.getTime(idEmployee, day)
 
-            binding1.viewDaySub.setBackgroundColor(it.context.getColor(R.color.red_800))
+            val newTime = Time(
+                timeData?.idTime,
+                idEmployee = idEmployee,
+                year = year,
+                month = month,
+                day = day.toString(),
+                arrival = false,
+                entry = "0",
+                exit = "0"
+            )
+
+            if (day.toString() == timeData?.day) {
+                timeDao.update(newTime)
+                //inOutAdapter.updateInOut(newTime, 0)
+                binding1.viewDaySub.setBackgroundColor(it.context.getColor(R.color.red_800))
+            } else {
+                timeDao.insert(newTime)
+                inOutAdapter.addInOut(newTime)
+                binding1.viewDaySub.setBackgroundColor(it.context.getColor(R.color.red_800))
+            }
 
             dismiss()
         }

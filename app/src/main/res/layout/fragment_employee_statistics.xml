@@ -25,11 +25,11 @@
             android:layout_height="80dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            app:cpb_background_progressbar_color="@color/white_dark"
+            app:cpb_background_progressbar_color="@color/white"
             app:cpb_background_progressbar_width="5dp"
             app:cpb_progress_max="100"
             app:cpb_progressbar_color="@color/firoze"
-            app:cpb_progressbar_width="2dp"
+            app:cpb_progressbar_width="5dp"
             app:cpb_round_border="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

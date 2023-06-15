@@ -6,31 +6,37 @@ import android.view.*
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kizitonwose.calendarview.model.CalendarDay
+import com.kizitonwose.calendarview.model.DayOwner
 import com.kizitonwose.calendarview.ui.DayBinder
 import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.persian.*
 import com.kizitonwose.calendarview.utils.yearMonth
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
+import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.DataBase.Task
-import ir.aliza.sherkatmanage.DataBase.TaskDao
+import ir.aliza.sherkatmanage.Dialog.DeleteItemTaskDialogFragment
 import ir.aliza.sherkatmanage.Dialog.TaskBottomsheetFragment
+import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.TaskAdapter
 import ir.aliza.sherkatmanage.databinding.FragmentTaskBinding
 import ir.aliza.sherkatmanage.databinding.ItemCalendarDayTaskBinding
+import ir.aliza.sherkatmanage.inOutAdapter
+import ir.aliza.sherkatmanage.taskAdapter
+import ir.aliza.sherkatmanage.taskDao
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 
-class TaskFragment : Fragment(), TaskAdapter.TaskEvent {
+class TaskFragment(val employee: Employee) : Fragment(), TaskAdapter.TaskEvent {
 
+    var selectedDate = LocalDate.now()
     lateinit var binding: FragmentTaskBinding
-    lateinit var taskDao: TaskDao
-    lateinit var taskAdapter: TaskAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,15 +54,15 @@ class TaskFragment : Fragment(), TaskAdapter.TaskEvent {
 
         taskDao = AppDatabase.getDataBase(view.context).TaskDao
 
-        val taskData = taskDao.getAllEmployee()
-        taskAdapter = TaskAdapter(ArrayList(taskData), this)
-        binding.recyclerViewDuties.adapter = taskAdapter
-        binding.recyclerViewDuties.layoutManager = LinearLayoutManager(context)
-
         calendarViewCreated()
 
         binding.btnFabTack.setOnClickListener {
-            val bottomsheet = TaskBottomsheetFragment()
+            val bottomsheet = TaskBottomsheetFragment(
+                employee,
+                selectedDate.toPersianCalendar().persianYear,
+                selectedDate.toPersianCalendar().persianMonthName,
+                selectedDate.toPersianCalendar().persianDay
+            )
             bottomsheet.show(parentFragmentManager, null)
         }
 
@@ -64,8 +70,6 @@ class TaskFragment : Fragment(), TaskAdapter.TaskEvent {
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun calendarViewCreated() {
-
-        var selectedDate: LocalDate? = null
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             val binding1 = ItemCalendarDayTaskBinding.bind(view)
@@ -79,11 +83,43 @@ class TaskFragment : Fragment(), TaskAdapter.TaskEvent {
 
                 view.setOnClickListener {
 
-                    if (selectedDate != day.date) {
-                        val oldDate = selectedDate
-                        selectedDate = day.date
-                        binding.exSevenCalendar.notifyDateChanged(day.date)
-                        oldDate?.let { binding.exSevenCalendar.notifyDateChanged(it) }
+                    val taskDay = taskDao.getTaskDay(
+                        employee.idEmployee!!,
+                        day.persianCalendar.persianDay
+                    )
+
+                    val taskData = taskDao.getAllTaskInDay(
+                        employee.idEmployee,
+                        selectedDate.toPersianCalendar().persianYear.toString(),
+                        selectedDate.toPersianCalendar().persianMonthName,
+                        day.persianCalendar.persianDay.toString()
+                    )
+
+                    if (day.owner == DayOwner.THIS_MONTH) {
+                        if (selectedDate != day.date) {
+                            val oldDate = selectedDate
+                            selectedDate = day.date
+                            binding.exSevenCalendar.notifyDateChanged(day.date)
+                            oldDate?.let { binding.exSevenCalendar.notifyDateChanged(it) }
+
+                            if (taskDay != null) {
+
+
+                                if (taskDay.day == selectedDate.toPersianCalendar().persianDay.toString()) {
+
+                                    taskAdapter =
+                                        TaskAdapter(ArrayList(taskData), TaskFragment(employee))
+                                    binding.recyclerViewDuties.adapter = taskAdapter
+                                    binding.recyclerViewDuties.layoutManager =
+                                        LinearLayoutManager(context)
+
+                                } else {
+
+                                    if (binding.recyclerViewDuties.size != 0)
+                                        inOutAdapter.clearAll()
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -92,7 +128,9 @@ class TaskFragment : Fragment(), TaskAdapter.TaskEvent {
 
                 val persianlCalendar = day.date.yearMonth.persianlCalendar()
                 val monthTitle =
-                    "${persianlCalendar.persianMonthName} ${persianlCalendar.persianYear.toString().persianNumbers()}"
+                    "${persianlCalendar.persianMonthName} ${
+                        persianlCalendar.persianYear.toString().persianNumbers()
+                    }"
                 binding.txtYM.text = monthTitle
 
                 this.day = day
@@ -110,13 +148,9 @@ class TaskFragment : Fragment(), TaskAdapter.TaskEvent {
                         colorRes
                     )
                 )
-//                binding1.exSevenDayText.setTextColor(
-//                    ContextCompat.getColor(
-//                        view.context,
-//                        colorRes
-//                    )
-//                )
-                selectedView.isVisible = day.date == selectedDate
+
+                binding1.exSevenSelectedView.isVisible =
+                    day.persianCalendar.persianDay == selectedDate.toPersianCalendar().persianDay
 
             }
         }
@@ -128,17 +162,25 @@ class TaskFragment : Fragment(), TaskAdapter.TaskEvent {
 
         val currentMonth = YearMonth.now()
         // Value for firstDayOfWeek does not matter since inDates and outDates are not generated.
-        binding.exSevenCalendar.setup(currentMonth.minusMonths(10), currentMonth.plusMonths(10), DayOfWeek.SATURDAY)
+        binding.exSevenCalendar.setup(
+            currentMonth.minusMonths(12),
+            currentMonth.plusMonths(12),
+            DayOfWeek.SATURDAY
+        )
         binding.exSevenCalendar.scrollToDate(LocalDate.now())
 
     }
 
-    override fun onTaskClicked(task: Task, adapterPosition: Int) {
-
+    override fun onTaskClicked(task: Task, position: Int) {
+        val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
+        transaction.add(R.id.frame_layout_main, TaskInformationFragment(task))
+            .addToBackStack(null)
+            .commit()
     }
 
-    override fun onTaskLongClicked(task: Task, adapterPosition: Int) {
-
+    override fun onTaskLongClicked(task: Task, position: Int) {
+        val dialog = DeleteItemTaskDialogFragment(task, position)
+        dialog.show((activity as MainActivity).supportFragmentManager, null)
     }
 
 }

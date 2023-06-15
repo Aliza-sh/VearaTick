@@ -16,23 +16,23 @@
         android:background="?attr/colorPrimaryVariant">
 
         <TextView
-            android:id="@+id/itemFlightDateText"
+            android:id="@+id/itemDateText"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="?attr/colorPrimary"
             android:gravity="center"
-            android:lineSpacingExtra="2.5dp"
+            android:lineSpacingExtra="2.6dp"
             android:textAllCaps="true"
             android:textColor="?attr/colorOnSurface"
             android:textSize="10sp"
             android:textStyle="bold"
             app:cardCornerRadius="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="H,1:1"
+            app:layout_constraintDimensionRatio="W,2:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.143"
+            app:layout_constraintWidth_percent="0.119"
             android:text="سه شنبه\n10 اردیبهشت" />
 
         <!--Colored view divider-->
@@ -42,17 +42,17 @@
             android:layout_height="0dp"
             android:background="?attr/colorOnPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/itemFlightDateText"
+            app:layout_constraintEnd_toEndOf="@id/itemDateText"
             app:layout_constraintTop_toTopOf="parent" />
 
         <FrameLayout
             android:id="@+id/itemFlightDepartureImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@id/itemFlightDateText"
-            app:layout_constraintDimensionRatio="W,1:1"
-            app:layout_constraintStart_toEndOf="@id/itemFlightDateText"
-            app:layout_constraintTop_toTopOf="@id/itemFlightDateText">
+            app:layout_constraintBottom_toBottomOf="@id/itemDateText"
+            app:layout_constraintDimensionRatio="W,1:1.8"
+            app:layout_constraintStart_toEndOf="@id/itemDateText"
+            app:layout_constraintTop_toTopOf="@id/itemDateText">
 
             <ImageView
                 android:id="@+id/imageView5"
@@ -69,13 +69,23 @@
         <LinearLayout
             android:id="@+id/itemFlightDepartureLayout"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="@id/itemFlightDepartureImage"
-            app:layout_constraintDimensionRatio="W,2:1"
+            app:layout_constraintDimensionRatio="W,4:2.5"
             app:layout_constraintStart_toEndOf="@id/itemFlightDepartureImage"
             app:layout_constraintTop_toTopOf="@id/itemFlightDepartureImage">
+
+            <TextView
+                android:id="@+id/txt_time_in_must"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="20dp"
+                android:gravity="top|center"
+                android:text="14:30"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -86,14 +96,17 @@
                 android:text="ورود" />
 
             <TextView
+                android:layout_marginTop="2dp"
+
                 android:id="@+id/txt_time_in"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:elevation="20dp"
-                android:gravity="center"
+                android:gravity="bottom|center"
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="16sp"
                 android:text="14:30" />
+
         </LinearLayout>
 
         <FrameLayout
@@ -101,7 +114,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="@id/itemFlightDepartureLayout"
-            app:layout_constraintDimensionRatio="W,1:1"
+            app:layout_constraintDimensionRatio="W,1:1.4"
             app:layout_constraintStart_toEndOf="@id/itemFlightDepartureLayout"
             app:layout_constraintTop_toTopOf="@id/itemFlightDepartureLayout">
 
@@ -116,31 +129,41 @@
         <LinearLayout
             android:id="@+id/itemFlightDestinationLayout"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="@id/itemFlightDestinationImage"
-            app:layout_constraintDimensionRatio="W,2:1"
+            app:layout_constraintDimensionRatio="W,4:2.5"
             app:layout_constraintStart_toEndOf="@id/itemFlightDestinationImage"
             app:layout_constraintTop_toTopOf="@id/itemFlightDestinationImage">
+
+            <TextView
+                android:id="@+id/txt_time_out_must"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="20:00"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/txt_out"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:text="خروج"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp"
-                android:text="خروج" />
+                android:textSize="16sp" />
 
             <TextView
+                android:layout_marginTop="2dp"
                 android:id="@+id/txt_time_out"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
+                android:text="20:00"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp"
-                android:text="20:00" />
+                android:textSize="16sp" />
         </LinearLayout>
 
         <!--Departure/Destination dividers-->

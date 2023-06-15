@@ -15,12 +15,17 @@ class TaskAdapter(private val data: ArrayList<Task>, private val tackEvent: Task
     inner class TaskViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
 
         fun bindData(position: Int) {
+
+            binding.txtTack.text = data[position].nameTask
+            binding.txtDescription.text = data[position].descriptionTask
+            binding.txtTime.text = data[position].timeTask + " روز "
+
             itemView.setOnClickListener {
-                tackEvent.onTaskClicked(data[adapterPosition], adapterPosition)
+                tackEvent.onTaskClicked(data[position], position)
             }
 
             itemView.setOnLongClickListener {
-                tackEvent.onTaskLongClicked(data[adapterPosition], adapterPosition)
+                tackEvent.onTaskLongClicked(data[position], position)
                 true
             }
 
@@ -45,16 +50,19 @@ class TaskAdapter(private val data: ArrayList<Task>, private val tackEvent: Task
     }
 
     override fun getItemCount(): Int {
-        return 20
+        return data.size
     }
 
     fun addTask(newTask: Task) {
         data.add(0, newTask)
         notifyItemInserted(0)
     }
-
+    fun removeEmployee(oldTask: Task, oldPosition: Int) {
+        data.remove(oldTask)
+        notifyItemRemoved(oldPosition)
+    }
     interface TaskEvent {
-        fun onTaskClicked(task: Task, adapterPosition: Int)
-        fun onTaskLongClicked(task: Task, adapterPosition: Int)
+        fun onTaskClicked(task: Task, position: Int)
+        fun onTaskLongClicked(task: Task, position: Int)
     }
 }

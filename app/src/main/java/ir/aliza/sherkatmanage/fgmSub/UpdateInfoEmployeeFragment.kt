@@ -1,6 +1,10 @@
 package ir.aliza.sherkatmanage.fgmSub
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,6 +12,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.Position
 import ir.aliza.sherkatmanage.R
@@ -18,6 +23,7 @@ import ir.aliza.sherkatmanage.employeeDao
 class UpdateInfoEmployeeFragment(employee: Employee) : Fragment() {
 
     lateinit var binding: FragmentUpdateInfoEmployeeBinding
+    var imageUri: Uri? = null
 
     val employee = employee
 
@@ -50,6 +56,12 @@ class UpdateInfoEmployeeFragment(employee: Employee) : Fragment() {
         binding.sheetBtnDone.setOnClickListener {
             addNewEmployee()
         }
+
+        binding.imgprn4.setOnClickListener{
+            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            startActivityForResult(intent, 0)
+        }
+
         binding.btnBck.setOnClickListener {
             onBackPressed()
         }
@@ -65,7 +77,16 @@ class UpdateInfoEmployeeFragment(employee: Employee) : Fragment() {
         binding.edtNumEmp.setText(employee.cellularPhone.toString())
         binding.edtTakhasosEmp.setText(employee.specialty)
         binding.edtNumbhomeEmp.setText(employee.homePhone.toString())
-        binding.edtTimeEmp.setText(employee.watch)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
+            imageUri = data?.data
+            Glide.with(this)
+                .load(imageUri)
+                .into(binding.imgprn4)
+        }
     }
 
     fun onBackPressed() {
@@ -86,8 +107,7 @@ class UpdateInfoEmployeeFragment(employee: Employee) : Fragment() {
             binding.edtMaharatEmp.length() > 0 &&
             binding.edtNumEmp.length() > 0 &&
             binding.edtTakhasosEmp.length() > 0 &&
-            binding.edtNumbhomeEmp.length() > 0 &&
-            binding.edtTimeEmp.length() > 0
+            binding.edtNumbhomeEmp.length() > 0
         ) {
             val txtname = binding.edtNameEpm.text.toString()
             val txtFamily = binding.edtFamEmp.text.toString()
@@ -98,7 +118,9 @@ class UpdateInfoEmployeeFragment(employee: Employee) : Fragment() {
             val txtNumberHome = binding.edtNumbhomeEmp.text.toString()
             val txtAddress = binding.edtAddressEmp.text.toString()
             val txtMaharat = binding.edtMaharatEmp.text.toString()
-            val txtWatch = binding.edtTimeEmp.text.toString()
+
+            val inputStream = context?.contentResolver?.openInputStream(imageUri!!)
+            val imageBytes = inputStream?.readBytes()
 
             val newEmployee = Employee(
                 employee.idEmployee,
@@ -111,8 +133,7 @@ class UpdateInfoEmployeeFragment(employee: Employee) : Fragment() {
                 address = txtAddress,
                 specialty = txtSpecialty,
                 skill = txtMaharat,
-                watch = txtWatch
-
+                imgEmployee = imageBytes!!
             )
             employeeAdapter.updateEmployee(position = Position, newEmployee = newEmployee)
             employeeDao.update(newEmployee)
