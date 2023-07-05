@@ -24,4 +24,11 @@
         <item name="colorPrimary">@color/example_4_green</item>
     </style>
 
+    <style name="Fragment_Dialog" parent="Theme.AppCompat.Light.Dialog">
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:background">@android:color/transparent</item>
+    </style>
+
 </resources>

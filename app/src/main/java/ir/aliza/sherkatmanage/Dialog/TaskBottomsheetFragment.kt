@@ -37,7 +37,7 @@ class TaskBottomsheetFragment(
         val typeProject = listOf(
             "اندروید",
             "بک اند",
-            "فرانت",
+            "فرانت اند",
             "رباتیک",
             "سایت",
             "فتوشاپ"

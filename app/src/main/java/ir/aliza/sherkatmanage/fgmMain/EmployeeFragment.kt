@@ -15,7 +15,6 @@ import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.EmployeeAdapter
 import ir.aliza.sherkatmanage.databinding.FragmentEmployeesBinding
 import ir.aliza.sherkatmanage.employeeAdapter
-import ir.aliza.sherkatmanage.employeeDao
 import ir.aliza.sherkatmanage.fgmSub.EmployeeStatisticsFragment
 import ir.aliza.sherkatmanage.fgmSub.RecruitmentFragment
 
@@ -36,7 +35,7 @@ class EmployeeFragment : Fragment(), EmployeeAdapter.EmployeeEvents {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        employeeDao = AppDatabase.getDataBase(view.context).employeeDao
+        val employeeDao = AppDatabase.getDataBase(view.context).employeeDao
         employeeData = employeeDao.getAllEmployee()
         employeeAdapter = EmployeeAdapter(ArrayList(employeeData), this)
         binding.recyclerViewEmployee.adapter = employeeAdapter

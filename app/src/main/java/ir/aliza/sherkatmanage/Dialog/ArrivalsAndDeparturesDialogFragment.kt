@@ -9,7 +9,6 @@ import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.FragmentDialogArrivalsAndDeparturesBinding
 import ir.aliza.sherkatmanage.databinding.ItemCalendarDayBinding
-import ir.aliza.sherkatmanage.inOutAdapter
 import ir.aliza.sherkatmanage.timeDao
 
 class ArrivalsAndDeparturesDialogFragment(
@@ -59,7 +58,6 @@ class ArrivalsAndDeparturesDialogFragment(
                 binding1.viewDaySub.setBackgroundColor(it.context.getColor(R.color.red_800))
             } else {
                 timeDao.insert(newTime)
-                inOutAdapter.addInOut(newTime)
                 binding1.viewDaySub.setBackgroundColor(it.context.getColor(R.color.red_800))
             }
 

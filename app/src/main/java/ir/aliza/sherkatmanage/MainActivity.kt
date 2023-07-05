@@ -3,6 +3,7 @@ package ir.aliza.sherkatmanage
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.DayDao
 import ir.aliza.sherkatmanage.DataBase.EmployeeDao
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
@@ -38,6 +39,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        employeeDao = AppDatabase.getDataBase(this).employeeDao
 
         firstRun()
 

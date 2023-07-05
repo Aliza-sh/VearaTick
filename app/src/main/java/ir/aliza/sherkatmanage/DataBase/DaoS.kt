@@ -79,6 +79,13 @@ interface ProjectDao : BaceDao<Project> {
     fun searchProject(searching: String): List<Project>
 
 }
+@Dao
+interface TeamProjectDao : BaceDao<TeamProject> {
+
+    @Query("SELECT * FROM teamProject_table")
+    fun getAllTeamProject(): List<TeamProject>
+
+}
 
 @Dao
 interface EffDao : BaceDao<Efficiency> {

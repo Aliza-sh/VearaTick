@@ -18,7 +18,7 @@ import ir.aliza.sherkatmanage.fgmSub.ProjectInformationFragment
 import ir.aliza.sherkatmanage.projectAdapter
 import ir.aliza.sherkatmanage.projectDao
 
-class ProjectFragment : Fragment(), ProjectNearAdapter.ProjectNearEvents {
+class ProjectFragment() : Fragment(), ProjectNearAdapter.ProjectNearEvents {
 
     lateinit var binding: FragmentProjectBinding
 

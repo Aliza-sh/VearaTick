@@ -19,6 +19,7 @@ class AvatarNearAdapter(private val data: ArrayList<Employee>) :
         fun bindData(position: Int) {
 
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AvatarNearViewHolder {

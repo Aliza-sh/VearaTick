@@ -26,6 +26,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.debug
         }
     }
     compileOptions {
@@ -79,4 +80,7 @@ dependencies {
 
     //crop img
     implementation 'com.github.yalantis:ucrop:2.2.6'
+
+    //splash
+    implementation 'com.airbnb.android:lottie:3.4.0'
 }

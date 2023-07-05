@@ -21,6 +21,16 @@ data class Project(
 
 )
 
+@Entity(tableName = "teamProject_table")
+data class TeamProject(
+
+    @PrimaryKey(autoGenerate = true)
+    val idTeam: Int? = null,
+
+    val idEmployee: Int? = null
+
+)
+
 @Entity(tableName = "employee_table")
 data class Employee(
 

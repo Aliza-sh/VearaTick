@@ -74,7 +74,7 @@
                 android:layout_gravity="center|bottom"
                 android:text="اندروید"
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="14dp" />
+                android:textSize="16sp" />
 
         </LinearLayout>
 

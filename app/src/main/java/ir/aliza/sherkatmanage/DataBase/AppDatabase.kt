@@ -6,13 +6,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [Project::class, Employee::class,Day::class, Efficiency::class, Task::class, Time::class],
+    entities = [Project::class,TeamProject::class, Employee::class,Day::class, Efficiency::class, Task::class, Time::class],
     version = 1,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
 
     abstract val projectDao: ProjectDao
+    abstract val teamProjectDao: TeamProjectDao
     abstract val employeeDao: EmployeeDao
     abstract val dayDao: DayDao
     abstract val effDao: EffDao
