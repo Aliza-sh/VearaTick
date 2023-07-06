@@ -9,10 +9,10 @@ import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ir.aliza.sherkatmanage.DataBase.Employee
-import ir.aliza.sherkatmanage.DataBase.Task
+import ir.aliza.sherkatmanage.DataBase.TaskEmployee
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.BottomsheetfragmentTaskBinding
-import ir.aliza.sherkatmanage.taskDao
+import ir.aliza.sherkatmanage.taskEmployeeDao
 
 class TaskBottomsheetFragment(
     val employee: Employee,
@@ -44,7 +44,7 @@ class TaskBottomsheetFragment(
         )
 
         val myAdapteredt = ArrayAdapter(requireContext(), R.layout.item_gender, typeProject)
-        (binding.dialogMainTypeProject.editText as AutoCompleteTextView).setAdapter(
+        (binding.mainEdtTypeTask.editText as AutoCompleteTextView).setAdapter(
             myAdapteredt
         )
 
@@ -61,19 +61,24 @@ class TaskBottomsheetFragment(
             binding.dialogEdtTozih.length() > 0
         ) {
             val txtTask = binding.dialogEdtTask.text.toString()
-            val txtTime = binding.edtTimeTask.text.toString()
-            val txtTozih = binding.dialogEdtTozih.text.toString()
+            val txtTime = binding.edtTimePro.text.toString()
+            val txtDay = binding.edtDayProject.text.toString()
+            val txtDescription = binding.dialogEdtTozih.text.toString()
+            val txtTypeTask = binding.edtTypeTask.text.toString()
 
-            val newTask = Task(
+            val newTask = TaskEmployee(
                 idEmployee = employee.idEmployee!!,
                 nameTask = txtTask,
-                timeTask = txtTime,
-                descriptionTask = txtTozih,
+                dayTask = txtDay,
+                watchTask = txtTime,
+                descriptionTask = txtDescription,
+                typeTask = txtTypeTask,
+
                 year = year.toString(),
                 month = monthName,
                 day = day.toString()
             )
-            taskDao.insert(newTask)
+            taskEmployeeDao.insert(newTask)
             dismiss()
         } else {
             Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()

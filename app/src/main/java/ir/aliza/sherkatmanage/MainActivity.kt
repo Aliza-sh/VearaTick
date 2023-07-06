@@ -7,12 +7,12 @@ import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.DayDao
 import ir.aliza.sherkatmanage.DataBase.EmployeeDao
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
-import ir.aliza.sherkatmanage.DataBase.TaskDao
+import ir.aliza.sherkatmanage.DataBase.TaskEmployeeDao
 import ir.aliza.sherkatmanage.DataBase.TimeDao
 import ir.aliza.sherkatmanage.adapter.EmployeeAdapter
 import ir.aliza.sherkatmanage.adapter.InOutAdapter
 import ir.aliza.sherkatmanage.adapter.ProjectNearAdapter
-import ir.aliza.sherkatmanage.adapter.TaskAdapter
+import ir.aliza.sherkatmanage.adapter.TaskEmployeeAdapter
 import ir.aliza.sherkatmanage.databinding.ActivityMainBinding
 import ir.aliza.sherkatmanage.fgmMain.AffairsFragment
 import ir.aliza.sherkatmanage.fgmMain.ChatFragment
@@ -24,9 +24,9 @@ lateinit var employeeDao: EmployeeDao
 lateinit var dayDao: DayDao
 lateinit var timeDao: TimeDao
 lateinit var projectDao: ProjectDao
-lateinit var taskDao: TaskDao
+lateinit var taskEmployeeDao: TaskEmployeeDao
 lateinit var projectAdapter: ProjectNearAdapter
-lateinit var taskAdapter: TaskAdapter
+lateinit var taskAdapter: TaskEmployeeAdapter
 lateinit var inOutAdapter: InOutAdapter
 lateinit var employeeAdapter: EmployeeAdapter
 var Position: Int = 0

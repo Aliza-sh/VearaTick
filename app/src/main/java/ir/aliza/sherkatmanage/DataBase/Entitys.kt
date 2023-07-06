@@ -3,34 +3,6 @@ package ir.aliza.sherkatmanage.DataBase
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "project_table")
-data class Project(
-
-    @PrimaryKey(autoGenerate = true)
-    val idProject: Int? = null,
-
-    val nameProject: String,
-    val informationProject: String,
-    val watchProject: Int,
-    val dayProject: String,
-    val typeProject: String,
-    val progresProject: Int? = null,
-
-    val teamProject: Int? = null,
-    val taskProject: Int? = null
-
-)
-
-@Entity(tableName = "teamProject_table")
-data class TeamProject(
-
-    @PrimaryKey(autoGenerate = true)
-    val idTeam: Int? = null,
-
-    val idEmployee: Int? = null
-
-)
-
 @Entity(tableName = "employee_table")
 data class Employee(
 
@@ -83,6 +55,86 @@ data class Time(
     val exit: String
 )
 
+@Entity(tableName = "taskEmployee_table")
+data class TaskEmployee(
+
+    @PrimaryKey(autoGenerate = true)
+    val idTask: Int? = null,
+
+    val idEmployee: Int,
+
+    val nameTask: String,
+    val dayTask: String,
+    val watchTask: String,
+    val descriptionTask: String,
+    val typeTask: String,
+    val progresTask: Int? = null,
+    val numberSubTaskEmployeeTask: Int? = null,
+
+    val year: String,
+    val month: String,
+    val day: String,
+)
+
+@Entity(tableName = "subTaskEmployeeTask_table")
+data class SubTaskEmployeeTack(
+
+    @PrimaryKey(autoGenerate = true)
+    val idSubTask: Int? = null,
+
+    val isTask: Int,
+
+    val nameTask: String,
+    val descriptionTask: String,
+    val doneTask: Boolean? = null
+
+)
+
+
+@Entity(tableName = "project_table")
+data class Project(
+
+    @PrimaryKey(autoGenerate = true)
+    val idProject: Int? = null,
+
+    val nameProject: String,
+    val descriptionProject: String,
+    val watchProject: Int,
+    val dayProject: String,
+    val typeProject: String,
+    val progresProject: Int? = null,
+
+    val numberSubTaskProject: Int? = null,
+
+    val year: Int,
+    val month: Int,
+    val day: Int,
+
+)
+
+@Entity(tableName = "teamProject_table")
+data class TeamProject(
+
+    @PrimaryKey(autoGenerate = true)
+    val idTeam: Int? = null,
+
+    val idEmployee: Int? = null
+
+)
+
+@Entity(tableName = "subTaskProject_table")
+data class SubTaskProject(
+
+    @PrimaryKey(autoGenerate = true)
+    val idSubTask: Int? = null,
+
+    val idProject: Int,
+
+    val nameSubTask: String,
+    val descriptionTask: String,
+    val doneSubTask: Boolean?
+)
+
 @Entity(tableName = "eff_table")
 data class Efficiency(
 
@@ -97,21 +149,4 @@ data class Efficiency(
     val efficiencyWeekPresence: Int,
     val efficiencyTotal: Int
 
-)
-
-@Entity(tableName = "task_table")
-data class Task(
-
-    @PrimaryKey(autoGenerate = true)
-    val idTask: Int? = null,
-
-    val idEmployee: Int,
-
-    val nameTask: String,
-    val timeTask: String,
-    val descriptionTask: String,
-
-    val year: String,
-    val month: String,
-    val day: String,
 )

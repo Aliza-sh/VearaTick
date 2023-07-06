@@ -4,24 +4,37 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ir.aliza.sherkatmanage.DataBase.Task
+import com.kizitonwose.calendarview.utils.persian.toPersianCalendar
+import ir.aliza.sherkatmanage.DataBase.TaskEmployee
 import ir.aliza.sherkatmanage.databinding.ItemTaskBinding
+import org.threeten.bp.LocalDate
 
-class TaskAdapter(private val data: ArrayList<Task>, private val tackEvent: TaskEvent) :
-    RecyclerView.Adapter<TaskAdapter.TaskViewHolder>() {
+class TaskEmployeeAdapter(
+    private val data: ArrayList<TaskEmployee>,
+    private val tackEvent: TaskEvent,
+    private val inDay: Int,
+    private val date: LocalDate
+) :
+
+    RecyclerView.Adapter<TaskEmployeeAdapter.TaskViewHolder>() {
 
     lateinit var binding: ItemTaskBinding
 
-    inner class TaskViewHolder(itemView: View):RecyclerView.ViewHolder(itemView){
+    inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindData(position: Int) {
 
+            val day = inDay + data[position].dayTask.toInt()
+
+            val monthValue = day / 30 + date.monthValue
+            val dayValue = (day % 30)
+
             binding.txtTack.text = data[position].nameTask
             binding.txtDescription.text = data[position].descriptionTask
-            binding.txtTime.text = data[position].timeTask + " روز "
+            binding.txtTime.text =  dayValue.toString() + " " + date.withMonth(monthValue).toPersianCalendar().persianMonthName
 
             itemView.setOnClickListener {
-                tackEvent.onTaskClicked(data[position], position)
+                tackEvent.onTaskClicked(data[position], position , dayValue.toString() , date.withMonth(monthValue).toPersianCalendar().persianMonthName)
             }
 
             itemView.setOnLongClickListener {
@@ -53,16 +66,29 @@ class TaskAdapter(private val data: ArrayList<Task>, private val tackEvent: Task
         return data.size
     }
 
-    fun addTask(newTask: Task) {
+    fun addTask(newTask: TaskEmployee) {
         data.add(0, newTask)
         notifyItemInserted(0)
     }
-    fun removeEmployee(oldTask: Task, oldPosition: Int) {
+
+    fun removeEmployee(oldTask: TaskEmployee, oldPosition: Int) {
         data.remove(oldTask)
         notifyItemRemoved(oldPosition)
     }
-    interface TaskEvent {
-        fun onTaskClicked(task: Task, position: Int)
-        fun onTaskLongClicked(task: Task, position: Int)
+
+    fun clearAll() {
+        data.clear()
+        notifyDataSetChanged()
     }
+
+    interface TaskEvent {
+        fun onTaskClicked(
+            task: TaskEmployee,
+            position: Int,
+            day: String,
+            monthName: String
+        )
+        fun onTaskLongClicked(task: TaskEmployee, position: Int)
+    }
+
 }

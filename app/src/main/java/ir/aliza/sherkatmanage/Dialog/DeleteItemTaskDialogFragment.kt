@@ -4,12 +4,12 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import ir.aliza.sherkatmanage.DataBase.Task
+import ir.aliza.sherkatmanage.DataBase.TaskEmployee
 import ir.aliza.sherkatmanage.databinding.FragmentDialogDeleteItemTaskBinding
 import ir.aliza.sherkatmanage.taskAdapter
-import ir.aliza.sherkatmanage.taskDao
+import ir.aliza.sherkatmanage.taskEmployeeDao
 
-class DeleteItemTaskDialogFragment(private val task: Task, private val position: Int) : DialogFragment() {
+class DeleteItemTaskDialogFragment(private val task: TaskEmployee, private val position: Int) : DialogFragment() {
 
     lateinit var binding: FragmentDialogDeleteItemTaskBinding
 
@@ -30,9 +30,9 @@ class DeleteItemTaskDialogFragment(private val task: Task, private val position:
 
     }
 
-    fun deleteItem(task: Task, position: Int) {
+    fun deleteItem(task: TaskEmployee, position: Int) {
         taskAdapter.removeEmployee(task, position)
-        taskDao.delete(task)
+        taskEmployeeDao.delete(task)
     }
 
 }

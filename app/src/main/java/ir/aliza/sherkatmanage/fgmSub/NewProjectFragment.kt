@@ -8,6 +8,7 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import com.kizitonwose.calendarview.utils.persian.PersianCalendar
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.Dialog.NewPersonAddToProjectBottomsheetFragment
 import ir.aliza.sherkatmanage.MainActivity
@@ -81,14 +82,20 @@ class NewProjectFragment() : Fragment() {
             val txtDay = binding.edtDayProject.text.toString()
             val txtTime = binding.edtTimePro.text.toString()
             val txtType = binding.edtTypeProject.text.toString()
-            val txtInfo = binding.edtInfoPro.text.toString()
+            val txtDescription = binding.edtInfoPro.text.toString()
+            val day = PersianCalendar()
 
             val newProject = Project(
                 nameProject = txtname,
                 dayProject = txtDay,
                 watchProject = txtTime.toInt(),
                 typeProject = txtType,
-                informationProject = txtInfo
+                descriptionProject = txtDescription,
+
+                year = day.persianYear,
+                month = day.persianMonth,
+                day = day.persianDay
+
             )
             projectAdapter.addProject(newProject)
             projectDao.insert(newProject)

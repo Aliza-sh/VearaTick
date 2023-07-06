@@ -4,10 +4,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ir.aliza.sherkatmanage.DataBase.Task
+import ir.aliza.sherkatmanage.DataBase.TaskEmployee
 import ir.aliza.sherkatmanage.databinding.ItemTaskProjectBinding
 
-class ProjectTaskAdapter(private val data: ArrayList<Task>) :
+class ProjectTaskAdapter(private val data: ArrayList<TaskEmployee>) :
     RecyclerView.Adapter<ProjectTaskAdapter.ProjectTaskHolder>() {
 
     lateinit var binding: ItemTaskProjectBinding
@@ -40,13 +40,13 @@ class ProjectTaskAdapter(private val data: ArrayList<Task>) :
         return 20
     }
 
-    fun addTask(newTask: Task) {
+    fun addTask(newTask: TaskEmployee) {
         data.add(0, newTask)
         notifyItemInserted(0)
     }
 
     interface ProjectTaskAdapter {
-        fun onTaskClicked(task: Task, adapterPosition: Int)
-        fun onTaskLongClicked(task: Task, adapterPosition: Int)
+        fun onTaskClicked(task: TaskEmployee, adapterPosition: Int)
+        fun onTaskLongClicked(task: TaskEmployee, adapterPosition: Int)
     }
 }
