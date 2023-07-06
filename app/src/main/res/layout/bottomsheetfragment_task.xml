@@ -52,11 +52,10 @@
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="5dp"
         android:layoutDirection="rtl"
         android:orientation="horizontal"
         android:weightSum="2"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout5"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -87,13 +86,13 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout5"
+        android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:layout_weight="2"
         android:layoutDirection="rtl"
         android:orientation="horizontal"
-        android:weightSum="2"
         app:layout_constraintBottom_toTopOf="@+id/textInputLayout3">
 
         <com.google.android.material.textfield.TextInputLayout
@@ -101,15 +100,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_weight="1"
-            android:hint="مدت زمان"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1.2"
+            android:hint="روز"
             android:textColorHint="?attr/colorOnSecondary"
             app:boxStrokeColor="@color/firoze">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edt_time_task"
+                android:id="@+id/edt_day_project"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:backgroundTint="?attr/colorPrimaryVariant"
                 android:inputType="phone"
                 android:maxLength="3"
                 android:singleLine="true"
@@ -118,23 +121,51 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/dialog_main_type_project"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
+            android:layout_weight="1.2"
+            android:hint="ساعت"
+            android:textColorHint="?attr/colorOnSecondary"
+            app:boxStrokeColor="@color/firoze">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_time_pro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:backgroundTint="?attr/colorPrimaryVariant"
+                android:inputType="phone"
+                android:maxLength="2"
+                android:singleLine="true"
+                android:textColor="?attr/colorOnSecondary" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/main_edt_type_task"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
+            android:layout_marginBottom="5dp"
             android:layout_weight="1"
             android:hint="نوع پروژه"
             android:textColorHint="?attr/colorOnSecondary"
             app:boxStrokeColor="@color/firoze">
 
             <AutoCompleteTextView
-                android:id="@+id/type_project"
+                android:id="@+id/edt_type_task"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:backgroundTint="?attr/colorPrimaryVariant"
                 android:inputType="none"
+                android:singleLine="true"
                 android:textColor="?attr/colorOnSecondary" />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -162,9 +193,9 @@
             android:layout_height="150dp"
             android:gravity="top"
             android:inputType="text"
-            android:minWidth="20dp"
-            android:maxEms="10"
             android:maxHeight="20dp"
+            android:maxEms="10"
+            android:minWidth="20dp"
             android:textColor="?attr/colorOnSecondary" />
 
     </com.google.android.material.textfield.TextInputLayout>

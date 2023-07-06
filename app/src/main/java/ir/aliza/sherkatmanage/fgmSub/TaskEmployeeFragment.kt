@@ -18,22 +18,21 @@ import com.kizitonwose.calendarview.utils.persian.*
 import com.kizitonwose.calendarview.utils.yearMonth
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Employee
-import ir.aliza.sherkatmanage.DataBase.Task
+import ir.aliza.sherkatmanage.DataBase.TaskEmployee
 import ir.aliza.sherkatmanage.Dialog.DeleteItemTaskDialogFragment
 import ir.aliza.sherkatmanage.Dialog.TaskBottomsheetFragment
 import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.R
-import ir.aliza.sherkatmanage.adapter.TaskAdapter
+import ir.aliza.sherkatmanage.adapter.TaskEmployeeAdapter
 import ir.aliza.sherkatmanage.databinding.FragmentTaskBinding
 import ir.aliza.sherkatmanage.databinding.ItemCalendarDayTaskBinding
-import ir.aliza.sherkatmanage.inOutAdapter
 import ir.aliza.sherkatmanage.taskAdapter
-import ir.aliza.sherkatmanage.taskDao
+import ir.aliza.sherkatmanage.taskEmployeeDao
 import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 
-class TaskFragment(val employee: Employee) : Fragment(), TaskAdapter.TaskEvent {
+class TaskEmployeeFragment(val employee: Employee) : Fragment(), TaskEmployeeAdapter.TaskEvent {
 
     var selectedDate = LocalDate.now()
     lateinit var binding: FragmentTaskBinding
@@ -52,9 +51,10 @@ class TaskFragment(val employee: Employee) : Fragment(), TaskAdapter.TaskEvent {
         super.onViewCreated(view, savedInstanceState)
         AndroidThreeTen.init(view.context)
 
-        taskDao = AppDatabase.getDataBase(view.context).TaskDao
+        taskEmployeeDao = AppDatabase.getDataBase(view.context).TaskDao
 
-        calendarViewCreated()
+        val this1 = this
+        calendarViewCreated(this1)
 
         binding.btnFabTack.setOnClickListener {
             val bottomsheet = TaskBottomsheetFragment(
@@ -69,7 +69,7 @@ class TaskFragment(val employee: Employee) : Fragment(), TaskAdapter.TaskEvent {
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun calendarViewCreated() {
+    fun calendarViewCreated(this1: TaskEmployeeFragment) {
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             val binding1 = ItemCalendarDayTaskBinding.bind(view)
@@ -83,12 +83,12 @@ class TaskFragment(val employee: Employee) : Fragment(), TaskAdapter.TaskEvent {
 
                 view.setOnClickListener {
 
-                    val taskDay = taskDao.getTaskDay(
+                    val taskDay = taskEmployeeDao.getTaskDay(
                         employee.idEmployee!!,
                         day.persianCalendar.persianDay
                     )
 
-                    val taskData = taskDao.getAllTaskInDay(
+                    val taskData = taskEmployeeDao.getAllTaskInInDay(
                         employee.idEmployee,
                         selectedDate.toPersianCalendar().persianYear.toString(),
                         selectedDate.toPersianCalendar().persianMonthName,
@@ -104,11 +104,10 @@ class TaskFragment(val employee: Employee) : Fragment(), TaskAdapter.TaskEvent {
 
                             if (taskDay != null) {
 
-
                                 if (taskDay.day == selectedDate.toPersianCalendar().persianDay.toString()) {
 
                                     taskAdapter =
-                                        TaskAdapter(ArrayList(taskData), TaskFragment(employee))
+                                        TaskEmployeeAdapter(ArrayList(taskData), this1,day.persianCalendar.persianDay,day.date)
                                     binding.recyclerViewDuties.adapter = taskAdapter
                                     binding.recyclerViewDuties.layoutManager =
                                         LinearLayoutManager(context)
@@ -116,7 +115,8 @@ class TaskFragment(val employee: Employee) : Fragment(), TaskAdapter.TaskEvent {
                                 } else {
 
                                     if (binding.recyclerViewDuties.size != 0)
-                                        inOutAdapter.clearAll()
+                                        taskAdapter.clearAll()
+
                                 }
                             }
                         }
@@ -136,6 +136,31 @@ class TaskFragment(val employee: Employee) : Fragment(), TaskAdapter.TaskEvent {
                 this.day = day
                 dateText.text = day.persianCalendar.persianDay.toString().persianNumbers()
                 dayText.text = day.persianCalendar.persianWeekDayName.persianNumbers()
+
+                val taskInDay = taskEmployeeDao.getAllTaskInDay(
+                    employee.idEmployee!!,
+                    day.persianCalendar.persianYear.toString(),
+                    day.persianCalendar.persianMonthName,
+                    day.persianCalendar.persianDay.toString()
+                )
+
+                if (taskInDay != null && taskInDay.day == day.persianCalendar.persianDay.toString()) {
+
+                    binding1.exSevenDateText.setTextColor(
+                        ContextCompat.getColor(
+                            view.context,
+                            R.color.firoze
+                        )
+                    )
+                    binding1.exSevenDayText.setTextColor(
+                        ContextCompat.getColor(
+                            view.context,
+                            R.color.firoze
+                        )
+                    )
+
+                }
+
 
                 val colorRes = if (day.date == selectedDate) {
                     R.color.firoze
@@ -171,14 +196,19 @@ class TaskFragment(val employee: Employee) : Fragment(), TaskAdapter.TaskEvent {
 
     }
 
-    override fun onTaskClicked(task: Task, position: Int) {
+    override fun onTaskClicked(
+        task: TaskEmployee,
+        position: Int,
+        day: String,
+        monthName: String
+    ) {
         val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-        transaction.add(R.id.frame_layout_main, TaskInformationFragment(task))
+        transaction.replace(R.id.frame_layout_main, TaskEmployeeInformationFragment(task,day,monthName))
             .addToBackStack(null)
             .commit()
     }
 
-    override fun onTaskLongClicked(task: Task, position: Int) {
+    override fun onTaskLongClicked(task: TaskEmployee, position: Int) {
         val dialog = DeleteItemTaskDialogFragment(task, position)
         dialog.show((activity as MainActivity).supportFragmentManager, null)
     }
