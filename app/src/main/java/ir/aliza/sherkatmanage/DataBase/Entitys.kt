@@ -20,7 +20,7 @@ data class Employee(
     val skill: String,
     val imgEmployee: ByteArray? = null,
 
-    val watch: Int? = null
+    val isToProject: Int? = null,
 
 )
 
@@ -68,7 +68,7 @@ data class TaskEmployee(
     val watchTask: String,
     val descriptionTask: String,
     val typeTask: String,
-    val progresTask: Int? = null,
+    val progressTask: Int? = null,
     val numberSubTaskEmployeeTask: Int? = null,
 
     val year: String,
@@ -102,9 +102,10 @@ data class Project(
     val watchProject: Int,
     val dayProject: String,
     val typeProject: String,
-    val progresProject: Int? = null,
+    val progressProject: Int? = null,
 
-    val numberSubTaskProject: Int? = null,
+    val numberSubTaskProject: Int? = 0,
+    val numberDoneSubTaskProject: Int? = 0,
 
     val year: Int,
     val month: Int,
@@ -118,7 +119,11 @@ data class TeamProject(
     @PrimaryKey(autoGenerate = true)
     val idTeam: Int? = null,
 
-    val idEmployee: Int? = null
+    val idProject: Int,
+    val idEmployee: Int? = null,
+    val nameEmployee: String? = null,
+    val familyEmployee: String? = null,
+    val genderEmployee: String? = null,
 
 )
 
@@ -132,7 +137,7 @@ data class SubTaskProject(
 
     val nameSubTask: String,
     val descriptionTask: String,
-    val doneSubTask: Boolean?
+    val doneSubTask: Boolean? = null
 )
 
 @Entity(tableName = "eff_table")

@@ -18,6 +18,8 @@ interface EmployeeDao : BaceDao<Employee> {
 
     @Query("SELECT * FROM employee_table")
     fun getAllEmployee(): List<Employee>
+    @Query("SELECT * FROM employee_table WHERE idEmployee = :idEmployee")
+    fun getEmployee(idEmployee: Int,): Employee?
 
     @Query("DELETE FROM employee_table")
     fun deleteAllEmployee()
@@ -72,6 +74,9 @@ interface ProjectDao : BaceDao<Project> {
     @Query("SELECT * FROM project_table")
     fun getAllProject(): List<Project>
 
+    @Query("SELECT * FROM project_table WHERE idProject = :idProject")
+    fun getProject(idProject: Int,): Project?
+
     @Query("DELETE FROM project_table")
     fun deleteAllProject()
 
@@ -84,6 +89,11 @@ interface TeamProjectDao : BaceDao<TeamProject> {
 
     @Query("SELECT * FROM teamProject_table")
     fun getAllTeamProject(): List<TeamProject>
+
+    @Query("SELECT * FROM teamProject_table WHERE idProject = :idProject")
+    fun getListTeamProject(idProject: Int,): List<TeamProject>
+    @Query("SELECT * FROM teamProject_table WHERE idProject = :idProject")
+    fun getTeamProject(idProject: Int,): TeamProject?
 
 }
 
@@ -132,6 +142,8 @@ interface SubTaskProjectDao : BaceDao<SubTaskProject> {
 
     @Query("SELECT * FROM subTaskProject_table")
     fun getAllSubTaskProject(): List<SubTaskProject>
+    @Query("SELECT * FROM subTaskProject_table WHERE idProject = :idProject")
+    fun getSubTaskProject(idProject: Int,): List<SubTaskProject>
 
 //    @Query("SELECT * FROM subTaskProject_table WHERE idEmployee = :idEmployee AND day = :persianDay ")
 //    fun getTaskDay(idEmployee: Int, persianDay: Int): SubTaskProject?

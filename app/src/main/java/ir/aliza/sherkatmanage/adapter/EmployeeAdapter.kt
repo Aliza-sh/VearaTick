@@ -19,7 +19,7 @@ class EmployeeAdapter(private val data: ArrayList<Employee>, private val employe
         @SuppressLint("SetTextI18n")
         fun bindData(position: Int) {
 
-            binding.txtnameprn.text = data[position].name + "" + data[position].family
+            binding.txtnameprn.text = data[position].name + " " + data[position].family
             binding.txttkhprn.text = data[position].specialty
             if (data[position].gender == "زن"){
                 binding.imgprn.setImageResource(R.drawable.img_matter);

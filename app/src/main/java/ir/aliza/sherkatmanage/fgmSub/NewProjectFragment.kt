@@ -10,8 +10,6 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.kizitonwose.calendarview.utils.persian.PersianCalendar
 import ir.aliza.sherkatmanage.DataBase.Project
-import ir.aliza.sherkatmanage.Dialog.NewPersonAddToProjectBottomsheetFragment
-import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.FragmentNewProjectBinding
 import ir.aliza.sherkatmanage.projectAdapter
@@ -48,13 +46,6 @@ class NewProjectFragment() : Fragment() {
 
         binding.btnBck.setOnClickListener {
             onBackPressed()
-        }
-
-        binding.btnAddNewPerson.setOnClickListener{
-            val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frame_layout_main, NewPersonAddToProjectBottomsheetFragment())
-                .addToBackStack(null)
-                .commit()
         }
 
         binding.sheetBtnDone.setOnClickListener {

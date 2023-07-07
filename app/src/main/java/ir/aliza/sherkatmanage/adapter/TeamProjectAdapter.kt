@@ -5,11 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ir.aliza.sherkatmanage.DataBase.Employee
+import ir.aliza.sherkatmanage.DataBase.TeamProject
+import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.ItemAvatarBinding
 
-class AvatarNearAdapter(private val data: ArrayList<Employee>) :
-    RecyclerView.Adapter<AvatarNearAdapter.AvatarNearViewHolder>() {
+class TeamProjectAdapter(private val data: ArrayList<TeamProject>) :
+    RecyclerView.Adapter<TeamProjectAdapter.AvatarNearViewHolder>() {
 
     lateinit var binding: ItemAvatarBinding
 
@@ -17,6 +18,11 @@ class AvatarNearAdapter(private val data: ArrayList<Employee>) :
 
         @SuppressLint("SetTextI18n")
         fun bindData(position: Int) {
+
+            binding.txtNameEmployee.text = data[position].nameEmployee + "" + data[position].familyEmployee
+            if (data[position].genderEmployee == "زن"){
+                binding.imgEmployee.setImageResource(R.drawable.img_matter);
+            }
 
         }
 
@@ -40,7 +46,7 @@ class AvatarNearAdapter(private val data: ArrayList<Employee>) :
     }
 
     override fun getItemCount(): Int {
-        return 5
+        return data.size
     }
 
 }

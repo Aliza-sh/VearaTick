@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Project
+import ir.aliza.sherkatmanage.DataBase.SubTaskProjectDao
 import ir.aliza.sherkatmanage.Dialog.ProjectDialogFragment
 import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.R
@@ -21,6 +22,8 @@ import ir.aliza.sherkatmanage.projectDao
 class ProjectFragment() : Fragment(), ProjectNearAdapter.ProjectNearEvents {
 
     lateinit var binding: FragmentProjectBinding
+    lateinit var subTaskProjectDao: SubTaskProjectDao
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,9 +39,11 @@ class ProjectFragment() : Fragment(), ProjectNearAdapter.ProjectNearEvents {
 
         projectDao = AppDatabase.getDataBase(view.context).projectDao
         val projectNearData = projectDao.getAllProject()
-        projectAdapter = ProjectNearAdapter(ArrayList(projectNearData), this)
+        projectAdapter = ProjectNearAdapter(ArrayList(projectNearData), this, projectDao)
         binding.recyclerViewProject.adapter = projectAdapter
         binding.recyclerViewProject.layoutManager = GridLayoutManager(context, 2)
+
+        subTaskProjectDao = AppDatabase.getDataBase(view.context).subTaskEmployeeProjectDao
 
         onFabClicked()
     }
@@ -56,9 +61,10 @@ class ProjectFragment() : Fragment(), ProjectNearAdapter.ProjectNearEvents {
         }
     }
 
-    override fun onProjectClicked(project: Project) {
+    override fun onProjectClicked(project: Project, day: String, monthName: String) {
         val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-        transaction.add(R.id.frame_layout_main, ProjectInformationFragment())
+        transaction.add(R.id.frame_layout_main, ProjectInformationFragment(project,day,monthName,subTaskProjectDao,
+            projectDao))
             .addToBackStack(null)
             .commit()
     }
@@ -67,19 +73,5 @@ class ProjectFragment() : Fragment(), ProjectNearAdapter.ProjectNearEvents {
         val dialog = ProjectDialogFragment(project, position)
         dialog.show((activity as MainActivity).supportFragmentManager, null)
     }
-
-//    override fun onEmployeeClicked(employee: Employee) {
-//        val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-//        transatction.replace(R.id.frame_layout_main, EmployeeStatisticsFragment())
-//            .addToBackStack(null)
-//            .commit()
-//
-//
-//    }
-//
-//    override fun onEmployeeLongClicked(employee: Employee, position: Int) {
-//        val dialog = EmployeeDialogFragment(employee, position)
-//        dialog.show(parentFragmentManager, null)
-//    }
 
 }

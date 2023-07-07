@@ -5,12 +5,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ir.aliza.sherkatmanage.DataBase.TaskEmployee
-import ir.aliza.sherkatmanage.databinding.ItemTaskProjectBinding
+import ir.aliza.sherkatmanage.databinding.ItemSubTaskBinding
 
 class ProjectTaskAdapter(private val data: ArrayList<TaskEmployee>) :
     RecyclerView.Adapter<ProjectTaskAdapter.ProjectTaskHolder>() {
 
-    lateinit var binding: ItemTaskProjectBinding
+    lateinit var binding: ItemSubTaskBinding
 
     inner class ProjectTaskHolder(itemView: View):RecyclerView.ViewHolder(itemView){
 
@@ -20,7 +20,7 @@ class ProjectTaskAdapter(private val data: ArrayList<TaskEmployee>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProjectTaskHolder {
-        binding = ItemTaskProjectBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = ItemSubTaskBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ProjectTaskHolder(binding.root)
     }
 
@@ -37,7 +37,7 @@ class ProjectTaskAdapter(private val data: ArrayList<TaskEmployee>) :
     }
 
     override fun getItemCount(): Int {
-        return 20
+        return data.size
     }
 
     fun addTask(newTask: TaskEmployee) {

@@ -5,24 +5,51 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.kizitonwose.calendarview.utils.persian.PersianCalendar
+import com.kizitonwose.calendarview.utils.persian.withMonth
+import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Project
+import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.databinding.ItemProjectBinding
 
-class ProjectNearAdapter(private val data: ArrayList<Project>, private val projectNearEvents: ProjectNearEvents) :
+class ProjectNearAdapter(
+    private val data: ArrayList<Project>,
+    private val projectNearEvents: ProjectNearEvents,
+    val projectDao: ProjectDao
+) :
     RecyclerView.Adapter<ProjectNearAdapter.ProjectNearViewHolder>() {
 
     lateinit var binding: ItemProjectBinding
 
-    inner class ProjectNearViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
+    inner class ProjectNearViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         @SuppressLint("SetTextI18n")
         fun bindData(position: Int) {
 
+            val project = projectDao.getProject(data[position].idProject!!)
+            val teamProjectDao = AppDatabase.getDataBase(itemView.context).teamProjectDao
+            val teamProjectData = teamProjectDao.getListTeamProject(project!!.idProject!!)
+            val teamProjectAdapter = TeamProjectAdapter(ArrayList(teamProjectData))
+            binding.recyclerView.adapter = teamProjectAdapter
+
+            val calendar = PersianCalendar()
+            val inDay = calendar.persianDay
+
+            val day = inDay + data[position].dayProject.toInt()
+
+            val monthValue = day / 30 + calendar.persianMonth
+            val dayValue = (day % 30)
+
             binding.txtNamePro.text = data[position].nameProject
-            binding.txtTimePro.text = data[position].dayProject + " روز"
+            binding.txtTimePro.text =
+                dayValue.toString() + " " + calendar.withMonth(monthValue).persianMonthName
 
             itemView.setOnClickListener {
-                projectNearEvents.onProjectClicked(data[position])
+                projectNearEvents.onProjectClicked(
+                    data[position],
+                    dayValue.toString(),
+                    calendar.withMonth(monthValue).persianMonthName
+                )
             }
 
             itemView.setOnLongClickListener {
@@ -72,7 +99,7 @@ class ProjectNearAdapter(private val data: ArrayList<Project>, private val proje
     }
 
     interface ProjectNearEvents {
-        fun onProjectClicked(project: Project)
+        fun onProjectClicked(project: Project, day: String, monthName: String)
         fun onProjectLongClicked(project: Project, position: Int)
     }
 }

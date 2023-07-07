@@ -19,21 +19,22 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/txt_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="12dp"
             android:layout_marginBottom="32dp"
             android:text="توضیحات"
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/textView12"
-            app:layout_constraintTop_toBottomOf="@+id/textView12" />
+            app:layout_constraintEnd_toEndOf="@+id/txt_name_pro"
+            app:layout_constraintTop_toBottomOf="@+id/txt_name_pro" />
 
         <TextView
-            android:id="@+id/textView12"
+            android:id="@+id/txt_name_pro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -96,7 +97,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/imageView4" />
 
             <TextView
-                android:id="@+id/textView33"
+                android:id="@+id/txt_watch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="4dp"
@@ -109,10 +110,9 @@
                 app:layout_constraintTop_toTopOf="@+id/imageView4" />
 
             <TextView
-                android:id="@+id/textView34"
+                android:id="@+id/txt_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginEnd="4dp"
                 android:text="دوشنبه 5 خرداد"
                 android:textColor="?attr/colorOnSurfaceVariant"
@@ -120,7 +120,6 @@
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/imageView3"
                 app:layout_constraintEnd_toStartOf="@+id/imageView3"
-                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/imageView3" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -157,7 +156,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView330"
+                android:id="@+id/txt_num_task_pro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -171,9 +170,9 @@
                 android:id="@+id/textView340"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="تسک هایه کامل شده"
-                app:layout_constraintEnd_toEndOf="@+id/textView330"
-                app:layout_constraintTop_toBottomOf="@+id/textView330" />
+                android:text="تسک کامل شده"
+                app:layout_constraintEnd_toEndOf="@+id/txt_num_task_pro"
+                app:layout_constraintTop_toBottomOf="@+id/txt_num_task_pro" />
 
             <TextView
                 android:id="@+id/textView350"
@@ -181,11 +180,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="پیشرفت"
-                app:layout_constraintEnd_toEndOf="@+id/progress_limit0"
+                app:layout_constraintEnd_toEndOf="@+id/progress_pro"
                 app:layout_constraintTop_toBottomOf="@+id/textView340" />
 
+            <TextView
+                android:id="@+id/txt_prog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="0%"
+                android:textColor="?attr/colorOnSecondary"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@+id/progress_pro"
+                app:layout_constraintStart_toStartOf="@+id/progress_pro" />
+
             <ProgressBar
-                android:id="@+id/progress_limit0"
+                android:id="@+id/progress_pro"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="230dp"
                 android:layout_height="12dp"
@@ -210,7 +220,7 @@
     </androidx.cardview.widget.CardView>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
-        android:id="@+id/btn_fab_pro"
+        android:id="@+id/btn_fab_tack"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
@@ -245,7 +255,6 @@
                 android:id="@+id/textView32"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:text="تیم"
                 android:textColor="?attr/colorOnSurface"
@@ -257,11 +266,12 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rcv_team"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="24dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="24dp"
-                android:layout_marginBottom="32dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="12dp"
+                android:layoutDirection="rtl"
                 android:orientation="horizontal"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -274,10 +284,11 @@
             </androidx.recyclerview.widget.RecyclerView>
 
             <ImageButton
+                android:id="@+id/btn_add_new_person"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:background="?attr/colorPrimaryVariant"
                 android:src="@drawable/ic_add_big"
                 app:layout_constraintStart_toStartOf="parent"
@@ -288,16 +299,18 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:id="@+id/rcv_tsk_pro"
-        tools:listitem="@layout/item_task_project"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="4dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@+id/btn_fab_tack"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cardView7" />
+        app:layout_constraintTop_toBottomOf="@+id/cardView7"
+        tools:listitem="@layout/item_sub_task" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

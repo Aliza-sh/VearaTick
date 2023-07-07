@@ -10,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
+import ir.aliza.sherkatmanage.DataBase.SubTaskProjectDao
 import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.PagerAdapter
@@ -25,6 +26,7 @@ class CompanyFragment : Fragment(), ProjectNearAdapter.ProjectNearEvents {
     lateinit var binding1: ItemProjectBinding
     lateinit var projectNearAdapter: ProjectNearAdapter
     lateinit var projectDao: ProjectDao
+    lateinit var subTaskProjectDao: SubTaskProjectDao
     lateinit var pagerAdapter: PagerAdapter
     private lateinit var viewPager2: ViewPager2
 
@@ -45,8 +47,15 @@ class CompanyFragment : Fragment(), ProjectNearAdapter.ProjectNearEvents {
 
         projectDao = AppDatabase.getDataBase(view.context).projectDao
         val projectNearData = projectDao.getAllProject()
-        projectNearAdapter = ProjectNearAdapter(ArrayList(projectNearData), this)
+        projectNearAdapter = ProjectNearAdapter(
+            ArrayList(projectNearData),
+            this,
+            projectDao
+        )
         binding.recyclerView.adapter = projectNearAdapter
+
+        subTaskProjectDao = AppDatabase.getDataBase(view.context).subTaskEmployeeProjectDao
+
 
 //        val data = arrayListOf<Employee>()
 //        data.add(Employee(1, "ali", "hasani", 20, "man", "aa", 0, 9111112134, "bbb"))
@@ -78,9 +87,15 @@ class CompanyFragment : Fragment(), ProjectNearAdapter.ProjectNearEvents {
 
     }
 
-    override fun onProjectClicked(project: Project) {
+    override fun onProjectClicked(project: Project, day: String, nameMonth: String) {
         val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-        transaction.add(R.id.frame_layout_main, ProjectInformationFragment())
+        transaction.add(R.id.frame_layout_main, ProjectInformationFragment(
+            project,
+            day,
+            nameMonth,
+            subTaskProjectDao,
+            projectDao
+        ))
             .addToBackStack(null)
             .commit()    }
 

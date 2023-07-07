@@ -1,4 +1,4 @@
-package ir.aliza.sherkatmanage.Dialog
+package ir.aliza.sherkatmanage.fgmSub
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,19 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
+import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.adapter.AddNewPersonToProjectAdapter
-import ir.aliza.sherkatmanage.databinding.BottomsheetfragmentNewPersonAddToProjectBinding
+import ir.aliza.sherkatmanage.databinding.FragmentNewPersonAddToProjectBinding
 
-class NewPersonAddToProjectBottomsheetFragment : Fragment() {
+class NewPersonAddToProjectFragment(val project: Project) : Fragment() {
 
-    lateinit var binding: BottomsheetfragmentNewPersonAddToProjectBinding
+    lateinit var binding: FragmentNewPersonAddToProjectBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = BottomsheetfragmentNewPersonAddToProjectBinding.inflate(layoutInflater, null, false)
+        binding = FragmentNewPersonAddToProjectBinding.inflate(layoutInflater, null, false)
         return binding.root
 
     }
@@ -27,7 +28,7 @@ class NewPersonAddToProjectBottomsheetFragment : Fragment() {
 
         val employeeDao = AppDatabase.getDataBase(view.context).employeeDao
         val employeeData = employeeDao.getAllEmployee()
-        val addNewPersonToProjectAdapter = AddNewPersonToProjectAdapter(ArrayList(employeeData))
+        val addNewPersonToProjectAdapter = AddNewPersonToProjectAdapter(ArrayList(employeeData),project)
         binding.recyclerView.adapter = addNewPersonToProjectAdapter
 
 
