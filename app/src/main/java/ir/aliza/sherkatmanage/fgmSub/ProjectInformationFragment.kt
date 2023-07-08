@@ -65,8 +65,7 @@ class ProjectInformationFragment(
         binding.txtNumTaskPro.text =
             project1!!.numberDoneSubTaskProject.toString() + " از " + project1!!.numberSubTaskProject.toString()
 
-
-        val subTaskProjectData = subTaskProjectDao.getSubTaskProject(project.idProject!!)
+        val subTaskProjectData = subTaskProjectDao.getSubTaskProject(project.idProject)
         subTaskProjectAdapter =
             SubTaskProjectAdapter(
                 ArrayList(subTaskProjectData),

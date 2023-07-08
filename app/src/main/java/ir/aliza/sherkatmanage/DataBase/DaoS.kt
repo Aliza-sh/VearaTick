@@ -94,6 +94,8 @@ interface TeamProjectDao : BaceDao<TeamProject> {
     fun getListTeamProject(idProject: Int,): List<TeamProject>
     @Query("SELECT * FROM teamProject_table WHERE idProject = :idProject")
     fun getTeamProject(idProject: Int,): TeamProject?
+    @Query("SELECT * FROM teamProject_table WHERE idEmployee = :idEmployee AND idProject = :idProject")
+    fun getEmployeeTeamProject(idEmployee: Int, idProject: Int,): TeamProject?
 
 }
 

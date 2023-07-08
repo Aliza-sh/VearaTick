@@ -19,7 +19,7 @@ class TeamProjectAdapter(private val data: ArrayList<TeamProject>) :
         @SuppressLint("SetTextI18n")
         fun bindData(position: Int) {
 
-            binding.txtNameEmployee.text = data[position].nameEmployee + "" + data[position].familyEmployee
+            binding.txtNameEmployee.text = data[position].nameEmployee + " " + data[position].familyEmployee
             if (data[position].genderEmployee == "زن"){
                 binding.imgEmployee.setImageResource(R.drawable.img_matter);
             }

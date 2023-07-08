@@ -27,7 +27,8 @@ class AddNewPersonToProjectAdapter(private val data: ArrayList<Employee>, val pr
             val employeeDao = AppDatabase.getDataBase(itemView.context).employeeDao
             val teamProjectDao = AppDatabase.getDataBase(itemView.context).teamProjectDao
             val employee = employeeDao.getEmployee(data[position].idEmployee!!)
-            val teamProject = teamProjectDao.getTeamProject(data[position].idEmployee!!)
+            val teamProject = teamProjectDao.getTeamProject(project.idProject!!)
+            val employeeTeamProject = teamProjectDao.getEmployeeTeamProject(data[position].idEmployee!!,project.idProject)
 
             if (data[position].gender == "زن") {
                 binding.imgprn2.setImageResource(R.drawable.img_matter)
@@ -36,10 +37,12 @@ class AddNewPersonToProjectAdapter(private val data: ArrayList<Employee>, val pr
             binding.txtNameEmployee.text = data[position].name + " " + data[position].family
             binding.txtJobEmployee.text = data[position].specialty
 
-            if (employee!!.isToProject != null) {
-                if (employee.isToProject == data[position].isToProject) {
-                    binding.ckbEmployee.isChecked = true
-                }
+            if (teamProject?.idProject != null) {
+                    if (employeeTeamProject?.idEmployee == employee?.idEmployee) {
+
+                        binding.ckbEmployee.isChecked = true
+
+                    }
             }
 
             binding.ckbEmployee.setOnCheckedChangeListener() { compoundButton: CompoundButton, b: Boolean ->
@@ -47,56 +50,25 @@ class AddNewPersonToProjectAdapter(private val data: ArrayList<Employee>, val pr
                 if (b) {
 
                     val newTeamProject = TeamProject(
-                        idProject = project.idProject!!,
-                        idEmployee = employee.idEmployee,
-                        nameEmployee = employee.name,
-                        familyEmployee = employee.family,
-                        genderEmployee = employee.gender
-                    )
-
-                    val newEmployee = Employee(
-                        idEmployee = employee.idEmployee,
-                        name = employee.name,
-                        family = employee.family,
-                        age = employee.age,
-                        gender = employee.gender,
-                        cellularPhone = employee.cellularPhone,
-                        homePhone = employee.homePhone,
-                        address = employee.address,
-                        specialty = employee.specialty,
-                        skill = employee.skill,
-                        imgEmployee = employee.imgEmployee,
-                        isToProject = project.idProject
-                    )
-                    employeeDao.update(newEmployee)
-                    teamProjectDao.insert(newTeamProject)
-
-                } else {
-
-                    val newTeamProject = TeamProject(
-                        idTeam = teamProject!!.idTeam,
-                        idProject = project.idProject!!,
+                        idProject = project.idProject,
                         idEmployee = employee!!.idEmployee,
                         nameEmployee = employee.name,
                         familyEmployee = employee.family,
                         genderEmployee = employee.gender
                     )
 
-                    val newEmployee = Employee(
-                        idEmployee = employee.idEmployee,
-                        name = employee.name,
-                        family = employee.family,
-                        age = employee.age,
-                        gender = employee.gender,
-                        cellularPhone = employee.cellularPhone,
-                        homePhone = employee.homePhone,
-                        address = employee.address,
-                        specialty = employee.specialty,
-                        skill = employee.skill,
-                        imgEmployee = employee.imgEmployee,
-                        isToProject = null
+                    teamProjectDao.insert(newTeamProject)
+
+                } else {
+
+                    val newTeamProject = TeamProject(
+                        idTeam = employeeTeamProject?.idTeam,
+                        idProject = project.idProject,
+                        idEmployee = employee!!.idEmployee,
+                        nameEmployee = employee.name,
+                        familyEmployee = employee.family,
+                        genderEmployee = employee.gender
                     )
-                    employeeDao.update(newEmployee)
                     teamProjectDao.delete(newTeamProject)
 
                 }

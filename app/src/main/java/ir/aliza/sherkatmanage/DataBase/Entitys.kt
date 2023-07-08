@@ -20,8 +20,6 @@ data class Employee(
     val skill: String,
     val imgEmployee: ByteArray? = null,
 
-    val isToProject: Int? = null,
-
 )
 
 @Entity(tableName = "day_table")
