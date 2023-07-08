@@ -155,7 +155,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/textView330"
+                android:id="@+id/txt_num_task"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
@@ -170,8 +170,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="تسک هایه کامل شده"
-                app:layout_constraintEnd_toEndOf="@+id/textView330"
-                app:layout_constraintTop_toBottomOf="@+id/textView330" />
+                app:layout_constraintEnd_toEndOf="@+id/txt_num_task"
+                app:layout_constraintTop_toBottomOf="@+id/txt_num_task" />
 
             <TextView
                 android:id="@+id/textView350"

@@ -129,6 +129,9 @@ interface SubTaskEmployeeTackDao : BaceDao<SubTaskEmployeeTack> {
     @Query("SELECT * FROM subTaskEmployeeTask_table")
     fun getAllSubTaskEmployeeTack(): List<SubTaskEmployeeTack>
 
+    @Query("SELECT * FROM subTaskEmployeeTask_table WHERE idTask = :idTack")
+    fun getSubTaskProject(idTack: Int,): List<SubTaskEmployeeTack>
+
 //    @Query("SELECT * FROM subTaskEmployeeTask_table WHERE idEmployee = :idEmployee AND day = :persianDay ")
 //    fun getTaskDay(idEmployee: Int, persianDay: Int): SubTaskEmployeeTack?
 //

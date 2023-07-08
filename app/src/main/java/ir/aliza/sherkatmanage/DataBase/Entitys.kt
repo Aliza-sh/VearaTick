@@ -67,7 +67,9 @@ data class TaskEmployee(
     val descriptionTask: String,
     val typeTask: String,
     val progressTask: Int? = null,
+
     val numberSubTaskEmployeeTask: Int? = null,
+    val numberDoneSubTaskEmployeeTask: Int? = 0,
 
     val year: String,
     val month: String,
@@ -80,11 +82,11 @@ data class SubTaskEmployeeTack(
     @PrimaryKey(autoGenerate = true)
     val idSubTask: Int? = null,
 
-    val isTask: Int,
+    val idTask: Int,
 
-    val nameTask: String,
-    val descriptionTask: String,
-    val doneTask: Boolean? = null
+    val nameSubTask: String,
+    val descriptionSubTask: String,
+    val doneSubTask: Boolean? = null
 
 )
 
