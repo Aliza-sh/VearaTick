@@ -27,6 +27,7 @@
             app:cpb_background_progressbar_color="@color/white"
             app:cpb_background_progressbar_width="5dp"
             app:cpb_progress="0"
+            android:layout_marginEnd="@dimen/text_margin"
             app:cpb_progress_max="100"
             app:cpb_progressbar_color="@color/firoze"
             app:cpb_progressbar_width="5dp"
@@ -39,7 +40,6 @@
             android:id="@+id/imgprn"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_gravity="center|top"
             app:layout_constraintBottom_toBottomOf="@+id/progress_circular"
             app:layout_constraintEnd_toEndOf="@+id/progress_circular"
             app:layout_constraintStart_toStartOf="@+id/progress_circular"
@@ -50,7 +50,6 @@
             android:id="@+id/lin_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:layout_marginTop="16dp"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="@+id/imgprn"
@@ -61,7 +60,6 @@
                 android:id="@+id/txtnameprn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center|top"
                 android:text="علیرضا شهسواری"
                 android:textColor="?attr/colorOnSecondary"
                 android:textSize="20sp"
@@ -91,7 +89,7 @@
             app:layout_constraintTop_toBottomOf="@+id/lin_name" />
 
         <TextView
-            android:id="@+id/txttime"
+            android:id="@+id/txt_presence_week"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -99,10 +97,10 @@
             android:textColor="?attr/colorOnSecondary"
             android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/txtbzdwk"
+            app:layout_constraintEnd_toStartOf="@+id/txt_duties_week"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/txtbzdwk" />
+            app:layout_constraintTop_toTopOf="@+id/txt_duties_week" />
 
         <TextView
             android:id="@+id/textView1"
@@ -114,12 +112,12 @@
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/txttime"
-            app:layout_constraintStart_toStartOf="@+id/txttime"
-            app:layout_constraintTop_toBottomOf="@+id/txttime" />
+            app:layout_constraintEnd_toEndOf="@+id/txt_presence_week"
+            app:layout_constraintStart_toStartOf="@+id/txt_presence_week"
+            app:layout_constraintTop_toBottomOf="@+id/txt_presence_week" />
 
         <TextView
-            android:id="@+id/txtbzdwk"
+            android:id="@+id/txt_duties_week"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
@@ -128,7 +126,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/txttime"
+            app:layout_constraintStart_toEndOf="@+id/txt_presence_week"
             app:layout_constraintTop_toBottomOf="@+id/view" />
 
         <TextView
@@ -141,9 +139,9 @@
             android:textColor="?attr/colorOnSurfaceVariant"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/txtbzdwk"
-            app:layout_constraintStart_toStartOf="@+id/txtbzdwk"
-            app:layout_constraintTop_toBottomOf="@+id/txtbzdwk" />
+            app:layout_constraintEnd_toEndOf="@+id/txt_duties_week"
+            app:layout_constraintStart_toStartOf="@+id/txt_duties_week"
+            app:layout_constraintTop_toBottomOf="@+id/txt_duties_week" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

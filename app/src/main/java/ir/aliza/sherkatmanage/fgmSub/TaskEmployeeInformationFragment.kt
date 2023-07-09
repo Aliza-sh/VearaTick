@@ -9,7 +9,9 @@ import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.SubTaskEmployeeTack
 import ir.aliza.sherkatmanage.DataBase.SubTaskEmployeeTackDao
 import ir.aliza.sherkatmanage.DataBase.TaskEmployee
+import ir.aliza.sherkatmanage.Dialog.DeleteSubTaskEmployeeTaskDialogFragment
 import ir.aliza.sherkatmanage.Dialog.SubTaskEmployeeTaskBottomsheetFragment
+import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.adapter.SubTaskEmployeeTackAdapter
 import ir.aliza.sherkatmanage.databinding.FragmentTaskInformationBinding
 import ir.aliza.sherkatmanage.taskEmployeeDao
@@ -41,13 +43,13 @@ class TaskEmployeeInformationFragment(
         binding.txtTime.text = task.watchTask + " : 00"
         binding.txtData.text = day + " " + monthName
 
-        val tack1 = taskEmployeeDao.getTaskDay(task.idTask!!,task.day.toInt())
+        val tack1 = taskEmployeeDao.getSubTaskDay(task.idTask!!,task.day.toInt())
         binding.txtNumTask.text =
-            tack1!!.numberDoneSubTaskEmployeeTask.toString() + " از " + tack1!!.numberSubTaskEmployeeTask.toString()
+            tack1?.numberDoneSubTaskEmployeeTask.toString() + " از " + tack1?.numberSubTaskEmployeeTask.toString()
 
         subTaskEmployeeTaskDao = AppDatabase.getDataBase(view.context).subTaskEmployeeTackDao
 
-        val subTaskEmployeeTaskData = subTaskEmployeeTaskDao.getSubTaskProject(task.idTask)
+        val subTaskEmployeeTaskData = subTaskEmployeeTaskDao.getSubTaskEmployeeTack(task.idTask)
 
         subTaskEmployeeTaskAdapter =
             SubTaskEmployeeTackAdapter(
@@ -84,16 +86,16 @@ class TaskEmployeeInformationFragment(
     }
 
     override fun onSubTaskLongClicked(subTask: SubTaskEmployeeTack, position: Int) {
-//        val dialog = DeleteSubTaskProjectDialogFragment(
-//            subTask,
-//            position,
-//            subTaskProjectDao,
-//            subTaskProjectAdapter,
-//            projectDao,
-//            project,
-//            binding
-//        )
-//        dialog.show((activity as MainActivity).supportFragmentManager, null)
+        val dialog = DeleteSubTaskEmployeeTaskDialogFragment(
+            subTask,
+            position,
+            subTaskEmployeeTaskDao,
+            subTaskEmployeeTaskAdapter,
+            taskEmployeeDao,
+            task,
+            binding
+        )
+        dialog.show((activity as MainActivity).supportFragmentManager, null)
 
     }
 

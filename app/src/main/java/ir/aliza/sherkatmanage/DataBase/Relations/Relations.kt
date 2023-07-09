@@ -2,7 +2,7 @@ package ir.aliza.sherkatmanage.DataBase.Relations
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import ir.aliza.sherkatmanage.DataBase.Efficiency
+import ir.aliza.sherkatmanage.DataBase.EfficiencyEmployee
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.DataBase.Time
 
@@ -12,7 +12,7 @@ data class EmployeeAndEfficiency (
         parentColumn = "idEmployee",
         entityColumn = "idEfficiency"
     )
-    val efficiency: Efficiency
+    val efficiency: EfficiencyEmployee
 
 )data class EmployeeAndTime (
     @Embedded val employee: Employee,

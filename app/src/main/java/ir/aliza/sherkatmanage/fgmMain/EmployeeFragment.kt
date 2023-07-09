@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
+import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.Dialog.EmployeeDialogFragment
 import ir.aliza.sherkatmanage.MainActivity
@@ -21,6 +22,8 @@ import ir.aliza.sherkatmanage.fgmSub.RecruitmentFragment
 class EmployeeFragment : Fragment(), EmployeeAdapter.EmployeeEvents {
 
     lateinit var binding: FragmentEmployeesBinding
+    lateinit var efficiencyEmployeeDao: EfficiencyDao
+
     lateinit var employeeData: List<Employee>
 
     override fun onCreateView(
@@ -35,9 +38,11 @@ class EmployeeFragment : Fragment(), EmployeeAdapter.EmployeeEvents {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        efficiencyEmployeeDao = AppDatabase.getDataBase(view.context).efficiencyDao
+
         val employeeDao = AppDatabase.getDataBase(view.context).employeeDao
         employeeData = employeeDao.getAllEmployee()
-        employeeAdapter = EmployeeAdapter(ArrayList(employeeData), this)
+        employeeAdapter = EmployeeAdapter(ArrayList(employeeData), this, efficiencyEmployeeDao)
         binding.recyclerViewEmployee.adapter = employeeAdapter
         binding.recyclerViewEmployee.layoutManager = GridLayoutManager(context, 2)
 
@@ -57,7 +62,7 @@ class EmployeeFragment : Fragment(), EmployeeAdapter.EmployeeEvents {
     fun onFabClicked() {
         binding.btnFabEmp.setOnClickListener {
             val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frame_layout_main, RecruitmentFragment())
+            transaction.replace(R.id.frame_layout_main, RecruitmentFragment(efficiencyEmployeeDao))
                 .addToBackStack(null)
                 .commit()
         }
@@ -66,7 +71,10 @@ class EmployeeFragment : Fragment(), EmployeeAdapter.EmployeeEvents {
     override fun onEmployeeClicked(employee: Employee, position: Int) {
         Position = position
         val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.frame_layout_main, EmployeeStatisticsFragment(employee))
+        transaction.replace(
+            R.id.frame_layout_main,
+            EmployeeStatisticsFragment(employee, efficiencyEmployeeDao)
+        )
             .addToBackStack(null)
             .commit()
     }

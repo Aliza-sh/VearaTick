@@ -42,7 +42,7 @@
 
 
             <com.mikhaellopez.circularprogressbar.CircularProgressBar
-                android:id="@+id/progress_circular_efficiency"
+                android:id="@+id/progress_circular_Tack"
                 android:layout_width="160dp"
                 android:layout_height="160dp"
                 android:layout_gravity="center"
@@ -51,6 +51,7 @@
                 android:layout_marginBottom="16dp"
                 app:cpb_background_progressbar_color="?attr/colorOnPrimary"
                 app:cpb_background_progressbar_width="13dp"
+                app:cpb_progress="0"
                 app:cpb_progress_max="100"
                 app:cpb_progressbar_color="@color/fi_dark"
                 app:cpb_progressbar_width="9dp"
@@ -60,21 +61,22 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <com.mikhaellopez.circularprogressbar.CircularProgressBar
-                android:id="@+id/progress_circular_Time"
+                android:id="@+id/progress_circular_presence"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_gravity="center"
                 app:cpb_background_progressbar_color="?attr/colorOnPrimary"
                 app:cpb_background_progressbar_width="13dp"
+                app:cpb_progress="0"
                 app:cpb_progress_max="100"
                 app:cpb_progressbar_color="@color/fi_light"
                 app:cpb_progressbar_color_direction="right_to_left"
                 app:cpb_progressbar_width="9dp"
                 app:cpb_round_border="true"
-                app:layout_constraintBottom_toBottomOf="@+id/progress_circular_efficiency"
-                app:layout_constraintEnd_toEndOf="@+id/progress_circular_efficiency"
-                app:layout_constraintStart_toStartOf="@+id/progress_circular_efficiency"
-                app:layout_constraintTop_toTopOf="@+id/progress_circular_efficiency" />
+                app:layout_constraintBottom_toBottomOf="@+id/progress_circular_Tack"
+                app:layout_constraintEnd_toEndOf="@+id/progress_circular_Tack"
+                app:layout_constraintStart_toStartOf="@+id/progress_circular_Tack"
+                app:layout_constraintTop_toTopOf="@+id/progress_circular_Tack" />
 
             <TextView
                 android:id="@+id/textView8"

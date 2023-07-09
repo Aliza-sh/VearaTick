@@ -4,6 +4,8 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
+import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
+import ir.aliza.sherkatmanage.DataBase.EfficiencyEmployee
 import ir.aliza.sherkatmanage.DataBase.Time
 import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.R
@@ -17,7 +19,7 @@ class ArrivalsAndDeparturesDialogFragment(
     val year: String,
     val month: String,
     val day: Int,
-    val arrival: Boolean,
+    val efficiencyEmployeeDao: EfficiencyDao,
 
     ) : DialogFragment() {
 
@@ -32,7 +34,7 @@ class ArrivalsAndDeparturesDialogFragment(
         dialog.setView(binding.root)
         dialog.setCancelable(true)
         binding.dialogBtnSure.setOnClickListener {
-            val dialog = DoneEntryDialogFragment(binding1, idEmployee, year, month, day, true)
+            val dialog = DoneEntryDialogFragment(binding1, idEmployee, year, month, day,efficiencyEmployeeDao)
             dialog.show((activity as MainActivity).supportFragmentManager, null)
             dialog.isCancelable = false
             dismiss()
@@ -51,8 +53,20 @@ class ArrivalsAndDeparturesDialogFragment(
                 entry = "0",
                 exit = "0"
             )
+            val efficiencyEmployee = efficiencyEmployeeDao.getEfficiencyEmployee(idEmployee)
 
             if (day.toString() == timeData?.day) {
+
+                var time = timeData.exit!!.toInt() - timeData.entry.toInt()
+                val timeAgo = efficiencyEmployee?.efficiencyWeekDuties!! - time
+
+                val newEfficiencyEmployee = EfficiencyEmployee(
+                    idEfficiency = efficiencyEmployee.idEfficiency,
+                    idEmployee = idEmployee,
+                    totalWatch = efficiencyEmployee.totalWatch,
+                    efficiencyWeekDuties = timeAgo
+                )
+                efficiencyEmployeeDao.update(newEfficiencyEmployee)
                 timeDao.update(newTime)
                 //inOutAdapter.updateInOut(newTime, 0)
                 binding1.viewDaySub.setBackgroundColor(it.context.getColor(R.color.red_800))

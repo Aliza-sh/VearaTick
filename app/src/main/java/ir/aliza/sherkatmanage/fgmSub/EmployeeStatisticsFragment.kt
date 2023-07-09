@@ -8,13 +8,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.ViewPagerEmployeeAdapter
 import ir.aliza.sherkatmanage.databinding.FragmentEmployeeStatisticsBinding
 
-class EmployeeStatisticsFragment(val employee: Employee) : Fragment() {
+class EmployeeStatisticsFragment(val employee: Employee, val efficiencyEmployeeDao: EfficiencyDao) : Fragment() {
 
     lateinit var binding: FragmentEmployeeStatisticsBinding
 
@@ -30,7 +31,7 @@ class EmployeeStatisticsFragment(val employee: Employee) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val myAdapter = ViewPagerEmployeeAdapter(employee,this)
+        val myAdapter = ViewPagerEmployeeAdapter(employee,this,efficiencyEmployeeDao)
         binding.viewpagerEmp.adapter = myAdapter
         binding.viewpagerEmp.offscreenPageLimit = 2
 

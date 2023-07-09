@@ -5,28 +5,38 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.ItemEmployeeBinding
 
-class EmployeeAdapter(private val data: ArrayList<Employee>, private val employeeEvents: EmployeeEvents) :
+class EmployeeAdapter(
+    private val data: ArrayList<Employee>,
+    private val employeeEvents: EmployeeEvents,
+    val efficiencyEmployeeDao: EfficiencyDao
+) :
     RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder>() {
 
     lateinit var binding: ItemEmployeeBinding
 
-    inner class EmployeeViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
+    inner class EmployeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         @SuppressLint("SetTextI18n")
         fun bindData(position: Int) {
 
+            val efficiencyEmployee =
+                efficiencyEmployeeDao.getEfficiencyEmployee(data[position].idEmployee!!)
+
+            binding.txtPresenceWeek.text = efficiencyEmployee?.efficiencyWeekPresence.toString() + "%"
+            binding.txtDutiesWeek.text = efficiencyEmployee?.efficiencyWeekDuties.toString() + "%"
             binding.txtnameprn.text = data[position].name + " " + data[position].family
             binding.txttkhprn.text = data[position].specialty
-            if (data[position].gender == "زن"){
+            if (data[position].gender == "زن") {
                 binding.imgprn.setImageResource(R.drawable.img_matter);
             }
 
             itemView.setOnClickListener {
-                employeeEvents.onEmployeeClicked(data[position],position)
+                employeeEvents.onEmployeeClicked(data[position], position)
             }
 
             itemView.setOnLongClickListener {
@@ -69,7 +79,7 @@ class EmployeeAdapter(private val data: ArrayList<Employee>, private val employe
 
     fun updateEmployee(newEmployee: Employee, position: Int) {
 
-        data.set(position,newEmployee)
+        data.set(position, newEmployee)
         notifyItemChanged(position)
 
     }
@@ -82,7 +92,7 @@ class EmployeeAdapter(private val data: ArrayList<Employee>, private val employe
     }
 
     interface EmployeeEvents {
-        fun onEmployeeClicked(employee: Employee,position: Int)
+        fun onEmployeeClicked(employee: Employee, position: Int)
         fun onEmployeeLongClicked(employee: Employee, position: Int)
     }
 }

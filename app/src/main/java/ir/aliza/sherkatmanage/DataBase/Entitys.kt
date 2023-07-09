@@ -66,9 +66,10 @@ data class TaskEmployee(
     val watchTask: String,
     val descriptionTask: String,
     val typeTask: String,
-    val progressTask: Int? = null,
 
-    val numberSubTaskEmployeeTask: Int? = null,
+    val progressTask: Int? = 0,
+
+    val numberSubTaskEmployeeTask: Int? = 0,
     val numberDoneSubTaskEmployeeTask: Int? = 0,
 
     val year: String,
@@ -102,7 +103,8 @@ data class Project(
     val watchProject: Int,
     val dayProject: String,
     val typeProject: String,
-    val progressProject: Int? = null,
+
+    val progressProject: Int? = 0,
 
     val numberSubTaskProject: Int? = 0,
     val numberDoneSubTaskProject: Int? = 0,
@@ -140,18 +142,23 @@ data class SubTaskProject(
     val doneSubTask: Boolean? = null
 )
 
-@Entity(tableName = "eff_table")
-data class Efficiency(
+@Entity(tableName = "efficiency_table")
+data class EfficiencyEmployee(
 
     @PrimaryKey(autoGenerate = true)
-    val idEfficiency: Int,
+    val idEfficiency: Int? = null,
 
     val idEmployee: Int,
 
-    val efficiencyTask: Int,
-    val efficiencyPresence: Int,
-    val efficiencyWeekDuties: Int,
-    val efficiencyWeekPresence: Int,
-    val efficiencyTotal: Int
+    val efficiencyWeekDuties: Int? = 0,
+    val efficiencyWeekPresence: Int? = 0,
+
+    val efficiencyTotalDuties: Int? = 0,
+    val efficiencyTotalPresence: Int? = 0,
+
+    val efficiencyTotal: Int? = 0,
+
+    val totalWatch: Int? = 0,
+    val totalTask: Int? = 0
 
 )

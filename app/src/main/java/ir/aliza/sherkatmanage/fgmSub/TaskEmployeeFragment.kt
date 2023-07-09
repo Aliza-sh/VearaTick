@@ -17,6 +17,7 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.persian.*
 import com.kizitonwose.calendarview.utils.yearMonth
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
+import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.DataBase.TaskEmployee
 import ir.aliza.sherkatmanage.Dialog.DeleteItemTaskDialogFragment
@@ -32,7 +33,7 @@ import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 
-class TaskEmployeeFragment(val employee: Employee) : Fragment(), TaskEmployeeAdapter.TaskEvent {
+class TaskEmployeeFragment(val employee: Employee, val  efficiencyEmployeeDao: EfficiencyDao) : Fragment(), TaskEmployeeAdapter.TaskEvent {
 
     var selectedDate = LocalDate.now()
     lateinit var binding: FragmentTaskBinding

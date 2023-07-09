@@ -60,7 +60,7 @@ class SubTaskEmployeeTaskBottomsheetFragment(
             subTaskProjectDao.insert(newSubTask)
             subTaskEmployeeTaskAdapter.addTask(newSubTask)
 
-            val task1 = taskEmployeeDao.getTaskDay(task.idTask,task.day.toInt())
+            val task1 = taskEmployeeDao.getSubTaskDay(task.idTask,task.day.toInt())
 
             var numberSubTaskEmployeeTask = task1!!.numberSubTaskEmployeeTask
 

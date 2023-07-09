@@ -5,6 +5,8 @@ import android.app.Dialog
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
+import ir.aliza.sherkatmanage.DataBase.EfficiencyEmployee
 import ir.aliza.sherkatmanage.DataBase.Time
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.FragmentCalendarBinding
@@ -18,7 +20,7 @@ class DoneEntryDialogFragment(
     val year: String,
     val month: String,
     val day: Int,
-    val arrival: Boolean
+    val efficiencyEmployeeDao: EfficiencyDao,
 ) : DialogFragment() {
 
     lateinit var binding: FragmentDialogDoneEntryBinding
@@ -42,9 +44,13 @@ class DoneEntryDialogFragment(
 
             if (
                 binding.edtEntryEpm.length() > 0 &&
-                binding.edtExitEmp.length() > 0
+                binding.edtExitEmp.length() > 0 &&
+                binding.edtEntryEpm.text.toString().toInt() < binding.edtExitEmp.text.toString()
+                    .toInt()
 
             ) {
+
+                val efficiencyEmployee = efficiencyEmployeeDao.getEfficiencyEmployee(idEmployee)
 
                 val newTime = Time(
                     timeData?.idTime,
@@ -53,15 +59,48 @@ class DoneEntryDialogFragment(
                     month = month,
                     day = day.toString(),
                     arrival = true,
-                    entry = entry.toString(),
-                    exit = exit.toString()
+                    entry = binding.edtEntryEpm.text.toString(),
+                    exit = binding.edtExitEmp.text.toString()
                 )
 
                 if (day.toString() == timeData?.day) {
+
+                    var time = timeData?.exit!!.toInt() - timeData.entry.toInt()
+                    val timeAgo = efficiencyEmployee?.efficiencyWeekDuties!! - time
+                    val timeNew = binding.edtExitEmp.text.toString()
+                        .toInt() - binding.edtEntryEpm.text.toString().toInt()
+
+                    time = timeNew + timeAgo
+
+                    val newEfficiencyEmployee = EfficiencyEmployee(
+                        idEfficiency = efficiencyEmployee.idEfficiency,
+                        idEmployee = idEmployee,
+                        totalWatch = efficiencyEmployee.totalWatch,
+                        efficiencyWeekDuties = time
+
+                    )
+                    efficiencyEmployeeDao.update(newEfficiencyEmployee)
+
                     timeDao.update(newTime)
                     //inOutAdapter.updateInOut(newTime, 0)
                     binding2.viewDaySub.setBackgroundColor(it.context.getColor(R.color.green_700))
                 } else {
+
+                    val timeAgo = efficiencyEmployee?.efficiencyWeekDuties!!
+                    val timeNew = binding.edtExitEmp.text.toString()
+                        .toInt() - binding.edtEntryEpm.text.toString().toInt()
+
+                    val time = timeNew + timeAgo
+
+                    val newEfficiencyEmployee = EfficiencyEmployee(
+                        idEfficiency = efficiencyEmployee.idEfficiency,
+                        idEmployee = idEmployee,
+                        totalWatch = efficiencyEmployee.totalWatch,
+                        efficiencyWeekDuties = time
+
+                    )
+                    efficiencyEmployeeDao.update(newEfficiencyEmployee)
+
                     timeDao.insert(newTime)
                     binding2.viewDaySub.setBackgroundColor(it.context.getColor(R.color.green_700))
                 }

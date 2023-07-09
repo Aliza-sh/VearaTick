@@ -15,6 +15,8 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.yalantis.ucrop.UCrop
+import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
+import ir.aliza.sherkatmanage.DataBase.EfficiencyEmployee
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.FragmentRecruitmentBinding
@@ -23,10 +25,10 @@ import ir.aliza.sherkatmanage.employeeDao
 import java.io.File
 
 private val PICK_IMAGE_REQUEST = 1
-private val REQUEST_CODE_CROP_IMAGE = 2
-class RecruitmentFragment() : Fragment() {
+class RecruitmentFragment(val efficiencyEmployeeDao: EfficiencyDao) : Fragment() {
 
     lateinit var binding: FragmentRecruitmentBinding
+
     var imageUri: Uri? = null
     lateinit var imageBytes: ByteArray
     lateinit var newEmployee: Employee
@@ -72,7 +74,6 @@ class RecruitmentFragment() : Fragment() {
         intent.type = "image/*"
         startActivityForResult(intent, PICK_IMAGE_REQUEST)
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == AppCompatActivity.RESULT_OK && data != null) {
@@ -112,7 +113,6 @@ class RecruitmentFragment() : Fragment() {
                 .apply(RequestOptions.circleCropTransform())
                 .into(binding.imgprn2)
     }
-
     fun onBackPressed() {
         if (parentFragmentManager.backStackEntryCount > 0) {
             parentFragmentManager.popBackStack()
@@ -120,7 +120,6 @@ class RecruitmentFragment() : Fragment() {
             onBackPressed()
         }
     }
-
     private fun addNewEmployee() {
         if (
             binding.edtNameEpm.length() > 0 &&
@@ -174,6 +173,13 @@ class RecruitmentFragment() : Fragment() {
 
             employeeAdapter.addEmployee(newEmployee)
             employeeDao.insert(newEmployee)
+
+            val employee = employeeDao.getObjectAllEmployee(txtname,txtFamily)
+
+            val newEfficiencyEmployee = EfficiencyEmployee(
+                idEmployee = employee?.idEmployee!!,
+            )
+            efficiencyEmployeeDao.insert(newEfficiencyEmployee)
 
             onBackPressed()
         } else {

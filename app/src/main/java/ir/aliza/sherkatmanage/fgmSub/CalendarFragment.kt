@@ -25,6 +25,8 @@ import com.kizitonwose.calendarview.utils.persian.*
 import com.kizitonwose.calendarview.utils.previous
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Day
+import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
+import ir.aliza.sherkatmanage.DataBase.EfficiencyEmployee
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.Dialog.ArrivalsAndDeparturesDialogFragment
 import ir.aliza.sherkatmanage.Dialog.EntryAndExitDialogFragment
@@ -41,9 +43,8 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import java.time.DayOfWeek
 
-class CalendarFragment(employee: Employee) : Fragment() {
+class CalendarFragment(val employee: Employee, val efficiencyEmployeeDao: EfficiencyDao) : Fragment() {
 
-    val employee = employee
 
     lateinit var binding: FragmentCalendarBinding
     private var selectedDate: LocalDate? = null
@@ -172,7 +173,7 @@ class CalendarFragment(employee: Employee) : Fragment() {
                                     day.persianCalendar.persianYear.toString(),
                                     day.persianCalendar.persianMonthName,
                                     selectedDate!!.toPersianCalendar().persianDay,
-                                    true,
+                                    efficiencyEmployeeDao
                                 )
                                 dialog.isCancelable = false
                                 dialog.show((activity as MainActivity).supportFragmentManager, null)
@@ -282,7 +283,7 @@ class CalendarFragment(employee: Employee) : Fragment() {
                                         dayDao.getDay(("${tv.id}${employee.idEmployee}").toLong())
 
                                     if (dayData?.idDay != ("${tv.id}${employee.idEmployee}").toLong()) {
-                                        val dialog = EntryAndExitDialogFragment(month, employee, tv)
+                                        val dialog = EntryAndExitDialogFragment(month, employee, tv,efficiencyEmployeeDao)
                                         dialog.show(
                                             (activity as MainActivity).supportFragmentManager,
                                             null
@@ -304,6 +305,19 @@ class CalendarFragment(employee: Employee) : Fragment() {
                                                 tv.context, R.color.blacke
                                             )
                                         )
+
+                                        val efficiencyEmployee = efficiencyEmployeeDao.getEfficiencyEmployee(employee.idEmployee!!)
+                                        var time = dayData.exit!!.toInt() - dayData.entry!!.toInt()
+
+                                        time = efficiencyEmployee?.totalWatch!! - time
+
+                                        val newEfficiencyEmployee = EfficiencyEmployee(
+                                            idEfficiency = efficiencyEmployee.idEfficiency,
+                                            idEmployee = employee.idEmployee,
+                                            totalWatch = time
+
+                                        )
+                                        efficiencyEmployeeDao.update(newEfficiencyEmployee)
                                     }
 
                                 }

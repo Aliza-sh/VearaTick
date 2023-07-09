@@ -48,7 +48,7 @@ class SubTaskEmployeeTackAdapter(
                 )
                 subTaskProjectDao.update(newSubTask)
 
-                val tack1 = taskEmployeeDao.getTaskDay(task.idTask,task.day.toInt())
+                val tack1 = taskEmployeeDao.getSubTaskDay(task.idTask, task.day.toInt())
 
                 var numberDonSubTaskEmployeeTack = tack1!!.numberDoneSubTaskEmployeeTask
                 if (numberDonSubTaskEmployeeTack == null)
@@ -58,7 +58,7 @@ class SubTaskEmployeeTackAdapter(
                     numberDonSubTaskEmployeeTack++
                 if (numberDonSubTaskEmployeeTack != null && b == false)
                     numberDonSubTaskEmployeeTack--
-                if (numberDonSubTaskEmployeeTack> tack1.numberSubTaskEmployeeTask!! || numberDonSubTaskEmployeeTack<0)
+                if (numberDonSubTaskEmployeeTack > tack1.numberSubTaskEmployeeTask!! || numberDonSubTaskEmployeeTack < 0)
                     numberDonSubTaskEmployeeTack = tack1.numberSubTaskEmployeeTask
 
                 val newTack = TaskEmployee(
@@ -70,7 +70,7 @@ class SubTaskEmployeeTackAdapter(
                     typeTask = tack1.typeTask,
                     descriptionTask = tack1.descriptionTask,
                     numberSubTaskEmployeeTask = tack1.numberSubTaskEmployeeTask,
-                    numberDoneSubTaskEmployeeTask = tack1.numberDoneSubTaskEmployeeTask,
+                    numberDoneSubTaskEmployeeTask = numberDonSubTaskEmployeeTack,
 
                     year = tack1.year,
                     month = tack1.month,
@@ -78,7 +78,6 @@ class SubTaskEmployeeTackAdapter(
 
                 )
                 taskEmployeeDao.update(newTack)
-
                 binding1.txtNumTask.text =
                     numberDonSubTaskEmployeeTack.toString() + " از " + tack1.numberSubTaskEmployeeTask
 
@@ -121,7 +120,7 @@ class SubTaskEmployeeTackAdapter(
         notifyItemInserted(0)
     }
 
-    fun removeEmployee(oldTask: SubTaskEmployeeTack, oldPosition: Int) {
+    fun deleteSubTask(oldTask: SubTaskEmployeeTack, oldPosition: Int) {
         data.remove(oldTask)
         notifyItemRemoved(oldPosition)
     }
