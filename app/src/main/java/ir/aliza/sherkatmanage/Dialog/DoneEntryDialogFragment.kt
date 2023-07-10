@@ -66,7 +66,7 @@ class DoneEntryDialogFragment(
                 if (day.toString() == timeData?.day) {
 
                     var time = timeData?.exit!!.toInt() - timeData.entry.toInt()
-                    val timeAgo = efficiencyEmployee?.efficiencyWeekDuties!! - time
+                    val timeAgo = efficiencyEmployee?.totalWeekWatch!! - time
                     val timeNew = binding.edtExitEmp.text.toString()
                         .toInt() - binding.edtEntryEpm.text.toString().toInt()
 
@@ -75,8 +75,8 @@ class DoneEntryDialogFragment(
                     val newEfficiencyEmployee = EfficiencyEmployee(
                         idEfficiency = efficiencyEmployee.idEfficiency,
                         idEmployee = idEmployee,
-                        totalWatch = efficiencyEmployee.totalWatch,
-                        efficiencyWeekDuties = time
+                        mustWeekWatch = efficiencyEmployee.mustWeekWatch,
+                        totalWeekWatch = time
 
                     )
                     efficiencyEmployeeDao.update(newEfficiencyEmployee)
@@ -86,7 +86,7 @@ class DoneEntryDialogFragment(
                     binding2.viewDaySub.setBackgroundColor(it.context.getColor(R.color.green_700))
                 } else {
 
-                    val timeAgo = efficiencyEmployee?.efficiencyWeekDuties!!
+                    val timeAgo = efficiencyEmployee?.totalWeekWatch!!
                     val timeNew = binding.edtExitEmp.text.toString()
                         .toInt() - binding.edtEntryEpm.text.toString().toInt()
 
@@ -95,8 +95,8 @@ class DoneEntryDialogFragment(
                     val newEfficiencyEmployee = EfficiencyEmployee(
                         idEfficiency = efficiencyEmployee.idEfficiency,
                         idEmployee = idEmployee,
-                        totalWatch = efficiencyEmployee.totalWatch,
-                        efficiencyWeekDuties = time
+                        mustWeekWatch = efficiencyEmployee.mustWeekWatch,
+                        totalWeekWatch = time
 
                     )
                     efficiencyEmployeeDao.update(newEfficiencyEmployee)

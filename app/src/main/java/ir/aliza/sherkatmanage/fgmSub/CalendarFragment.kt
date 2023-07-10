@@ -309,12 +309,12 @@ class CalendarFragment(val employee: Employee, val efficiencyEmployeeDao: Effici
                                         val efficiencyEmployee = efficiencyEmployeeDao.getEfficiencyEmployee(employee.idEmployee!!)
                                         var time = dayData.exit!!.toInt() - dayData.entry!!.toInt()
 
-                                        time = efficiencyEmployee?.totalWatch!! - time
+                                        time = efficiencyEmployee?.mustWeekWatch!! - time
 
                                         val newEfficiencyEmployee = EfficiencyEmployee(
                                             idEfficiency = efficiencyEmployee.idEfficiency,
                                             idEmployee = employee.idEmployee,
-                                            totalWatch = time
+                                            mustWeekWatch = time
 
                                         )
                                         efficiencyEmployeeDao.update(newEfficiencyEmployee)

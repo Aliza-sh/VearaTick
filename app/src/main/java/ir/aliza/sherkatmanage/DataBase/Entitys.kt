@@ -150,15 +150,18 @@ data class EfficiencyEmployee(
 
     val idEmployee: Int,
 
-    val efficiencyWeekDuties: Int? = 0,
-    val efficiencyWeekPresence: Int? = 0,
-
-    val efficiencyTotalDuties: Int? = 0,
+    var mustWeekWatch: Int? = 0,
+    var totalWeekWatch: Int? = 0,
+    var totalMonthWatch: Int? = 0,
+    var totalWatch: Int? = 0,
+    var efficiencyWeekPresence: Int? = 0,
     val efficiencyTotalPresence: Int? = 0,
 
-    val efficiencyTotal: Int? = 0,
 
-    val totalWatch: Int? = 0,
-    val totalTask: Int? = 0
+    val totalTask: Int? = 0,
+    var efficiencyWeekDuties: Int? = 0,
+    val efficiencyTotalDuties: Int? = 0,
+
+    val efficiencyTotal: Int? = 0
 
 )

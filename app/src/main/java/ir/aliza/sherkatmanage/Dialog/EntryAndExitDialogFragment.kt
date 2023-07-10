@@ -42,7 +42,7 @@ class EntryAndExitDialogFragment(
 
                 val efficiencyEmployee = efficiencyEmployeeDao.getEfficiencyEmployee(employee.idEmployee!!)
 
-                val timeAgo = efficiencyEmployee?.totalWatch!!
+                val timeAgo = efficiencyEmployee?.mustWeekWatch!!
                 val timeNew = binding.edtExitEmp.text.toString().toInt() - binding.edtEntryEpm.text.toString().toInt()
                 val time = timeNew + timeAgo
 
@@ -67,7 +67,7 @@ class EntryAndExitDialogFragment(
                 val newEfficiencyEmployee = EfficiencyEmployee(
                     idEfficiency = efficiencyEmployee.idEfficiency,
                     idEmployee = employee.idEmployee,
-                    totalWatch = time
+                    mustWeekWatch = time
 
                 )
                 efficiencyEmployeeDao.update(newEfficiencyEmployee)

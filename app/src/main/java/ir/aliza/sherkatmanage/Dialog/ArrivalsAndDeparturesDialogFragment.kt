@@ -58,13 +58,13 @@ class ArrivalsAndDeparturesDialogFragment(
             if (day.toString() == timeData?.day) {
 
                 var time = timeData.exit!!.toInt() - timeData.entry.toInt()
-                val timeAgo = efficiencyEmployee?.efficiencyWeekDuties!! - time
+                val timeAgo = efficiencyEmployee?.totalWeekWatch!! - time
 
                 val newEfficiencyEmployee = EfficiencyEmployee(
                     idEfficiency = efficiencyEmployee.idEfficiency,
                     idEmployee = idEmployee,
-                    totalWatch = efficiencyEmployee.totalWatch,
-                    efficiencyWeekDuties = timeAgo
+                    mustWeekWatch = efficiencyEmployee.mustWeekWatch,
+                    totalWeekWatch = timeAgo
                 )
                 efficiencyEmployeeDao.update(newEfficiencyEmployee)
                 timeDao.update(newTime)

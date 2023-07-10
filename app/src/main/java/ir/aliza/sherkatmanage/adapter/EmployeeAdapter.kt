@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
+import ir.aliza.sherkatmanage.DataBase.EfficiencyEmployee
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.ItemEmployeeBinding
@@ -27,8 +28,30 @@ class EmployeeAdapter(
             val efficiencyEmployee =
                 efficiencyEmployeeDao.getEfficiencyEmployee(data[position].idEmployee!!)
 
-            binding.txtPresenceWeek.text = efficiencyEmployee?.efficiencyWeekPresence.toString() + "%"
+            var efficiencyWeekPresence = 0
+
+            if (efficiencyEmployee?.totalWeekWatch.toString()
+                    .toInt() != 0 && efficiencyEmployee?.mustWeekWatch.toString().toInt() != 0
+            ) {
+                efficiencyWeekPresence = (efficiencyEmployee?.totalWeekWatch.toString()
+                    .toInt() / efficiencyEmployee?.mustWeekWatch.toString().toInt()) * 100
+
+                val newEfficiencyEmployee = EfficiencyEmployee(
+                    idEfficiency = efficiencyEmployee?.idEfficiency,
+                    idEmployee = data[position].idEmployee!!,
+                    mustWeekWatch = efficiencyEmployee?.mustWeekWatch,
+                    totalWeekWatch = efficiencyEmployee?.totalWeekWatch,
+                    efficiencyWeekPresence = efficiencyWeekPresence
+                )
+                efficiencyEmployeeDao.update(newEfficiencyEmployee)
+
+            }
+
+            binding.txtPresenceWeek.text =
+                efficiencyWeekPresence.toString() + "%"
+
             binding.txtDutiesWeek.text = efficiencyEmployee?.efficiencyWeekDuties.toString() + "%"
+
             binding.txtnameprn.text = data[position].name + " " + data[position].family
             binding.txttkhprn.text = data[position].specialty
             if (data[position].gender == "زن") {
