@@ -17,8 +17,9 @@ import ir.aliza.sherkatmanage.taskEmployeeDao
 class TaskBottomsheetFragment(
     val employee: Employee,
     val year: Int,
-    val monthName: String,
-    val day: Int
+    val month: Int,
+    val day: Int,
+    val watch: Int
 ) : BottomSheetDialogFragment() {
 
     lateinit var binding: BottomsheetfragmentTaskBinding
@@ -69,14 +70,15 @@ class TaskBottomsheetFragment(
             val newTask = TaskEmployee(
                 idEmployee = employee.idEmployee!!,
                 nameTask = txtTask,
-                dayTask = txtDay,
-                watchTask = txtTime,
+                dayTaskDeadline = txtDay.toInt(),
+                watchTaskDeadline = txtTime.toInt(),
                 descriptionTask = txtDescription,
                 typeTask = txtTypeTask,
 
-                year = year.toString(),
-                month = monthName,
-                day = day.toString()
+                yearCreation = year,
+                monthCreation = month,
+                dayCreation = day,
+                watchCreation = watch
             )
             taskEmployeeDao.insert(newTask)
             dismiss()

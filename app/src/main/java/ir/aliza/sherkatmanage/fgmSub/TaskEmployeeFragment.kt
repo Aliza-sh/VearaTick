@@ -33,7 +33,8 @@ import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 
-class TaskEmployeeFragment(val employee: Employee, val  efficiencyEmployeeDao: EfficiencyDao) : Fragment(), TaskEmployeeAdapter.TaskEvent {
+class TaskEmployeeFragment(val employee: Employee, val efficiencyEmployeeDao: EfficiencyDao) :
+    Fragment(), TaskEmployeeAdapter.TaskEvent {
 
     var selectedDate = LocalDate.now()
     lateinit var binding: FragmentTaskBinding
@@ -56,13 +57,14 @@ class TaskEmployeeFragment(val employee: Employee, val  efficiencyEmployeeDao: E
 
         val this1 = this
         calendarViewCreated(this1)
-
+        val day = PersianCalendar()
         binding.btnFabTack.setOnClickListener {
             val bottomsheet = TaskBottomsheetFragment(
                 employee,
                 selectedDate.toPersianCalendar().persianYear,
-                selectedDate.toPersianCalendar().persianMonthName,
-                selectedDate.toPersianCalendar().persianDay
+                selectedDate.toPersianCalendar().persianMonth,
+                selectedDate.toPersianCalendar().persianDay,
+                day.time.hours
             )
             bottomsheet.show(parentFragmentManager, null)
         }
@@ -89,12 +91,7 @@ class TaskEmployeeFragment(val employee: Employee, val  efficiencyEmployeeDao: E
                         day.persianCalendar.persianDay
                     )
 
-                    val taskData = taskEmployeeDao.getAllTaskInInDay(
-                        employee.idEmployee,
-                        selectedDate.toPersianCalendar().persianYear.toString(),
-                        selectedDate.toPersianCalendar().persianMonthName,
-                        day.persianCalendar.persianDay.toString()
-                    )
+
 
                     if (day.owner == DayOwner.THIS_MONTH) {
                         if (selectedDate != day.date) {
@@ -105,11 +102,23 @@ class TaskEmployeeFragment(val employee: Employee, val  efficiencyEmployeeDao: E
 
                             if (taskDay != null) {
 
-                                if (taskDay.day == selectedDate.toPersianCalendar().persianDay.toString()) {
+                                val taskData = taskEmployeeDao.getAllTaskInInDay(
+                                    taskDay.idEmployee,
+                                    selectedDate.toPersianCalendar().persianYear,
+                                    selectedDate.toPersianCalendar().persianMonth,
+                                    selectedDate.toPersianCalendar().persianDay
+                                )
+
+                                if (taskDay.dayCreation.toString() == selectedDate.toPersianCalendar().persianDay.toString()) {
 
                                     taskAdapter =
-                                        TaskEmployeeAdapter(ArrayList(taskData), this1,day.persianCalendar.persianDay,day.date.toPersianCalendar(),
-                                            taskEmployeeDao)
+                                        TaskEmployeeAdapter(
+                                            ArrayList(taskData),
+                                            this1,
+                                            day.persianCalendar.persianDay,
+                                            taskEmployeeDao,
+                                            employee
+                                        )
                                     binding.recyclerViewDuties.adapter = taskAdapter
                                     binding.recyclerViewDuties.layoutManager =
                                         LinearLayoutManager(context)
@@ -141,12 +150,12 @@ class TaskEmployeeFragment(val employee: Employee, val  efficiencyEmployeeDao: E
 
                 val taskInDay = taskEmployeeDao.getAllTaskInDay(
                     employee.idEmployee!!,
-                    day.persianCalendar.persianYear.toString(),
-                    day.persianCalendar.persianMonthName,
-                    day.persianCalendar.persianDay.toString()
+                    selectedDate.toPersianCalendar().persianYear,
+                    selectedDate.toPersianCalendar().persianMonth,
+                    selectedDate.toPersianCalendar().persianDay
                 )
 
-                if (taskInDay != null && taskInDay.day == day.persianCalendar.persianDay.toString()) {
+                if (taskInDay != null && taskInDay.dayCreation.toString() == day.persianCalendar.persianDay.toString()) {
 
                     binding1.exSevenDateText.setTextColor(
                         ContextCompat.getColor(

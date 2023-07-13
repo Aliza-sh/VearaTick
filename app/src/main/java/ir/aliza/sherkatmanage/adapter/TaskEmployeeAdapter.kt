@@ -7,6 +7,8 @@ import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.utils.persian.PersianCalendar
 import com.kizitonwose.calendarview.utils.persian.withMonth
+import ir.aliza.sherkatmanage.DataBase.AppDatabase
+import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.DataBase.TaskEmployee
 import ir.aliza.sherkatmanage.DataBase.TaskEmployeeDao
 import ir.aliza.sherkatmanage.databinding.ItemTaskBinding
@@ -15,8 +17,8 @@ class TaskEmployeeAdapter(
     private val data: ArrayList<TaskEmployee>,
     private val tackEvent: TaskEvent,
     private val inDay: Int,
-    private val date: PersianCalendar,
-    val taskEmployeeDao: TaskEmployeeDao
+    val taskEmployeeDao: TaskEmployeeDao,
+    val employee: Employee
 ) :
 
     RecyclerView.Adapter<TaskEmployeeAdapter.TaskViewHolder>() {
@@ -26,15 +28,17 @@ class TaskEmployeeAdapter(
     inner class TaskViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindData(position: Int) {
+            val employeeDao = AppDatabase.getDataBase(itemView.context).employeeDao
 
-            val day = inDay + data[position].dayTask.toInt()
-
+            val date = PersianCalendar()
+            val day = inDay + data[position].dayTaskDeadline
             val monthValue = day / 30 + date.persianMonth
             val dayValue = (day % 30)
 
             binding.txtTack.text = data[position].nameTask
             binding.txtDescription.text = data[position].descriptionTask
-            binding.txtTime.text =  dayValue.toString() + " " + date.withMonth(monthValue).persianMonthName
+            binding.txtTime.text =
+                dayValue.toString() + " " + date.withMonth(monthValue).persianMonthName
 
             if (data[position].doneTask != null) {
                 binding.ckbDoneTaskEmployee.isChecked = data[position].doneTask == true
@@ -42,21 +46,87 @@ class TaskEmployeeAdapter(
 
             binding.ckbDoneTaskEmployee.setOnCheckedChangeListener() { compoundButton: CompoundButton, b: Boolean ->
 
-                val newTask = TaskEmployee(
-                    idTask = data[position].idTask,
-                    idEmployee = data[position].idEmployee,
-                    nameTask = data[position].nameTask,
-                    dayTask = data[position].dayTask,
-                    watchTask = data[position].watchTask,
-                    descriptionTask = data[position].descriptionTask,
-                    typeTask = data[position].typeTask,
-                    doneTask = b,
-                    year = date.persianYear.toString(),
-                    month = date.persianMonth.toString(),
-                    day = date.persianDay.toString(),
+                if (b) {
 
-                )
-                taskEmployeeDao.update(newTask)
+                    val employee = employeeDao.getEmployee(data[position].idEmployee)
+                    val numberTask = employee?.numberDoneTask
+
+                    val newTask = TaskEmployee(
+                        idTask = data[position].idTask,
+                        idEmployee = data[position].idEmployee,
+                        nameTask = data[position].nameTask,
+                        dayTaskDeadline = data[position].dayTaskDeadline,
+                        watchTaskDeadline = data[position].watchTaskDeadline,
+                        descriptionTask = data[position].descriptionTask,
+                        typeTask = data[position].typeTask,
+                        doneTask = b,
+                        yearDoneTask = date.persianYear,
+                        monthDoneTask = date.persianMonth,
+                        dayDoneTask = date.persianDay,
+                        watchDoneTask = date.time.hours,
+                        yearCreation = data[position].yearCreation,
+                        monthCreation = data[position].monthCreation,
+                        dayCreation = data[position].dayCreation,
+                        watchCreation = data[position].watchCreation,
+                    )
+                    val newEmployee = Employee(
+                        idEmployee = employee!!.idEmployee,
+                        name = employee.name,
+                        family = employee.family,
+                        age = employee.age,
+                        gender = employee.gender,
+                        cellularPhone = employee.cellularPhone,
+                        homePhone = employee.homePhone,
+                        address = employee.address,
+                        specialty = employee.specialty,
+                        skill = employee.skill,
+                        imgEmployee = employee.imgEmployee,
+                        numberDoneTask = numberTask!! + 1
+                    )
+                    taskEmployeeDao.update(newTask)
+                    employeeDao.update(newEmployee)
+                } else {
+
+                    val employee = employeeDao.getEmployee(data[position].idEmployee)
+                    var numberTask = employee?.numberDoneTask
+                    if (numberTask == 0)
+                        numberTask = 1
+
+                    val newTask = TaskEmployee(
+                        idTask = data[position].idTask,
+                        idEmployee = data[position].idEmployee,
+                        nameTask = data[position].nameTask,
+                        dayTaskDeadline = data[position].dayTaskDeadline,
+                        watchTaskDeadline = data[position].watchTaskDeadline,
+                        descriptionTask = data[position].descriptionTask,
+                        typeTask = data[position].typeTask,
+                        doneTask = b,
+                        yearDoneTask = 0,
+                        monthDoneTask = 0,
+                        dayDoneTask = 0,
+                        watchDoneTask = 0,
+                        yearCreation = data[position].yearCreation,
+                        monthCreation = data[position].monthCreation,
+                        dayCreation = data[position].dayCreation,
+                        watchCreation = data[position].watchCreation,
+                    )
+                    val newEmployee = Employee(
+                        idEmployee = employee!!.idEmployee,
+                        name = employee.name,
+                        family = employee.family,
+                        age = employee.age,
+                        gender = employee.gender,
+                        cellularPhone = employee.cellularPhone,
+                        homePhone = employee.homePhone,
+                        address = employee.address,
+                        specialty = employee.specialty,
+                        skill = employee.skill,
+                        imgEmployee = employee.imgEmployee,
+                        numberDoneTask = numberTask!! - 1
+                    )
+                    taskEmployeeDao.update(newTask)
+                    employeeDao.update(newEmployee)
+                }
             }
 //            itemView.setOnClickListener {
 //                tackEvent.onTaskClicked(data[position], position , dayValue.toString() , date.withMonth(monthValue).toPersianCalendar().persianMonthName)
@@ -107,7 +177,7 @@ class TaskEmployeeAdapter(
     }
 
     interface TaskEvent {
-//        fun onTaskClicked(
+        //        fun onTaskClicked(
 //            task: TaskEmployee,
 //            position: Int,
 //            day: String,

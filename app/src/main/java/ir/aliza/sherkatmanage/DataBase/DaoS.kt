@@ -60,14 +60,14 @@ interface TimeDao : BaceDao<Time> {
 interface TaskEmployeeDao : BaceDao<TaskEmployee> {
     @Query("SELECT * FROM taskEmployee_table")
     fun getAllTaskEmployee(): List<TaskEmployee>
-    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND day = :persianDay ")
+    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND dayCreation = :persianDay ")
     fun getTaskDay(idEmployee: Int, persianDay: Int): TaskEmployee?
-    @Query("SELECT * FROM taskEmployee_table WHERE idTask = :idTack AND day = :persianDay ")
+    @Query("SELECT * FROM taskEmployee_table WHERE idTask = :idTack AND dayCreation = :persianDay ")
     fun getSubTaskDay(idTack: Int, persianDay: Int): TaskEmployee?
-    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND year = :year AND month = :month AND day = :day")
-    fun getAllTaskInDay(idEmployee: Int, year: String, month: String, day: String): TaskEmployee?
-    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND year = :year AND month = :month AND day = :day")
-    fun getAllTaskInInDay(idEmployee: Int, year: String, month: String, day: String): List<TaskEmployee>
+    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND yearCreation = :year AND monthCreation = :month AND dayCreation = :day")
+    fun getAllTaskInDay(idEmployee: Int, year: Int, month: Int, day: Int): TaskEmployee?
+    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND yearCreation = :year AND monthCreation = :month AND dayCreation = :day")
+    fun getAllTaskInInDay(idEmployee: Int, year: Int, month: Int, day: Int): List<TaskEmployee>
 }
 
 //@Dao

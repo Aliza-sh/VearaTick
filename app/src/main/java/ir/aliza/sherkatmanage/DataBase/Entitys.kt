@@ -20,7 +20,9 @@ data class Employee(
     val skill: String,
     val imgEmployee: ByteArray? = null,
 
-)
+    val numberDoneTask: Int? = 0,
+
+    )
 
 @Entity(tableName = "day_table")
 data class Day(
@@ -62,19 +64,26 @@ data class TaskEmployee(
     val idEmployee: Int,
 
     val nameTask: String,
-    val dayTask: String,
-    val watchTask: String,
+    val dayTaskDeadline: Int,
+    val watchTaskDeadline: Int,
     val descriptionTask: String,
     val typeTask: String,
+
     val doneTask: Boolean? = null,
+    val yearDoneTask: Int? = 0,
+    val monthDoneTask: Int? = 0,
+    val dayDoneTask: Int? = 0,
+    val watchDoneTask: Int? = 0,
 
     //val progressTask: Int? = 0,
     //val numberSubTaskEmployeeTask: Int? = 0,
     //val numberDoneSubTaskEmployeeTask: Int? = 0,
 
-    val year: String,
-    val month: String,
-    val day: String,
+    val yearCreation: Int,
+    val monthCreation: Int,
+    val dayCreation: Int,
+    val watchCreation: Int,
+
 )
 
 //@Entity(tableName = "subTaskEmployeeTask_table")
