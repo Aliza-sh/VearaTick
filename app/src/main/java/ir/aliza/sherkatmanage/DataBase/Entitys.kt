@@ -66,30 +66,30 @@ data class TaskEmployee(
     val watchTask: String,
     val descriptionTask: String,
     val typeTask: String,
+    val doneTask: Boolean? = null,
 
-    val progressTask: Int? = 0,
-
-    val numberSubTaskEmployeeTask: Int? = 0,
-    val numberDoneSubTaskEmployeeTask: Int? = 0,
+    //val progressTask: Int? = 0,
+    //val numberSubTaskEmployeeTask: Int? = 0,
+    //val numberDoneSubTaskEmployeeTask: Int? = 0,
 
     val year: String,
     val month: String,
     val day: String,
 )
 
-@Entity(tableName = "subTaskEmployeeTask_table")
-data class SubTaskEmployeeTack(
-
-    @PrimaryKey(autoGenerate = true)
-    val idSubTask: Int? = null,
-
-    val idTask: Int,
-
-    val nameSubTask: String,
-    val descriptionSubTask: String,
-    val doneSubTask: Boolean? = null
-
-)
+//@Entity(tableName = "subTaskEmployeeTask_table")
+//data class SubTaskEmployeeTack(
+//
+//    @PrimaryKey(autoGenerate = true)
+//    val idSubTask: Int? = null,
+//
+//    val idTask: Int,
+//
+//    val nameSubTask: String,
+//    val descriptionSubTask: String,
+//    val doneSubTask: Boolean? = null
+//
+//)
 
 
 @Entity(tableName = "project_table")
@@ -151,17 +151,34 @@ data class EfficiencyEmployee(
     val idEmployee: Int,
 
     var mustWeekWatch: Int? = 0,
+    var numberDay:Int? = 0,
     var totalWeekWatch: Int? = 0,
     var totalMonthWatch: Int? = 0,
     var totalWatch: Int? = 0,
     var efficiencyWeekPresence: Int? = 0,
-    val efficiencyTotalPresence: Int? = 0,
+
+    val efficiencyTotalPresence: Float? = 0f,
 
 
-    val totalTask: Int? = 0,
-    var efficiencyWeekDuties: Int? = 0,
-    val efficiencyTotalDuties: Int? = 0,
+    var totalWeekDuties: Int? = 0,
+    var totalMonthDuties: Int? = 0,
+    var totalDuties: Int? = 0,
+    var efficiencyWeekDuties: Float? = 0f,
 
-    val efficiencyTotal: Int? = 0
+    val efficiencyTotalDuties: Float? = 0f,
 
+
+    val efficiencyTotal: Float? = 0f
+
+)
+
+@Entity(tableName = "targets_table")
+data class Targets(
+
+    @PrimaryKey(autoGenerate = true)
+    val idTarget: Int? = null,
+
+    val nameTarget: String,
+    val descriptionTarget: String,
+    val dateTarget: Int? = null
 )

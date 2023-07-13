@@ -31,6 +31,8 @@ interface DayDao : BaceDao<Day> {
     fun getAllDay(): List<Day>
     @Query("SELECT * FROM day_table WHERE idDay = :idDay")
     fun getDay(idDay: Long): Day?
+    @Query("SELECT * FROM day_table WHERE idEmployee = :idEmployee")
+    fun getEmployeeDay(idEmployee: Int): List<Day>
     @Query("SELECT * FROM day_table WHERE idEmployee = :idEmployee AND year = :year AND month = :month AND  nameday = :nameDay")
     fun getAllNameDay(idEmployee: Int, year: String, month: String, nameDay: String): Day?
     @Query("SELECT * FROM day_table WHERE idEmployee = :idEmployee AND year = :year AND month = :month AND nameday = :nameDay")
@@ -68,13 +70,13 @@ interface TaskEmployeeDao : BaceDao<TaskEmployee> {
     fun getAllTaskInInDay(idEmployee: Int, year: String, month: String, day: String): List<TaskEmployee>
 }
 
-@Dao
-interface SubTaskEmployeeTackDao : BaceDao<SubTaskEmployeeTack> {
-    @Query("SELECT * FROM subTaskEmployeeTask_table")
-    fun getAllSubTaskEmployeeTack(): List<SubTaskEmployeeTack>
-    @Query("SELECT * FROM subTaskEmployeeTask_table WHERE idTask = :idTack")
-    fun getSubTaskEmployeeTack(idTack: Int,): List<SubTaskEmployeeTack>
-}
+//@Dao
+//interface SubTaskEmployeeTackDao : BaceDao<SubTaskEmployeeTack> {
+//    @Query("SELECT * FROM subTaskEmployeeTask_table")
+//    fun getAllSubTaskEmployeeTack(): List<SubTaskEmployeeTack>
+//    @Query("SELECT * FROM subTaskEmployeeTask_table WHERE idTask = :idTack")
+//    fun getSubTaskEmployeeTack(idTack: Int,): List<SubTaskEmployeeTack>
+//}
 
 @Dao
 interface ProjectDao : BaceDao<Project> {
@@ -113,4 +115,10 @@ interface EfficiencyDao : BaceDao<EfficiencyEmployee> {
     fun getAllEfficiency(): List<EfficiencyEmployee>
     @Query("SELECT * FROM efficiency_table WHERE idEmployee = :idEmployee")
     fun getEfficiencyEmployee(idEmployee: Int): EfficiencyEmployee?
+}
+
+@Dao
+interface TargetsDao : BaceDao<Targets> {
+    @Query("SELECT * FROM targets_table")
+    fun getAllTargets(): List<Targets>
 }

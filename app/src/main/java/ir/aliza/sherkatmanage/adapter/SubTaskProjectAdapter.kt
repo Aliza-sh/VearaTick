@@ -33,10 +33,10 @@ class SubTaskProjectAdapter(
             binding.txtTack.text = data[position].nameSubTask
             binding.txtDescription.text = data[position].descriptionTask
             if (data[position].doneSubTask != null) {
-                binding.checkBox.isChecked = data[position].doneSubTask == true
+                binding.ckbDoneTaskEmployee.isChecked = data[position].doneSubTask == true
             }
 
-            binding.checkBox.setOnCheckedChangeListener() { compoundButton: CompoundButton, b: Boolean ->
+            binding.ckbDoneTaskEmployee.setOnCheckedChangeListener() { compoundButton: CompoundButton, b: Boolean ->
 
                 val newSubTask = SubTaskProject(
                     idSubTask = data[position].idSubTask,

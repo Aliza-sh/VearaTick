@@ -48,7 +48,7 @@
 
         <CheckBox
             style="@style/Widget.Material3.CompoundButton.CheckBox"
-            android:id="@+id/checkBox"
+            android:id="@+id/ckb_done_task_employee"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_marginStart="8dp"

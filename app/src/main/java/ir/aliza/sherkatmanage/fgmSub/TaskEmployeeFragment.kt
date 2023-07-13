@@ -108,7 +108,8 @@ class TaskEmployeeFragment(val employee: Employee, val  efficiencyEmployeeDao: E
                                 if (taskDay.day == selectedDate.toPersianCalendar().persianDay.toString()) {
 
                                     taskAdapter =
-                                        TaskEmployeeAdapter(ArrayList(taskData), this1,day.persianCalendar.persianDay,day.date)
+                                        TaskEmployeeAdapter(ArrayList(taskData), this1,day.persianCalendar.persianDay,day.date.toPersianCalendar(),
+                                            taskEmployeeDao)
                                     binding.recyclerViewDuties.adapter = taskAdapter
                                     binding.recyclerViewDuties.layoutManager =
                                         LinearLayoutManager(context)
@@ -197,17 +198,17 @@ class TaskEmployeeFragment(val employee: Employee, val  efficiencyEmployeeDao: E
 
     }
 
-    override fun onTaskClicked(
-        task: TaskEmployee,
-        position: Int,
-        day: String,
-        monthName: String
-    ) {
-        val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.frame_layout_main, TaskEmployeeInformationFragment(task,day,monthName))
-            .addToBackStack(null)
-            .commit()
-    }
+//    override fun onTaskClicked(
+//        task: TaskEmployee,
+//        position: Int,
+//        day: String,
+//        monthName: String
+//    ) {
+//        val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
+//        transaction.replace(R.id.frame_layout_main, TaskEmployeeInformationFragment(task,day,monthName))
+//            .addToBackStack(null)
+//            .commit()
+//    }
 
     override fun onTaskLongClicked(task: TaskEmployee, position: Int) {
         val dialog = DeleteItemTaskDialogFragment(task, position)

@@ -1,33 +1,45 @@
 package ir.aliza.sherkatmanage.fgmMain
 
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.DataBase.SubTaskProjectDao
+import ir.aliza.sherkatmanage.DataBase.Targets
+import ir.aliza.sherkatmanage.DataBase.TargetsDao
 import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.R
-import ir.aliza.sherkatmanage.adapter.PagerAdapter
 import ir.aliza.sherkatmanage.adapter.ProjectNearAdapter
+import ir.aliza.sherkatmanage.adapter.TargetsAdapter
 import ir.aliza.sherkatmanage.adapter.ZoomOutPageTransformer
+import ir.aliza.sherkatmanage.databinding.BottomsheetfragmentAddNewTargetBinding
 import ir.aliza.sherkatmanage.databinding.FragmentCompanyBinding
+import ir.aliza.sherkatmanage.databinding.FragmentDialogDeleteTargetBinding
 import ir.aliza.sherkatmanage.databinding.ItemProjectBinding
 import ir.aliza.sherkatmanage.fgmSub.ProjectInformationFragment
+import me.relex.circleindicator.CircleIndicator3
 
 class CompanyFragment : Fragment(), ProjectNearAdapter.ProjectNearEvents {
 
     lateinit var binding: FragmentCompanyBinding
-    lateinit var binding1: ItemProjectBinding
+    lateinit var bindingItemProject: ItemProjectBinding
+    lateinit var bindingBottomsheet: BottomsheetfragmentAddNewTargetBinding
+    lateinit var bindingDialog: FragmentDialogDeleteTargetBinding
     lateinit var projectNearAdapter: ProjectNearAdapter
     lateinit var projectDao: ProjectDao
+    lateinit var targetsDao: TargetsDao
     lateinit var subTaskProjectDao: SubTaskProjectDao
-    lateinit var pagerAdapter: PagerAdapter
+    lateinit var targetsAdapter: TargetsAdapter
     private lateinit var viewPager2: ViewPager2
 
     override fun onCreateView(
@@ -36,7 +48,10 @@ class CompanyFragment : Fragment(), ProjectNearAdapter.ProjectNearEvents {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentCompanyBinding.inflate(layoutInflater, container, false)
-        binding1 = ItemProjectBinding.inflate(layoutInflater, container, false)
+        bindingItemProject = ItemProjectBinding.inflate(layoutInflater, container, false)
+        bindingBottomsheet =
+            BottomsheetfragmentAddNewTargetBinding.inflate(layoutInflater, container, false)
+        bindingDialog = FragmentDialogDeleteTargetBinding.inflate(layoutInflater, container, false)
 
         return binding.root
 
@@ -44,6 +59,8 @@ class CompanyFragment : Fragment(), ProjectNearAdapter.ProjectNearEvents {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        targetsDao = AppDatabase.getDataBase(view.context).targetsDao
 
         projectDao = AppDatabase.getDataBase(view.context).projectDao
         val projectNearData = projectDao.getAllProject()
@@ -56,48 +73,119 @@ class CompanyFragment : Fragment(), ProjectNearAdapter.ProjectNearEvents {
 
         subTaskProjectDao = AppDatabase.getDataBase(view.context).subTaskEmployeeProjectDao
 
-
-//        val data = arrayListOf<Employee>()
-//        data.add(Employee(1, "ali", "hasani", 20, "man", "aa", 0, 9111112134, "bbb"))
-//        val adpter = AvatarNearAdapter(data)
-//        employeeDao = AppDatabase.getDataBase(view.context).employeeDao
-//        val avatarData = employeeDao.getAllEmployee()
-//        val avatarAdapter = AvatarNearAdapter(ArrayList(avatarData))
-        //binding1.recyclerView.adapter = adpter
-
-        viewPager2 = binding.viewPager
-        pager()
+        viewPager2 = binding.targetsPager
+        pagerTargets()
 
     }
 
-    private fun pager() {
+    private fun pagerTargets() {
 
-        pagerAdapter = PagerAdapter(viewPager2, object : PagerAdapter.SliderEvent {
-            override fun onSliderClicked(movieId: Int) {
+        val targetsData = targetsDao.getAllTargets()
+        var isFixedItemClicked = false
+        if (targetsData.size != 0)
+            isFixedItemClicked = true
 
-            }
-        })
-        viewPager2.adapter = pagerAdapter
+
+        targetsAdapter = TargetsAdapter(
+            ArrayList(targetsData),
+            viewPager2,
+            parentFragmentManager,
+            targetsDao,
+            isFixedItemClicked,
+            object : TargetsAdapter.SliderEvent {
+
+                override fun onSliderClicked(target: Targets, position: Int) {
+                    val bottomSheetDialog = BottomSheetDialog(context!!)
+                    showBottomsheet(bottomSheetDialog, target, position, targetsAdapter)
+                    bottomSheetDialog.setContentView(bindingBottomsheet.root)
+                    bottomSheetDialog.show()
+                }
+
+                override fun onSliderLongClicked(target: Targets, position: Int) {
+
+                    showDialog(target, position, targetsAdapter)
+                }
+            })
+        viewPager2.adapter = targetsAdapter
         viewPager2.offscreenPageLimit = 3
         viewPager2.clipToPadding = false
         viewPager2.clipChildren = false
         viewPager2.getChildAt(0).overScrollMode = RecyclerView.OVER_SCROLL_NEVER
         viewPager2.setPageTransformer(ZoomOutPageTransformer())
 
+        val indicator: CircleIndicator3 = binding.indicator
+        indicator.setViewPager(viewPager2)
+        targetsAdapter.registerAdapterDataObserver(indicator.adapterDataObserver)
 
+    }
+
+    private fun showBottomsheet(
+        bottomSheetDialog: BottomSheetDialog,
+        target: Targets,
+        position: Int,
+        targetsAdapter: TargetsAdapter
+    ) {
+
+        bindingBottomsheet.edtNameTerget.setText(target.nameTarget)
+        bindingBottomsheet.edtDayTarget.setText(target.dateTarget.toString())
+        bindingBottomsheet.edtDescription.setText(target.descriptionTarget)
+        bindingBottomsheet.sheetBtnDone.setOnClickListener {
+
+            if (
+                bindingBottomsheet.edtNameTerget.length() > 0 &&
+                bindingBottomsheet.edtDayTarget.length() > 0 &&
+                bindingBottomsheet.edtDescription.length() > 0
+            ) {
+                val txtNameTerget = bindingBottomsheet.edtNameTerget.text.toString()
+                val txtDayTarget = bindingBottomsheet.edtDayTarget.text.toString()
+                val txtDescriptionTarget = bindingBottomsheet.edtDescription.text.toString()
+
+                val newTarget = Targets(
+                    idTarget = target.idTarget,
+                    nameTarget = txtNameTerget,
+                    dateTarget = txtDayTarget.toInt(),
+                    descriptionTarget = txtDescriptionTarget,
+                )
+                targetsDao.update(newTarget)
+                targetsAdapter.updateTarget(newTarget, position)
+                bottomSheetDialog.dismiss()
+            } else {
+                Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    private fun showDialog(target: Targets, position: Int, targetsAdapter: TargetsAdapter) {
+        val dialog = Dialog(binding.root.context)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(bindingDialog.root)
+
+        bindingDialog.dialogBtnDeleteSure.setOnClickListener {
+            targetsAdapter.removeTarget(target, position)
+            targetsDao.delete(target)
+            dialog.dismiss()
+        }
+        bindingDialog.dialogBtnDeleteCansel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     override fun onProjectClicked(project: Project, day: String, nameMonth: String) {
         val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-        transaction.add(R.id.frame_layout_main, ProjectInformationFragment(
-            project,
-            day,
-            nameMonth,
-            subTaskProjectDao,
-            projectDao
-        ))
+        transaction.add(
+            R.id.frame_layout_main, ProjectInformationFragment(
+                project,
+                day,
+                nameMonth,
+                subTaskProjectDao,
+                projectDao
+            )
+        )
             .addToBackStack(null)
-            .commit()    }
+            .commit()
+    }
 
     override fun onProjectLongClicked(project: Project, position: Int) {
         TODO("Not yet implemented")

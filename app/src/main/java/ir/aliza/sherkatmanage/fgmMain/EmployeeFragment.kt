@@ -23,6 +23,7 @@ class EmployeeFragment : Fragment(), EmployeeAdapter.EmployeeEvents {
 
     lateinit var binding: FragmentEmployeesBinding
     lateinit var efficiencyEmployeeDao: EfficiencyDao
+    lateinit var view1: View
 
     lateinit var employeeData: List<Employee>
 
@@ -38,6 +39,7 @@ class EmployeeFragment : Fragment(), EmployeeAdapter.EmployeeEvents {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        view1 = view
         efficiencyEmployeeDao = AppDatabase.getDataBase(view.context).efficiencyDao
 
         val employeeDao = AppDatabase.getDataBase(view.context).employeeDao

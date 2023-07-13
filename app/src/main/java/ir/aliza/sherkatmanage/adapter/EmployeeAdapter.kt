@@ -14,41 +14,48 @@ import ir.aliza.sherkatmanage.databinding.ItemEmployeeBinding
 class EmployeeAdapter(
     private val data: ArrayList<Employee>,
     private val employeeEvents: EmployeeEvents,
-    val efficiencyEmployeeDao: EfficiencyDao
+    private val efficiencyEmployeeDao: EfficiencyDao
 ) :
     RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder>() {
 
     lateinit var binding: ItemEmployeeBinding
 
     inner class EmployeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        @SuppressLint("SetTextI18n")
         fun bindData(position: Int) {
-
             val efficiencyEmployee =
                 efficiencyEmployeeDao.getEfficiencyEmployee(data[position].idEmployee!!)
 
-            var efficiencyWeekPresence = 0
-
-            if (efficiencyEmployee?.totalWeekWatch.toString()
-                    .toInt() != 0 && efficiencyEmployee?.mustWeekWatch.toString().toInt() != 0
+            if (efficiencyEmployee!!.totalWeekWatch != 0 && efficiencyEmployee.mustWeekWatch != 0
             ) {
-                efficiencyWeekPresence = (efficiencyEmployee?.totalWeekWatch.toString()
-                    .toInt() / efficiencyEmployee?.mustWeekWatch.toString().toInt()) * 100
+                var totalWeekWatch = efficiencyEmployee.totalWeekWatch
+                var mustWeekWatch = efficiencyEmployee.mustWeekWatch
+                var dahanSevisKon: Float = 0f
+                dahanSevisKon = totalWeekWatch!!.toFloat() / mustWeekWatch!!.toFloat()
+
+                val efficiencyWeekPresence = dahanSevisKon * 100
 
                 val newEfficiencyEmployee = EfficiencyEmployee(
-                    idEfficiency = efficiencyEmployee?.idEfficiency,
-                    idEmployee = data[position].idEmployee!!,
-                    mustWeekWatch = efficiencyEmployee?.mustWeekWatch,
-                    totalWeekWatch = efficiencyEmployee?.totalWeekWatch,
-                    efficiencyWeekPresence = efficiencyWeekPresence
+                    idEfficiency = efficiencyEmployee.idEfficiency,
+                    idEmployee = efficiencyEmployee.idEmployee,
+                    mustWeekWatch = efficiencyEmployee.mustWeekWatch,
+                    numberDay = efficiencyEmployee.numberDay,
+                    totalWeekWatch = efficiencyEmployee.totalWeekWatch,
+                    totalWatch = efficiencyEmployee.totalWatch,
+                    efficiencyWeekPresence = efficiencyWeekPresence.toInt(),
+                    efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
+                    totalWeekDuties = efficiencyEmployee.totalWeekDuties,
+                    totalMonthDuties = efficiencyEmployee.totalMonthDuties,
+                    totalDuties = efficiencyEmployee.totalDuties,
+                    efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties,
+                    efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
+                    efficiencyTotal = efficiencyEmployee.efficiencyTotal,
+                    totalMonthWatch = efficiencyEmployee.totalMonthWatch
                 )
                 efficiencyEmployeeDao.update(newEfficiencyEmployee)
-
             }
 
             binding.txtPresenceWeek.text =
-                efficiencyWeekPresence.toString() + "%"
+                efficiencyEmployee?.efficiencyWeekPresence.toString() + "%"
 
             binding.txtDutiesWeek.text = efficiencyEmployee?.efficiencyWeekDuties.toString() + "%"
 

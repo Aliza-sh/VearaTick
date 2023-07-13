@@ -40,10 +40,13 @@ class EntryAndExitDialogFragment(
 
             ) {
 
-                val efficiencyEmployee = efficiencyEmployeeDao.getEfficiencyEmployee(employee.idEmployee!!)
+                val efficiencyEmployee =
+                    efficiencyEmployeeDao.getEfficiencyEmployee(employee.idEmployee!!)
 
                 val timeAgo = efficiencyEmployee?.mustWeekWatch!!
-                val timeNew = binding.edtExitEmp.text.toString().toInt() - binding.edtEntryEpm.text.toString().toInt()
+                val timeNew =
+                    binding.edtExitEmp.text.toString().toInt() - binding.edtEntryEpm.text.toString()
+                        .toInt()
                 val time = timeNew + timeAgo
 
                 val newDay = Day(
@@ -62,17 +65,27 @@ class EntryAndExitDialogFragment(
                         tv.context, R.color.firoze
                     )
                 )
-                month.yearMonth
 
                 val newEfficiencyEmployee = EfficiencyEmployee(
                     idEfficiency = efficiencyEmployee.idEfficiency,
-                    idEmployee = employee.idEmployee,
-                    mustWeekWatch = time
-
-                )
+                    idEmployee = efficiencyEmployee.idEmployee,
+                    mustWeekWatch = time,
+                    totalWeekWatch = efficiencyEmployee.totalWeekWatch,
+                    efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
+                    totalWatch = efficiencyEmployee.totalWatch,
+                    efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
+                    totalWeekDuties = efficiencyEmployee.totalWeekDuties,
+                    totalMonthDuties = efficiencyEmployee.totalMonthDuties,
+                    totalDuties = efficiencyEmployee.totalDuties,
+                    efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties,
+                    efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
+                    efficiencyTotal = efficiencyEmployee.efficiencyTotal,
+                    numberDay = efficiencyEmployee.numberDay
+                    )
                 efficiencyEmployeeDao.update(newEfficiencyEmployee)
 
                 dismiss()
+
             } else {
                 Toast.makeText(context, "لطفا مقادیر را درست وارد کنید", Toast.LENGTH_SHORT).show()
             }

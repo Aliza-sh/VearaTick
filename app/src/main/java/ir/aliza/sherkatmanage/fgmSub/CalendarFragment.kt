@@ -314,8 +314,18 @@ class CalendarFragment(val employee: Employee, val efficiencyEmployeeDao: Effici
                                         val newEfficiencyEmployee = EfficiencyEmployee(
                                             idEfficiency = efficiencyEmployee.idEfficiency,
                                             idEmployee = employee.idEmployee,
-                                            mustWeekWatch = time
-
+                                            mustWeekWatch = time,
+                                            totalWeekWatch = efficiencyEmployee.totalWeekWatch,
+                                            efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
+                                            totalWatch = efficiencyEmployee.totalWatch,
+                                            efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
+                                            totalWeekDuties = efficiencyEmployee.totalWeekDuties,
+                                            totalMonthDuties = efficiencyEmployee.totalMonthDuties,
+                                            totalDuties = efficiencyEmployee.totalDuties,
+                                            efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties,
+                                            efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
+                                            efficiencyTotal = efficiencyEmployee.efficiencyTotal,
+                                            numberDay = efficiencyEmployee.numberDay
                                         )
                                         efficiencyEmployeeDao.update(newEfficiencyEmployee)
                                     }

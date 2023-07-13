@@ -3,17 +3,20 @@ package ir.aliza.sherkatmanage.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendarview.utils.persian.toPersianCalendar
+import com.kizitonwose.calendarview.utils.persian.PersianCalendar
+import com.kizitonwose.calendarview.utils.persian.withMonth
 import ir.aliza.sherkatmanage.DataBase.TaskEmployee
+import ir.aliza.sherkatmanage.DataBase.TaskEmployeeDao
 import ir.aliza.sherkatmanage.databinding.ItemTaskBinding
-import org.threeten.bp.LocalDate
 
 class TaskEmployeeAdapter(
     private val data: ArrayList<TaskEmployee>,
     private val tackEvent: TaskEvent,
     private val inDay: Int,
-    private val date: LocalDate
+    private val date: PersianCalendar,
+    val taskEmployeeDao: TaskEmployeeDao
 ) :
 
     RecyclerView.Adapter<TaskEmployeeAdapter.TaskViewHolder>() {
@@ -26,16 +29,38 @@ class TaskEmployeeAdapter(
 
             val day = inDay + data[position].dayTask.toInt()
 
-            val monthValue = day / 30 + date.monthValue
+            val monthValue = day / 30 + date.persianMonth
             val dayValue = (day % 30)
 
             binding.txtTack.text = data[position].nameTask
             binding.txtDescription.text = data[position].descriptionTask
-            binding.txtTime.text =  dayValue.toString() + " " + date.withMonth(monthValue).toPersianCalendar().persianMonthName
+            binding.txtTime.text =  dayValue.toString() + " " + date.withMonth(monthValue).persianMonthName
 
-            itemView.setOnClickListener {
-                tackEvent.onTaskClicked(data[position], position , dayValue.toString() , date.withMonth(monthValue).toPersianCalendar().persianMonthName)
+            if (data[position].doneTask != null) {
+                binding.ckbDoneTaskEmployee.isChecked = data[position].doneTask == true
             }
+
+            binding.ckbDoneTaskEmployee.setOnCheckedChangeListener() { compoundButton: CompoundButton, b: Boolean ->
+
+                val newTask = TaskEmployee(
+                    idTask = data[position].idTask,
+                    idEmployee = data[position].idEmployee,
+                    nameTask = data[position].nameTask,
+                    dayTask = data[position].dayTask,
+                    watchTask = data[position].watchTask,
+                    descriptionTask = data[position].descriptionTask,
+                    typeTask = data[position].typeTask,
+                    doneTask = b,
+                    year = date.persianYear.toString(),
+                    month = date.persianMonth.toString(),
+                    day = date.persianDay.toString(),
+
+                )
+                taskEmployeeDao.update(newTask)
+            }
+//            itemView.setOnClickListener {
+//                tackEvent.onTaskClicked(data[position], position , dayValue.toString() , date.withMonth(monthValue).toPersianCalendar().persianMonthName)
+//            }
 
             itemView.setOnLongClickListener {
                 tackEvent.onTaskLongClicked(data[position], position)
@@ -82,12 +107,12 @@ class TaskEmployeeAdapter(
     }
 
     interface TaskEvent {
-        fun onTaskClicked(
-            task: TaskEmployee,
-            position: Int,
-            day: String,
-            monthName: String
-        )
+//        fun onTaskClicked(
+//            task: TaskEmployee,
+//            position: Int,
+//            day: String,
+//            monthName: String
+//        )
         fun onTaskLongClicked(task: TaskEmployee, position: Int)
     }
 

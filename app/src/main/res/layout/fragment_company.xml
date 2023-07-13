@@ -54,7 +54,7 @@
             android:layout_gravity="end"
             android:layout_marginStart="5dp"
             android:layout_marginTop="3dp"
-            android:text="دو روز دیکه باید پروژه اندروید رو تحویل بدی"
+            android:text="خوش آمدید"
             android:textColor="@color/fi_light"
             android:textSize="20sp"
             app:layout_constraintEnd_toEndOf="@+id/textView"
@@ -92,7 +92,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.viewpager2.widget.ViewPager2
-                android:id="@+id/viewPager"
+                android:id="@+id/targets_pager"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:layout_marginStart="8dp"
@@ -100,22 +100,34 @@
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView160">
+                app:layout_constraintTop_toBottomOf="@+id/textView160"/>
 
-            </androidx.viewpager2.widget.ViewPager2>
+            <me.relex.circleindicator.CircleIndicator3
+                android:id="@+id/indicator"
+                android:layout_width="match_parent"
+                android:layout_height="20dp"
+                app:ci_drawable="@drawable/ic_slider_selected"
+                app:ci_drawable_unselected="@drawable/ic_slider_unselected"
+                app:ci_height="3dp"
+                app:ci_margin="4dp"
+                app:ci_width="8dp"
+
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/targets_pager" />
 
             <TextView
                 android:id="@+id/textView16"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:text="آمار کلی شرکت"
                 android:textColor="?attr/colorOnSecondary"
                 android:textSize="24sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/viewPager" />
+                app:layout_constraintTop_toBottomOf="@+id/indicator" />
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView"

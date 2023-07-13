@@ -21,6 +21,7 @@ class DeleteItemTaskDialogFragment(private val task: TaskEmployee, private val p
         binding.dialogBtnDeleteCansel.setOnClickListener {
             dismiss()
         }
+
         binding.dialogBtnDeleteSure.setOnClickListener {
             dismiss()
             deleteItem(task ,position)

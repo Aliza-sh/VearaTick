@@ -26,16 +26,12 @@ class DoneEntryDialogFragment(
     lateinit var binding: FragmentDialogDoneEntryBinding
     lateinit var binding1: FragmentCalendarBinding
 
-
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = AlertDialog.Builder(context)
         binding = FragmentDialogDoneEntryBinding.inflate(layoutInflater, null, false)
         binding1 = FragmentCalendarBinding.inflate(layoutInflater, null, false)
 
         val timeData = timeDao.getTime(idEmployee!!, day)
-
-        val entry = binding.edtEntryEpm.text
-        val exit = binding.edtExitEmp.text
 
         dialog.setView(binding.root)
         dialog.setCancelable(true)
@@ -51,6 +47,7 @@ class DoneEntryDialogFragment(
             ) {
 
                 val efficiencyEmployee = efficiencyEmployeeDao.getEfficiencyEmployee(idEmployee)
+                val numberDay = efficiencyEmployee?.numberDay
 
                 val newTime = Time(
                     timeData?.idTime,
@@ -65,7 +62,7 @@ class DoneEntryDialogFragment(
 
                 if (day.toString() == timeData?.day) {
 
-                    var time = timeData?.exit!!.toInt() - timeData.entry.toInt()
+                    var time = timeData.exit.toInt() - timeData.entry.toInt()
                     val timeAgo = efficiencyEmployee?.totalWeekWatch!! - time
                     val timeNew = binding.edtExitEmp.text.toString()
                         .toInt() - binding.edtEntryEpm.text.toString().toInt()
@@ -76,19 +73,29 @@ class DoneEntryDialogFragment(
                         idEfficiency = efficiencyEmployee.idEfficiency,
                         idEmployee = idEmployee,
                         mustWeekWatch = efficiencyEmployee.mustWeekWatch,
-                        totalWeekWatch = time
-
+                        numberDay = efficiencyEmployee.numberDay,
+                        totalWeekWatch = time,
+                        totalWatch = efficiencyEmployee.totalWatch,
+                        efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
+                        efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
+                        totalWeekDuties = efficiencyEmployee.totalWeekDuties,
+                        totalMonthDuties = efficiencyEmployee.totalMonthDuties,
+                        totalDuties = efficiencyEmployee.totalDuties,
+                        efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties,
+                        efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
+                        efficiencyTotal = efficiencyEmployee.efficiencyTotal,
+                        totalMonthWatch = efficiencyEmployee.totalMonthWatch
                     )
                     efficiencyEmployeeDao.update(newEfficiencyEmployee)
 
                     timeDao.update(newTime)
                     //inOutAdapter.updateInOut(newTime, 0)
                     binding2.viewDaySub.setBackgroundColor(it.context.getColor(R.color.green_700))
+
                 } else {
 
                     val timeAgo = efficiencyEmployee?.totalWeekWatch!!
-                    val timeNew = binding.edtExitEmp.text.toString()
-                        .toInt() - binding.edtEntryEpm.text.toString().toInt()
+                    val timeNew = binding.edtExitEmp.text.toString().toInt() - binding.edtEntryEpm.text.toString().toInt()
 
                     val time = timeNew + timeAgo
 
@@ -96,13 +103,23 @@ class DoneEntryDialogFragment(
                         idEfficiency = efficiencyEmployee.idEfficiency,
                         idEmployee = idEmployee,
                         mustWeekWatch = efficiencyEmployee.mustWeekWatch,
-                        totalWeekWatch = time
-
+                        totalWeekWatch = time,
+                        numberDay = numberDay!! + 1,
+                        totalWatch = efficiencyEmployee.totalWatch,
+                        efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
+                        efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
+                        totalWeekDuties = efficiencyEmployee.totalWeekDuties,
+                        totalMonthDuties = efficiencyEmployee.totalMonthDuties,
+                        totalDuties = efficiencyEmployee.totalDuties,
+                        efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties,
+                        efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
+                        efficiencyTotal = efficiencyEmployee.efficiencyTotal,
+                        totalMonthWatch = efficiencyEmployee.totalMonthWatch
                     )
                     efficiencyEmployeeDao.update(newEfficiencyEmployee)
-
                     timeDao.insert(newTime)
                     binding2.viewDaySub.setBackgroundColor(it.context.getColor(R.color.green_700))
+
                 }
 
                 dismiss()

@@ -49,6 +49,22 @@ class StatisticsFragment(val employee: Employee, val efficiencyEmployeeDao: Effi
         binding.progressCircularPresence.progress =
             efficiencyEmployee?.efficiencyTotalPresence!!.toFloat()
 
+        if (day.persianWeekDayName.toString() == "\u062c\u0645\u0639\u0647") {
+            efficiencyEmployee.totalMonthDuties = efficiencyEmployee.totalWeekDuties
+            efficiencyEmployee.totalWeekDuties = 0
+        }
+        efficiencyEmployee.totalMonthDuties = efficiencyEmployee.totalWeekDuties
+
+        if (day.persianDay == 30) {
+            efficiencyEmployee.totalDuties = efficiencyEmployee.totalMonthDuties
+            efficiencyEmployee.totalMonthDuties = 0
+        }
+        efficiencyEmployee.totalDuties = efficiencyEmployee.totalMonthDuties
+
+        binding.txtTackWeek.text = efficiencyEmployee.totalWeekDuties.toString() + " تا"
+        binding.txtTackMonth.text = efficiencyEmployee.totalMonthDuties.toString() + " تا"
+        binding.txtTackTotal.text = efficiencyEmployee.totalDuties.toString() + " تا"
+
         binding.txtTack.text = efficiencyEmployee.efficiencyTotalDuties.toString() + "%"
         binding.progressCircularTack.progress = efficiencyEmployee.efficiencyTotalDuties!!.toFloat()
     }

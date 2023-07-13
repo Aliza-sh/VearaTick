@@ -418,3 +418,35 @@ class CalendarFragment(employee: Employee) : Fragment() {
             }
     }
 }
+
+if (efficiencyEmployee!!.totalWeekWatch != 0 && efficiencyEmployee.mustWeekWatch != 0
+            ) {
+                dayDao = AppDatabase.getDataBase(itemView.context).dayDao
+                val numberDayInWeek = dayDao.getEmployeeDay(data[position].idEmployee!!).size
+                var totalWeekWatch = efficiencyEmployee.totalWeekWatch
+                var mustWeekWatch = efficiencyEmployee.mustWeekWatch
+                var dahanSevisKon: Float = 0f
+                mustWeekWatch = mustWeekWatch!! * numberDayInWeek
+                dahanSevisKon = totalWeekWatch!!.toFloat() / mustWeekWatch.toFloat()
+
+                val efficiencyWeekPresence = dahanSevisKon * 100
+
+                val newEfficiencyEmployee = EfficiencyEmployee(
+                    idEfficiency = efficiencyEmployee.idEfficiency,
+                    idEmployee = efficiencyEmployee.idEmployee,
+                    mustWeekWatch = efficiencyEmployee.mustWeekWatch,
+                    numberDay = efficiencyEmployee.numberDay,
+                    totalWeekWatch = efficiencyEmployee.totalWeekWatch,
+                    totalWatch = efficiencyEmployee.totalWatch,
+                    efficiencyWeekPresence = efficiencyWeekPresence,
+                    efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
+                    totalWeekDuties = efficiencyEmployee.totalWeekDuties,
+                    totalMonthDuties = efficiencyEmployee.totalMonthDuties,
+                    totalDuties = efficiencyEmployee.totalDuties,
+                    efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties,
+                    efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
+                    efficiencyTotal = efficiencyEmployee.efficiencyTotal,
+                    totalMonthWatch = efficiencyEmployee.totalMonthWatch
+                )
+                efficiencyEmployeeDao.update(newEfficiencyEmployee)
+            }
