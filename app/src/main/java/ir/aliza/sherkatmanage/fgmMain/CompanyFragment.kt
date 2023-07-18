@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
+import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
+import ir.aliza.sherkatmanage.DataBase.EmployeeDao
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.DataBase.SubTaskProjectDao
@@ -37,6 +39,8 @@ class CompanyFragment : Fragment(), ProjectNearAdapter.ProjectNearEvents {
     lateinit var bindingDialog: FragmentDialogDeleteTargetBinding
     lateinit var projectNearAdapter: ProjectNearAdapter
     lateinit var projectDao: ProjectDao
+    lateinit var employeeDao: EmployeeDao
+    lateinit var efficiencyDao: EfficiencyDao
     lateinit var targetsDao: TargetsDao
     lateinit var subTaskProjectDao: SubTaskProjectDao
     lateinit var targetsAdapter: TargetsAdapter
@@ -61,6 +65,7 @@ class CompanyFragment : Fragment(), ProjectNearAdapter.ProjectNearEvents {
         super.onViewCreated(view, savedInstanceState)
 
         targetsDao = AppDatabase.getDataBase(view.context).targetsDao
+        efficiencyDao = AppDatabase.getDataBase(view.context).efficiencyDao
 
         projectDao = AppDatabase.getDataBase(view.context).projectDao
         val projectNearData = projectDao.getAllProject()
@@ -76,6 +81,57 @@ class CompanyFragment : Fragment(), ProjectNearAdapter.ProjectNearEvents {
         viewPager2 = binding.targetsPager
         pagerTargets()
 
+        binding.progressEfficiencyPro.progress = efficiencyProject()
+        binding.txtEfficiencyPro.text = efficiencyProject().toString() + "%"
+
+        binding.progressEfficiencyEmpTask.progress = efficiencyEmployeeTack()
+        binding.txtEfficiencyEmpTask.text = efficiencyEmployeeTack().toString() + "%"
+
+        binding.progressEfficiencyEmpPresence.progress = efficiencyEmployeePresence()
+        binding.txtEfficiencyEmpPresence.text = efficiencyEmployeePresence().toString() + "%"
+    }
+
+    private fun efficiencyProject(): Int {
+        val numberProject = projectDao.getAllProject().size
+        val sumProgressProject = projectDao.getColumnprogressProject()
+
+        var sumAllProgressProject =
+            sumProgressProject.sum()
+
+        if (sumAllProgressProject != 0)
+            sumAllProgressProject /= numberProject
+
+        return sumAllProgressProject
+    }
+
+    private fun efficiencyEmployeeTack(): Int {
+
+        val numberEmployee = efficiencyDao.getAllEfficiency().size
+        val sumEfficiencyWeekDuties = efficiencyDao.getColumnEfficiencyWeekDuties()
+        val sumEfficiencyMonthDuties = efficiencyDao.getColumnEfficiencyMonthDuties()
+        val sumEfficiencyTotalDuties = efficiencyDao.getColumnEfficiencyTotalDuties()
+
+        var sumEefficiencyEmployeeTack =
+            sumEfficiencyWeekDuties.sum() + sumEfficiencyMonthDuties.sum() + sumEfficiencyTotalDuties.sum()
+
+        if (sumEefficiencyEmployeeTack != 0)
+            sumEefficiencyEmployeeTack /= numberEmployee
+
+        return sumEefficiencyEmployeeTack
+    }
+
+    private fun efficiencyEmployeePresence(): Int {
+        val numberEmployee = efficiencyDao.getAllEfficiency().size
+        val sumEfficiencyWeekPresence = efficiencyDao.getColumnEfficiencyWeekPresence()
+        val sumEfficiencyTotalPresence = efficiencyDao.getColumnEfficiencyTotalPresence()
+
+        var sumEefficiencyEmployeePresence =
+            sumEfficiencyWeekPresence.sum() + sumEfficiencyTotalPresence.sum()
+
+        if (sumEefficiencyEmployeePresence != 0)
+            sumEefficiencyEmployeePresence /= numberEmployee
+
+        return sumEefficiencyEmployeePresence
     }
 
     private fun pagerTargets() {

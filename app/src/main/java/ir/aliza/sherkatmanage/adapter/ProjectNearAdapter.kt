@@ -44,6 +44,9 @@ class ProjectNearAdapter(
             binding.txtTimePro.text =
                 dayValue.toString() + " " + calendar.withMonth(monthValue).persianMonthName
 
+            binding.progressLimit4.progress = data[position].progressProject!!
+            binding.txtProg.text = data[position].progressProject!!.toString() + "%"
+
             itemView.setOnClickListener {
                 projectNearEvents.onProjectClicked(
                     data[position],

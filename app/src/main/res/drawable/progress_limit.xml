@@ -9,7 +9,7 @@
         <clip>
             <shape>
                 <corners android:radius="10dp" />
-                <gradient android:startColor="@color/fi_dark" android:endColor="@color/fi_light"/>
+                <gradient android:startColor="@color/fi_light" android:endColor="@color/firoze"/>
             </shape>
         </clip>
     </item>

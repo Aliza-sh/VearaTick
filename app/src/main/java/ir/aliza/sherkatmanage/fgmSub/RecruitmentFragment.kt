@@ -174,7 +174,7 @@ class RecruitmentFragment(val efficiencyEmployeeDao: EfficiencyDao) : Fragment()
             employeeAdapter.addEmployee(newEmployee)
             employeeDao.insert(newEmployee)
 
-            val employee = employeeDao.getObjectAllEmployee(txtname,txtFamily)
+            val employee = employeeDao.getObjectAllEmployee(txtname,txtFamily,txtNumber.toLong())
 
             val newEfficiencyEmployee = EfficiencyEmployee(
                 idEmployee = employee?.idEmployee!!,

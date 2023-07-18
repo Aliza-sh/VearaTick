@@ -196,6 +196,7 @@
                 app:layout_constraintStart_toStartOf="@+id/progress_pro" />
 
             <ProgressBar
+                android:layoutDirection="rtl"
                 android:id="@+id/progress_pro"
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="230dp"

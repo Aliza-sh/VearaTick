@@ -67,7 +67,8 @@ class NewProjectFragment() : Fragment() {
             binding.edtDayProject.length() > 0 &&
             binding.edtTypeProject.length() > 0 &&
             binding.edtInfoPro.length() > 0 &&
-            binding.edtTimePro.length() > 0
+            binding.edtTimePro.length() > 0 &&
+            binding.edtTimePro.text.toString().toInt() <= 24
         ) {
             val txtname = binding.edtNamePro.text.toString()
             val txtDay = binding.edtDayProject.text.toString()

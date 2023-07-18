@@ -4,13 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.DataBase.TaskEmployee
-import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.BottomsheetfragmentTaskBinding
 import ir.aliza.sherkatmanage.taskEmployeeDao
 
@@ -35,20 +32,6 @@ class TaskBottomsheetFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val typeProject = listOf(
-            "اندروید",
-            "بک اند",
-            "فرانت اند",
-            "رباتیک",
-            "سایت",
-            "فتوشاپ"
-        )
-
-        val myAdapteredt = ArrayAdapter(requireContext(), R.layout.item_gender, typeProject)
-        (binding.mainEdtTypeTask.editText as AutoCompleteTextView).setAdapter(
-            myAdapteredt
-        )
-
         binding.sheetBtnDone.setOnClickListener {
 
             addNewTask()
@@ -58,14 +41,15 @@ class TaskBottomsheetFragment(
     private fun addNewTask() {
         if (
             binding.dialogEdtTask.length() > 0 &&
-            binding.dialogEdtTask.length() > 0 &&
-            binding.dialogEdtTozih.length() > 0
+            binding.edtTimePro.length() > 0 &&
+            binding.dialogEdtTozih.length() > 0 &&
+            binding.edtTimePro.text.toString().toInt() <= 24
         ) {
             val txtTask = binding.dialogEdtTask.text.toString()
             val txtTime = binding.edtTimePro.text.toString()
             val txtDay = binding.edtDayProject.text.toString()
             val txtDescription = binding.dialogEdtTozih.text.toString()
-            val txtTypeTask = binding.edtTypeTask.text.toString()
+            val txtVolumeTask = binding.edtVolumeTask.text.toString()
 
             val newTask = TaskEmployee(
                 idEmployee = employee.idEmployee!!,
@@ -73,7 +57,7 @@ class TaskBottomsheetFragment(
                 dayTaskDeadline = txtDay.toInt(),
                 watchTaskDeadline = txtTime.toInt(),
                 descriptionTask = txtDescription,
-                typeTask = txtTypeTask,
+                volumeTask = txtVolumeTask.toInt(),
 
                 yearCreation = year,
                 monthCreation = month,

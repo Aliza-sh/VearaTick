@@ -44,10 +44,16 @@ class ProjectInformationFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val project1 = projectDao.getProject(project.idProject!!)
+
+
         binding.txtNamePro.text = project.nameProject
         binding.txtDescription.text = project.descriptionProject
         binding.txtWatch.text = project.watchProject.toString() + " : 00"
         binding.txtDate.text = day + " " + monthName
+
+        binding.progressPro.progress = project1!!.progressProject!!
+        binding.txtProg.text = project1.progressProject!!.toString() + "%"
 
         binding.btnAddNewPerson.setOnClickListener {
             val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
@@ -57,11 +63,10 @@ class ProjectInformationFragment(
         }
 
         val teamProjectDao = AppDatabase.getDataBase(view.context).teamProjectDao
-        val teamProjectData = teamProjectDao.getListTeamProject(project.idProject!!)
+        val teamProjectData = teamProjectDao.getListTeamProject(project.idProject)
         val teamProjectAdapter = TeamProjectAdapter(ArrayList(teamProjectData))
         binding.rcvTeam.adapter = teamProjectAdapter
 
-        val project1 = projectDao.getProject(project.idProject)
         binding.txtNumTaskPro.text =
             project1!!.numberDoneSubTaskProject.toString() + " از " + project1!!.numberSubTaskProject.toString()
 

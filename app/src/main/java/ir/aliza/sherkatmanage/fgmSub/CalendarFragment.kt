@@ -35,6 +35,7 @@ import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.InOutAdapter
 import ir.aliza.sherkatmanage.databinding.CalendarHeaderBinding
 import ir.aliza.sherkatmanage.databinding.FragmentCalendarBinding
+import ir.aliza.sherkatmanage.databinding.FragmentDialogEntryExitBinding
 import ir.aliza.sherkatmanage.databinding.ItemCalendarDayBinding
 import ir.aliza.sherkatmanage.dayDao
 import ir.aliza.sherkatmanage.inOutAdapter
@@ -47,11 +48,13 @@ class CalendarFragment(val employee: Employee, val efficiencyEmployeeDao: Effici
 
 
     lateinit var binding: FragmentCalendarBinding
+    lateinit var bindingFragmentDialogEntryExit: FragmentDialogEntryExitBinding
     private var selectedDate: LocalDate? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentCalendarBinding.inflate(layoutInflater, container, false)
+        bindingFragmentDialogEntryExit = FragmentDialogEntryExitBinding.inflate(layoutInflater, null, false)
         return binding.root
     }
 
@@ -283,7 +286,7 @@ class CalendarFragment(val employee: Employee, val efficiencyEmployeeDao: Effici
                                         dayDao.getDay(("${tv.id}${employee.idEmployee}").toLong())
 
                                     if (dayData?.idDay != ("${tv.id}${employee.idEmployee}").toLong()) {
-                                        val dialog = EntryAndExitDialogFragment(month, employee, tv,efficiencyEmployeeDao)
+                                        val dialog = EntryAndExitDialogFragment(month, employee, tv,efficiencyEmployeeDao,container.legendLayout)
                                         dialog.show(
                                             (activity as MainActivity).supportFragmentManager,
                                             null
@@ -362,5 +365,4 @@ class CalendarFragment(val employee: Employee, val efficiencyEmployeeDao: Effici
                     }
                 }
             }
-    }
-}
+    }}

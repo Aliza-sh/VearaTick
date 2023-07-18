@@ -154,11 +154,11 @@
                         android:text="پروژه ها"
                         android:textColor="?attr/colorOnSecondary"
                         android:textSize="20sp"
-                        app:layout_constraintStart_toStartOf="@+id/progress_limit"
+                        app:layout_constraintStart_toStartOf="@+id/progress_efficiency_pro"
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <ProgressBar
-                        android:id="@+id/progress_limit"
+                        android:id="@+id/progress_efficiency_pro"
                         style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="290dp"
                         android:layout_height="12dp"
@@ -175,7 +175,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
                     <ProgressBar
-                        android:id="@+id/progress_limit2"
+                        android:id="@+id/progress_efficiency_emp_task"
                         style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="290dp"
                         android:layout_height="12dp"
@@ -193,7 +193,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
                     <ProgressBar
-                        android:id="@+id/progress_limit3"
+                        android:id="@+id/progress_efficiency_emp_presence"
                         style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="290dp"
                         android:layout_height="12dp"
@@ -221,8 +221,8 @@
                         android:text="بازدهی کارکنان"
                         android:textColor="?attr/colorOnSecondary"
                         android:textSize="20sp"
-                        app:layout_constraintStart_toStartOf="@+id/progress_limit2"
-                        app:layout_constraintTop_toBottomOf="@+id/progress_limit" />
+                        app:layout_constraintStart_toStartOf="@+id/progress_efficiency_emp_task"
+                        app:layout_constraintTop_toBottomOf="@+id/progress_efficiency_pro" />
 
                     <TextView
                         android:id="@+id/textView18"
@@ -232,38 +232,38 @@
                         android:text="حضور کارکنان "
                         android:textColor="?attr/colorOnSecondary"
                         android:textSize="20sp"
-                        app:layout_constraintStart_toStartOf="@+id/progress_limit3"
-                        app:layout_constraintTop_toBottomOf="@+id/progress_limit2" />
+                        app:layout_constraintStart_toStartOf="@+id/progress_efficiency_emp_presence"
+                        app:layout_constraintTop_toBottomOf="@+id/progress_efficiency_emp_task" />
 
                     <TextView
-                        android:id="@+id/textView19"
+                        android:id="@+id/txt_efficiency_pro"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0%"
                         android:textColor="?attr/colorOnSecondary"
                         android:textSize="20sp"
-                        app:layout_constraintBottom_toTopOf="@+id/progress_limit"
-                        app:layout_constraintEnd_toEndOf="@+id/progress_limit" />
+                        app:layout_constraintBottom_toTopOf="@+id/progress_efficiency_pro"
+                        app:layout_constraintEnd_toEndOf="@+id/progress_efficiency_pro" />
 
                     <TextView
-                        android:id="@+id/textView20"
+                        android:id="@+id/txt_efficiency_emp_task"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0%"
                         android:textColor="?attr/colorOnSecondary"
                         android:textSize="20sp"
-                        app:layout_constraintBottom_toTopOf="@+id/progress_limit2"
-                        app:layout_constraintEnd_toEndOf="@+id/progress_limit2" />
+                        app:layout_constraintBottom_toTopOf="@+id/progress_efficiency_emp_task"
+                        app:layout_constraintEnd_toEndOf="@+id/progress_efficiency_emp_task" />
 
                     <TextView
-                        android:id="@+id/textView21"
+                        android:id="@+id/txt_efficiency_emp_presence"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="0%"
                         android:textColor="?attr/colorOnSecondary"
                         android:textSize="20sp"
-                        app:layout_constraintBottom_toTopOf="@+id/progress_limit3"
-                        app:layout_constraintEnd_toEndOf="@+id/progress_limit3" />
+                        app:layout_constraintBottom_toTopOf="@+id/progress_efficiency_emp_presence"
+                        app:layout_constraintEnd_toEndOf="@+id/progress_efficiency_emp_presence" />
 
 
                 </androidx.constraintlayout.widget.ConstraintLayout>

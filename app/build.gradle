@@ -51,12 +51,15 @@ dependencies {
     //circularprogressbar
     implementation 'com.github.fornewid:neumorphism:0.3.2'
     implementation 'com.mikhaellopez:circularprogressbar:3.1.0'
+    implementation 'com.github.lzyzsd:circleprogress:1.2.1'
+    implementation 'com.akexorcist:RoundCornerProgressBar:2.0.3'
 
 
     // The view calendar library
     implementation 'com.kizitonwose.calendar:view:2.3.0'
     implementation 'com.github.sma6871:CalendarView:0.3.2'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.0.3'
+    implementation 'joda-time:joda-time:2.10.13'
 
     //wheel
     implementation 'com.github.gzu-liyujiang.AndroidPicker:WheelView:4.1.11'

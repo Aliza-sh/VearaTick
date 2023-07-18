@@ -42,7 +42,9 @@ class DoneEntryDialogFragment(
                 binding.edtEntryEpm.length() > 0 &&
                 binding.edtExitEmp.length() > 0 &&
                 binding.edtEntryEpm.text.toString().toInt() < binding.edtExitEmp.text.toString()
-                    .toInt()
+                    .toInt() &&
+                binding.edtEntryEpm.text.toString().toInt() <= 24 &&
+                binding.edtExitEmp.text.toString().toInt() <= 24
 
             ) {
 
@@ -84,7 +86,8 @@ class DoneEntryDialogFragment(
                         efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties,
                         efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
                         efficiencyTotal = efficiencyEmployee.efficiencyTotal,
-                        totalMonthWatch = efficiencyEmployee.totalMonthWatch
+                        totalMonthWatch = efficiencyEmployee.totalMonthWatch,
+                        efficiencyMonthDuties = efficiencyEmployee.totalMonthDuties
                     )
                     efficiencyEmployeeDao.update(newEfficiencyEmployee)
 
@@ -95,7 +98,8 @@ class DoneEntryDialogFragment(
                 } else {
 
                     val timeAgo = efficiencyEmployee?.totalWeekWatch!!
-                    val timeNew = binding.edtExitEmp.text.toString().toInt() - binding.edtEntryEpm.text.toString().toInt()
+                    val timeNew = binding.edtExitEmp.text.toString()
+                        .toInt() - binding.edtEntryEpm.text.toString().toInt()
 
                     val time = timeNew + timeAgo
 

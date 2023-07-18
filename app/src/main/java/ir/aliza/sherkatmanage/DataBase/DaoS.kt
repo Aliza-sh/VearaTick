@@ -15,8 +15,8 @@ interface BaceDao<T> {
 interface EmployeeDao : BaceDao<Employee> {
     @Query("SELECT * FROM employee_table")
     fun getAllEmployee(): List<Employee>
-    @Query("SELECT * FROM employee_table WHERE name = :name AND family = :family")
-    fun getObjectAllEmployee(name: String,family:String): Employee?
+    @Query("SELECT * FROM employee_table WHERE name = :name AND family = :family AND cellularPhone =:cellularPhone")
+    fun getObjectAllEmployee(name: String,family:String,cellularPhone: Long): Employee?
     @Query("SELECT * FROM employee_table WHERE idEmployee = :idEmployee")
     fun getEmployee(idEmployee: Int,): Employee?
     @Query("DELETE FROM employee_table")
@@ -42,6 +42,8 @@ interface DayDao : BaceDao<Day> {
         month: String,
         nameDay: String
     ): Day?
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertOrUpdateFood(day: Day)
 }
 
 @Dao
@@ -63,7 +65,7 @@ interface TaskEmployeeDao : BaceDao<TaskEmployee> {
     @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND dayCreation = :persianDay ")
     fun getTaskDay(idEmployee: Int, persianDay: Int): TaskEmployee?
     @Query("SELECT * FROM taskEmployee_table WHERE idTask = :idTack AND dayCreation = :persianDay ")
-    fun getSubTaskDay(idTack: Int, persianDay: Int): TaskEmployee?
+    fun getInTaskDay(idTack: Int, persianDay: Int): TaskEmployee?
     @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND yearCreation = :year AND monthCreation = :month AND dayCreation = :day")
     fun getAllTaskInDay(idEmployee: Int, year: Int, month: Int, day: Int): TaskEmployee?
     @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND yearCreation = :year AND monthCreation = :month AND dayCreation = :day")
@@ -88,6 +90,13 @@ interface ProjectDao : BaceDao<Project> {
     fun deleteAllProject()
     @Query("SELECT * FROM project_table WHERE nameProject LIKE '%'||:searching || '%'")
     fun searchProject(searching: String): List<Project>
+    @Query("SELECT * FROM project_table ORDER BY idProject DESC LIMIT 1")
+    fun getLastRecord(): Project?
+    @Query("SELECT * FROM project_table LIMIT 1")
+    fun getFirstRecord(): Project?
+
+    @Query("SELECT progressProject FROM project_table")
+    fun getColumnprogressProject(): List<Int>
 }
 @Dao
 interface TeamProjectDao : BaceDao<TeamProject> {
@@ -115,6 +124,17 @@ interface EfficiencyDao : BaceDao<EfficiencyEmployee> {
     fun getAllEfficiency(): List<EfficiencyEmployee>
     @Query("SELECT * FROM efficiency_table WHERE idEmployee = :idEmployee")
     fun getEfficiencyEmployee(idEmployee: Int): EfficiencyEmployee?
+
+    @Query("SELECT efficiencyWeekDuties FROM efficiency_table")
+    fun getColumnEfficiencyWeekDuties(): List<Int>
+    @Query("SELECT efficiencyMonthDuties FROM efficiency_table")
+    fun getColumnEfficiencyMonthDuties(): List<Int>
+    @Query("SELECT efficiencyTotalDuties FROM efficiency_table")
+    fun getColumnEfficiencyTotalDuties(): List<Int>
+    @Query("SELECT efficiencyWeekPresence FROM efficiency_table")
+    fun getColumnEfficiencyWeekPresence(): List<Int>
+    @Query("SELECT efficiencyTotalPresence FROM efficiency_table")
+    fun getColumnEfficiencyTotalPresence(): List<Int>
 }
 
 @Dao

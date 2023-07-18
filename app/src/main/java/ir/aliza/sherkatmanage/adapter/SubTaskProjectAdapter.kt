@@ -70,7 +70,7 @@ class SubTaskProjectAdapter(
                     descriptionProject = project1.descriptionProject,
                     numberSubTaskProject = project1.numberSubTaskProject,
                     numberDoneSubTaskProject = numberDonSubTaskProject,
-
+                    progressProject = project1.progressProject,
                     year = project.year,
                     month = project.month,
                     day = project.day
@@ -78,8 +78,13 @@ class SubTaskProjectAdapter(
                 )
                 projectDao.update(newProject)
 
+                progressPro()
+
                 binding1.txtNumTaskPro.text =
                     numberDonSubTaskProject.toString() + " از " + project1.numberSubTaskProject
+
+                binding1.progressPro.progress = progressPro()
+                binding1.txtProg.text = progressPro().toString() + "%"
 
             }
 
@@ -128,6 +133,37 @@ class SubTaskProjectAdapter(
     fun clearAll() {
         data.clear()
         notifyDataSetChanged()
+    }
+
+    private fun progressPro():Int {
+        val project1 = projectDao.getProject(project.idProject!!)
+
+        val numSubTask = project1!!.numberSubTaskProject
+        val numDoneSubTask = project1.numberDoneSubTaskProject
+        var efficiencyProject = 0
+
+        if (numSubTask != null) {
+            efficiencyProject = ((numDoneSubTask!!.toDouble() / numSubTask) * 100).toInt()
+
+        }
+        val newProject = Project(
+            idProject = project1.idProject,
+            nameProject = project1.nameProject,
+            dayProject = project1.dayProject,
+            watchProject = project1.watchProject,
+            typeProject = project1.typeProject,
+            descriptionProject = project1.descriptionProject,
+            numberSubTaskProject = project1.numberSubTaskProject,
+            numberDoneSubTaskProject = project1.numberDoneSubTaskProject,
+            progressProject = efficiencyProject,
+            year = project.year,
+            month = project.month,
+            day = project.day
+
+        )
+        projectDao.update(newProject)
+
+        return efficiencyProject
     }
 
     interface SubTaskEvent {

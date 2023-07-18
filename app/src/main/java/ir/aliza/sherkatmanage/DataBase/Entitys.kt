@@ -20,8 +20,6 @@ data class Employee(
     val skill: String,
     val imgEmployee: ByteArray? = null,
 
-    val numberDoneTask: Int? = 0,
-
     )
 
 @Entity(tableName = "day_table")
@@ -67,7 +65,7 @@ data class TaskEmployee(
     val dayTaskDeadline: Int,
     val watchTaskDeadline: Int,
     val descriptionTask: String,
-    val typeTask: String,
+    val volumeTask: Int,
 
     val doneTask: Boolean? = null,
     val yearDoneTask: Int? = 0,
@@ -166,19 +164,19 @@ data class EfficiencyEmployee(
     var totalWatch: Int? = 0,
     var efficiencyWeekPresence: Int? = 0,
 
-    val efficiencyTotalPresence: Float? = 0f,
+    var efficiencyTotalPresence: Int? = 0,
 
 
     var totalWeekDuties: Int? = 0,
     var totalMonthDuties: Int? = 0,
     var totalDuties: Int? = 0,
-    var efficiencyWeekDuties: Float? = 0f,
+    var efficiencyWeekDuties: Int? = 0,
+    var efficiencyMonthDuties: Int? = 0,
 
-    val efficiencyTotalDuties: Float? = 0f,
+    var efficiencyTotalDuties: Int? = 0,
 
 
-    val efficiencyTotal: Float? = 0f
-
+    val efficiencyTotal: Int? = 0
 )
 
 @Entity(tableName = "targets_table")

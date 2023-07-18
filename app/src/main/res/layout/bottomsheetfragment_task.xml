@@ -146,25 +146,25 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/main_edt_type_task"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="5dp"
-            android:layout_weight="1"
-            android:hint="نوع پروژه"
+            android:layout_weight="1.1"
+            android:hint="حجم تسک"
             android:textColorHint="?attr/colorOnSecondary"
             app:boxStrokeColor="@color/firoze">
 
-            <AutoCompleteTextView
-                android:id="@+id/edt_type_task"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_Volume_task"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="?attr/colorPrimaryVariant"
-                android:inputType="none"
+                android:inputType="phone"
+                android:maxLength="3"
                 android:singleLine="true"
                 android:textColor="?attr/colorOnSecondary" />
 

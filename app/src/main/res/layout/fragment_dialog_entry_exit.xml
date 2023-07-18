@@ -83,12 +83,25 @@
 
     </LinearLayout>
 
+    <CheckBox
+        android:id="@+id/checkBox"
+        style="@style/Widget.Material3.CompoundButton.CheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layoutDirection="rtl"
+        android:text="آیا برایه تمام روز هایه هفته اعمال شود؟"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/linearLayout2"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
     <com.google.android.material.button.MaterialButton
         android:id="@+id/dialog_btn_Sure"
         android:layout_width="80dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:layout_marginBottom="8dp"
         android:background="@drawable/shape_dore_button"
         android:backgroundTint="?attr/colorPrimary"
@@ -98,7 +111,7 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBox" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
