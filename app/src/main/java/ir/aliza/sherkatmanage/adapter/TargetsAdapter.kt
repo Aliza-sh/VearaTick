@@ -128,6 +128,7 @@ class TargetsAdapter(
                 targetsDao.insert(newTarget)
                 addTarget(newTarget)
                 bottomSheetDialog.dismiss()
+
             } else {
                 Toast.makeText(it.context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT)
                     .show()

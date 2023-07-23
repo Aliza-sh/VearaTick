@@ -53,6 +53,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="5 تا فتوشاپ بقیه اندروید"
+            android:textColor="@color/white_dark"
             android:textSize="20sp"
             app:layout_constraintStart_toStartOf="@+id/txt_name_target"
             app:layout_constraintTop_toBottomOf="@+id/txt_name_target" />

@@ -9,9 +9,9 @@
         android:icon="@drawable/ic_project_employee_24"
         android:title="پروژه ها و کارکنان" />
     <item
-    android:id="@+id/menu_recruitment"
-    android:icon="@drawable/ic_apartment"
-    android:title="امور شرکت" />
+        android:id="@+id/menu_recruitment"
+        android:enabled="false"
+        android:title="" />
     <item
         android:id="@+id/menu_chat"
         android:icon="@drawable/ic_chat"

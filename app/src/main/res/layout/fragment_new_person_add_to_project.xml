@@ -31,7 +31,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txt_name_employee"
-        tools:listitem="@layout/item_new_person_to_project" />
+        tools:listitem="@layout/item_add_employee_to_project" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/dialog_btn_Sure"

@@ -44,7 +44,8 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import java.time.DayOfWeek
 
-class CalendarFragment(val employee: Employee, val efficiencyEmployeeDao: EfficiencyDao) : Fragment() {
+class CalendarFragment(val employee: Employee, val efficiencyEmployeeDao: EfficiencyDao) :
+    Fragment() {
 
 
     lateinit var binding: FragmentCalendarBinding
@@ -54,7 +55,8 @@ class CalendarFragment(val employee: Employee, val efficiencyEmployeeDao: Effici
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         binding = FragmentCalendarBinding.inflate(layoutInflater, container, false)
-        bindingFragmentDialogEntryExit = FragmentDialogEntryExitBinding.inflate(layoutInflater, null, false)
+        bindingFragmentDialogEntryExit =
+            FragmentDialogEntryExitBinding.inflate(layoutInflater, null, false)
         return binding.root
     }
 
@@ -254,19 +256,26 @@ class CalendarFragment(val employee: Employee, val efficiencyEmployeeDao: Effici
                                 when (daysOfWeek[index]) {
 
                                     DayOfWeek.SUNDAY -> tv.text =
-                                        "\u0634\u0646\u0628\u0647" // Shanbeh
-                                    DayOfWeek.MONDAY -> tv.text =
                                         "\u06cc\u06a9\u200c\u0634\u0646\u0628\u0647"// Yekshanbeh
-                                    DayOfWeek.TUESDAY -> tv.text =
+
+                                    DayOfWeek.MONDAY -> tv.text =
                                         "\u062f\u0648\u0634\u0646\u0628\u0647"  // Doshanbeh
-                                    DayOfWeek.WEDNESDAY -> tv.text =
+
+                                    DayOfWeek.TUESDAY -> tv.text =
                                         "\u0633\u0647\u200c\u0634\u0646\u0628\u0647"  // Sehshanbeh
-                                    DayOfWeek.THURSDAY -> tv.text =
+
+                                    DayOfWeek.WEDNESDAY -> tv.text =
                                         "\u0686\u0647\u0627\u0631\u0634\u0646\u0628\u0647"  // Chaharshanbeh
-                                    DayOfWeek.FRIDAY -> tv.text =
+
+                                    DayOfWeek.THURSDAY -> tv.text =
                                         "\u067e\u0646\u062c\u200c\u0634\u0646\u0628\u0647"  // Panjshanbeh
-                                    DayOfWeek.SATURDAY -> tv.text =
+
+                                    DayOfWeek.FRIDAY -> tv.text =
                                         "\u062c\u0645\u0639\u0647" // jome
+
+                                    DayOfWeek.SATURDAY -> tv.text =
+                                        "\u0634\u0646\u0628\u0647" // Shanbeh
+
                                 }
 
                                 val dayData =
@@ -286,7 +295,13 @@ class CalendarFragment(val employee: Employee, val efficiencyEmployeeDao: Effici
                                         dayDao.getDay(("${tv.id}${employee.idEmployee}").toLong())
 
                                     if (dayData?.idDay != ("${tv.id}${employee.idEmployee}").toLong()) {
-                                        val dialog = EntryAndExitDialogFragment(month, employee, tv,efficiencyEmployeeDao,container.legendLayout)
+                                        val dialog = EntryAndExitDialogFragment(
+                                            month,
+                                            employee,
+                                            tv,
+                                            efficiencyEmployeeDao,
+                                            container.legendLayout
+                                        )
                                         dialog.show(
                                             (activity as MainActivity).supportFragmentManager,
                                             null
@@ -309,7 +324,8 @@ class CalendarFragment(val employee: Employee, val efficiencyEmployeeDao: Effici
                                             )
                                         )
 
-                                        val efficiencyEmployee = efficiencyEmployeeDao.getEfficiencyEmployee(employee.idEmployee!!)
+                                        val efficiencyEmployee =
+                                            efficiencyEmployeeDao.getEfficiencyEmployee(employee.idEmployee!!)
                                         var time = dayData.exit!!.toInt() - dayData.entry!!.toInt()
 
                                         time = efficiencyEmployee?.mustWeekWatch!! - time
@@ -365,4 +381,5 @@ class CalendarFragment(val employee: Employee, val efficiencyEmployeeDao: Effici
                     }
                 }
             }
-    }}
+    }
+}

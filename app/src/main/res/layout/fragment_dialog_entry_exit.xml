@@ -1,117 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layoutDirection="ltr"
-    android:background="@drawable/shape_circle_white_solid_background"
     android:layout_height="wrap_content"
-    android:padding="10dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    app:cardBackgroundColor="?attr/colorPrimaryVariant"
+    app:cardCornerRadius="25dp">
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        android:text="ساعت ورود و خروج رو مشخص کن."
-        android:textColor="?attr/colorOnSecondary"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
+        android:layoutDirection="ltr"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:layoutDirection="rtl"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        app:layout_constraintTop_toBottomOf="@+id/textView"
-        tools:layout_editor_absoluteX="10dp">
+        android:padding="10dp">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="ساعت ورود و خروج رو مشخص کن."
+            android:textColor="?attr/colorOnSecondary"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp"
-            android:layout_weight="1.3"
-            android:hint="ورود"
-            android:textColorHint="?attr/colorOnSecondary"
-            app:boxStrokeColor="@color/firoze">
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:layoutDirection="rtl"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            app:layout_constraintTop_toBottomOf="@+id/textView"
+            tools:layout_editor_absoluteX="10dp">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edt_entry_epm"
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="phone"
-                android:maxLength="2"
-                android:singleLine="true"
-                android:textColor="?attr/colorOnSecondary" />
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1.3"
+                android:hint="ورود"
+                android:textColorHint="?attr/colorOnSecondary"
+                app:boxStrokeColor="@color/firoze">
 
-        </com.google.android.material.textfield.TextInputLayout>
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_entry_epm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:maxLength="2"
+                    android:singleLine="true"
+                    android:textColor="?attr/colorOnSecondary" />
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="match_parent"
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:layout_weight="1.3"
+                android:gravity="end"
+                android:hint="خروج"
+                android:textColorHint="?attr/colorOnSecondary"
+                app:boxStrokeColor="@color/firoze">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_exit_emp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"
+                    android:maxLength="2"
+                    android:singleLine="true"
+                    android:textColor="?attr/colorOnSecondary" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+        <CheckBox
+            android:textColor="?attr/colorOnSurface"
+            android:id="@+id/checkBox"
+            style="@style/Widget.Material3.CompoundButton.CheckBox"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp"
-            android:layout_weight="1.3"
-            android:gravity="end"
-            android:hint="خروج"
-            android:textColorHint="?attr/colorOnSecondary"
-            app:boxStrokeColor="@color/firoze">
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:layoutDirection="rtl"
+            android:text="آیا برایه تمام روز هایه هفته اعمال شود؟"
+            android:textSize="18sp"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout2"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edt_exit_emp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="phone"
-                android:maxLength="2"
-                android:singleLine="true"
-                android:textColor="?attr/colorOnSecondary" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-    </LinearLayout>
-
-    <CheckBox
-        android:id="@+id/checkBox"
-        style="@style/Widget.Material3.CompoundButton.CheckBox"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:layoutDirection="rtl"
-        android:text="آیا برایه تمام روز هایه هفته اعمال شود؟"
-        android:textSize="18sp"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout2"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/dialog_btn_Sure"
-        android:layout_width="80dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp"
-        android:background="@drawable/shape_dore_button"
-        android:backgroundTint="?attr/colorPrimary"
-        android:text="تایید"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/checkBox" />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/dialog_btn_Sure"
+            android:layout_width="80dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/shape_dore_button"
+            android:backgroundTint="?attr/colorPrimary"
+            android:text="تایید"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/checkBox" />
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

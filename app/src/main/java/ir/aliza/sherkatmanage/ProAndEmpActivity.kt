@@ -4,40 +4,22 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
-import ir.aliza.sherkatmanage.DataBase.DayDao
-import ir.aliza.sherkatmanage.DataBase.EmployeeDao
-import ir.aliza.sherkatmanage.DataBase.ProjectDao
-import ir.aliza.sherkatmanage.DataBase.TaskEmployeeDao
-import ir.aliza.sherkatmanage.DataBase.TimeDao
-import ir.aliza.sherkatmanage.adapter.EmployeeAdapter
-import ir.aliza.sherkatmanage.adapter.InOutAdapter
-import ir.aliza.sherkatmanage.adapter.ProjectNearAdapter
-import ir.aliza.sherkatmanage.adapter.TaskEmployeeAdapter
-import ir.aliza.sherkatmanage.databinding.ActivityMainBinding
+import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.fgmMain.AffairsFragment
 import ir.aliza.sherkatmanage.fgmMain.ChatFragment
 import ir.aliza.sherkatmanage.fgmMain.CompanyFragment
 import ir.aliza.sherkatmanage.fgmMain.ProAndEmpFragment
 import ir.aliza.sherkatmanage.fgmSub.PersonFragment
 
-lateinit var employeeDao: EmployeeDao
-lateinit var dayDao: DayDao
-lateinit var timeDao: TimeDao
-lateinit var projectDao: ProjectDao
-lateinit var taskEmployeeDao: TaskEmployeeDao
-lateinit var projectAdapter: ProjectNearAdapter
-lateinit var taskAdapter: TaskEmployeeAdapter
-lateinit var inOutAdapter: InOutAdapter
-lateinit var employeeAdapter: EmployeeAdapter
-var Position: Int = 0
 
-class MainActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityMainBinding
+class ProAndEmpActivity : AppCompatActivity() {
+
+    lateinit var binding: ActivityProAndEmpBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityProAndEmpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         employeeDao = AppDatabase.getDataBase(this).employeeDao

@@ -8,27 +8,37 @@ import android.widget.CompoundButton
 import androidx.recyclerview.widget.RecyclerView
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Employee
+import ir.aliza.sherkatmanage.DataBase.EmployeeDao
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.TeamProject
+import ir.aliza.sherkatmanage.DataBase.TeamProjectDao
 import ir.aliza.sherkatmanage.R
-import ir.aliza.sherkatmanage.databinding.ItemNewPersonToProjectBinding
+import ir.aliza.sherkatmanage.databinding.ItemAddEmployeeToProjectBinding
 
-class AddNewPersonToProjectAdapter(private val data: ArrayList<Employee>, val project: Project) :
-    RecyclerView.Adapter<AddNewPersonToProjectAdapter.AddNewPersonToProjectViewHolder>() {
+class AddEmployeeToProjectAdapter(private val data: ArrayList<Employee>, val project: Project) :
+    RecyclerView.Adapter<AddEmployeeToProjectAdapter.AddEmployeeToProjectViewHolder>() {
 
-    lateinit var binding: ItemNewPersonToProjectBinding
+    lateinit var binding: ItemAddEmployeeToProjectBinding
+    lateinit var employeeDao: EmployeeDao
+    lateinit var teamProjectDao: TeamProjectDao
+    var employee: Employee? = null
+    var teamProject: TeamProject? = null
+    var employeeTeamProject: TeamProject? = null
 
-    inner class AddNewPersonToProjectViewHolder(itemView: View) :
+    inner class AddEmployeeToProjectViewHolder(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
 
         @SuppressLint("SetTextI18n")
         fun bindData(position: Int) {
 
-            val employeeDao = AppDatabase.getDataBase(itemView.context).employeeDao
-            val teamProjectDao = AppDatabase.getDataBase(itemView.context).teamProjectDao
-            val employee = employeeDao.getEmployee(data[position].idEmployee!!)
-            val teamProject = teamProjectDao.getTeamProject(project.idProject!!)
-            val employeeTeamProject = teamProjectDao.getEmployeeTeamProject(data[position].idEmployee!!,project.idProject)
+            employeeDao = AppDatabase.getDataBase(itemView.context).employeeDao
+            teamProjectDao = AppDatabase.getDataBase(itemView.context).teamProjectDao
+            employee = employeeDao.getEmployee(data[position].idEmployee!!)
+            teamProject = teamProjectDao.getTeamProject(project.idProject!!)
+            employeeTeamProject = teamProjectDao.getEmployeeTeamProject(
+                data[position].idEmployee!!,
+                project.idProject
+            )
 
             if (data[position].gender == "زن") {
                 binding.imgprn2.setImageResource(R.drawable.img_matter)
@@ -38,11 +48,11 @@ class AddNewPersonToProjectAdapter(private val data: ArrayList<Employee>, val pr
             binding.txtJobEmployee.text = data[position].specialty
 
             if (teamProject?.idProject != null) {
-                    if (employeeTeamProject?.idEmployee == employee?.idEmployee) {
+                if (employeeTeamProject!!.idEmployee == employee!!.idEmployee) {
 
-                        binding.ckbEmployee.isChecked = true
+                    binding.ckbEmployee.isChecked = true
 
-                    }
+                }
             }
 
             binding.ckbEmployee.setOnCheckedChangeListener() { compoundButton: CompoundButton, b: Boolean ->
@@ -52,9 +62,9 @@ class AddNewPersonToProjectAdapter(private val data: ArrayList<Employee>, val pr
                     val newTeamProject = TeamProject(
                         idProject = project.idProject,
                         idEmployee = employee!!.idEmployee,
-                        nameEmployee = employee.name,
-                        familyEmployee = employee.family,
-                        genderEmployee = employee.gender
+                        nameEmployee = employee!!.name,
+                        familyEmployee = employee!!.family,
+                        genderEmployee = employee!!.gender
                     )
 
                     teamProjectDao.insert(newTeamProject)
@@ -65,9 +75,9 @@ class AddNewPersonToProjectAdapter(private val data: ArrayList<Employee>, val pr
                         idTeam = employeeTeamProject?.idTeam,
                         idProject = project.idProject,
                         idEmployee = employee!!.idEmployee,
-                        nameEmployee = employee.name,
-                        familyEmployee = employee.family,
-                        genderEmployee = employee.gender
+                        nameEmployee = employee!!.name,
+                        familyEmployee = employee!!.family,
+                        genderEmployee = employee!!.gender
                     )
                     teamProjectDao.delete(newTeamProject)
 
@@ -82,16 +92,16 @@ class AddNewPersonToProjectAdapter(private val data: ArrayList<Employee>, val pr
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): AddNewPersonToProjectViewHolder {
-        binding = ItemNewPersonToProjectBinding.inflate(
+    ): AddEmployeeToProjectViewHolder {
+        binding = ItemAddEmployeeToProjectBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
         )
-        return AddNewPersonToProjectViewHolder(binding.root)
+        return AddEmployeeToProjectViewHolder(binding.root)
     }
 
-    override fun onBindViewHolder(holder: AddNewPersonToProjectViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AddEmployeeToProjectViewHolder, position: Int) {
         holder.bindData(position)
     }
 

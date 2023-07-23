@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Project
-import ir.aliza.sherkatmanage.adapter.AddNewPersonToProjectAdapter
+import ir.aliza.sherkatmanage.adapter.AddEmployeeToProjectAdapter
 import ir.aliza.sherkatmanage.databinding.FragmentNewPersonAddToProjectBinding
 
 class NewPersonAddToProjectFragment(val project: Project) : Fragment() {
@@ -28,11 +28,19 @@ class NewPersonAddToProjectFragment(val project: Project) : Fragment() {
 
         val employeeDao = AppDatabase.getDataBase(view.context).employeeDao
         val employeeData = employeeDao.getAllEmployee()
-        val addNewPersonToProjectAdapter = AddNewPersonToProjectAdapter(ArrayList(employeeData),project)
+        val addNewPersonToProjectAdapter = AddEmployeeToProjectAdapter(ArrayList(employeeData),project)
         binding.recyclerView.adapter = addNewPersonToProjectAdapter
 
-
+        binding.dialogBtnSure.setOnClickListener {
+            onBackPressed()
+        }
     }
 
-
+    fun onBackPressed() {
+        if (parentFragmentManager.backStackEntryCount > 0) {
+            parentFragmentManager.popBackStack()
+        } else {
+            onBackPressed()
+        }
+    }
 }

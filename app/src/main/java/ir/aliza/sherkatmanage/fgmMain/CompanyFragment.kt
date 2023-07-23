@@ -158,7 +158,6 @@ class CompanyFragment : Fragment(), ProjectNearAdapter.ProjectNearEvents {
                 }
 
                 override fun onSliderLongClicked(target: Targets, position: Int) {
-
                     showDialog(target, position, targetsAdapter)
                 }
             })
@@ -204,6 +203,8 @@ class CompanyFragment : Fragment(), ProjectNearAdapter.ProjectNearEvents {
                 )
                 targetsDao.update(newTarget)
                 targetsAdapter.updateTarget(newTarget, position)
+                targetsAdapter.notifyDataSetChanged()
+                targetsAdapter.notifyItemChanged(position)
                 bottomSheetDialog.dismiss()
             } else {
                 Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()
@@ -218,6 +219,7 @@ class CompanyFragment : Fragment(), ProjectNearAdapter.ProjectNearEvents {
 
         bindingDialog.dialogBtnDeleteSure.setOnClickListener {
             targetsAdapter.removeTarget(target, position)
+            targetsAdapter.notifyItemRemoved(position)
             targetsDao.delete(target)
             dialog.dismiss()
         }

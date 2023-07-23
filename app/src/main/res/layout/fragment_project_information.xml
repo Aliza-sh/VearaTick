@@ -172,6 +172,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="تسک کامل شده"
+                android:textColor="@color/white_dark"
                 app:layout_constraintEnd_toEndOf="@+id/txt_num_task_pro"
                 app:layout_constraintTop_toBottomOf="@+id/txt_num_task_pro" />
 
@@ -181,6 +182,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="14dp"
                 android:text="پیشرفت"
+                android:textColor="@color/white"
                 app:layout_constraintEnd_toEndOf="@+id/progress_pro"
                 app:layout_constraintTop_toBottomOf="@+id/textView340" />
 
