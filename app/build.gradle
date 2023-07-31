@@ -103,7 +103,4 @@ dependencies {
     // Jetpack Compose Integration
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
-    //bubblenavigation
-    implementation 'com.gauravk.bubblenavigation:bubblenavigation:1.0.7'
-
 }

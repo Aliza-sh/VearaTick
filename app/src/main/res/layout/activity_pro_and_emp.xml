@@ -4,9 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/layout_main"
     android:background="?attr/colorOnPrimary"
     android:layoutDirection="ltr"
     tools:context=".MainActivity">
+
 
     <FrameLayout
         android:id="@+id/frame_layout_main"
@@ -15,34 +17,77 @@
         android:layout_marginBottom="60dp" />
 
     <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/BottomAppBar"
+        android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:backgroundTint="?attr/colorPrimaryVariant"
+        app:backgroundTint="?attr/colorPrimaryVariant"
+        app:fabAlignmentMode="center"
         android:layoutDirection="rtl"
-        app:fabCradleMargin="20dp"
-        app:fabCradleRoundedCornerRadius="50dp">
+        app:fabCradleMargin="19dp"
+        app:fabCradleRoundedCornerRadius="150dp">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
+        <LinearLayout
+            android:id="@+id/btn_projrct"
+            style="@style/Widget.Material3.Button"
+            android:layout_gravity="start"
+            android:layout_marginStart="20dp"
+            android:gravity="center"
+            android:orientation="vertical"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ic_project"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_tack"/>
+
+            <TextView
+                android:id="@+id/txt_project"
+                android:textSize="16dp"
+                android:textColor="@color/firoze"
+                android:text="پروژه ها"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_employee"
+            style="@style/Widget.Material3.Button"
+            android:layout_gravity="end"
             android:layout_marginEnd="20dp"
-            android:background="@android:color/transparent"
-            app:labelVisibilityMode="labeled"
-            app:menu="@menu/menu_bottombar" />
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/ic_employee"
+                android:tint="@color/gray"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/ic_employee"/>
+
+            <TextView
+                android:id="@+id/txt_employee"
+                android:textSize="16dp"
+                android:textColor="@color/gray"
+                android:text="کارمندان"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:backgroundTint="@color/firoze"
         android:src="@drawable/ic_add_round"
-        android:tint="?attr/colorPrimary"
-        app:layout_anchor="@id/BottomAppBar"
+        app:layout_anchor="@id/bottomAppBar"
         app:maxImageSize="40dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

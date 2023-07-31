@@ -1,16 +1,14 @@
 package ir.aliza.sherkatmanage
 
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
-import ir.aliza.sherkatmanage.fgmMain.AffairsFragment
-import ir.aliza.sherkatmanage.fgmMain.ChatFragment
-import ir.aliza.sherkatmanage.fgmMain.CompanyFragment
-import ir.aliza.sherkatmanage.fgmMain.ProAndEmpFragment
-import ir.aliza.sherkatmanage.fgmSub.PersonFragment
-
+import ir.aliza.sherkatmanage.fgmMain.EmployeeFragment
+import ir.aliza.sherkatmanage.fgmMain.ProjectFragment
 
 
 class ProAndEmpActivity : AppCompatActivity() {
@@ -22,46 +20,40 @@ class ProAndEmpActivity : AppCompatActivity() {
         binding = ActivityProAndEmpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        employeeDao = AppDatabase.getDataBase(this).employeeDao
-
         firstRun()
-        binding.bottomNavigation.background = null
-        binding.bottomNavigation.setOnItemSelectedListener {
 
-            when (it.itemId) {
-                R.id.menu_home -> {
-                    replaceFragment(CompanyFragment())
-                }
+        binding.btnProjrct.setOnClickListener() {
+            binding.icProject.setColorFilter(ContextCompat.getColor(this, R.color.firoze), PorterDuff.Mode.SRC_IN)
+            binding.txtProject.setTextColor(Color.parseColor("#E600ADB5"))
 
-                R.id.menu_pro_emp -> {
-                    replaceFragment(ProAndEmpFragment())
-                }
+            binding.icEmployee.setColorFilter(ContextCompat.getColor(this, R.color.gray), PorterDuff.Mode.SRC_IN)
+            binding.txtEmployee.setTextColor(Color.parseColor("#929292"))
 
-                R.id.menu_recruitment -> {
-                    replaceFragment(AffairsFragment())
-                }
-
-                R.id.menu_chat -> {
-                    replaceFragment(ChatFragment())
-                }
-
-                R.id.menu_person -> {
-                    replaceFragment(PersonFragment())
-                }
-            }
-            true
+            replaceFragment(ProjectFragment(binding))
         }
+        binding.btnEmployee.setOnClickListener() {
+            binding.icEmployee.setColorFilter(ContextCompat.getColor(this, R.color.firoze), PorterDuff.Mode.SRC_IN)
+            binding.txtEmployee.setTextColor(Color.parseColor("#E600ADB5"))
+
+            binding.icProject.setColorFilter(ContextCompat.getColor(this, R.color.gray), PorterDuff.Mode.SRC_IN)
+            binding.txtProject.setTextColor(Color.parseColor("#929292"))
+
+            replaceFragment(EmployeeFragment(binding))
+
+        }
+
+
     }
 
     fun replaceFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frame_layout_main, fragment)
-            .addToBackStack(null)
             .commit()
     }
 
     fun firstRun() {
-        replaceFragment(CompanyFragment())
-        binding.bottomNavigation.selectedItemId = R.id.menu_home
+        replaceFragment(ProjectFragment(binding))
+        binding.icProject.setColorFilter(ContextCompat.getColor(this, R.color.firoze), PorterDuff.Mode.SRC_IN)
+        binding.txtProject.setTextColor(Color.parseColor("#E600ADB5"))
     }
 }

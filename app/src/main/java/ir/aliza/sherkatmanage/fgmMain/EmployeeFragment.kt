@@ -12,14 +12,16 @@ import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.Dialog.EmployeeDialogFragment
 import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.Position
+import ir.aliza.sherkatmanage.ProAndEmpActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.EmployeeAdapter
+import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.FragmentEmployeesBinding
 import ir.aliza.sherkatmanage.employeeAdapter
 import ir.aliza.sherkatmanage.fgmSub.EmployeeStatisticsFragment
 import ir.aliza.sherkatmanage.fgmSub.RecruitmentFragment
 
-class EmployeeFragment : Fragment(), EmployeeAdapter.EmployeeEvents {
+class EmployeeFragment(binding: ActivityProAndEmpBinding) : Fragment(), EmployeeAdapter.EmployeeEvents {
 
     lateinit var binding: FragmentEmployeesBinding
     lateinit var efficiencyEmployeeDao: EfficiencyDao
@@ -63,7 +65,7 @@ class EmployeeFragment : Fragment(), EmployeeAdapter.EmployeeEvents {
 
     fun onFabClicked() {
         binding.btnFabEmp.setOnClickListener {
-            val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
+            val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
             transaction.replace(R.id.frame_layout_main, RecruitmentFragment(efficiencyEmployeeDao))
                 .addToBackStack(null)
                 .commit()

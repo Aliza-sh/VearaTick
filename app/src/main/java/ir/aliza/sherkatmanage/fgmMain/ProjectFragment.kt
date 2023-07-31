@@ -10,16 +10,17 @@ import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.SubTaskProjectDao
 import ir.aliza.sherkatmanage.Dialog.ProjectDialogFragment
-import ir.aliza.sherkatmanage.MainActivity
+import ir.aliza.sherkatmanage.ProAndEmpActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.ProjectNearAdapter
+import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.FragmentProjectBinding
 import ir.aliza.sherkatmanage.fgmSub.NewProjectFragment
 import ir.aliza.sherkatmanage.fgmSub.ProjectInformationFragment
 import ir.aliza.sherkatmanage.projectAdapter
 import ir.aliza.sherkatmanage.projectDao
 
-class ProjectFragment() : Fragment(), ProjectNearAdapter.ProjectNearEvents {
+class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : Fragment(), ProjectNearAdapter.ProjectNearEvents {
 
     lateinit var binding: FragmentProjectBinding
     lateinit var subTaskProjectDao: SubTaskProjectDao
@@ -53,17 +54,17 @@ class ProjectFragment() : Fragment(), ProjectNearAdapter.ProjectNearEvents {
     }
 
     fun onFabClicked() {
-        binding.btnFabPro.setOnClickListener {
-            val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frame_layout_main, NewProjectFragment())
+        bindingActivityProAndEmp.btnAdd.setOnClickListener {
+            val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.layout_main, NewProjectFragment())
                 .addToBackStack(null)
                 .commit()
         }
     }
 
     override fun onProjectClicked(project: Project, day: String, monthName: String) {
-        val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-        transaction.add(R.id.frame_layout_main, ProjectInformationFragment(project,day,monthName,subTaskProjectDao,
+        val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
+        transaction.add(R.id.layout_main, ProjectInformationFragment(project,day,monthName,subTaskProjectDao,
             projectDao))
             .addToBackStack(null)
             .commit()
@@ -71,7 +72,7 @@ class ProjectFragment() : Fragment(), ProjectNearAdapter.ProjectNearEvents {
 
     override fun onProjectLongClicked(project: Project, position: Int) {
         val dialog = ProjectDialogFragment(project, position)
-        dialog.show((activity as MainActivity).supportFragmentManager, null)
+        dialog.show((activity as ProAndEmpActivity).supportFragmentManager, null)
     }
 
 }

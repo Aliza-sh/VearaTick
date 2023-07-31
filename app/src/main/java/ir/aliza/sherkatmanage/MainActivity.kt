@@ -1,5 +1,6 @@
 package ir.aliza.sherkatmanage
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -14,10 +15,7 @@ import ir.aliza.sherkatmanage.adapter.InOutAdapter
 import ir.aliza.sherkatmanage.adapter.ProjectNearAdapter
 import ir.aliza.sherkatmanage.adapter.TaskEmployeeAdapter
 import ir.aliza.sherkatmanage.databinding.ActivityMainBinding
-import ir.aliza.sherkatmanage.fgmMain.AffairsFragment
-import ir.aliza.sherkatmanage.fgmMain.ChatFragment
 import ir.aliza.sherkatmanage.fgmMain.CompanyFragment
-import ir.aliza.sherkatmanage.fgmMain.ProAndEmpFragment
 import ir.aliza.sherkatmanage.fgmSub.PersonFragment
 
 lateinit var employeeDao: EmployeeDao
@@ -43,8 +41,8 @@ class MainActivity : AppCompatActivity() {
         employeeDao = AppDatabase.getDataBase(this).employeeDao
 
         firstRun()
-        binding.bottomNavigation.background = null
-        binding.bottomNavigation.setOnItemSelectedListener {
+
+        binding.bottomNavigationMain.setOnItemSelectedListener {
 
             when (it.itemId) {
                 R.id.menu_home -> {
@@ -52,18 +50,11 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.menu_pro_emp -> {
-                    replaceFragment(ProAndEmpFragment())
+                    val intent = Intent(this, ProAndEmpActivity::class.java)
+                    startActivity(intent)
                 }
 
-                R.id.menu_recruitment -> {
-                    replaceFragment(AffairsFragment())
-                }
-
-                R.id.menu_chat -> {
-                    replaceFragment(ChatFragment())
-                }
-
-                R.id.menu_person -> {
+                R.id.menu_settings -> {
                     replaceFragment(PersonFragment())
                 }
             }
@@ -80,6 +71,6 @@ class MainActivity : AppCompatActivity() {
 
     fun firstRun() {
         replaceFragment(CompanyFragment())
-        binding.bottomNavigation.selectedItemId = R.id.menu_home
+        binding.bottomNavigationMain.selectedItemId = R.id.menu_home
     }
 }

@@ -6,10 +6,10 @@
 
     <!-- theme night. -->
     <color name="black_dark">#00001C</color>
-    <color name="black_light">#393e46</color>
+    <color name="black_light">#333333</color>
 
     <color name="black_gra">#B3242E38</color>
-    <color name="blacke">#222831</color>
+    <color name="blacke">#202020</color>
 
     <!-- theme day. -->
     <color name="whity">#EAEBEF</color>

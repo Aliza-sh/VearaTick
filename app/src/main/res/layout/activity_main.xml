@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,37 +12,38 @@
         android:id="@+id/frame_layout_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="60dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/BottomAppBar"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/materialCardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:backgroundTint="?attr/colorPrimaryVariant"
+        android:layout_margin="20dp"
+        android:elevation="20dp"
         android:layoutDirection="rtl"
-        app:fabCradleMargin="20dp"
-        app:fabCradleRoundedCornerRadius="50dp">
+        android:translationZ="10dp"
+        app:cardBackgroundColor="?attr/colorPrimaryVariant"
+        app:cardCornerRadius="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:background="@android:color/transparent"
+            android:id="@+id/bottom_navigation_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:labelVisibilityMode="labeled"
-            app:menu="@menu/menu_bottombar" />
+            app:itemBackground="?attr/colorPrimaryVariant"
+            app:itemRippleColor="@color/firoze"
+            android:animateLayoutChanges="true"
+            app:backgroundTint="?attr/colorPrimaryVariant"
+            app:itemIconTint="@color/color_item_bottom_nav_main"
+            app:itemTextColor="@color/color_item_bottom_nav_main"
+            app:menu="@menu/main_menu_bottombar" />
 
-    </com.google.android.material.bottomappbar.BottomAppBar>
+    </com.google.android.material.card.MaterialCardView>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:backgroundTint="@color/firoze"
-        android:src="@drawable/ic_add_round"
-        android:tint="?attr/colorPrimary"
-        app:layout_anchor="@id/BottomAppBar"
-        app:maxImageSize="40dp" />
-
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
