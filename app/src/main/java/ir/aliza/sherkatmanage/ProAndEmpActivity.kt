@@ -47,7 +47,7 @@ class ProAndEmpActivity : AppCompatActivity() {
 
     fun replaceFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.frame_layout_main, fragment)
+        transaction.replace(R.id.frame_layout_sub, fragment)
             .commit()
     }
 

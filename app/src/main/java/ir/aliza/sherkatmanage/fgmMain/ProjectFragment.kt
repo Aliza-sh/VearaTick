@@ -56,7 +56,7 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
     fun onFabClicked() {
         bindingActivityProAndEmp.btnAdd.setOnClickListener {
             val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.layout_main, NewProjectFragment())
+            transaction.replace(R.id.layout_pro_and_emp, NewProjectFragment())
                 .addToBackStack(null)
                 .commit()
         }
@@ -64,7 +64,7 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
 
     override fun onProjectClicked(project: Project, day: String, monthName: String) {
         val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
-        transaction.add(R.id.layout_main, ProjectInformationFragment(project,day,monthName,subTaskProjectDao,
+        transaction.add(R.id.layout_pro_and_emp, ProjectInformationFragment(project,day,monthName,subTaskProjectDao,
             projectDao))
             .addToBackStack(null)
             .commit()

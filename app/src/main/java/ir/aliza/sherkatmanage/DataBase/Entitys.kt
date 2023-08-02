@@ -178,14 +178,3 @@ data class EfficiencyEmployee(
 
     val efficiencyTotal: Int? = 0
 )
-
-@Entity(tableName = "targets_table")
-data class Targets(
-
-    @PrimaryKey(autoGenerate = true)
-    val idTarget: Int? = null,
-
-    val nameTarget: String,
-    val descriptionTarget: String,
-    val dateTarget: Int? = null
-)

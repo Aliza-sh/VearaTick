@@ -231,6 +231,7 @@
         android:layout_margin="16dp"
         android:backgroundTint="@color/firoze"
         android:text="تسک جدید"
+        android:elevation="101dp"
         android:textColor="@color/white"
         app:icon="@drawable/ic_plus"
         app:iconTint="@color/white"

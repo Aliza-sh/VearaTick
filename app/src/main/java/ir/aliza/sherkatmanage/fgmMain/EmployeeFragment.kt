@@ -10,7 +10,6 @@ import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.Dialog.EmployeeDialogFragment
-import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.Position
 import ir.aliza.sherkatmanage.ProAndEmpActivity
 import ir.aliza.sherkatmanage.R
@@ -21,11 +20,10 @@ import ir.aliza.sherkatmanage.employeeAdapter
 import ir.aliza.sherkatmanage.fgmSub.EmployeeStatisticsFragment
 import ir.aliza.sherkatmanage.fgmSub.RecruitmentFragment
 
-class EmployeeFragment(binding: ActivityProAndEmpBinding) : Fragment(), EmployeeAdapter.EmployeeEvents {
+class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBinding) : Fragment(), EmployeeAdapter.EmployeeEvents {
 
     lateinit var binding: FragmentEmployeesBinding
     lateinit var efficiencyEmployeeDao: EfficiencyDao
-    lateinit var view1: View
 
     lateinit var employeeData: List<Employee>
 
@@ -41,7 +39,6 @@ class EmployeeFragment(binding: ActivityProAndEmpBinding) : Fragment(), Employee
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        view1 = view
         efficiencyEmployeeDao = AppDatabase.getDataBase(view.context).efficiencyDao
 
         val employeeDao = AppDatabase.getDataBase(view.context).employeeDao
@@ -64,9 +61,9 @@ class EmployeeFragment(binding: ActivityProAndEmpBinding) : Fragment(), Employee
     }
 
     fun onFabClicked() {
-        binding.btnFabEmp.setOnClickListener {
+        bindingActivityProAndEmpBinding.btnAdd.setOnClickListener {
             val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frame_layout_main, RecruitmentFragment(efficiencyEmployeeDao))
+            transaction.replace(R.id.layout_pro_and_emp, RecruitmentFragment(efficiencyEmployeeDao))
                 .addToBackStack(null)
                 .commit()
         }
@@ -74,9 +71,9 @@ class EmployeeFragment(binding: ActivityProAndEmpBinding) : Fragment(), Employee
 
     override fun onEmployeeClicked(employee: Employee, position: Int) {
         Position = position
-        val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
+        val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
         transaction.replace(
-            R.id.frame_layout_main,
+            R.id.layout_pro_and_emp,
             EmployeeStatisticsFragment(employee, efficiencyEmployeeDao)
         )
             .addToBackStack(null)
@@ -85,7 +82,7 @@ class EmployeeFragment(binding: ActivityProAndEmpBinding) : Fragment(), Employee
 
     override fun onEmployeeLongClicked(employee: Employee, position: Int) {
         val dialog = EmployeeDialogFragment(employee, position)
-        dialog.show((activity as MainActivity).supportFragmentManager, null)
+        dialog.show((activity as ProAndEmpActivity).supportFragmentManager, null)
     }
 
 }

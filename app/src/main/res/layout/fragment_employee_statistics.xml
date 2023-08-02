@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layoutDirection="ltr"
     android:layout_height="match_parent"
+    android:background="?attr/colorOnPrimary"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fgmSub.EmployeeStatisticsFragment">
 
@@ -116,7 +117,6 @@
             app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpagerEmp"

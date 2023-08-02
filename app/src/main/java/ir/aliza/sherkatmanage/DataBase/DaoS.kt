@@ -136,9 +136,3 @@ interface EfficiencyDao : BaceDao<EfficiencyEmployee> {
     @Query("SELECT efficiencyTotalPresence FROM efficiency_table")
     fun getColumnEfficiencyTotalPresence(): List<Int>
 }
-
-@Dao
-interface TargetsDao : BaceDao<Targets> {
-    @Query("SELECT * FROM targets_table")
-    fun getAllTargets(): List<Targets>
-}

@@ -104,8 +104,9 @@ class StatisticsFragment(val employee: Employee, val efficiencyEmployeeDao: Effi
         binding.txtWatchMonth.text = efficiencyEmployee.totalMonthWatch.toString() + " ساعت"
         binding.txtWatchTotal.text = efficiencyEmployee.totalWatch.toString() + " ساعت"
 
-        binding.progressTotalPresence.progress =
-            efficiencyEmployee.efficiencyTotalPresence!!.toInt()
+        binding.progressTotalPresence.setPercent(efficiencyEmployee.efficiencyTotalPresence!!.toInt())
+        binding.txtTotalPresence.text =
+            efficiencyEmployee.efficiencyTotalPresence!!.toString() + " %"
 
         if (day.persianWeekDayName.toString() == "\u062c\u0645\u0639\u0647") {
             val weekDuties = efficiencyEmployee.totalWeekDuties
@@ -185,8 +186,11 @@ class StatisticsFragment(val employee: Employee, val efficiencyEmployeeDao: Effi
         binding.txtTackMonth.text = efficiencyEmployee.totalMonthDuties.toString() + " تا"
         binding.txtTackTotal.text = efficiencyEmployee.totalDuties.toString() + " تا"
 
-        binding.progressWeekDuties.progress = efficiencyEmployee.efficiencyWeekDuties!!
-        binding.progressMonthDuties.progress = efficiencyEmployee.efficiencyMonthDuties!!
-        binding.progressTotalDuties.progress = efficiencyEmployee.efficiencyTotalDuties!!
+        binding.progressWeekDuties.setPercent(efficiencyEmployee.efficiencyWeekDuties!!.toInt())
+        binding.txtWeekDuties.text = efficiencyEmployee.efficiencyWeekDuties!!.toString() + " %"
+        binding.progressMonthDuties.setPercent(efficiencyEmployee.efficiencyMonthDuties!!.toInt())
+        binding.txtMonthDuties.text = efficiencyEmployee.efficiencyMonthDuties!!.toString() + " %"
+        binding.progressTotalDuties.setPercent(efficiencyEmployee.efficiencyTotalDuties!!.toInt())
+        binding.txtTotalDuties.text = efficiencyEmployee.efficiencyTotalDuties!!.toString() + " %"
     }
 }
