@@ -19,15 +19,15 @@ import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.EfficiencyEmployee
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.R
-import ir.aliza.sherkatmanage.databinding.FragmentRecruitmentBinding
+import ir.aliza.sherkatmanage.databinding.FragmentEmployeeRecruitmentBinding
 import ir.aliza.sherkatmanage.employeeAdapter
 import ir.aliza.sherkatmanage.employeeDao
 import java.io.File
 
 private val PICK_IMAGE_REQUEST = 1
-class RecruitmentFragment(val efficiencyEmployeeDao: EfficiencyDao) : Fragment() {
+class EmployeeRecruitmentFragment(val efficiencyEmployeeDao: EfficiencyDao) : Fragment() {
 
-    lateinit var binding: FragmentRecruitmentBinding
+    lateinit var binding: FragmentEmployeeRecruitmentBinding
 
     var imageUri: Uri? = null
     lateinit var imageBytes: ByteArray
@@ -38,7 +38,7 @@ class RecruitmentFragment(val efficiencyEmployeeDao: EfficiencyDao) : Fragment()
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentRecruitmentBinding.inflate(layoutInflater, null, false)
+        binding = FragmentEmployeeRecruitmentBinding.inflate(layoutInflater, null, false)
         return binding.root
 
     }

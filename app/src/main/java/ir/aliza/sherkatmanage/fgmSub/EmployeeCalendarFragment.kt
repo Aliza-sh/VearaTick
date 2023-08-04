@@ -34,8 +34,8 @@ import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.InOutAdapter
 import ir.aliza.sherkatmanage.databinding.CalendarHeaderBinding
-import ir.aliza.sherkatmanage.databinding.FragmentCalendarBinding
 import ir.aliza.sherkatmanage.databinding.FragmentDialogEntryExitBinding
+import ir.aliza.sherkatmanage.databinding.FragmentEmployeeCalendarBinding
 import ir.aliza.sherkatmanage.databinding.ItemCalendarDayBinding
 import ir.aliza.sherkatmanage.dayDao
 import ir.aliza.sherkatmanage.inOutAdapter
@@ -44,17 +44,17 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import java.time.DayOfWeek
 
-class CalendarFragment(val employee: Employee, val efficiencyEmployeeDao: EfficiencyDao) :
+class EmployeeCalendarFragment(val employee: Employee, val efficiencyEmployeeDao: EfficiencyDao) :
     Fragment() {
 
 
-    lateinit var binding: FragmentCalendarBinding
+    lateinit var binding: FragmentEmployeeCalendarBinding
     lateinit var bindingFragmentDialogEntryExit: FragmentDialogEntryExitBinding
     private var selectedDate: LocalDate? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCalendarBinding.inflate(layoutInflater, container, false)
+        binding = FragmentEmployeeCalendarBinding.inflate(layoutInflater, container, false)
         bindingFragmentDialogEntryExit =
             FragmentDialogEntryExitBinding.inflate(layoutInflater, null, false)
         return binding.root

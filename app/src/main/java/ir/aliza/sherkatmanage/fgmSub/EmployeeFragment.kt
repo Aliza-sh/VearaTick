@@ -1,4 +1,4 @@
-package ir.aliza.sherkatmanage.fgmMain
+package ir.aliza.sherkatmanage.fgmSub
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,8 +17,6 @@ import ir.aliza.sherkatmanage.adapter.EmployeeAdapter
 import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.FragmentEmployeesBinding
 import ir.aliza.sherkatmanage.employeeAdapter
-import ir.aliza.sherkatmanage.fgmSub.EmployeeStatisticsFragment
-import ir.aliza.sherkatmanage.fgmSub.RecruitmentFragment
 
 class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBinding) : Fragment(), EmployeeAdapter.EmployeeEvents {
 
@@ -63,7 +61,7 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
     fun onFabClicked() {
         bindingActivityProAndEmpBinding.btnAdd.setOnClickListener {
             val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.layout_pro_and_emp, RecruitmentFragment(efficiencyEmployeeDao))
+            transaction.replace(R.id.layout_pro_and_emp, EmployeeRecruitmentFragment(efficiencyEmployeeDao))
                 .addToBackStack(null)
                 .commit()
         }
@@ -74,7 +72,7 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
         val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
         transaction.replace(
             R.id.layout_pro_and_emp,
-            EmployeeStatisticsFragment(employee, efficiencyEmployeeDao)
+            EmployeeInformationFragment(employee, efficiencyEmployeeDao)
         )
             .addToBackStack(null)
             .commit()

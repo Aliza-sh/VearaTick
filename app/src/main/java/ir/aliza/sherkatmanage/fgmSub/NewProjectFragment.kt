@@ -35,8 +35,8 @@ class NewProjectFragment() : Fragment() {
             "بک اند",
             "فرانت اند",
             "رباتیک",
-            "سایت",
-            "فوتوشاپ"
+            "طراحی",
+            "سئو"
         )
 
         val myAdapteredt = ArrayAdapter(requireContext(), R.layout.item_gender, typeProject)

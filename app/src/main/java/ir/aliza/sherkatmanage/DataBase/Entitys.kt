@@ -112,6 +112,7 @@ data class Project(
     val typeProject: String,
 
     val progressProject: Int? = 0,
+    val doneProject: Boolean? = false,
 
     val numberSubTaskProject: Int? = 0,
     val numberDoneSubTaskProject: Int? = 0,

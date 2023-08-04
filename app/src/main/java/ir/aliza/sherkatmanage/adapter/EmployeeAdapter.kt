@@ -22,49 +22,54 @@ class EmployeeAdapter(
 
     inner class EmployeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bindData(position: Int) {
-            val efficiencyEmployee =
-                efficiencyEmployeeDao.getEfficiencyEmployee(data[position].idEmployee!!)
 
-            if (efficiencyEmployee!!.totalWeekWatch != 0 && efficiencyEmployee.mustWeekWatch != 0
-            ) {
-                var totalWeekWatch = efficiencyEmployee.totalWeekWatch
-                var mustWeekWatch = efficiencyEmployee.mustWeekWatch
-                var dahanSevisKon: Float = 0f
-                dahanSevisKon = totalWeekWatch!!.toFloat() / mustWeekWatch!!.toFloat()
+            if (data[position].idEmployee != null) {
 
-                val efficiencyWeekPresence = dahanSevisKon * 100
+                val efficiencyEmployee =
+                    efficiencyEmployeeDao.getEfficiencyEmployee(data[position].idEmployee!!)
 
-                val newEfficiencyEmployee = EfficiencyEmployee(
-                    idEfficiency = efficiencyEmployee.idEfficiency,
-                    idEmployee = efficiencyEmployee.idEmployee,
-                    mustWeekWatch = efficiencyEmployee.mustWeekWatch,
-                    numberDay = efficiencyEmployee.numberDay,
-                    totalWeekWatch = efficiencyEmployee.totalWeekWatch,
-                    totalWatch = efficiencyEmployee.totalWatch,
-                    efficiencyWeekPresence = efficiencyWeekPresence.toInt(),
-                    efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
-                    totalWeekDuties = efficiencyEmployee.totalWeekDuties,
-                    totalMonthDuties = efficiencyEmployee.totalMonthDuties,
-                    totalDuties = efficiencyEmployee.totalDuties,
-                    efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties,
-                    efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
-                    efficiencyTotal = efficiencyEmployee.efficiencyTotal,
-                    totalMonthWatch = efficiencyEmployee.totalMonthWatch
-                )
-                efficiencyEmployeeDao.update(newEfficiencyEmployee)
+                if (efficiencyEmployee!!.totalWeekWatch != 0 && efficiencyEmployee.mustWeekWatch != 0
+                ) {
+                    var totalWeekWatch = efficiencyEmployee.totalWeekWatch
+                    var mustWeekWatch = efficiencyEmployee.mustWeekWatch
+                    var dahanSevisKon: Float = 0f
+                    dahanSevisKon = totalWeekWatch!!.toFloat() / mustWeekWatch!!.toFloat()
+
+                    val efficiencyWeekPresence = dahanSevisKon * 100
+
+                    val newEfficiencyEmployee = EfficiencyEmployee(
+                        idEfficiency = efficiencyEmployee.idEfficiency,
+                        idEmployee = efficiencyEmployee.idEmployee,
+                        mustWeekWatch = efficiencyEmployee.mustWeekWatch,
+                        numberDay = efficiencyEmployee.numberDay,
+                        totalWeekWatch = efficiencyEmployee.totalWeekWatch,
+                        totalWatch = efficiencyEmployee.totalWatch,
+                        efficiencyWeekPresence = efficiencyWeekPresence.toInt(),
+                        efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
+                        totalWeekDuties = efficiencyEmployee.totalWeekDuties,
+                        totalMonthDuties = efficiencyEmployee.totalMonthDuties,
+                        totalDuties = efficiencyEmployee.totalDuties,
+                        efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties,
+                        efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
+                        efficiencyTotal = efficiencyEmployee.efficiencyTotal,
+                        totalMonthWatch = efficiencyEmployee.totalMonthWatch
+                    )
+                    efficiencyEmployeeDao.update(newEfficiencyEmployee)
+                }
+
+                binding.txtPresenceWeek.text =
+                    efficiencyEmployee?.efficiencyWeekPresence.toString() + "%"
+
+                binding.txtDutiesWeek.text =
+                    efficiencyEmployee?.efficiencyWeekDuties.toString() + "%"
+
+                binding.txtnameprn.text = data[position].name + " " + data[position].family
+                binding.txttkhprn.text = data[position].specialty
+                if (data[position].gender == "زن") {
+                    binding.imgprn.setImageResource(R.drawable.img_matter);
+                }
+
             }
-
-            binding.txtPresenceWeek.text =
-                efficiencyEmployee?.efficiencyWeekPresence.toString() + "%"
-
-            binding.txtDutiesWeek.text = efficiencyEmployee?.efficiencyWeekDuties.toString() + "%"
-
-            binding.txtnameprn.text = data[position].name + " " + data[position].family
-            binding.txttkhprn.text = data[position].specialty
-            if (data[position].gender == "زن") {
-                binding.imgprn.setImageResource(R.drawable.img_matter);
-            }
-
             itemView.setOnClickListener {
                 employeeEvents.onEmployeeClicked(data[position], position)
             }

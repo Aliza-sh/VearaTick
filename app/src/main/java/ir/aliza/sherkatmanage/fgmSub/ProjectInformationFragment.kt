@@ -13,6 +13,7 @@ import ir.aliza.sherkatmanage.DataBase.SubTaskProjectDao
 import ir.aliza.sherkatmanage.Dialog.DeleteSubTaskProjectDialogFragment
 import ir.aliza.sherkatmanage.Dialog.SubTaskBottomsheetFragment
 import ir.aliza.sherkatmanage.MainActivity
+import ir.aliza.sherkatmanage.ProAndEmpActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.SubTaskProjectAdapter
 import ir.aliza.sherkatmanage.adapter.TeamProjectAdapter
@@ -56,8 +57,8 @@ class ProjectInformationFragment(
         binding.txtProg.text = project1.progressProject!!.toString() + "%"
 
         binding.btnAddNewPerson.setOnClickListener {
-            val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frame_layout_main, NewPersonAddToProjectFragment(project))
+            val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.layout_pro_and_emp, NewPersonAddToProjectFragment(project))
                 .addToBackStack(null)
                 .commit()
         }

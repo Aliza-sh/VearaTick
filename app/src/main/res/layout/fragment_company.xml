@@ -17,7 +17,7 @@
         android:layout_marginEnd="15dp"
         app:cardBackgroundColor="?attr/colorPrimaryVariant"
         app:cardCornerRadius="16dp"
-        app:cardElevation="25dp"
+        app:cardElevation="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/constraintLayout2">
@@ -34,7 +34,7 @@
                 android:layout_marginTop="8dp"
                 android:textSize="24sp"
                 android:textStyle="bold"
-                android:text="سپردۀ شرکت"
+                android:text=" سپردۀ شرکت"
                 android:textColor="?attr/colorOnSecondary"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -53,7 +53,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView160" />
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/card_payment"
+                android:id="@+id/btn_payment"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
@@ -63,7 +63,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/card_receipt"
+                app:layout_constraintStart_toEndOf="@+id/btn_receipt"
                 app:layout_constraintTop_toBottomOf="@+id/txt_total_deposit">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -91,7 +91,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="8dp"
-                        android:text="پرداختی شرکت"
+                        android:text=" پرداختی شرکت"
                         android:textColor="?attr/colorOnSecondary"
                         android:textSize="18sp"
                         android:textStyle="bold"
@@ -105,7 +105,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_marginEnd="16dp"
                         android:text="0 تومان"
-                        android:textColor="@color/firoze"
+                        android:textColor="?attr/colorPrimary"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -115,15 +115,15 @@
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/card_receipt"
+                android:id="@+id/btn_receipt"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="?attr/colorOnPrimary"
+                app:cardBackgroundColor="@color/firoze"
                 app:cardCornerRadius="16dp"
-                app:layout_constraintEnd_toStartOf="@+id/card_payment"
+                app:layout_constraintEnd_toStartOf="@+id/btn_payment"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/card_payment">
+                app:layout_constraintTop_toTopOf="@+id/btn_payment">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -137,8 +137,9 @@
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="4dp"
                         android:layout_marginBottom="8dp"
-                        android:background="?attr/colorOnPrimary"
+                        android:background="#05A0A7"
                         android:padding="5dp"
+                        app:tint="@color/white"
                         android:src="@drawable/go_to"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -150,8 +151,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="8dp"
-                        android:text="دریافتی شرکت"
-                        android:textColor="?attr/colorOnSecondary"
+                        android:text=" دریافتی شرکت"
+                        android:textColor="@color/white"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
@@ -164,7 +165,7 @@
                         android:layout_marginTop="4dp"
                         android:layout_marginEnd="16dp"
                         android:text="0 تومان"
-                        android:textColor="@color/firoze"
+                        android:textColor="@color/black"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -209,7 +210,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:layout_marginStart="8dp"
-            android:text="شرکت"
+            android:text=" شرکت"
             android:textColor="#00001D"
             android:textSize="34sp"
             android:textStyle="bold"
@@ -251,6 +252,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="-16dp"
         android:fillViewport="true"
         android:orientation="horizontal"
         android:scrollbars="none"
@@ -268,7 +270,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="24dp"
                 android:layout_marginEnd="15dp"
                 app:cardBackgroundColor="?attr/colorPrimaryVariant"
                 app:cardCornerRadius="16dp"
@@ -287,7 +289,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="8dp"
-                        android:text="آمار کلی شرکت"
+                        android:text=" آمار کلی شرکت"
                         android:textColor="?attr/colorOnSecondary"
                         android:textSize="24sp"
                         android:textStyle="bold"
@@ -299,7 +301,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        app:cardBackgroundColor="#97DAE4"
+                        app:cardBackgroundColor="@color/blue_light"
                         app:cardCornerRadius="16dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -315,8 +317,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="16dp"
                                 android:layout_marginTop="8dp"
-                                android:text="پروژه ها"
-                                android:textColor="#000000"
+                                android:text=" پروژه ها"
+                                android:textColor="@color/black"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -336,9 +338,9 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/textView14"
                                 app:percent="0"
-                                app:progressBarColor="#000000"
+                                app:progressBarColor="@color/black"
                                 app:progressBarWidth="30"
-                                app:progressPlaceHolderColor="#68A7B1"
+                                app:progressPlaceHolderColor="@color/blue_dark"
                                 app:progressPlaceHolderWidth="30" />
 
                             <TextView
@@ -346,8 +348,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="-10dp"
-                                android:textColor="#000000"
                                 android:text="0%"
+                                android:textColor="@color/black"
                                 android:textSize="20sp"
                                 android:textStyle="bold"
                                 app:layout_constraintBottom_toBottomOf="@+id/progress_efficiency_pro"
@@ -366,7 +368,7 @@
                         android:layout_marginStart="30dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginBottom="16dp"
-                        app:cardBackgroundColor="#6D9884"
+                        app:cardBackgroundColor="@color/green_light"
                         app:cardCornerRadius="16dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -382,8 +384,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
                                 android:layout_marginTop="8dp"
-                                android:text="بازدهی کارکنان"
-                                android:textColor="#000000"
+                                android:text=" بازدهی کارکنان"
+                                android:textColor="@color/white"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
                                 app:layout_constraintStart_toStartOf="@+id/progress_efficiency_emp_task"
@@ -402,19 +404,20 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/textView170"
                                 app:percent="0"
-                                app:progressBarColor="#000000"
+                                app:progressBarColor="@color/black"
                                 app:progressBarWidth="25"
-                                app:progressPlaceHolderColor="#4D7E68"
+                                app:progressPlaceHolderColor="@color/green_dark"
                                 app:progressPlaceHolderWidth="25" />
 
                             <TextView
                                 android:id="@+id/txt_efficiency_emp_task"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="0%"
-                                android:textStyle="bold"
                                 android:layout_marginBottom="-10dp"
-                                android:textColor="#000000"                                android:textSize="20sp"
+                                android:text="0%"
+                                android:textColor="@color/white"
+                                android:textSize="20sp"
+                                android:textStyle="bold"
                                 app:layout_constraintBottom_toBottomOf="@+id/progress_efficiency_emp_task"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="@+id/progress_efficiency_emp_task" />
@@ -427,7 +430,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="30dp"
-                        app:cardBackgroundColor="#F2E45B"
+                        app:cardBackgroundColor="@color/yelowe_light"
                         app:cardCornerRadius="16dp"
                         app:layout_constraintBottom_toBottomOf="@+id/card_receipt0"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -443,8 +446,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginStart="8dp"
                                 android:layout_marginTop="8dp"
-                                android:text="حضور کارکنان"
-                                android:textColor="#000000"
+                                android:text=" حضور کارکنان"
+                                android:textColor="@color/black"
                                 android:textSize="16sp"
                                 android:textStyle="bold"
                                 app:layout_constraintStart_toStartOf="@+id/progress_efficiency_emp_presence"
@@ -463,9 +466,9 @@
                                 app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/textView17"
                                 app:percent="0"
-                                app:progressBarColor="#000000"
+                                app:progressBarColor="@color/black"
                                 app:progressBarWidth="25"
-                                app:progressPlaceHolderColor="#B39E932D"
+                                app:progressPlaceHolderColor="@color/yelowe_dark"
                                 app:progressPlaceHolderWidth="25" />
 
                             <TextView
@@ -474,7 +477,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginBottom="-10dp"
                                 android:text="0%"
-                                android:textColor="@color/blacke"
+                                android:textColor="@color/black"
                                 android:textSize="20sp"
                                 android:textStyle="bold"
                                 app:layout_constraintBottom_toBottomOf="@+id/progress_efficiency_emp_presence"
@@ -493,12 +496,12 @@
                 android:id="@+id/cardView00"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="90dp"
                 app:cardBackgroundColor="?attr/colorPrimaryVariant"
                 app:cardCornerRadius="16dp"
-                android:layout_marginBottom="90dp"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="15dp"
                 app:cardElevation="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -509,17 +512,226 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
+                    <TextView
+                        android:id="@+id/textView3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="8dp"
+                        android:text=" تعداد پروژه ها"
+                        android:textColor="?attr/colorOnSecondary"
+                        android:textSize="24sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
                     <com.ghanshyam.graphlibs.Graph
-                        android:id="@+id/graph"
+                        android:id="@+id/progress_num_project"
                         android:layout_width="200dp"
                         android:layout_height="200dp"
                         android:layout_gravity="center"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginTop="25dp"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginBottom="32dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="55dp"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="@+id/progress_num_project"
+                        app:layout_constraintEnd_toStartOf="@+id/progress_num_project"
+                        app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:background="@drawable/shape_circle"
+                                android:backgroundTint="@color/blue_light" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text=" اندروید"
+                                android:textColor="@color/white"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:background="@drawable/shape_circle"
+                                android:backgroundTint="@color/green_dark" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text=" بک اند"
+                                android:textColor="@color/white"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:background="@drawable/shape_circle"
+                                android:backgroundTint="@color/yelowe_light" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text=" فرانت اند"
+                                android:textColor="@color/white"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:background="@drawable/shape_circle"
+                                android:backgroundTint="@color/blue_dark" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text=" رباتیک"
+                                android:textColor="@color/white"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:background="@drawable/shape_circle"
+                                android:backgroundTint="@color/green_light" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text=" طراحی"
+                                android:textColor="@color/white"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <View
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:background="@drawable/shape_circle"
+                                android:backgroundTint="@color/yelowe_dark" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text=" سئو"
+                                android:textColor="@color/white"
+                                android:textSize="20sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/txt_total_project"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="-10dp"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textSize="34sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="@+id/progress_num_project"
+                        app:layout_constraintEnd_toEndOf="@+id/progress_num_project"
+                        app:layout_constraintStart_toStartOf="@+id/progress_num_project"
+                        app:layout_constraintTop_toTopOf="@+id/progress_num_project" />
+
+                    <TextView
+                        android:id="@+id/txt_total_project0"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=" در کل "
+                        android:textColor="@color/white"
+                        android:textSize="34sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toEndOf="@+id/progress_num_project"
+                        app:layout_constraintStart_toStartOf="@+id/progress_num_project"
+                        app:layout_constraintTop_toBottomOf="@+id/txt_total_project" />
+
+                    <Button
+                        android:id="@+id/btn_see_more_num_pro"
+                        style="@style/Widget.Material3.Button.OutlinedButton.Icon"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginBottom="12dp"
+                        android:gravity="center"
+                        android:text="بیشتر"
+                        android:textColor="@color/firoze"
+                        android:textSize="18sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        app:layout_constraintTop_toBottomOf="@+id/progress_num_project"
+                        app:strokeColor="@color/firoze"
+                        app:strokeWidth="2dp" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </androidx.cardview.widget.CardView>

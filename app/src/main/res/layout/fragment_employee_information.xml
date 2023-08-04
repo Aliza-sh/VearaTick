@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layoutDirection="ltr"
+    android:layout_height="match_parent"
+    android:background="?attr/colorOnPrimary"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".fgmSub.EmployeeInformationFragment">
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cons_lyt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_background_light"
+        android:elevation="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+
+        <com.mikhaellopez.circularprogressbar.CircularProgressBar
+            android:id="@+id/progress_circular"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            app:cpb_background_progressbar_color="@color/white"
+            app:cpb_background_progressbar_width="5dp"
+            app:cpb_progress_max="100"
+            app:cpb_progressbar_color="@color/firoze"
+            app:cpb_progressbar_width="5dp"
+            app:cpb_round_border="true"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/btn_info_prn"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center|top"
+            app:layout_constraintBottom_toBottomOf="@+id/progress_circular"
+            app:layout_constraintEnd_toEndOf="@+id/progress_circular"
+            app:layout_constraintStart_toStartOf="@+id/progress_circular"
+            app:layout_constraintTop_toTopOf="@+id/progress_circular"
+            app:srcCompat="@drawable/img_male" />
+
+        <TextView
+            android:id="@+id/txt_name_emp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="2dp"
+            android:text="علیرضا شهسواری"
+            android:textColor="?attr/colorOnSecondary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/progress_circular"
+            app:layout_constraintStart_toStartOf="@+id/progress_circular"
+            app:layout_constraintTop_toBottomOf="@+id/progress_circular" />
+
+        <TextView
+            android:id="@+id/txt_Specialty_emp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="2dp"
+            android:layout_marginBottom="8dp"
+            android:text="اندروید کار"
+            android:textColor="?attr/colorOnSecondary"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/txt_name_emp"
+            app:layout_constraintStart_toStartOf="@+id/txt_name_emp"
+            app:layout_constraintTop_toBottomOf="@+id/txt_name_emp" />
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tablayoutEmp"
+            style="@style/Widget.Material3.TabLayout.OnSurface"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:layoutDirection="rtl"
+            android:background="@drawable/shape_background_light"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:tabMode="scrollable">
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="آمار" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="تقویم" />
+
+            <com.google.android.material.tabs.TabItem
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="وظایف" />
+        </com.google.android.material.tabs.TabLayout>
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="این کارمند کارش درسته"
+            android:textColor="?attr/colorPrimary"
+            android:textSize="26sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tablayoutEmp"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewpagerEmp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layoutDirection="rtl"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cons_lyt" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

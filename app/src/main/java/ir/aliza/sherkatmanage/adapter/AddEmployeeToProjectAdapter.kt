@@ -31,11 +31,11 @@ class AddEmployeeToProjectAdapter(private val data: ArrayList<Employee>, val pro
         @SuppressLint("SetTextI18n")
         fun bindData(position: Int) {
 
-            employeeDao = AppDatabase.getDataBase(itemView.context).employeeDao
-            teamProjectDao = AppDatabase.getDataBase(itemView.context).teamProjectDao
-            employee = employeeDao.getEmployee(data[position].idEmployee!!)
-            teamProject = teamProjectDao.getTeamProject(project.idProject!!)
-            employeeTeamProject = teamProjectDao.getEmployeeTeamProject(
+            val employeeDao = AppDatabase.getDataBase(itemView.context).employeeDao
+            val teamProjectDao = AppDatabase.getDataBase(itemView.context).teamProjectDao
+            val employee = employeeDao.getEmployee(data[position].idEmployee!!)
+            val teamProject = teamProjectDao.getTeamProject(project.idProject!!)
+            val  employeeTeamProject = teamProjectDao.getEmployeeTeamProject(
                 data[position].idEmployee!!,
                 project.idProject
             )
@@ -47,8 +47,8 @@ class AddEmployeeToProjectAdapter(private val data: ArrayList<Employee>, val pro
             binding.txtNameEmployee.text = data[position].name + " " + data[position].family
             binding.txtJobEmployee.text = data[position].specialty
 
-            if (teamProject?.idProject != null) {
-                if (employeeTeamProject!!.idEmployee == employee!!.idEmployee) {
+            if (teamProject?.idProject != null && employeeTeamProject!=null) {
+                if (employeeTeamProject.idEmployee == employee!!.idEmployee) {
 
                     binding.ckbEmployee.isChecked = true
 

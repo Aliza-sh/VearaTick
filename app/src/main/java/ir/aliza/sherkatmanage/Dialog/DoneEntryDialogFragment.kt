@@ -9,8 +9,8 @@ import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.EfficiencyEmployee
 import ir.aliza.sherkatmanage.DataBase.Time
 import ir.aliza.sherkatmanage.R
-import ir.aliza.sherkatmanage.databinding.FragmentCalendarBinding
 import ir.aliza.sherkatmanage.databinding.FragmentDialogDoneEntryBinding
+import ir.aliza.sherkatmanage.databinding.FragmentEmployeeCalendarBinding
 import ir.aliza.sherkatmanage.databinding.ItemCalendarDayBinding
 import ir.aliza.sherkatmanage.timeDao
 
@@ -24,12 +24,12 @@ class DoneEntryDialogFragment(
 ) : DialogFragment() {
 
     lateinit var binding: FragmentDialogDoneEntryBinding
-    lateinit var binding1: FragmentCalendarBinding
+    lateinit var binding1: FragmentEmployeeCalendarBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val dialog = AlertDialog.Builder(context)
         binding = FragmentDialogDoneEntryBinding.inflate(layoutInflater, null, false)
-        binding1 = FragmentCalendarBinding.inflate(layoutInflater, null, false)
+        binding1 = FragmentEmployeeCalendarBinding.inflate(layoutInflater, null, false)
 
         val timeData = timeDao.getTime(idEmployee!!, day)
 

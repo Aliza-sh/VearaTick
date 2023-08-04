@@ -2,7 +2,7 @@
 <resources>
 
     <color name="white">#FFFFFF</color>
-    <color name="black">#2C2C2C</color>
+    <color name="black">#000000</color>
 
     <!-- theme night. -->
     <color name="black_dark">#00001C</color>
@@ -17,13 +17,22 @@
 
     <!-- color primary and theme day. -->
     <color name="firoze">#E600ADB5</color>
-    <color name="Blue_dark">#3878F2</color>
 
     <color name="Blue_light">#6BACFF</color>
+    <color name="Blue_dark">#006EFB</color>
 
     <color name="sorati">#BB9F91</color>
     <color name="fi_light">#7AC9BE</color>
-    <color name="fi_dark">#279A8A</color>
+    <color name="fi_dark">#289889</color>
+
+    <color name="blue_dark">#68A7B1</color>
+    <color name="blue_light">#97DAE4</color>
+
+    <color name="yelowe_dark">#B6AA3B</color>
+    <color name="yelowe_light">#F2E45B</color>
+
+    <color name="green_dark">#4D7E68</color>
+    <color name="green_light">#6D9884</color>
 
     <color name="example_4_grey">#474747</color>
     <color name="example_4_green">#008489</color>

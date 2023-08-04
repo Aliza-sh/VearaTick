@@ -1,5 +1,6 @@
 package ir.aliza.sherkatmanage
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -7,8 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
-import ir.aliza.sherkatmanage.fgmMain.EmployeeFragment
-import ir.aliza.sherkatmanage.fgmMain.ProjectFragment
+import ir.aliza.sherkatmanage.fgmSub.EmployeeFragment
+import ir.aliza.sherkatmanage.fgmSub.ProjectFragment
 
 
 class ProAndEmpActivity : AppCompatActivity() {
@@ -43,6 +44,12 @@ class ProAndEmpActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        finish()
     }
 
     fun replaceFragment(fragment: Fragment) {

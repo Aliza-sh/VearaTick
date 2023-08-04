@@ -25,7 +25,7 @@ import ir.aliza.sherkatmanage.Dialog.TaskBottomsheetFragment
 import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.TaskEmployeeAdapter
-import ir.aliza.sherkatmanage.databinding.FragmentTaskBinding
+import ir.aliza.sherkatmanage.databinding.FragmentEmployeeTaskBinding
 import ir.aliza.sherkatmanage.databinding.ItemCalendarDayTaskBinding
 import ir.aliza.sherkatmanage.taskAdapter
 import ir.aliza.sherkatmanage.taskEmployeeDao
@@ -33,18 +33,18 @@ import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 
-class TaskEmployeeFragment(val employee: Employee, val efficiencyEmployeeDao: EfficiencyDao) :
+class EmployeeTaskFragment(val employee: Employee, val efficiencyEmployeeDao: EfficiencyDao) :
     Fragment(), TaskEmployeeAdapter.TaskEvent {
 
     var selectedDate = LocalDate.now()
-    lateinit var binding: FragmentTaskBinding
+    lateinit var binding: FragmentEmployeeTaskBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentTaskBinding.inflate(layoutInflater, container, false)
+        binding = FragmentEmployeeTaskBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -72,7 +72,7 @@ class TaskEmployeeFragment(val employee: Employee, val efficiencyEmployeeDao: Ef
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun calendarViewCreated(this1: TaskEmployeeFragment) {
+    fun calendarViewCreated(this1: EmployeeTaskFragment) {
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             val binding1 = ItemCalendarDayTaskBinding.bind(view)

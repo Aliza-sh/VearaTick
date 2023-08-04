@@ -26,9 +26,8 @@ class ProjectNearAdapter(
         @SuppressLint("SetTextI18n")
         fun bindData(position: Int) {
 
-            val project = projectDao.getProject(data[position].idProject!!)
             val teamProjectDao = AppDatabase.getDataBase(itemView.context).teamProjectDao
-            val teamProjectData = teamProjectDao.getListTeamProject(project!!.idProject!!)
+            val teamProjectData = teamProjectDao.getListTeamProject(data[position].idProject!!)
             val teamProjectAdapter = TeamProjectAdapter(ArrayList(teamProjectData))
             binding.recyclerView.adapter = teamProjectAdapter
 

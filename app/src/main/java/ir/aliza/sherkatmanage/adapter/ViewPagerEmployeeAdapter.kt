@@ -4,9 +4,9 @@ import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.Employee
-import ir.aliza.sherkatmanage.fgmSub.CalendarFragment
-import ir.aliza.sherkatmanage.fgmSub.StatisticsFragment
-import ir.aliza.sherkatmanage.fgmSub.TaskEmployeeFragment
+import ir.aliza.sherkatmanage.fgmSub.EmployeeCalendarFragment
+import ir.aliza.sherkatmanage.fgmSub.EmployeeStatisticsFragment
+import ir.aliza.sherkatmanage.fgmSub.EmployeeTaskFragment
 
 class ViewPagerEmployeeAdapter(
     val employee: Employee,
@@ -19,11 +19,11 @@ class ViewPagerEmployeeAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> StatisticsFragment(employee,efficiencyEmployeeDao)
+            0 -> EmployeeStatisticsFragment(employee,efficiencyEmployeeDao)
 
-            1 -> CalendarFragment(employee,efficiencyEmployeeDao)
+            1 -> EmployeeCalendarFragment(employee,efficiencyEmployeeDao)
 
-            2 -> TaskEmployeeFragment(employee,efficiencyEmployeeDao)
+            2 -> EmployeeTaskFragment(employee,efficiencyEmployeeDao)
 
             else -> Fragment()
         }

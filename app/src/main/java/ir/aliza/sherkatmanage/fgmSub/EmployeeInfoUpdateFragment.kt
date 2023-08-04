@@ -16,13 +16,13 @@ import com.bumptech.glide.Glide
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.Position
 import ir.aliza.sherkatmanage.R
-import ir.aliza.sherkatmanage.databinding.FragmentUpdateInfoEmployeeBinding
+import ir.aliza.sherkatmanage.databinding.FragmentEmployeeInfoUpdateBinding
 import ir.aliza.sherkatmanage.employeeAdapter
 import ir.aliza.sherkatmanage.employeeDao
 
-class UpdateInfoEmployeeFragment(employee: Employee) : Fragment() {
+class EmployeeInfoUpdateFragment(employee: Employee) : Fragment() {
 
-    lateinit var binding: FragmentUpdateInfoEmployeeBinding
+    lateinit var binding: FragmentEmployeeInfoUpdateBinding
     var imageUri: Uri? = null
 
     val employee = employee
@@ -32,7 +32,7 @@ class UpdateInfoEmployeeFragment(employee: Employee) : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentUpdateInfoEmployeeBinding.inflate(layoutInflater, null, false)
+        binding = FragmentEmployeeInfoUpdateBinding.inflate(layoutInflater, null, false)
         return binding.root
 
     }

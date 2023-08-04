@@ -1,18 +1,23 @@
 package ir.aliza.sherkatmanage.fgmMain
 
-import android.R
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.ghanshyam.graphlibs.Graph
 import com.ghanshyam.graphlibs.GraphData
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.DataBase.SubTaskProjectDao
+import ir.aliza.sherkatmanage.MainActivity
+import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.FragmentCompanyBinding
 import ir.aliza.sherkatmanage.databinding.ItemProjectBinding
+import ir.aliza.sherkatmanage.fgmSub.NumberProjectFragment
 
 
 class CompanyFragment : Fragment() {
@@ -35,6 +40,7 @@ class CompanyFragment : Fragment() {
 
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -52,22 +58,63 @@ class CompanyFragment : Fragment() {
         binding.progressEfficiencyEmpPresence.setPercent(efficiencyEmployeePresence())
         binding.txtEfficiencyEmpPresence.text = efficiencyEmployeePresence().toString() + "%"
 
-        val graph = binding.graph
-        graph.setMinValue(0f)
-        graph.setMaxValue(100f)
-        graph.setDevideSize(0.5f)
-        graph.setBackgroundShapeWidthInDp(10)
-        graph.setShapeForegroundColor(resources.getColor(R.color.black))
-        graph.setShapeBackgroundColor(resources.getColor(R.color.holo_red_light))
-        graph.setForegroundShapeWidthInPx(50)
-        val resources = resources
-        val data: MutableCollection<GraphData> = ArrayList()
-        data.add(GraphData(20f, resources.getColor(R.color.holo_green_light)))
-        data.add(GraphData(15f, resources.getColor(R.color.holo_orange_light)))
-        data.add(GraphData(55f, resources.getColor(R.color.holo_blue_bright)))
-        data.add(GraphData(10f, resources.getColor(R.color.holo_blue_dark)))
-        graph.setData(data)
+        binding.btnSeeMoreNumPro.setOnClickListener {
+            val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.frame_layout_main, NumberProjectFragment(projectDao))
+                .addToBackStack(null)
+                .commit()
+        }
 
+        progressNumProject(binding.progressNumProject)
+
+    }
+
+    private fun progressNumProject(graph: Graph) {
+
+        val numAndroid = projectDao.getNumberProject("اندروید", true).size
+        val numFrontEnd = projectDao.getNumberProject("فرانت اند", true).size
+        val numBackEnd = projectDao.getNumberProject("بک اند", true).size
+        val numRobotic = projectDao.getNumberProject("رباتیک", true).size
+        val numDsign = projectDao.getNumberProject("طراحی", true).size
+        val numSeo = projectDao.getNumberProject("سئو", true).size
+        val numTotalProject = projectDao.getAllDoneProject(true).size
+        var devide = 0.04f
+
+        if (numTotalProject in 11..19)
+            devide = 0.1f
+        if (numTotalProject in 20..50)
+            devide = 0.3f
+        if (numTotalProject in 51..100)
+            devide = 0.5f
+        if (numTotalProject in 101..500)
+            devide = 0.7f
+        if (numTotalProject in 501..1000)
+            devide = 1f
+
+        graph.setMinValue(0f)
+        graph.setMaxValue(numTotalProject.toFloat())
+        graph.setDevideSize(devide)
+        graph.setBackgroundShapeWidthInDp(20)
+        graph.setForegroundShapeWidthInPx(50)
+        graph.setShapeForegroundColor(Color.parseColor("#202020"))
+        graph.setShapeBackgroundColor(Color.parseColor("#202020"))
+
+        binding.txtTotalProject.text = " $numTotalProject"
+        val data: MutableCollection<GraphData> = ArrayList()
+        //اندروید
+        data.add(GraphData(numAndroid.toFloat(), Color.parseColor("#97DAE4")))
+        //بک اند
+        data.add(GraphData(numBackEnd.toFloat(), Color.parseColor("#4D7E68")))
+        //فرانت اند
+        data.add(GraphData(numFrontEnd.toFloat(), Color.parseColor("#F2E45B")))
+        //رباتیک
+        data.add(GraphData(numRobotic.toFloat(), Color.parseColor("#68A7B1")))
+        //طراحی
+        data.add(GraphData(numDsign.toFloat(), Color.parseColor("#6D9884")))
+        //سئو
+        data.add(GraphData(numSeo.toFloat(), Color.parseColor("#B6AA3B")))
+
+        graph.setData(data)
     }
 
 

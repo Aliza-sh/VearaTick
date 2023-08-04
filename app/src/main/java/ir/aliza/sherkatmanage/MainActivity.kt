@@ -2,6 +2,8 @@ package ir.aliza.sherkatmanage
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
@@ -16,7 +18,7 @@ import ir.aliza.sherkatmanage.adapter.ProjectNearAdapter
 import ir.aliza.sherkatmanage.adapter.TaskEmployeeAdapter
 import ir.aliza.sherkatmanage.databinding.ActivityMainBinding
 import ir.aliza.sherkatmanage.fgmMain.CompanyFragment
-import ir.aliza.sherkatmanage.fgmSub.PersonFragment
+import ir.aliza.sherkatmanage.fgmMain.PersonFragment
 
 lateinit var employeeDao: EmployeeDao
 lateinit var dayDao: DayDao
@@ -56,6 +58,15 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.menu_settings -> {
                     replaceFragment(PersonFragment())
+
+                    val anim = AlphaAnimation(
+                        1f, 0f
+                    )
+                    anim.duration = 1000
+                    anim.fillAfter = true
+                    anim.repeatCount = 5
+                    anim.repeatMode = Animation.REVERSE
+
                 }
             }
             true
