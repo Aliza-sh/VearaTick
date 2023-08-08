@@ -27,14 +27,13 @@ import java.io.File
 private val PICK_IMAGE_REQUEST = 1
 
 class EmployeeInfoUpdateFragment(
-    val employee1: Employee,
+    val employee: Employee,
     val efficiencyEmployeeDao: EfficiencyDao,
     val position: Int,
     val employeeDao: EmployeeDao
-) : Fragment() {
+): Fragment() {
 
     lateinit var binding: FragmentEmployeeInfoUpdateBinding
-    lateinit var employee: Employee
 
     var imageUri: Uri? = null
     lateinit var imageBytes: ByteArray
@@ -54,7 +53,7 @@ class EmployeeInfoUpdateFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-            employee = employeeDao.getEmployee(position)!!
+            //employee = employeeDao.getEmployee(employee1.idEmployee!!)!!
 
         val gender = listOf(
             "مرد",

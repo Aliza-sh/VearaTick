@@ -1,6 +1,5 @@
 package ir.aliza.sherkatmanage.fgmSub
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -37,12 +36,6 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val ft = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
-        if (Build.VERSION.SDK_INT >= 26) {
-            ft.setReorderingAllowed(false)
-        }
-        ft.detach(this).attach(this).commit()
-
         projectDao = AppDatabase.getDataBase(view.context).projectDao
         val projectNearData = projectDao.getAllProject()
         projectAdapter = ProjectNearAdapter(ArrayList(projectNearData), this, projectDao)
@@ -52,17 +45,12 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
         subTaskProjectDao = AppDatabase.getDataBase(view.context).subTaskEmployeeProjectDao
 
         onFabClicked()
-
-    }
-
-    private fun showAllData() {
-
     }
 
     fun onFabClicked() {
         bindingActivityProAndEmp.btnAdd.setOnClickListener {
-            val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.layout_pro_and_emp, NewProjectFragment())
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.add(R.id.layout_pro_and_emp, NewProjectFragment())
                 .addToBackStack(null)
                 .commit()
         }

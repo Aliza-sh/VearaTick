@@ -10,7 +10,6 @@ import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.DataBase.EmployeeDao
-import ir.aliza.sherkatmanage.Dialog.EmployeeDialogFragment
 import ir.aliza.sherkatmanage.Position
 import ir.aliza.sherkatmanage.ProAndEmpActivity
 import ir.aliza.sherkatmanage.R
@@ -49,18 +48,9 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
         onFabClicked()
     }
 
-    private fun showAllData() {
-
-        // val data = arrayListOf<Employee>()
-        // data.add(Employee(1, "ali", "hasani", 20, "man", "aa", 0, 9111112134, "bbb"))
-        // val adpter = EmployeeAdapter(data, this)
-        // binding.recyclerViewEmployee.layoutManager =
-        // LinearLayoutManager(context, RecyclerView.VERTICAL, false)
-    }
-
     fun onFabClicked() {
         bindingActivityProAndEmpBinding.btnAdd.setOnClickListener {
-            val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
             transaction.replace(R.id.layout_pro_and_emp, EmployeeRecruitmentFragment(bindingActivityProAndEmpBinding,efficiencyEmployeeDao))
                 .addToBackStack(null)
                 .commit()
@@ -79,8 +69,7 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
     }
 
     override fun onEmployeeLongClicked(employee: Employee, position: Int) {
-        val dialog = EmployeeDialogFragment(employee, position)
-        dialog.show((activity as ProAndEmpActivity).supportFragmentManager, null)
+
     }
 
 }

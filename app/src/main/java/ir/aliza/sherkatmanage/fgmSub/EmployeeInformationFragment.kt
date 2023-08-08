@@ -19,14 +19,13 @@ import ir.aliza.sherkatmanage.adapter.ViewPagerEmployeeAdapter
 import ir.aliza.sherkatmanage.databinding.FragmentEmployeeInformationBinding
 
 class EmployeeInformationFragment(
-    val employee1: Employee,
+    val employee: Employee,
     val efficiencyEmployeeDao: EfficiencyDao,
     val position: Int,
     val employeeDao: EmployeeDao
 ) : Fragment() {
 
     lateinit var binding: FragmentEmployeeInformationBinding
-    lateinit var employee: Employee
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +39,7 @@ class EmployeeInformationFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        employee = employeeDao.getEmployee(employee1.idEmployee!!)!!
+        //employee = employeeDao.getEmployee(employee1.idEmployee!!)!!
 
         setData(employee)
 

@@ -8,10 +8,8 @@ import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import com.kizitonwose.calendarview.utils.persian.PersianCalendar
 import ir.aliza.sherkatmanage.DataBase.Project
-import ir.aliza.sherkatmanage.ProAndEmpActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.FragmentNewProjectBinding
 import ir.aliza.sherkatmanage.projectAdapter
@@ -31,7 +29,6 @@ class NewProjectFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        (activity as ProAndEmpActivity).supportFragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
         val typeProject = listOf(
             "اندروید",

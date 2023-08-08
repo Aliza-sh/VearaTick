@@ -69,11 +69,11 @@ class EmployeeAdapter(
                     binding.imgprn.setImageResource(R.drawable.img_matter);
                 }
             itemView.setOnClickListener {
-                employeeEvents.onEmployeeClicked(data[position], position+1)
+                employeeEvents.onEmployeeClicked(data[position], position)
             }
 
             itemView.setOnLongClickListener {
-                employeeEvents.onEmployeeLongClicked(data[position], position+1)
+                employeeEvents.onEmployeeLongClicked(data[position], position)
                 true
             }
         }
