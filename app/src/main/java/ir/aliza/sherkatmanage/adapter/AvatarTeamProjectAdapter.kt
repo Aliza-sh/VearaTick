@@ -7,12 +7,12 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ir.aliza.sherkatmanage.DataBase.TeamProject
 import ir.aliza.sherkatmanage.R
-import ir.aliza.sherkatmanage.databinding.ItemAvatarBigBinding
+import ir.aliza.sherkatmanage.databinding.ItemAvatarSmallBinding
 
-class TeamProjectAdapter(private val data: ArrayList<TeamProject>) :
-    RecyclerView.Adapter<TeamProjectAdapter.AvatarNearViewHolder>() {
+class AvatarTeamProjectAdapter(private val data: ArrayList<TeamProject>) :
+    RecyclerView.Adapter<AvatarTeamProjectAdapter.AvatarNearViewHolder>() {
 
-    lateinit var binding: ItemAvatarBigBinding
+    lateinit var binding: ItemAvatarSmallBinding
 
     inner class AvatarNearViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
 
@@ -29,7 +29,7 @@ class TeamProjectAdapter(private val data: ArrayList<TeamProject>) :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AvatarNearViewHolder {
-        binding = ItemAvatarBigBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding = ItemAvatarSmallBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AvatarNearViewHolder(binding.root)
     }
 

@@ -44,7 +44,11 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 import java.time.DayOfWeek
 
-class EmployeeCalendarFragment(val employee: Employee, val efficiencyEmployeeDao: EfficiencyDao) :
+class EmployeeCalendarFragment(
+    val employee: Employee,
+    val efficiencyEmployeeDao: EfficiencyDao,
+    val position: Int
+) :
     Fragment() {
 
 
@@ -94,23 +98,23 @@ class EmployeeCalendarFragment(val employee: Employee, val efficiencyEmployeeDao
                             oldDate?.let { binding.exFiveCalendar.notifyDateChanged(it) }
 
                             val nameDay = dayDao.getAllNameDay(
-                                employee.idEmployee!!,
+                                position,
                                 day.persianCalendar.persianYear.toString(),
                                 day.persianCalendar.persianMonthName,
                                 selectedDate!!.toPersianCalendar().persianWeekDayName
                             )
                             //val timeAllData = timeDao.getTime(employee.idEmployee)
                             val timeDayData = timeDao.getDayTime(
-                                employee.idEmployee,
+                                position,
                                 day.persianCalendar.persianDay.toString()
                             )
                             val timeDay = timeDao.getTime(
-                                employee.idEmployee,
+                                position,
                                 selectedDate!!.toPersianCalendar().persianDay
                             )
 
                             val entryExit = dayDao.getAllEntryExit(
-                                employee.idEmployee,
+                                position,
                                 selectedDate!!.toPersianCalendar().persianYear.toString(),
                                 selectedDate!!.toPersianCalendar().persianMonthName.toString(),
                                 selectedDate!!.toPersianCalendar().persianWeekDayName.toString(),
@@ -165,7 +169,7 @@ class EmployeeCalendarFragment(val employee: Employee, val efficiencyEmployeeDao
                             oldDate?.let { binding.exFiveCalendar.notifyDateChanged(it) }
 
                             val nameDay = dayDao.getAllNameDay(
-                                employee.idEmployee!!,
+                                position,
                                 day.persianCalendar.persianYear.toString(),
                                 day.persianCalendar.persianMonthName,
                                 selectedDate!!.toPersianCalendar().persianWeekDayName
@@ -174,7 +178,7 @@ class EmployeeCalendarFragment(val employee: Employee, val efficiencyEmployeeDao
                             if (nameDay?.nameday == selectedDate!!.toPersianCalendar().persianWeekDayName) {
                                 val dialog = ArrivalsAndDeparturesDialogFragment(
                                     binding1,
-                                    employee.idEmployee,
+                                    position,
                                     day.persianCalendar.persianYear.toString(),
                                     day.persianCalendar.persianMonthName,
                                     selectedDate!!.toPersianCalendar().persianDay,
@@ -212,7 +216,7 @@ class EmployeeCalendarFragment(val employee: Employee, val efficiencyEmployeeDao
                     layout.setBackgroundResource(if (selectedDate == day.date) R.drawable.shape_selected_bg else if (day.persianCalendar.persianDay == today.toPersianCalendar().persianDay) R.drawable.shape_selected_bg else 0)
 
                     val arrivalDay = timeDao.getAllArrivalDay(
-                        employee.idEmployee!!,
+                        position,
                         day.persianCalendar.persianYear.toString(),
                         day.persianCalendar.persianMonthName,
                         day.persianCalendar.persianDay.toString()
@@ -279,9 +283,9 @@ class EmployeeCalendarFragment(val employee: Employee, val efficiencyEmployeeDao
                                 }
 
                                 val dayData =
-                                    dayDao.getDay(("${tv.id}${employee.idEmployee}").toLong())
+                                    dayDao.getDay(("${tv.id}${position}").toLong())
 
-                                if ((dayData?.idDay) == ("${tv.id}${employee.idEmployee}").toLong() && dayData.idEmployee == employee.idEmployee) {
+                                if ((dayData?.idDay) == ("${tv.id}${position}").toLong() && dayData.idEmployee == position) {
                                     tv.setBackgroundColor(
                                         ContextCompat.getColor(
                                             view.context, R.color.firoze
@@ -292,9 +296,9 @@ class EmployeeCalendarFragment(val employee: Employee, val efficiencyEmployeeDao
                                 tv.setOnClickListener {
 
                                     val dayData =
-                                        dayDao.getDay(("${tv.id}${employee.idEmployee}").toLong())
+                                        dayDao.getDay(("${tv.id}${position}").toLong())
 
-                                    if (dayData?.idDay != ("${tv.id}${employee.idEmployee}").toLong()) {
+                                    if (dayData?.idDay != ("${tv.id}${position}").toLong()) {
                                         val dialog = EntryAndExitDialogFragment(
                                             month,
                                             employee,
@@ -307,10 +311,10 @@ class EmployeeCalendarFragment(val employee: Employee, val efficiencyEmployeeDao
                                             null
                                         )
 
-                                    } else if (dayData.idDay == ("${tv.id}${employee.idEmployee}").toLong() && dayData.idEmployee == employee.idEmployee) {
-                                        val newDay = employee.idEmployee?.let { it1 ->
+                                    } else if (dayData.idDay == ("${tv.id}${position}").toLong() && dayData.idEmployee == position) {
+                                        val newDay = position.let { it1 ->
                                             Day(
-                                                idDay = ("${tv.id}${employee.idEmployee}").toLong(),
+                                                idDay = ("${tv.id}${position}").toLong(),
                                                 idEmployee = it1,
                                                 year = month.persianCalendar.persianYear.toString(),
                                                 month = month.persianCalendar.persianMonthName,
@@ -325,14 +329,14 @@ class EmployeeCalendarFragment(val employee: Employee, val efficiencyEmployeeDao
                                         )
 
                                         val efficiencyEmployee =
-                                            efficiencyEmployeeDao.getEfficiencyEmployee(employee.idEmployee!!)
+                                            efficiencyEmployeeDao.getEfficiencyEmployee(position)
                                         var time = dayData.exit!!.toInt() - dayData.entry!!.toInt()
 
                                         time = efficiencyEmployee?.mustWeekWatch!! - time
 
                                         val newEfficiencyEmployee = EfficiencyEmployee(
                                             idEfficiency = efficiencyEmployee.idEfficiency,
-                                            idEmployee = employee.idEmployee,
+                                            idEmployee = position,
                                             mustWeekWatch = time,
                                             totalWeekWatch = efficiencyEmployee.totalWeekWatch,
                                             efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,

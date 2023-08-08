@@ -1,6 +1,5 @@
 package ir.aliza.sherkatmanage
 
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -32,6 +31,7 @@ class ProAndEmpActivity : AppCompatActivity() {
 
             replaceFragment(ProjectFragment(binding))
         }
+
         binding.btnEmployee.setOnClickListener() {
             binding.icEmployee.setColorFilter(ContextCompat.getColor(this, R.color.firoze), PorterDuff.Mode.SRC_IN)
             binding.txtEmployee.setTextColor(Color.parseColor("#E600ADB5"))
@@ -40,21 +40,13 @@ class ProAndEmpActivity : AppCompatActivity() {
             binding.txtProject.setTextColor(Color.parseColor("#929292"))
 
             replaceFragment(EmployeeFragment(binding))
-
         }
-
-
-    }
-
-    override fun onBackPressed() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        finish()
     }
 
     fun replaceFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frame_layout_sub, fragment)
+            .addToBackStack(null)
             .commit()
     }
 

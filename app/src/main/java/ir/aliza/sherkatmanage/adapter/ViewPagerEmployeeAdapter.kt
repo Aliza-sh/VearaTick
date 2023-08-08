@@ -11,7 +11,8 @@ import ir.aliza.sherkatmanage.fgmSub.EmployeeTaskFragment
 class ViewPagerEmployeeAdapter(
     val employee: Employee,
     fragment: Fragment,
-    val efficiencyEmployeeDao: EfficiencyDao
+    val efficiencyEmployeeDao: EfficiencyDao,
+    val position: Int
 ) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int {
         return 3
@@ -19,11 +20,11 @@ class ViewPagerEmployeeAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> EmployeeStatisticsFragment(employee,efficiencyEmployeeDao)
+            0 -> EmployeeStatisticsFragment(employee,efficiencyEmployeeDao,position)
 
-            1 -> EmployeeCalendarFragment(employee,efficiencyEmployeeDao)
+            1 -> EmployeeCalendarFragment(employee,efficiencyEmployeeDao,position)
 
-            2 -> EmployeeTaskFragment(employee,efficiencyEmployeeDao)
+            2 -> EmployeeTaskFragment(employee,efficiencyEmployeeDao,position)
 
             else -> Fragment()
         }

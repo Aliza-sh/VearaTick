@@ -1,5 +1,6 @@
 package ir.aliza.sherkatmanage.fgmSub
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,11 +19,11 @@ import ir.aliza.sherkatmanage.databinding.FragmentProjectBinding
 import ir.aliza.sherkatmanage.projectAdapter
 import ir.aliza.sherkatmanage.projectDao
 
+
 class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : Fragment(), ProjectNearAdapter.ProjectNearEvents {
 
     lateinit var binding: FragmentProjectBinding
     lateinit var subTaskProjectDao: SubTaskProjectDao
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +37,12 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val ft = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
+        if (Build.VERSION.SDK_INT >= 26) {
+            ft.setReorderingAllowed(false)
+        }
+        ft.detach(this).attach(this).commit()
+
         projectDao = AppDatabase.getDataBase(view.context).projectDao
         val projectNearData = projectDao.getAllProject()
         projectAdapter = ProjectNearAdapter(ArrayList(projectNearData), this, projectDao)
@@ -45,6 +52,7 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
         subTaskProjectDao = AppDatabase.getDataBase(view.context).subTaskEmployeeProjectDao
 
         onFabClicked()
+
     }
 
     private fun showAllData() {
@@ -60,10 +68,10 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
         }
     }
 
-    override fun onProjectClicked(project: Project, day: String, monthName: String) {
+    override fun onProjectClicked(project: Project,position: Int, day: String, monthName: String) {
         val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
         transaction.add(R.id.layout_pro_and_emp, ProjectInformationFragment(project,day,monthName,subTaskProjectDao,
-            projectDao))
+            projectDao,position))
             .addToBackStack(null)
             .commit()
     }

@@ -33,7 +33,11 @@ import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 
-class EmployeeTaskFragment(val employee: Employee, val efficiencyEmployeeDao: EfficiencyDao) :
+class EmployeeTaskFragment(
+    val employee: Employee,
+    val efficiencyEmployeeDao: EfficiencyDao,
+    val position: Int
+) :
     Fragment(), TaskEmployeeAdapter.TaskEvent {
 
     var selectedDate = LocalDate.now()
@@ -87,7 +91,7 @@ class EmployeeTaskFragment(val employee: Employee, val efficiencyEmployeeDao: Ef
                 view.setOnClickListener {
 
                     val taskDay = taskEmployeeDao.getTaskDay(
-                        employee.idEmployee!!,
+                        position,
                         day.persianCalendar.persianDay
                     )
 
@@ -149,7 +153,7 @@ class EmployeeTaskFragment(val employee: Employee, val efficiencyEmployeeDao: Ef
                 dayText.text = day.persianCalendar.persianWeekDayName.persianNumbers()
 
                 val taskInDay = taskEmployeeDao.getAllTaskInDay(
-                    employee.idEmployee!!,
+                    position,
                     selectedDate.toPersianCalendar().persianYear,
                     selectedDate.toPersianCalendar().persianMonth,
                     selectedDate.toPersianCalendar().persianDay

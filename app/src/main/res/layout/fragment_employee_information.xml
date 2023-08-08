@@ -24,15 +24,15 @@
             android:id="@+id/progress_circular"
             android:layout_width="80dp"
             android:layout_height="80dp"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="12dp"
             app:cpb_background_progressbar_color="@color/white"
             app:cpb_background_progressbar_width="5dp"
             app:cpb_progress_max="100"
             app:cpb_progressbar_color="@color/firoze"
             app:cpb_progressbar_width="5dp"
             app:cpb_round_border="true"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
@@ -47,32 +47,37 @@
             app:srcCompat="@drawable/img_male" />
 
         <TextView
+            android:layoutDirection="ltr"
             android:id="@+id/txt_name_emp"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
             android:text="علیرضا شهسواری"
             android:textColor="?attr/colorOnSecondary"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/progress_circular"
-            app:layout_constraintStart_toStartOf="@+id/progress_circular"
+            app:layout_constraintEnd_toEndOf="@+id/btn_info_prn"
+            app:layout_constraintStart_toEndOf="@+id/tablayoutEmp"
             app:layout_constraintTop_toBottomOf="@+id/progress_circular" />
 
         <TextView
+            android:layoutDirection="ltr"
             android:id="@+id/txt_Specialty_emp"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:text="اندروید کار"
             android:textColor="?attr/colorOnSecondary"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/txt_name_emp"
-            app:layout_constraintStart_toStartOf="@+id/txt_name_emp"
+            app:layout_constraintStart_toEndOf="@+id/tablayoutEmp"
             app:layout_constraintTop_toBottomOf="@+id/txt_name_emp" />
 
         <com.google.android.material.tabs.TabLayout
@@ -80,11 +85,11 @@
             style="@style/Widget.Material3.TabLayout.OnSurface"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:backgroundTint="?attr/colorPrimaryVariant"
+            android:background="@drawable/shape_background_navi"
+            android:backgroundTint="?attr/colorOnPrimary"
             android:layoutDirection="rtl"
-            android:background="@drawable/shape_background_light"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:tabMode="scrollable">
 
             <com.google.android.material.tabs.TabItem
@@ -107,14 +112,26 @@
             android:id="@+id/textView12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="12dp"
             android:text="این کارمند کارش درسته"
             android:textColor="?attr/colorPrimary"
             android:textSize="26sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/tablayoutEmp"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@+id/progress_circular"
+            app:layout_constraintEnd_toStartOf="@+id/progress_circular"
+            app:layout_constraintTop_toTopOf="@+id/progress_circular" />
+
+        <ImageButton
+            android:id="@+id/btn_menu_employee"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="8dp"
+            android:background="?attr/colorPrimaryVariant"
+            android:padding="8dp"
+            android:src="@drawable/ic_menu"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

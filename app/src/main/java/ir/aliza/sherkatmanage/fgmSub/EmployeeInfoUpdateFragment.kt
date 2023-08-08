@@ -1,31 +1,45 @@
 package ir.aliza.sherkatmanage.fgmSub
 
-import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.yalantis.ucrop.UCrop
+import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.Employee
-import ir.aliza.sherkatmanage.Position
+import ir.aliza.sherkatmanage.DataBase.EmployeeDao
+import ir.aliza.sherkatmanage.ProAndEmpActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.FragmentEmployeeInfoUpdateBinding
 import ir.aliza.sherkatmanage.employeeAdapter
-import ir.aliza.sherkatmanage.employeeDao
+import java.io.File
 
-class EmployeeInfoUpdateFragment(employee: Employee) : Fragment() {
+private val PICK_IMAGE_REQUEST = 1
+
+class EmployeeInfoUpdateFragment(
+    val employee1: Employee,
+    val efficiencyEmployeeDao: EfficiencyDao,
+    val position: Int,
+    val employeeDao: EmployeeDao
+) : Fragment() {
 
     lateinit var binding: FragmentEmployeeInfoUpdateBinding
-    var imageUri: Uri? = null
+    lateinit var employee: Employee
 
-    val employee = employee
+    var imageUri: Uri? = null
+    lateinit var imageBytes: ByteArray
+    lateinit var newEmployee: Employee
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +54,7 @@ class EmployeeInfoUpdateFragment(employee: Employee) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+            employee = employeeDao.getEmployee(position)!!
 
         val gender = listOf(
             "مرد",
@@ -55,11 +70,21 @@ class EmployeeInfoUpdateFragment(employee: Employee) : Fragment() {
 
         binding.sheetBtnDone.setOnClickListener {
             addNewEmployee()
+            val transaction =
+                (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
+            transaction.replace(
+                R.id.layout_pro_and_emp, EmployeeInformationFragment(
+                    employee,
+                    efficiencyEmployeeDao,
+                    position,
+                    employeeDao
+                )
+            )
+                .commit()
         }
 
-        binding.imgprn4.setOnClickListener{
-            val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivityForResult(intent, 0)
+        binding.imgprn2.setOnClickListener {
+            pickImage()
         }
 
         binding.btnBck.setOnClickListener {
@@ -79,22 +104,61 @@ class EmployeeInfoUpdateFragment(employee: Employee) : Fragment() {
         binding.edtNumbhomeEmp.setText(employee.homePhone.toString())
     }
 
+    fun pickImage() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 0 && resultCode == Activity.RESULT_OK) {
-            imageUri = data?.data
-            Glide.with(this)
-                .load(imageUri)
-                .into(binding.imgprn4)
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == AppCompatActivity.RESULT_OK && data != null) {
+            val selectedImageUri: Uri = data.data!!
+            val options = UCrop.Options()
+            options.setCircleDimmedLayer(true)
+            options.setShowCropGrid(false)
+            options.setCompressionQuality(100)
+            options.setToolbarTitle("Crop Image")
+            options.setStatusBarColor(
+                ContextCompat.getColor(
+                    requireActivity(),
+                    R.color.black_light
+                )
+            )
+            options.setToolbarColor(ContextCompat.getColor(requireActivity(), R.color.black_light))
+            options.setActiveControlsWidgetColor(
+                ContextCompat.getColor(
+                    requireActivity(),
+                    R.color.firoze
+                )
+            )
+            options.setToolbarWidgetColor(ContextCompat.getColor(requireActivity(), R.color.white))
+            options.setDimmedLayerColor(ContextCompat.getColor(requireActivity(), R.color.blacke))
+            options.setToolbarCropDrawable(R.drawable.ic_crop)
+            options.setFreeStyleCropEnabled(true)
+            val destinationUri = Uri.fromFile(File(requireActivity().cacheDir, "avatar"))
+            UCrop.of(selectedImageUri, destinationUri)
+                .withAspectRatio(1f, 1f)
+                .withOptions(options)
+                .start(requireActivity(), 2)
         }
+        imageUri = UCrop.getOutput(data!!)
+        Toast.makeText(context, "$imageUri", Toast.LENGTH_SHORT).show()
+        Glide.with(this)
+            .load(UCrop.getOutput(data))
+            .apply(RequestOptions.circleCropTransform())
+            .into(binding.imgprn2)
     }
 
     fun onBackPressed() {
-        if (parentFragmentManager.backStackEntryCount > 0) {
-            parentFragmentManager.popBackStack()
-        } else {
-            onBackPressed()
-        }
+        val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.layout_pro_and_emp, EmployeeInformationFragment(
+            employee,
+            efficiencyEmployeeDao,
+            position,
+            employeeDao
+        ))
+            .commit()
     }
 
     private fun addNewEmployee() {
@@ -119,11 +183,8 @@ class EmployeeInfoUpdateFragment(employee: Employee) : Fragment() {
             val txtAddress = binding.edtAddressEmp.text.toString()
             val txtMaharat = binding.edtMaharatEmp.text.toString()
 
-            val inputStream = context?.contentResolver?.openInputStream(imageUri!!)
-            val imageBytes = inputStream?.readBytes()
-
-            val newEmployee = Employee(
-                employee.idEmployee,
+            newEmployee = Employee(
+                idEmployee = employee.idEmployee,
                 name = txtname,
                 family = txtFamily,
                 age = txtAge.toInt(),
@@ -133,12 +194,29 @@ class EmployeeInfoUpdateFragment(employee: Employee) : Fragment() {
                 address = txtAddress,
                 specialty = txtSpecialty,
                 skill = txtMaharat,
-                imgEmployee = imageBytes!!
             )
-            employeeAdapter.updateEmployee(position = Position, newEmployee = newEmployee)
+
+            if (imageUri != null) {
+                val inputStream = context?.contentResolver?.openInputStream(imageUri!!)
+                imageBytes = inputStream?.readBytes()!!
+
+                newEmployee = Employee(
+                    idEmployee = employee.idEmployee,
+                    name = txtname,
+                    family = txtFamily,
+                    age = txtAge.toInt(),
+                    gender = txtGender,
+                    cellularPhone = txtNumber.toLong(),
+                    homePhone = txtNumberHome.toLong(),
+                    address = txtAddress,
+                    specialty = txtSpecialty,
+                    skill = txtMaharat,
+                    imgEmployee = imageBytes
+                )
+            }
+            employeeAdapter.updateEmployee(position = position, newEmployee = newEmployee)
             employeeDao.update(newEmployee)
 
-            onBackPressed()
         } else {
             Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()
         }

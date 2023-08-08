@@ -27,9 +27,12 @@ class ProjectNearAdapter(
         fun bindData(position: Int) {
 
             val teamProjectDao = AppDatabase.getDataBase(itemView.context).teamProjectDao
-            val teamProjectData = teamProjectDao.getListTeamProject(data[position].idProject!!)
-            val teamProjectAdapter = TeamProjectAdapter(ArrayList(teamProjectData))
-            binding.recyclerView.adapter = teamProjectAdapter
+
+            if (data[position].idProject != null) {
+                val teamProjectData = teamProjectDao.getListTeamProject(data[position].idProject!!)
+                val teamProjectAdapter = AvatarTeamProjectAdapter(ArrayList(teamProjectData))
+                binding.recyclerView.adapter = teamProjectAdapter
+            }
 
             val calendar = PersianCalendar()
             val inDay = calendar.persianDay
@@ -49,6 +52,7 @@ class ProjectNearAdapter(
             itemView.setOnClickListener {
                 projectNearEvents.onProjectClicked(
                     data[position],
+                    position,
                     dayValue.toString(),
                     calendar.withMonth(monthValue).persianMonthName
                 )
@@ -84,8 +88,8 @@ class ProjectNearAdapter(
     }
 
     fun addProject(newProject: Project) {
-        data.add(0, newProject)
-        notifyItemInserted(0)
+        data.add(data.size, newProject)
+        notifyItemInserted(data.size)
     }
 
     fun removeProject(oldProject: Project, oldPosition: Int) {
@@ -101,7 +105,7 @@ class ProjectNearAdapter(
     }
 
     interface ProjectNearEvents {
-        fun onProjectClicked(project: Project, day: String, monthName: String)
+        fun onProjectClicked(project: Project,position: Int, day: String, monthName: String)
         fun onProjectLongClicked(project: Project, position: Int)
     }
 }

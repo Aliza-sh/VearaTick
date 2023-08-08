@@ -6,13 +6,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.kizitonwose.calendarview.utils.persian.PersianCalendar
+import com.kizitonwose.calendarview.utils.persian.withMonth
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.DataBase.SubTaskProject
 import ir.aliza.sherkatmanage.DataBase.SubTaskProjectDao
+import ir.aliza.sherkatmanage.ProAndEmpActivity
+import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.SubTaskProjectAdapter
 import ir.aliza.sherkatmanage.databinding.BottomsheetfragmentSubtaskBinding
 import ir.aliza.sherkatmanage.databinding.FragmentProjectInformationBinding
+import ir.aliza.sherkatmanage.fgmSub.ProjectInformationFragment
 
 class SubTaskBottomsheetFragment(
     val subTaskProjectDao: SubTaskProjectDao,
@@ -20,6 +25,7 @@ class SubTaskBottomsheetFragment(
     val subTaskProjectAdapter: SubTaskProjectAdapter,
     val projectDao: ProjectDao,
     val binding1: FragmentProjectInformationBinding,
+    val position: Int,
 ) : BottomSheetDialogFragment() {
 
     lateinit var binding: BottomsheetfragmentSubtaskBinding
@@ -83,6 +89,24 @@ class SubTaskBottomsheetFragment(
             binding1.txtNumTaskPro.text =
                 project1.numberDoneSubTaskProject.toString() + " از " + numberSubTaskProject.toString()
 
+            val calendar = PersianCalendar()
+            val inDay = calendar.persianDay
+
+            val day = inDay + project1.dayProject.toInt()
+
+            val monthValue = day / 30 + calendar.persianMonth
+            val dayValue = (day % 30)
+
+            val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.layout_pro_and_emp, ProjectInformationFragment(
+                project1,
+                dayValue.toString(),
+                calendar.withMonth(monthValue).persianMonthName,
+                subTaskProjectDao,
+                projectDao,
+                position
+            ))
+                .commit()
             dismiss()
         } else {
             Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()

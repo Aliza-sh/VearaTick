@@ -21,15 +21,15 @@ class EmployeeAdapter(
     lateinit var binding: ItemEmployeeBinding
 
     inner class EmployeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         fun bindData(position: Int) {
 
             if (data[position].idEmployee != null) {
 
-                val efficiencyEmployee =
-                    efficiencyEmployeeDao.getEfficiencyEmployee(data[position].idEmployee!!)
+                val efficiencyEmployee = efficiencyEmployeeDao.getEfficiencyEmployee(data[position].idEmployee!!)
 
-                if (efficiencyEmployee!!.totalWeekWatch != 0 && efficiencyEmployee.mustWeekWatch != 0
-                ) {
+                if (efficiencyEmployee!!.totalWeekWatch != 0 && efficiencyEmployee.mustWeekWatch != 0) {
+
                     var totalWeekWatch = efficiencyEmployee.totalWeekWatch
                     var mustWeekWatch = efficiencyEmployee.mustWeekWatch
                     var dahanSevisKon: Float = 0f
@@ -62,20 +62,18 @@ class EmployeeAdapter(
 
                 binding.txtDutiesWeek.text =
                     efficiencyEmployee?.efficiencyWeekDuties.toString() + "%"
-
+            }
                 binding.txtnameprn.text = data[position].name + " " + data[position].family
                 binding.txttkhprn.text = data[position].specialty
                 if (data[position].gender == "زن") {
                     binding.imgprn.setImageResource(R.drawable.img_matter);
                 }
-
-            }
             itemView.setOnClickListener {
-                employeeEvents.onEmployeeClicked(data[position], position)
+                employeeEvents.onEmployeeClicked(data[position], position+1)
             }
 
             itemView.setOnLongClickListener {
-                employeeEvents.onEmployeeLongClicked(data[position], position)
+                employeeEvents.onEmployeeLongClicked(data[position], position+1)
                 true
             }
         }

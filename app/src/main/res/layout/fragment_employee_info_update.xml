@@ -67,7 +67,7 @@
             android:background="@drawable/shape_background_navi">
 
             <ImageView
-                android:id="@+id/imgprn4"
+                android:id="@+id/imgprn2"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
                 android:layout_gravity="center|top"

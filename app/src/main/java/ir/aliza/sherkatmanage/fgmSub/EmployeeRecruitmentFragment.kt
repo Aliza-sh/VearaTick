@@ -19,16 +19,19 @@ import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.EfficiencyEmployee
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.R
+import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.FragmentEmployeeRecruitmentBinding
 import ir.aliza.sherkatmanage.employeeAdapter
 import ir.aliza.sherkatmanage.employeeDao
 import java.io.File
 
 private val PICK_IMAGE_REQUEST = 1
-class EmployeeRecruitmentFragment(val efficiencyEmployeeDao: EfficiencyDao) : Fragment() {
+class EmployeeRecruitmentFragment(
+    val bindingActivityProAndEmpBinding: ActivityProAndEmpBinding,
+    val efficiencyEmployeeDao: EfficiencyDao
+) : Fragment() {
 
     lateinit var binding: FragmentEmployeeRecruitmentBinding
-
     var imageUri: Uri? = null
     lateinit var imageBytes: ByteArray
     lateinit var newEmployee: Employee
@@ -113,6 +116,7 @@ class EmployeeRecruitmentFragment(val efficiencyEmployeeDao: EfficiencyDao) : Fr
                 .apply(RequestOptions.circleCropTransform())
                 .into(binding.imgprn2)
     }
+
     fun onBackPressed() {
         if (parentFragmentManager.backStackEntryCount > 0) {
             parentFragmentManager.popBackStack()
@@ -120,6 +124,7 @@ class EmployeeRecruitmentFragment(val efficiencyEmployeeDao: EfficiencyDao) : Fr
             onBackPressed()
         }
     }
+
     private fun addNewEmployee() {
         if (
             binding.edtNameEpm.length() > 0 &&

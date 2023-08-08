@@ -29,7 +29,6 @@ class SubTaskProjectAdapter(
 
         fun bindData(position: Int) {
 
-
             binding.txtTack.text = data[position].nameSubTask
             binding.txtDescription.text = data[position].descriptionTask
             if (data[position].doneSubTask != null) {
@@ -121,8 +120,8 @@ class SubTaskProjectAdapter(
     }
 
     fun addTask(newTask: SubTaskProject) {
-        data.add(0, newTask)
-        notifyItemInserted(0)
+        data.add(data.size, newTask)
+        notifyItemInserted(data.size)
     }
 
     fun deleteSubTask(oldTask: SubTaskProject, oldPosition: Int) {

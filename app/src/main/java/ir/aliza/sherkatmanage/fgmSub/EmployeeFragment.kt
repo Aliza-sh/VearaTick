@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.Employee
+import ir.aliza.sherkatmanage.DataBase.EmployeeDao
 import ir.aliza.sherkatmanage.Dialog.EmployeeDialogFragment
 import ir.aliza.sherkatmanage.Position
 import ir.aliza.sherkatmanage.ProAndEmpActivity
@@ -22,7 +23,7 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
 
     lateinit var binding: FragmentEmployeesBinding
     lateinit var efficiencyEmployeeDao: EfficiencyDao
-
+    lateinit var employeeDao: EmployeeDao
     lateinit var employeeData: List<Employee>
 
     override fun onCreateView(
@@ -39,7 +40,7 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
 
         efficiencyEmployeeDao = AppDatabase.getDataBase(view.context).efficiencyDao
 
-        val employeeDao = AppDatabase.getDataBase(view.context).employeeDao
+        employeeDao = AppDatabase.getDataBase(view.context).employeeDao
         employeeData = employeeDao.getAllEmployee()
         employeeAdapter = EmployeeAdapter(ArrayList(employeeData), this, efficiencyEmployeeDao)
         binding.recyclerViewEmployee.adapter = employeeAdapter
@@ -53,15 +54,14 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
         // val data = arrayListOf<Employee>()
         // data.add(Employee(1, "ali", "hasani", 20, "man", "aa", 0, 9111112134, "bbb"))
         // val adpter = EmployeeAdapter(data, this)
-
-        //binding.recyclerViewEmployee.layoutManager =
+        // binding.recyclerViewEmployee.layoutManager =
         // LinearLayoutManager(context, RecyclerView.VERTICAL, false)
     }
 
     fun onFabClicked() {
         bindingActivityProAndEmpBinding.btnAdd.setOnClickListener {
             val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.layout_pro_and_emp, EmployeeRecruitmentFragment(efficiencyEmployeeDao))
+            transaction.replace(R.id.layout_pro_and_emp, EmployeeRecruitmentFragment(bindingActivityProAndEmpBinding,efficiencyEmployeeDao))
                 .addToBackStack(null)
                 .commit()
         }
@@ -72,7 +72,7 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
         val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
         transaction.replace(
             R.id.layout_pro_and_emp,
-            EmployeeInformationFragment(employee, efficiencyEmployeeDao)
+            EmployeeInformationFragment(employee, efficiencyEmployeeDao,position,employeeDao)
         )
             .addToBackStack(null)
             .commit()

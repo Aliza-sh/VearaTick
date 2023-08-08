@@ -216,8 +216,8 @@ class TaskEmployeeAdapter(
     }
 
     fun addTask(newTask: TaskEmployee) {
-        data.add(0, newTask)
-        notifyItemInserted(0)
+        data.add(data.size, newTask)
+        notifyItemInserted(data.size)
     }
 
     fun removeEmployee(oldTask: TaskEmployee, oldPosition: Int) {
