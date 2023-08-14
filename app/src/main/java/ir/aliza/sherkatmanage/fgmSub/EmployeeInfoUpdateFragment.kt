@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -18,8 +19,8 @@ import com.yalantis.ucrop.UCrop
 import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.DataBase.EmployeeDao
-import ir.aliza.sherkatmanage.ProAndEmpActivity
 import ir.aliza.sherkatmanage.R
+import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.FragmentEmployeeInfoUpdateBinding
 import ir.aliza.sherkatmanage.employeeAdapter
 import java.io.File
@@ -30,8 +31,9 @@ class EmployeeInfoUpdateFragment(
     val employee: Employee,
     val efficiencyEmployeeDao: EfficiencyDao,
     val position: Int,
-    val employeeDao: EmployeeDao
-): Fragment() {
+    val employeeDao: EmployeeDao,
+    val bindingActivityProAndEmpBinding: ActivityProAndEmpBinding,
+) : Fragment() {
 
     lateinit var binding: FragmentEmployeeInfoUpdateBinding
 
@@ -52,8 +54,7 @@ class EmployeeInfoUpdateFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-            //employee = employeeDao.getEmployee(employee1.idEmployee!!)!!
+        onBackPressed()
 
         val gender = listOf(
             "مرد",
@@ -69,17 +70,7 @@ class EmployeeInfoUpdateFragment(
 
         binding.sheetBtnDone.setOnClickListener {
             addNewEmployee()
-            val transaction =
-                (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(
-                R.id.layout_pro_and_emp, EmployeeInformationFragment(
-                    employee,
-                    efficiencyEmployeeDao,
-                    position,
-                    employeeDao
-                )
-            )
-                .commit()
+            onEmployeeInfoUpdate()
         }
 
         binding.imgprn2.setOnClickListener {
@@ -87,8 +78,44 @@ class EmployeeInfoUpdateFragment(
         }
 
         binding.btnBck.setOnClickListener {
-            onBackPressed()
+            if (parentFragmentManager.backStackEntryCount > 0) {
+                parentFragmentManager.popBackStack()
+            }
         }
+    }
+
+    fun onBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    parentFragmentManager.beginTransaction().detach(this@EmployeeInfoUpdateFragment)
+                        .replace(
+                            R.id.layout_pro_and_emp,
+                            EmployeeInformationFragment(
+                                employee,
+                                efficiencyEmployeeDao,
+                                position,
+                                employeeDao,
+                                bindingActivityProAndEmpBinding,
+                            )
+                        ).commit()
+                }
+            })
+    }
+
+    fun onEmployeeInfoUpdate() {
+        parentFragmentManager.beginTransaction().detach(this@EmployeeInfoUpdateFragment)
+            .replace(
+                R.id.layout_pro_and_emp,
+                EmployeeInformationFragment(
+                    employee,
+                    efficiencyEmployeeDao,
+                    position,
+                    employeeDao,
+                    bindingActivityProAndEmpBinding,
+                )
+            ).commit()
     }
 
     private fun setdata(employee: Employee) {
@@ -149,16 +176,6 @@ class EmployeeInfoUpdateFragment(
             .into(binding.imgprn2)
     }
 
-    fun onBackPressed() {
-        val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.layout_pro_and_emp, EmployeeInformationFragment(
-            employee,
-            efficiencyEmployeeDao,
-            position,
-            employeeDao
-        ))
-            .commit()
-    }
 
     private fun addNewEmployee() {
         if (
@@ -213,7 +230,7 @@ class EmployeeInfoUpdateFragment(
                     imgEmployee = imageBytes
                 )
             }
-            employeeAdapter.updateEmployee(position = position, newEmployee = newEmployee)
+            employeeAdapter.updateEmployee(newEmployee, position)
             employeeDao.update(newEmployee)
 
         } else {

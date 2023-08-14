@@ -7,15 +7,19 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.kizitonwose.calendarview.utils.persian.PersianCalendar
 import ir.aliza.sherkatmanage.DataBase.Project
+import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.R
+import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.FragmentNewProjectBinding
 import ir.aliza.sherkatmanage.projectAdapter
-import ir.aliza.sherkatmanage.projectDao
 
-class NewProjectFragment() : Fragment() {
+class NewProjectFragment(
+    val projectDao: ProjectDao,
+    val bindingActivityProAndEmp: ActivityProAndEmpBinding,) : Fragment() {
     lateinit var binding: FragmentNewProjectBinding
 
     override fun onCreateView(
@@ -29,6 +33,7 @@ class NewProjectFragment() : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        onBackPressed()
 
         val typeProject = listOf(
             "اندروید",
@@ -45,20 +50,32 @@ class NewProjectFragment() : Fragment() {
         )
 
         binding.btnBck.setOnClickListener {
-            onBackPressed()
+            if (parentFragmentManager.backStackEntryCount > 0) {
+                parentFragmentManager.popBackStack()
+            }
         }
 
         binding.sheetBtnDone.setOnClickListener {
             addNewProject()
+            onNewProject()
         }
     }
 
     fun onBackPressed() {
-        if (parentFragmentManager.backStackEntryCount > 0) {
-            parentFragmentManager.popBackStack()
-        } else {
-            onBackPressed()
-        }
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    fragmentManager?.beginTransaction()?.detach(this@NewProjectFragment)
+                        ?.attach(ProjectFragment(bindingActivityProAndEmp))?.commit()
+                }
+            })
+    }
+
+    fun onNewProject() {
+        fragmentManager?.beginTransaction()?.detach(this@NewProjectFragment)
+            ?.replace(R.id.frame_layout_sub, ProjectFragment(bindingActivityProAndEmp))
+            ?.commit()
     }
 
     private fun addNewProject() {

@@ -24,6 +24,7 @@ class EmployeeAdapter(
 
         fun bindData(position: Int) {
 
+
             if (data[position].idEmployee != null) {
 
                 val efficiencyEmployee = efficiencyEmployeeDao.getEfficiencyEmployee(data[position].idEmployee!!)

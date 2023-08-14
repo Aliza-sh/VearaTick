@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -26,6 +27,7 @@ import ir.aliza.sherkatmanage.employeeDao
 import java.io.File
 
 private val PICK_IMAGE_REQUEST = 1
+
 class EmployeeRecruitmentFragment(
     val bindingActivityProAndEmpBinding: ActivityProAndEmpBinding,
     val efficiencyEmployeeDao: EfficiencyDao
@@ -48,6 +50,7 @@ class EmployeeRecruitmentFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        onBackPressed()
 
         val gender = listOf(
             "مرد",
@@ -61,6 +64,7 @@ class EmployeeRecruitmentFragment(
 
         binding.sheetBtnDone.setOnClickListener {
             addNewEmployee()
+            onRecruitment()
         }
 
         binding.imgprn2.setOnClickListener {
@@ -68,8 +72,27 @@ class EmployeeRecruitmentFragment(
         }
 
         binding.btnBck.setOnClickListener {
-            onBackPressed()
+            if (parentFragmentManager.backStackEntryCount > 0) {
+                parentFragmentManager.popBackStack()
+            }
         }
+    }
+
+    fun onBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    fragmentManager?.beginTransaction()?.detach(this@EmployeeRecruitmentFragment)
+                        ?.attach(EmployeeFragment(bindingActivityProAndEmpBinding))?.commit()
+                }
+            })
+    }
+
+    fun onRecruitment() {
+        fragmentManager?.beginTransaction()?.detach(this@EmployeeRecruitmentFragment)
+            ?.replace(R.id.frame_layout_sub, EmployeeFragment(bindingActivityProAndEmpBinding))
+            ?.commit()
     }
 
     fun pickImage() {
@@ -77,6 +100,7 @@ class EmployeeRecruitmentFragment(
         intent.type = "image/*"
         startActivityForResult(intent, PICK_IMAGE_REQUEST)
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == AppCompatActivity.RESULT_OK && data != null) {
@@ -109,20 +133,12 @@ class EmployeeRecruitmentFragment(
                 .withOptions(options)
                 .start(requireActivity(), 2)
         }
-            imageUri = UCrop.getOutput(data!!)
-            Toast.makeText(context, "$imageUri", Toast.LENGTH_SHORT).show()
-            Glide.with(this)
-                .load(UCrop.getOutput(data))
-                .apply(RequestOptions.circleCropTransform())
-                .into(binding.imgprn2)
-    }
-
-    fun onBackPressed() {
-        if (parentFragmentManager.backStackEntryCount > 0) {
-            parentFragmentManager.popBackStack()
-        } else {
-            onBackPressed()
-        }
+        imageUri = UCrop.getOutput(data!!)
+        Toast.makeText(context, "$imageUri", Toast.LENGTH_SHORT).show()
+        Glide.with(this)
+            .load(UCrop.getOutput(data))
+            .apply(RequestOptions.circleCropTransform())
+            .into(binding.imgprn2)
     }
 
     private fun addNewEmployee() {
@@ -179,14 +195,13 @@ class EmployeeRecruitmentFragment(
             employeeAdapter.addEmployee(newEmployee)
             employeeDao.insert(newEmployee)
 
-            val employee = employeeDao.getObjectAllEmployee(txtname,txtFamily,txtNumber.toLong())
+            val employee = employeeDao.getObjectAllEmployee(txtname, txtFamily, txtNumber.toLong())
 
             val newEfficiencyEmployee = EfficiencyEmployee(
                 idEmployee = employee?.idEmployee!!,
             )
             efficiencyEmployeeDao.insert(newEfficiencyEmployee)
 
-            onBackPressed()
         } else {
             Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()
         }

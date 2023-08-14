@@ -3,7 +3,9 @@
     <item
         android:id="@+id/menu_employee_edit"
         android:title="ویرایش " />
+
     <item
         android:id="@+id/menu_employee_delete"
         android:title="حذف " />
+
 </menu>

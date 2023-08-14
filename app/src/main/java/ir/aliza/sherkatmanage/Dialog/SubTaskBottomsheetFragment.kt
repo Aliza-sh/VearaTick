@@ -15,8 +15,8 @@ import ir.aliza.sherkatmanage.DataBase.SubTaskProjectDao
 import ir.aliza.sherkatmanage.ProAndEmpActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.SubTaskProjectAdapter
+import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.BottomsheetfragmentSubtaskBinding
-import ir.aliza.sherkatmanage.databinding.FragmentProjectInformationBinding
 import ir.aliza.sherkatmanage.fgmSub.ProjectInformationFragment
 
 class SubTaskBottomsheetFragment(
@@ -24,8 +24,11 @@ class SubTaskBottomsheetFragment(
     val project: Project,
     val subTaskProjectAdapter: SubTaskProjectAdapter,
     val projectDao: ProjectDao,
-    val binding1: FragmentProjectInformationBinding,
     val position: Int,
+    val bindingActivityProAndEmp: ActivityProAndEmpBinding,
+    val projectInformationFragment: ProjectInformationFragment,
+    val day: String,
+    val monthName: String,
 ) : BottomSheetDialogFragment() {
 
     lateinit var binding: BottomsheetfragmentSubtaskBinding
@@ -42,10 +45,25 @@ class SubTaskBottomsheetFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
         binding.sheetBtnDone.setOnClickListener {
-
             addNewTask()
-
+            onSubTaskToProject()
         }
+    }
+
+    fun onSubTaskToProject() {
+        parentFragmentManager.beginTransaction().detach(projectInformationFragment)
+            .replace(
+                R.id.layout_pro_and_emp,
+                ProjectInformationFragment(
+                    project,
+                    day,
+                    monthName,
+                    subTaskProjectDao,
+                    projectDao,
+                    position,
+                    bindingActivityProAndEmp
+                )
+            ).commit()
     }
 
     private fun addNewTask() {
@@ -86,8 +104,7 @@ class SubTaskBottomsheetFragment(
 
             )
             projectDao.update(newProject)
-            binding1.txtNumTaskPro.text =
-                project1.numberDoneSubTaskProject.toString() + " از " + numberSubTaskProject.toString()
+
 
             val calendar = PersianCalendar()
             val inDay = calendar.persianDay
@@ -99,13 +116,15 @@ class SubTaskBottomsheetFragment(
 
             val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
             transaction.replace(R.id.layout_pro_and_emp, ProjectInformationFragment(
-                project1,
+                project,
                 dayValue.toString(),
                 calendar.withMonth(monthValue).persianMonthName,
                 subTaskProjectDao,
                 projectDao,
-                position
+                position,
+                bindingActivityProAndEmp
             ))
+                .addToBackStack(null)
                 .commit()
             dismiss()
         } else {

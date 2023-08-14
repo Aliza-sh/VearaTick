@@ -7,7 +7,7 @@ import androidx.fragment.app.DialogFragment
 import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.EfficiencyEmployee
 import ir.aliza.sherkatmanage.DataBase.Time
-import ir.aliza.sherkatmanage.MainActivity
+import ir.aliza.sherkatmanage.ProAndEmpActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.FragmentDialogArrivalsAndDeparturesBinding
 import ir.aliza.sherkatmanage.databinding.ItemCalendarDayBinding
@@ -41,7 +41,7 @@ class ArrivalsAndDeparturesDialogFragment(
                 day,
                 efficiencyEmployeeDao
             )
-            dialog.show((activity as MainActivity).supportFragmentManager, null)
+            dialog.show((activity as ProAndEmpActivity).supportFragmentManager, null)
             dialog.isCancelable = false
             dismiss()
         }

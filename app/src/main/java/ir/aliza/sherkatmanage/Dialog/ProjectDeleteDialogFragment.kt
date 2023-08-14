@@ -8,11 +8,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.DialogFragment
 import ir.aliza.sherkatmanage.DataBase.Project
+import ir.aliza.sherkatmanage.DataBase.ProjectDao
+import ir.aliza.sherkatmanage.R
+import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.FragmentDialogDeleteItemProjectBinding
+import ir.aliza.sherkatmanage.fgmSub.EmployeeFragment
+import ir.aliza.sherkatmanage.fgmSub.ProjectInformationFragment
 import ir.aliza.sherkatmanage.projectAdapter
-import ir.aliza.sherkatmanage.projectDao
 
-class ProjectDialogFragment(private val project: Project, private val position: Int) : DialogFragment() {
+class ProjectDeleteDialogFragment(
+    private val project: Project,
+    private val position: Int,
+    val projectDao: ProjectDao,
+    val bindingActivityProAndEmp: ActivityProAndEmpBinding,
+    val projectInformationFragment: ProjectInformationFragment
+) : DialogFragment() {
 
     lateinit var binding: FragmentDialogDeleteItemProjectBinding
 
@@ -22,17 +32,24 @@ class ProjectDialogFragment(private val project: Project, private val position: 
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(binding.root)
         dialog.window?.setBackgroundDrawable(ColorDrawable(Color.Transparent.toArgb()))
+        
         dialog.setCancelable(true)
         binding.dialogBtnDeleteCansel.setOnClickListener {
             dismiss()
         }
         binding.dialogBtnDeleteSure.setOnClickListener {
-            dismiss()
             deleteItem(project ,position)
+            dismiss()
+            onBackPressed()
         }
 
         return dialog
 
+    }
+
+    fun onBackPressed() {
+        parentFragmentManager.beginTransaction().detach(projectInformationFragment)
+            .replace(R.id.frame_layout_sub, EmployeeFragment(bindingActivityProAndEmp)).commit()
     }
 
     fun deleteItem(project: Project, position: Int) {

@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.DayDao
 import ir.aliza.sherkatmanage.DataBase.EmployeeDao
-import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.DataBase.TaskEmployeeDao
 import ir.aliza.sherkatmanage.DataBase.TimeDao
 import ir.aliza.sherkatmanage.adapter.EmployeeAdapter
@@ -23,13 +22,11 @@ import ir.aliza.sherkatmanage.fgmMain.PersonFragment
 lateinit var employeeDao: EmployeeDao
 lateinit var dayDao: DayDao
 lateinit var timeDao: TimeDao
-lateinit var projectDao: ProjectDao
 lateinit var taskEmployeeDao: TaskEmployeeDao
 lateinit var projectAdapter: ProjectNearAdapter
 lateinit var taskAdapter: TaskEmployeeAdapter
 lateinit var inOutAdapter: InOutAdapter
 lateinit var employeeAdapter: EmployeeAdapter
-var Position: Int = 0
 
 class MainActivity : AppCompatActivity() {
 

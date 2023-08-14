@@ -37,7 +37,7 @@ class ProjectNearAdapter(
             val calendar = PersianCalendar()
             val inDay = calendar.persianDay
 
-            val day = inDay + data[position].dayProject.toInt()
+            val day = inDay + data[position].dayProject
 
             val monthValue = day / 30 + calendar.persianMonth
             val dayValue = (day % 30)
@@ -97,6 +97,11 @@ class ProjectNearAdapter(
         notifyItemRemoved(oldPosition)
     }
 
+    fun updateProject(newProject: Project, position: Int) {
+        data.set(position, newProject)
+        notifyItemChanged(position)
+    }
+
     @SuppressLint("NotifyDataSetChanged")
     fun setData(newList: ArrayList<Project>) {
         data.clear()
@@ -105,7 +110,7 @@ class ProjectNearAdapter(
     }
 
     interface ProjectNearEvents {
-        fun onProjectClicked(project: Project,position: Int, day: String, monthName: String)
+        fun onProjectClicked(project: Project, position: Int, day: String, monthName: String)
         fun onProjectLongClicked(project: Project, position: Int)
     }
 }

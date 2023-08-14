@@ -19,21 +19,34 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="4dp"
+            android:rotationY="180"
+            app:tint="@color/white"
+            android:src="@drawable/ic_back"
+            app:backgroundTint="?attr/colorPrimaryVariant"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <com.mikhaellopez.circularprogressbar.CircularProgressBar
             android:id="@+id/progress_circular"
             android:layout_width="80dp"
             android:layout_height="80dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="12dp"
+            android:layout_marginEnd="8dp"
             app:cpb_background_progressbar_color="@color/white"
             app:cpb_background_progressbar_width="5dp"
             app:cpb_progress_max="100"
             app:cpb_progressbar_color="@color/firoze"
             app:cpb_progressbar_width="5dp"
             app:cpb_round_border="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/btn_back"
+            app:layout_constraintTop_toTopOf="@+id/btn_back" />
 
         <ImageView
             android:id="@+id/btn_info_prn"
@@ -47,37 +60,38 @@
             app:srcCompat="@drawable/img_male" />
 
         <TextView
-            android:layoutDirection="ltr"
             android:id="@+id/txt_name_emp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
+            android:layout_marginEnd="8dp"
+            android:layoutDirection="ltr"
             android:text="علیرضا شهسواری"
             android:textColor="?attr/colorOnSecondary"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/btn_info_prn"
+            app:layout_constraintEnd_toEndOf="@+id/progress_circular"
             app:layout_constraintStart_toEndOf="@+id/tablayoutEmp"
             app:layout_constraintTop_toBottomOf="@+id/progress_circular" />
 
         <TextView
-            android:layoutDirection="ltr"
             android:id="@+id/txt_Specialty_emp"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
+            android:layoutDirection="ltr"
             android:text="اندروید کار"
             android:textColor="?attr/colorOnSecondary"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/txt_name_emp"
-            app:layout_constraintStart_toEndOf="@+id/tablayoutEmp"
+            app:layout_constraintEnd_toEndOf="@+id/btn_info_prn"
+            app:layout_constraintStart_toStartOf="@+id/txt_name_emp"
             app:layout_constraintTop_toBottomOf="@+id/txt_name_emp" />
 
         <com.google.android.material.tabs.TabLayout

@@ -1,89 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/shape_back_bottomsheet"
     android:orientation="vertical"
-    android:background="?attr/colorPrimaryVariant"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Dialog.TaskBottomsheetFragment">
 
-    <View
-        android:id="@+id/drag_handle"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="16dp"
-        android:background="?attr/colorOnPrimary"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+    <ImageView
+        android:layout_marginTop="-20dp"
+        android:layout_marginBottom="-20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_remove"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/sheet_btn_done"
-        android:layout_width="90dp"
-        android:layout_height="40dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginStart="16dp"
-        android:background="@drawable/shape_dore_button"
-        android:text="تایید"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:backgroundTint="@color/firoze"
-        app:iconPadding="8dp"
-        app:layout_constraintBottom_toBottomOf="@+id/drag_handle"
-        app:layout_constraintStart_toStartOf="@+id/drag_handle"
-        app:layout_constraintTop_toTopOf="@+id/drag_handle" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="یه وظیفه جدید برا کارمندت ایجاد کن."
-        android:textColor="?attr/colorOnSurface"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/drag_handle"
-        app:layout_constraintEnd_toEndOf="@+id/drag_handle"
-        app:layout_constraintTop_toTopOf="@+id/drag_handle" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout3"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:backgroundTint="@android:color/transparent"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layoutDirection="rtl"
-        android:orientation="horizontal"
-        android:weightSum="2"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout4"
+        android:layout_height="65dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/sheet_btn_done"
+            android:layout_width="90dp"
+            android:layout_height="40dp"
+            android:layout_gravity="start"
+            android:layout_marginStart="16dp"
+            android:background="@drawable/shape_dore_button"
+            android:text="تایید"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:backgroundTint="@color/firoze"
+            app:iconPadding="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginEnd="16dp"
+            android:text="یه وظیفه جدید برا کارمندت ایجاد کن."
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="10dp"
+        android:layout_weight="0.8"
+        android:hint="وظیفه"
+        android:textColorHint="?attr/colorOnSecondary"
+        app:boxStrokeColor="@color/firoze">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/dialog_edt_task"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp"
-            android:layout_weight="0.8"
-            android:hint="وظیفه"
-            android:textColorHint="?attr/colorOnSecondary"
-            app:boxStrokeColor="@color/firoze">
+            android:inputType="text"
+            android:singleLine="true"
+            android:textColor="?attr/colorOnSecondary" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/dialog_edt_task"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text"
-                android:singleLine="true"
-                android:textColor="?attr/colorOnSecondary" />
+    </com.google.android.material.textfield.TextInputLayout>
 
-        </com.google.android.material.textfield.TextInputLayout>
-
-
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout4"
@@ -102,7 +99,6 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp"
             android:layout_weight="1.2"
             android:hint="روز"
             android:textColorHint="?attr/colorOnSecondary"
@@ -127,7 +123,6 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp"
             android:layout_weight="1.2"
             android:hint="ساعت"
             android:textColorHint="?attr/colorOnSecondary"
@@ -152,7 +147,6 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
-            android:layout_marginBottom="5dp"
             android:layout_weight="1.1"
             android:hint="حجم تسک"
             android:textColorHint="?attr/colorOnSecondary"
@@ -200,4 +194,4 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

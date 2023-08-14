@@ -1,16 +1,18 @@
 package ir.aliza.sherkatmanage.fgmSub
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.DataBase.EmployeeDao
-import ir.aliza.sherkatmanage.Position
+import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.ProAndEmpActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.EmployeeAdapter
@@ -36,6 +38,7 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        onBackPressed()
 
         efficiencyEmployeeDao = AppDatabase.getDataBase(view.context).efficiencyDao
 
@@ -48,6 +51,28 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
         onFabClicked()
     }
 
+    fun onBackPressed(){
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(requireContext(), MainActivity::class.java)
+                startActivity(intent)
+            }
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateYourData()
+    }
+
+    private fun updateYourData() {
+        employeeData = employeeDao.getAllEmployee()
+        employeeAdapter = EmployeeAdapter(ArrayList(employeeData), this, efficiencyEmployeeDao)
+        binding.recyclerViewEmployee.adapter = employeeAdapter
+    }
+
+
+
     fun onFabClicked() {
         bindingActivityProAndEmpBinding.btnAdd.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
@@ -58,18 +83,15 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
     }
 
     override fun onEmployeeClicked(employee: Employee, position: Int) {
-        Position = position
         val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
         transaction.replace(
             R.id.layout_pro_and_emp,
-            EmployeeInformationFragment(employee, efficiencyEmployeeDao,position,employeeDao)
+            EmployeeInformationFragment(employee, efficiencyEmployeeDao,position,employeeDao,bindingActivityProAndEmpBinding)
         )
             .addToBackStack(null)
             .commit()
     }
 
-    override fun onEmployeeLongClicked(employee: Employee, position: Int) {
-
-    }
+    override fun onEmployeeLongClicked(employee: Employee, position: Int) {}
 
 }

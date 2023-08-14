@@ -30,7 +30,7 @@ import ir.aliza.sherkatmanage.DataBase.EfficiencyEmployee
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.Dialog.ArrivalsAndDeparturesDialogFragment
 import ir.aliza.sherkatmanage.Dialog.EntryAndExitDialogFragment
-import ir.aliza.sherkatmanage.MainActivity
+import ir.aliza.sherkatmanage.ProAndEmpActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.InOutAdapter
 import ir.aliza.sherkatmanage.databinding.CalendarHeaderBinding
@@ -185,7 +185,7 @@ class EmployeeCalendarFragment(
                                     efficiencyEmployeeDao
                                 )
                                 dialog.isCancelable = false
-                                dialog.show((activity as MainActivity).supportFragmentManager, null)
+                                dialog.show((activity as ProAndEmpActivity).supportFragmentManager, null)
                             } else {
                                 Toast.makeText(
                                     context,
@@ -307,7 +307,7 @@ class EmployeeCalendarFragment(
                                             container.legendLayout
                                         )
                                         dialog.show(
-                                            (activity as MainActivity).supportFragmentManager,
+                                            (activity as ProAndEmpActivity).supportFragmentManager,
                                             null
                                         )
 
@@ -321,7 +321,7 @@ class EmployeeCalendarFragment(
                                                 nameday = "${tv.text}",
                                             )
                                         }
-                                        newDay?.let { it1 -> dayDao.delete(it1) }
+                                        newDay.let { it1 -> dayDao.delete(it1) }
                                         tv.setBackgroundColor(
                                             ContextCompat.getColor(
                                                 tv.context, R.color.blacke

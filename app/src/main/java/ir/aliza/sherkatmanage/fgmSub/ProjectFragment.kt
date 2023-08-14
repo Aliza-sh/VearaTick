@@ -1,28 +1,32 @@
 package ir.aliza.sherkatmanage.fgmSub
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Project
+import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.DataBase.SubTaskProjectDao
-import ir.aliza.sherkatmanage.Dialog.ProjectDialogFragment
+import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.ProAndEmpActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.ProjectNearAdapter
 import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.FragmentProjectBinding
 import ir.aliza.sherkatmanage.projectAdapter
-import ir.aliza.sherkatmanage.projectDao
 
 
 class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : Fragment(), ProjectNearAdapter.ProjectNearEvents {
 
     lateinit var binding: FragmentProjectBinding
     lateinit var subTaskProjectDao: SubTaskProjectDao
+    lateinit var projectDao: ProjectDao
+    lateinit var projectNearData: List<Project>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,9 +39,10 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        onBackPressed()
 
         projectDao = AppDatabase.getDataBase(view.context).projectDao
-        val projectNearData = projectDao.getAllProject()
+        projectNearData = projectDao.getAllProject()
         projectAdapter = ProjectNearAdapter(ArrayList(projectNearData), this, projectDao)
         binding.recyclerViewProject.adapter = projectAdapter
         binding.recyclerViewProject.layoutManager = GridLayoutManager(context, 2)
@@ -47,26 +52,45 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
         onFabClicked()
     }
 
+    fun onBackPressed(){
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                val intent = Intent(requireContext(), MainActivity::class.java)
+                startActivity(intent)
+            }
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        updateYourData()
+    }
+
+    private fun updateYourData() {
+        projectNearData = projectDao.getAllProject()
+        projectAdapter = ProjectNearAdapter(ArrayList(projectNearData), this, projectDao)
+        binding.recyclerViewProject.adapter = projectAdapter
+        binding.recyclerViewProject.layoutManager = GridLayoutManager(context, 2)
+        subTaskProjectDao = AppDatabase.getDataBase(binding.root.context).subTaskEmployeeProjectDao
+    }
+
     fun onFabClicked() {
         bindingActivityProAndEmp.btnAdd.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.add(R.id.layout_pro_and_emp, NewProjectFragment())
+            transaction.add(R.id.layout_pro_and_emp, NewProjectFragment(projectDao,bindingActivityProAndEmp))
                 .addToBackStack(null)
                 .commit()
         }
     }
 
-    override fun onProjectClicked(project: Project,position: Int, day: String, monthName: String) {
+    override fun onProjectClicked(project: Project, position: Int, day: String, monthName: String) {
         val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
         transaction.add(R.id.layout_pro_and_emp, ProjectInformationFragment(project,day,monthName,subTaskProjectDao,
-            projectDao,position))
+            projectDao,position,bindingActivityProAndEmp))
             .addToBackStack(null)
             .commit()
     }
 
-    override fun onProjectLongClicked(project: Project, position: Int) {
-        val dialog = ProjectDialogFragment(project, position)
-        dialog.show((activity as ProAndEmpActivity).supportFragmentManager, null)
-    }
+    override fun onProjectLongClicked(project: Project, position: Int) {}
 
 }

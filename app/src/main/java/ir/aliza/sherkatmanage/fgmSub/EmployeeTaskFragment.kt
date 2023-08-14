@@ -3,6 +3,7 @@ package ir.aliza.sherkatmanage.fgmSub
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
@@ -70,6 +71,7 @@ class EmployeeTaskFragment(
                 selectedDate.toPersianCalendar().persianDay,
                 day.time.hours
             )
+            bottomsheet.setStyle(R.style.BottomSheetStyle,R.style.BottomSheetDialogTheme)
             bottomsheet.show(parentFragmentManager, null)
         }
 
@@ -91,11 +93,11 @@ class EmployeeTaskFragment(
                 view.setOnClickListener {
 
                     val taskDay = taskEmployeeDao.getTaskDay(
-                        position,
+                        employee.idEmployee!!,
                         day.persianCalendar.persianDay
                     )
 
-
+                    Toast.makeText(context, "$taskDay", Toast.LENGTH_SHORT).show()
 
                     if (day.owner == DayOwner.THIS_MONTH) {
                         if (selectedDate != day.date) {

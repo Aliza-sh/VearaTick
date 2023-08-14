@@ -51,6 +51,7 @@ class EntryAndExitDialogFragment(
                 val timeAgo = efficiencyEmployee?.mustWeekWatch!!
                 val timeNew =
                     binding.edtExitEmp.text.toString().toInt() - binding.edtEntryEpm.text.toString()
+                        
                         .toInt()
                 val time = timeNew + timeAgo
 

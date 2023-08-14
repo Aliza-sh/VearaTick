@@ -41,13 +41,13 @@ class ProAndEmpActivity : AppCompatActivity() {
 
             replaceFragment(EmployeeFragment(binding))
         }
+
     }
 
     fun replaceFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.frame_layout_sub, fragment)
-            .addToBackStack(null)
-            .commit()
+        .commit()
     }
 
     fun firstRun() {

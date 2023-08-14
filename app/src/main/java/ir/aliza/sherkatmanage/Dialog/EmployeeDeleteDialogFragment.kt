@@ -1,33 +1,42 @@
 package ir.aliza.sherkatmanage.Dialog
 
-import android.app.AlertDialog
 import android.app.Dialog
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.Window
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.DialogFragment
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.EfficiencyEmployee
 import ir.aliza.sherkatmanage.DataBase.Employee
+import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.FragmentDialogDeleteItemEmployeeBinding
 import ir.aliza.sherkatmanage.employeeAdapter
 import ir.aliza.sherkatmanage.employeeDao
+import ir.aliza.sherkatmanage.fgmSub.EmployeeFragment
+import ir.aliza.sherkatmanage.fgmSub.EmployeeInformationFragment
 
-class EmployeeDialogFragment(private val employee: Employee, private val position: Int) :
+class EmployeeDeleteDialogFragment(
+    private val employee: Employee,
+    private val position: Int,
+    val bindingActivityProAndEmpBinding: ActivityProAndEmpBinding,
+    val employeeInformationFragment: EmployeeInformationFragment
+) :
     DialogFragment() {
 
     lateinit var binding: FragmentDialogDeleteItemEmployeeBinding
-    lateinit var bindingActivityProAndEmpBinding: ActivityProAndEmpBinding
     lateinit var efficiencyDao: EfficiencyDao
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = AlertDialog.Builder(context)
         binding = FragmentDialogDeleteItemEmployeeBinding.inflate(layoutInflater, null, false)
-        bindingActivityProAndEmpBinding =
-            ActivityProAndEmpBinding.inflate(layoutInflater, null, false)
+        val dialog = Dialog(binding.root.context)
         efficiencyDao = AppDatabase.getDataBase(binding.root.context).efficiencyDao
-
-        dialog.setView(binding.root)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(binding.root)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.Transparent.toArgb()))
         dialog.setCancelable(true)
         binding.dialogBtnDeleteCansel.setOnClickListener {
             dismiss()
@@ -38,16 +47,13 @@ class EmployeeDialogFragment(private val employee: Employee, private val positio
             dismiss()
         }
 
-        return dialog.create()
+        return dialog
 
     }
 
     fun onBackPressed() {
-        if (parentFragmentManager.backStackEntryCount > 0) {
-            parentFragmentManager.popBackStack()
-        } else {
-            onBackPressed()
-        }
+        parentFragmentManager.beginTransaction().detach(employeeInformationFragment)
+            .replace(R.id.frame_layout_sub, EmployeeFragment(bindingActivityProAndEmpBinding)).commit()
     }
 
     fun deleteItem(employee: Employee, position: Int) {
