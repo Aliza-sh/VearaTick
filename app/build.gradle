@@ -64,6 +64,9 @@ dependencies {
     implementation 'com.jakewharton.threetenabp:threetenabp:1.0.3'
     implementation 'joda-time:joda-time:2.10.13'
     implementation files('libs/datepicker-0.3.2.aar')
+    implementation 'com.afollestad.material-dialogs:datetime:3.3.0'
+    implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
+
     // Wheel
     implementation 'com.github.gzu-liyujiang.AndroidPicker:WheelView:4.1.11'
 
@@ -105,5 +108,5 @@ dependencies {
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
     // Jetpack Compose Integration
     implementation("androidx.navigation:navigation-compose:$nav_version")
-
+    
 }

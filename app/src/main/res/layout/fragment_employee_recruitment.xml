@@ -11,13 +11,15 @@
         android:id="@+id/btn_bck"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         android:background="@drawable/shape_circle"
         android:elevation="20dp"
+        android:rotationY="180
+"
         android:src="@drawable/ic_back"
         app:backgroundTint="?attr/colorPrimaryVariant"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.button.MaterialButton

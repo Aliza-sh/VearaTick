@@ -71,9 +71,8 @@ class EmployeeInformationFragment(
         onMenuClicked(popupMenu)
 
         binding.btnBack.setOnClickListener{
-            if (parentFragmentManager.backStackEntryCount > 0) {
-                parentFragmentManager.popBackStack()
-            }
+            parentFragmentManager.beginTransaction().detach(this@EmployeeInformationFragment)
+                .replace(R.id.frame_layout_sub,EmployeeFragment(bindingActivityProAndEmpBinding)).commit()
         }
     }
 

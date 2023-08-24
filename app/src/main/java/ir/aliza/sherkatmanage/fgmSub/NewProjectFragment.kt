@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +17,8 @@ import androidx.activity.OnBackPressedCallback
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.Fragment
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
+import com.wdullaer.materialdatetimepicker.time.Timepoint
 import com.xdev.arch.persiancalendar.datepicker.*
 import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import ir.aliza.sherkatmanage.DataBase.Project
@@ -25,6 +29,8 @@ import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.FragmentDialogDeadlineBinding
 import ir.aliza.sherkatmanage.databinding.FragmentNewProjectBinding
 import ir.aliza.sherkatmanage.projectAdapter
+import java.text.DecimalFormat
+
 
 class NewProjectFragment(
     val projectDao: ProjectDao,
@@ -32,6 +38,18 @@ class NewProjectFragment(
 ) : Fragment() {
     lateinit var binding: FragmentNewProjectBinding
     lateinit var bindingDialogView: FragmentDialogDeadlineBinding
+
+    var valueBtnNoDate = false
+    var valueBtnWatch = false
+    var valueBtnCalendar = false
+
+    var btnNoSettlement = false
+    var btnSettlement = false
+
+    var valueWatch = ""
+    var valueCalendar = ""
+
+    private var isUpdating = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -67,46 +85,114 @@ class NewProjectFragment(
             }
         }
 
-        binding.sheetBtnDone.setOnClickListener {
-            addNewProject()
-            onNewProject()
-        }
-
         binding.btnCalendar.setOnClickListener {
             showDeadlineDialog()
         }
+
+        binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
+
+            when (checkedId) {
+
+                R.id.btn_no_settlement -> {
+                    binding.budget.visibility = View.GONE
+                }
+
+                R.id.btn_settlement -> {
+                    binding.budget.visibility = View.VISIBLE
+                }
+
+            }
+        }
+
+        var formattedValue = "0"
+        val decimalFormat = DecimalFormat("#,###")
+        binding.edtBudget.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // قبل از تغییرات متنی
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // در هنگام تغییرات متنی
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // پس از تغییرات متنی
+                if (isUpdating) {
+                    return
+                }
+
+                isUpdating = true
+
+                val input = s.toString().replace(",", "") // حذف ویرگول‌ها از ورودی
+                val value = input.toLongOrNull()
+
+                if (value != null) {
+                    formattedValue = decimalFormat.format(value)
+                    binding.edtBudget.setText(formattedValue)
+                    binding.edtBudget.setSelection(formattedValue.length)
+                    formattedValue = formatCurrency(value)
+                    binding.txtBudget.text = formattedValue
+                }
+                isUpdating = false
+            }
+        })
+
+        binding.btnDone.setOnClickListener {
+
+            if (binding.btnSettlement.isChecked) {
+
+                if (binding.edtBudget.length() > 0) {
+                    addNewProject(formattedValue)
+                } else {
+                    Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT)
+                        .show()
+                }
+            } else {
+                addNewProject(formattedValue)
+            }
+        }
+
     }
 
     private fun showDeadlineDialog() {
 
-        var btnNoDate = false
-        var btnWatch = false
-        var btnCalendar = false
-
+        val parent = bindingDialogView.root.parent as? ViewGroup
+        parent?.removeView(bindingDialogView.root)
         val dialogBuilder = AlertDialog.Builder(bindingDialogView.root.context)
         dialogBuilder.setView(bindingDialogView.root)
 
         bindingDialogView.btnNoDate.setOnClickListener {
-
-            if (!btnNoDate) {
+            if (!valueBtnNoDate && !valueBtnWatch && !valueBtnCalendar) {
                 bindingDialogView.btnNoDate.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
-                btnNoDate = true
+                valueBtnNoDate = true
 
             } else {
                 bindingDialogView.btnNoDate.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
-                btnNoDate = false
+                valueBtnNoDate = false
 
             }
-
         }
 
         bindingDialogView.btnWatch.setOnClickListener {
-            if (!btnNoDate)
-                bindingDialogView.btnWatch.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
+            if (!valueBtnNoDate && !valueBtnWatch) {
+                onCreatePicker()
+            } else {
+                bindingDialogView.btnWatch.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
+                bindingDialogView.txtWatch.text = "ساعت"
+                bindingDialogView.txtWatch.textSize = 20f
+                valueBtnWatch = false
+            }
         }
+
         bindingDialogView.btnCalendar.setOnClickListener {
-            if (!btnNoDate)
-                bindingDialogView.btnCalendar.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
+            if (!valueBtnNoDate && !valueBtnCalendar) {
+                onCreateCalendar()
+            } else {
+                bindingDialogView.txtCalendar.text = "تقویم"
+                bindingDialogView.txtCalendar.textSize = 20f
+                bindingDialogView.btnCalendar.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
+                valueBtnCalendar = false
+            }
         }
 
         val alertDialog = dialogBuilder.create()
@@ -117,6 +203,49 @@ class NewProjectFragment(
         bindingDialogView.dialogBtnCansel.setOnClickListener {
             alertDialog.dismiss()
         }
+        bindingDialogView.dialogBtnSure.setOnClickListener {
+
+            if (valueBtnNoDate)
+                binding.txtDedlineDateTime.text = "پروژه ددلاین \n ندارد "
+            if (valueBtnWatch && !valueBtnCalendar)
+                binding.txtDedlineDateTime.text = valueWatch
+            if (!valueBtnWatch && valueBtnCalendar)
+                binding.txtDedlineDateTime.text = valueCalendar
+            if (valueBtnWatch && valueBtnCalendar)
+                binding.txtDedlineDateTime.text = "$valueCalendar \n$valueWatch "
+
+            alertDialog.dismiss()
+        }
+
+    }
+
+    fun onCreatePicker() {
+
+        val persianCalendar = com.kizitonwose.calendarview.utils.persian.PersianCalendar()
+
+        val timePickerDialog = TimePickerDialog.newInstance(
+            TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute, second ->
+                valueWatch = "$hourOfDay:$minute"
+                bindingDialogView.txtWatch.text = valueWatch
+                bindingDialogView.txtWatch.textSize = 24f
+                bindingDialogView.btnWatch.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
+                valueBtnWatch = true
+            },
+
+            true
+        )
+        timePickerDialog.isThemeDark = true
+        timePickerDialog.setCancelText("بیخیال")
+        timePickerDialog.setOkText("تایید")
+        timePickerDialog.setTimeInterval(1, 1, 10)
+        timePickerDialog.setInitialSelection(
+            Timepoint(
+                persianCalendar.time.hours,
+                persianCalendar.time.minutes
+            )
+        )
+        timePickerDialog.show(parentFragmentManager, "TimePickerDialog")
+
     }
 
     fun onCreateCalendar() {
@@ -138,13 +267,18 @@ class NewProjectFragment(
             .setTheme(R.style.AppTheme_PersianCalendar)
             .setCalendarConstraints(constraints).build()
         datePicker.show((activity as ProAndEmpActivity).supportFragmentManager, "aTag")
+        datePicker.isCancelable
 
         datePicker.addOnPositiveButtonClickListener(
             object : MaterialPickerOnPositiveButtonClickListener<Long?> {
                 @SuppressLint("SetTextI18n")
                 override fun onPositiveButtonClick(selection: Long?) {
                     val date = PersianCalendar(selection!!)
-                    binding.txtDedlineDateTime.text = date.toString()
+                    valueCalendar = date.toString()
+                    bindingDialogView.txtCalendar.text = valueCalendar
+                    bindingDialogView.txtCalendar.textSize = 22f
+                    bindingDialogView.btnCalendar.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
+                    valueBtnCalendar = true
                 }
             }
         )
@@ -168,28 +302,30 @@ class NewProjectFragment(
             .commit()
     }
 
-    private fun addNewProject() {
+    private fun addNewProject(formattedValue: String) {
         if (
             binding.edtNamePro.length() > 0 &&
-            //binding.edtDayProject.length() > 0 &&
+            binding.txtDedlineDateTime.length() > 0 &&
             binding.edtTypeProject.length() > 0 &&
             binding.edtInfoPro.length() > 0
-        //binding.edtTimePro.length() > 0 &&
-        //binding.edtTimePro.text.toString().toInt() <= 24
         ) {
             val txtname = binding.edtNamePro.text.toString()
-            //val txtDay = binding.edtDayProject.text.toString()
-            //val txtTime = binding.edtTimePro.text.toString()
+            val noDeadline = valueBtnNoDate
+            val txtWatch = valueWatch
+            val txtDate = valueCalendar
             val txtType = binding.edtTypeProject.text.toString()
             val txtDescription = binding.edtInfoPro.text.toString()
             val day = PersianCalendar()
+            val txtBudget = formattedValue
 
             val newProject = Project(
                 nameProject = txtname,
-                dayProject = 2,
-                watchProject = 3,
+                noDeadlineProject = noDeadline,
+                watchProject = txtWatch,
+                dateProject = txtDate,
                 typeProject = txtType,
                 descriptionProject = txtDescription,
+                budgetProject = txtBudget,
 
                 year = day.year,
                 month = day.month,
@@ -198,10 +334,14 @@ class NewProjectFragment(
             )
             projectAdapter.addProject(newProject)
             projectDao.insert(newProject)
-            onBackPressed()
+            onNewProject()
         } else {
             Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()
         }
     }
 
+    private fun formatCurrency(value: Long?): String {
+        val decimalFormat = DecimalFormat("#,###")
+        return decimalFormat.format(value) + " تومان"
+    }
 }

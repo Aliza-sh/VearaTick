@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
     android:layout_marginTop="8dp"
-    android:layout_marginBottom="8dp"
     android:layout_marginEnd="8dp"
+    android:layout_marginBottom="8dp"
     android:backgroundTint="?attr/colorPrimaryVariant"
     app:cardCornerRadius="16dp"
     app:cardElevation="8dp"
@@ -18,44 +19,104 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/txt_tack"
+        <ImageButton
+            android:id="@+id/btn_menu_sub_task_project"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_gravity="start"
             android:layout_marginEnd="16dp"
-            android:text="وظیفه"
-            android:textColor="?attr/colorOnSecondary"
-            android:textSize="30sp"
-            android:textStyle="bold"
+            android:background="?attr/colorPrimaryVariant"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
+            app:layout_constraintTop_toTopOf="@+id/txt_dedline_sub_task"
+            app:srcCompat="@drawable/ic_menu" />
 
         <TextView
-            android:id="@+id/txt_description"
+            android:id="@+id/txt_dedline_sub_task"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="20dp"
-            android:text="توضیحات"
-            android:textColor="@color/white_dark"
-            android:textSize="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/txt_tack"
-            app:layout_constraintTop_toBottomOf="@+id/txt_tack" />
-
-        <CheckBox
-            style="@style/Widget.Material3.CompoundButton.CheckBox"
-            android:id="@+id/ckb_done_task_employee"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/shape_dor_di"
+            android:padding="5dp"
+            android:paddingStart="13dp"
+            android:paddingEnd="13dp"
+            android:letterSpacing="0.1"
+            android:text="1402/3/2"
+            android:textColor="?attr/colorOnSecondary"
+            android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/shape_background_rcv"
+            android:backgroundTint="?attr/colorOnPrimary"
+            android:gravity="end"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_dedline_sub_task">
+
+            <TextView
+                android:id="@+id/txt_tack"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="12dp"
+                android:text="وظیفه"
+                android:textColor="?attr/colorOnSecondary"
+                android:textSize="30sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="24dp"
+                android:layout_marginBottom="16dp"
+                android:text="توضیحات"
+                android:textColor="@color/white_dark"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rcv_team_sub_task"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/shape_background_rcv"
+            android:backgroundTint="?attr/colorOnPrimary"
+            android:orientation="horizontal"
+            android:paddingStart="5dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="5dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_add_new_person"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
+            tools:listitem="@layout/item_avatar_small" />
+
+        <ImageButton
+            android:id="@+id/btn_add_new_person"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="32dp"
+            android:background="?attr/colorPrimaryVariant"
+            android:src="@drawable/ic_add_big"
+            app:layout_constraintBottom_toBottomOf="@+id/rcv_team_sub_task"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/rcv_team_sub_task" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

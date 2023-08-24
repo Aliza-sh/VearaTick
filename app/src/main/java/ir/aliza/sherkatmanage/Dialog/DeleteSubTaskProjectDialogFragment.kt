@@ -58,7 +58,7 @@ class DeleteSubTaskProjectDialogFragment(
         val newProject = Project(
             idProject = project1.idProject,
             nameProject = project1.nameProject,
-            dayProject = project1.dayProject,
+            dateProject = project1.dateProject,
             watchProject = project1.watchProject,
             typeProject = project1.typeProject,
             descriptionProject = project1.descriptionProject,

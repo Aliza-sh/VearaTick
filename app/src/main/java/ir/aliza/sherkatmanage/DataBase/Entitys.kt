@@ -107,9 +107,11 @@ data class Project(
 
     val nameProject: String,
     val descriptionProject: String,
-    val watchProject: Int,
-    val dayProject: Int,
+    val noDeadlineProject: Boolean? = false,
+    val watchProject: String? = "0",
+    val dateProject: String? = "0",
     val typeProject: String,
+    val budgetProject: String? = "0",
 
     val progressProject: Int? = 0,
     val doneProject: Boolean? = false,

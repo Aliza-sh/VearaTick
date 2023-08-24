@@ -12,7 +12,7 @@ import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.FragmentDialogDeleteItemProjectBinding
-import ir.aliza.sherkatmanage.fgmSub.EmployeeFragment
+import ir.aliza.sherkatmanage.fgmSub.ProjectFragment
 import ir.aliza.sherkatmanage.fgmSub.ProjectInformationFragment
 import ir.aliza.sherkatmanage.projectAdapter
 
@@ -44,12 +44,11 @@ class ProjectDeleteDialogFragment(
         }
 
         return dialog
-
     }
 
     fun onBackPressed() {
         parentFragmentManager.beginTransaction().detach(projectInformationFragment)
-            .replace(R.id.frame_layout_sub, EmployeeFragment(bindingActivityProAndEmp)).commit()
+            .replace(R.id.frame_layout_sub, ProjectFragment(bindingActivityProAndEmp)).commit()
     }
 
     fun deleteItem(project: Project, position: Int) {

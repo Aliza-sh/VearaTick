@@ -5,8 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.kizitonwose.calendarview.utils.persian.PersianCalendar
-import com.kizitonwose.calendarview.utils.persian.withMonth
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
@@ -34,17 +32,19 @@ class ProjectNearAdapter(
                 binding.recyclerView.adapter = teamProjectAdapter
             }
 
-            val calendar = PersianCalendar()
-            val inDay = calendar.persianDay
-
-            val day = inDay + data[position].dayProject
-
-            val monthValue = day / 30 + calendar.persianMonth
-            val dayValue = (day % 30)
-
             binding.txtNamePro.text = data[position].nameProject
-            binding.txtTimePro.text =
-                dayValue.toString() + " " + calendar.withMonth(monthValue).persianMonthName
+
+            if (data[position].noDeadlineProject!!) {
+                binding.txtDatePro.text = " "
+            } else {
+                if (data[position].dateProject != "" && data[position].watchProject == "")
+                    binding.txtDatePro.text = data[position].dateProject
+                else if (data[position].dateProject == "" && data[position].watchProject != "")
+                    binding.txtDatePro.text = "امروز" + "\n" + data[position].watchProject
+                else if (data[position].dateProject != "" && data[position].watchProject != "")
+                    binding.txtDatePro.text =
+                        data[position].dateProject + "\n" + data[position].watchProject
+            }
 
             binding.progressLimit4.progress = data[position].progressProject!!
             binding.txtProg.text = data[position].progressProject!!.toString() + "%"
@@ -53,8 +53,8 @@ class ProjectNearAdapter(
                 projectNearEvents.onProjectClicked(
                     data[position],
                     position,
-                    dayValue.toString(),
-                    calendar.withMonth(monthValue).persianMonthName
+                    data[position].dateProject!!,
+                    data[position].watchProject!!
                 )
             }
 
@@ -110,7 +110,13 @@ class ProjectNearAdapter(
     }
 
     interface ProjectNearEvents {
-        fun onProjectClicked(project: Project, position: Int, day: String, monthName: String)
+        fun onProjectClicked(
+            project: Project,
+            position: Int,
+            dateProject: String,
+            watchProject: String
+        )
+
         fun onProjectLongClicked(project: Project, position: Int)
     }
 }

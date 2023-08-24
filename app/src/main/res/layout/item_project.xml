@@ -73,20 +73,21 @@
             app:layout_constraintVertical_bias="0.477" />
 
         <TextView
-            android:id="@+id/txt_time_pro"
+            android:id="@+id/txt_date_pro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="10dp"
             android:background="@drawable/shape_dor_di"
+            android:gravity="center"
+            android:letterSpacing="0.09"
             android:padding="5dp"
             android:paddingStart="13dp"
             android:paddingEnd="13dp"
-            android:text="یک هفته"
+            android:text="1400/2/12"
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="14sp"
+            android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/cardView2" />
 
         <TextView
             android:id="@+id/txt_name_pro"

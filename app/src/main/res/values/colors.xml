@@ -25,14 +25,14 @@
     <color name="fi_light">#7AC9BE</color>
     <color name="fi_dark">#289889</color>
 
-    <color name="blue_dark">#68A7B1</color>
-    <color name="blue_light">#97DAE4</color>
+    <color name="blue_dark">#3188A8</color>
+    <color name="blue_light">#3294B5</color>
 
-    <color name="yelowe_dark">#B6AA3B</color>
-    <color name="yelowe_light">#F2E45B</color>
+    <color name="yelowe_dark">#DDB55B</color>
+    <color name="yelowe_light">#FCCD66</color>
 
-    <color name="green_dark">#4D7E68</color>
-    <color name="green_light">#6D9884</color>
+    <color name="green_dark">#60AA83</color>
+    <color name="green_light">#65B68B</color>
 
     <color name="example_4_grey">#474747</color>
     <color name="example_4_green">#008489</color>

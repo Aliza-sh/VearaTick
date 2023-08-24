@@ -6,8 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.kizitonwose.calendarview.utils.persian.PersianCalendar
-import com.kizitonwose.calendarview.utils.persian.withMonth
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.DataBase.SubTaskProject
@@ -27,8 +25,8 @@ class SubTaskBottomsheetFragment(
     val position: Int,
     val bindingActivityProAndEmp: ActivityProAndEmpBinding,
     val projectInformationFragment: ProjectInformationFragment,
-    val day: String,
-    val monthName: String,
+    val watchProject: String,
+    val dateProject: String,
 ) : BottomSheetDialogFragment() {
 
     lateinit var binding: BottomsheetfragmentSubtaskBinding
@@ -56,8 +54,8 @@ class SubTaskBottomsheetFragment(
                 R.id.layout_pro_and_emp,
                 ProjectInformationFragment(
                     project,
-                    day,
-                    monthName,
+                    watchProject,
+                    dateProject,
                     subTaskProjectDao,
                     projectDao,
                     position,
@@ -91,7 +89,7 @@ class SubTaskBottomsheetFragment(
             val newProject = Project(
                 idProject = project1.idProject,
                 nameProject = project1.nameProject,
-                dayProject = project1.dayProject,
+                dateProject = project1.dateProject,
                 watchProject = project1.watchProject,
                 typeProject = project1.typeProject,
                 descriptionProject = project1.descriptionProject,
@@ -105,20 +103,11 @@ class SubTaskBottomsheetFragment(
             )
             projectDao.update(newProject)
 
-
-            val calendar = PersianCalendar()
-            val inDay = calendar.persianDay
-
-            val day = inDay + project1.dayProject.toInt()
-
-            val monthValue = day / 30 + calendar.persianMonth
-            val dayValue = (day % 30)
-
             val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
             transaction.replace(R.id.layout_pro_and_emp, ProjectInformationFragment(
                 project,
-                dayValue.toString(),
-                calendar.withMonth(monthValue).persianMonthName,
+                project1.watchProject!!,
+                project1.dateProject!!,
                 subTaskProjectDao,
                 projectDao,
                 position,

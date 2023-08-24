@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ir.aliza.sherkatmanage.DataBase.TeamProject
-import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.ItemAvatarSmallBinding
 
 class AvatarTeamProjectAdapter(private val data: ArrayList<TeamProject>) :
@@ -19,10 +18,10 @@ class AvatarTeamProjectAdapter(private val data: ArrayList<TeamProject>) :
         @SuppressLint("SetTextI18n")
         fun bindData(position: Int) {
 
-            binding.txtNameEmployee.text = data[position].nameEmployee + " " + data[position].familyEmployee
-            if (data[position].genderEmployee == "زن"){
-                binding.imgEmployee.setImageResource(R.drawable.img_matter);
-            }
+//            binding.txtNameEmployee.text = data[position].nameEmployee + " " + data[position].familyEmployee
+//            if (data[position].genderEmployee == "زن"){
+//                binding.imgEmployee.setImageResource(R.drawable.img_matter);
+//            }
 
         }
 
@@ -46,7 +45,7 @@ class AvatarTeamProjectAdapter(private val data: ArrayList<TeamProject>) :
     }
 
     override fun getItemCount(): Int {
-        return data.size
+        return 5
     }
 
 }
