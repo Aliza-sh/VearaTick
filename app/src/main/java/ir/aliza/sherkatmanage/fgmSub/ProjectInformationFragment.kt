@@ -1,5 +1,6 @@
 package ir.aliza.sherkatmanage.fgmSub
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.DataBase.SubTaskProject
@@ -17,6 +19,7 @@ import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.ProAndEmpActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.SubTaskProjectAdapter
+import ir.aliza.sherkatmanage.adapter.TeamProjectAdapter
 import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.FragmentProjectInformationBinding
 
@@ -47,6 +50,36 @@ class ProjectInformationFragment(
         onBackPressed()
 
         project = projectDao.getProject(project.idProject!!)!!
+        setData(view)
+
+        binding.btnBck.setOnClickListener {
+            parentFragmentManager.beginTransaction().detach(this@ProjectInformationFragment)
+                .replace(R.id.frame_layout_sub, ProjectFragment(bindingActivityProAndEmp)).commit()
+        }
+
+        binding.btnAddNewPerson.setOnClickListener {
+            val transaction =
+                (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.layout_pro_and_emp, NewPersonAddToProjectFragment(project))
+                .addToBackStack(null)
+                .commit()
+        }
+
+        binding.btnSeeMoreSubTaskPro.setOnClickListener {
+            val transaction =
+                (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.layout_pro_and_emp, ProjectSubTaskFragment(project,projectDao,position,bindingActivityProAndEmp,subTaskProjectDao))
+                .addToBackStack(null)
+                .commit()
+        }
+
+        val popupMenu = PopupMenu(this.context, binding.btnMenuProject)
+        onMenuClicked(popupMenu)
+
+    }
+
+    @SuppressLint("SetTextI18n")
+    fun setData(view: View) {
 
         binding.txtNamePro.text = project.nameProject
         binding.txtDescription.text = project.descriptionProject
@@ -64,72 +97,49 @@ class ProjectInformationFragment(
         }
 
         if (!project.noDeadlineProject!!) {
-
-            if (project.dateProject != "" && project.watchProject!= ""){
+            if (project.dateDeadlineProject != "" && project.watchDeadlineProject != "") {
                 binding.txtWatch.text = watchProject
                 binding.txtDate.text = dateProject
-            }else if (project.dateProject != "" && project.watchProject == ""){
+            } else if (project.dateDeadlineProject != "" && project.watchDeadlineProject == "") {
                 binding.txtWatch.text = " ندارد"
                 binding.txtDate.text = dateProject
-            }else if (project.dateProject == "" && project.watchProject != ""){
+            } else if (project.dateDeadlineProject == "" && project.watchDeadlineProject != "") {
                 binding.txtWatch.text = watchProject
                 binding.txtDate.text = " امروز"
             }
-
         } else {
-
             binding.imageView4.visibility = View.GONE
             binding.imageView3.visibility = View.GONE
             binding.txtDate.visibility = View.GONE
             binding.txtWatch.visibility = View.GONE
             binding.txtNoDeadline.text = "پروژه ددلاین \nندارد"
-
-        }
-
-        binding.btnBck.setOnClickListener {
-            parentFragmentManager.beginTransaction().detach(this@ProjectInformationFragment)
-                .replace(R.id.frame_layout_sub, ProjectFragment(bindingActivityProAndEmp)).commit()
         }
 
         binding.progressPro.progress = project.progressProject!!
         binding.txtProg.text = project.progressProject.toString() + "%"
 
-//        binding.btnAddNewPerson.setOnClickListener {
-//            val transaction =
-//                (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
-//            transaction.replace(R.id.layout_pro_and_emp, NewPersonAddToProjectFragment(project))
-//                .addToBackStack(null)
-//                .commit()
-//        }
-//
-//        if (project.idProject != null) {
-//
-//            val teamProjectDao = AppDatabase.getDataBase(view.context).teamProjectDao
-//            val teamProjectData = teamProjectDao.getListTeamProject(project.idProject!!)
-//            val teamProjectAdapter = TeamProjectAdapter(ArrayList(teamProjectData))
-//            binding.rcvTeam.adapter = teamProjectAdapter
-//
-//            val subTaskProjectData = subTaskProjectDao.getSubTaskProject(project.idProject!!)
-//            subTaskProjectAdapter =
-//                SubTaskProjectAdapter(
-//                    ArrayList(subTaskProjectData),
-//                    this,
-//                    project,
-//                    subTaskProjectDao,
-//                    projectDao,
-//                    binding
-//                )
-//            binding.rcvTskPro.adapter = subTaskProjectAdapter
-
-//        }
-
         binding.txtNumTaskPro.text =
-            project!!.numberDoneSubTaskProject.toString() + " از " + project!!.numberSubTaskProject.toString()
+            project.numberDoneSubTaskProject.toString() + " از " + project.numberSubTaskProject.toString()
 
-        onFabClicked(project)
+        if (project.idProject != null) {
 
-        val popupMenu = PopupMenu(this.context, binding.btnMenuProject)
-        onMenuClicked(popupMenu)
+            val teamProjectDao = AppDatabase.getDataBase(view.context).teamProjectDao
+            val teamProjectData = teamProjectDao.getListTeamProject(project.idProject!!)
+            val teamProjectAdapter = TeamProjectAdapter(ArrayList(teamProjectData))
+            binding.rcvTeam.adapter = teamProjectAdapter
+
+            val subTaskProjectData = subTaskProjectDao.getSubTaskProject(project.idProject!!)
+            subTaskProjectAdapter =
+                SubTaskProjectAdapter(
+                    ArrayList(subTaskProjectData),
+                    this,
+                    project,
+                    projectDao,
+                    subTaskProjectDao,
+                )
+            binding.rcvTskPro.adapter = subTaskProjectAdapter
+
+        }
 
     }
 
@@ -201,26 +211,6 @@ class ProjectInformationFragment(
                 true
             }
         }
-    }
-
-    private fun onFabClicked(project: Project) {
-
-//        binding.btnFabTack.setOnClickListener {
-//            val bottomsheet = SubTaskBottomsheetFragment(
-//                subTaskProjectDao,
-//                project,
-//                subTaskProjectAdapter,
-//                projectDao,
-//                position,
-//                bindingActivityProAndEmp,
-//                this,
-//                watchProject,
-//                dateProject
-//            )
-//            bottomsheet.setStyle(R.style.BottomSheetStyle, R.style.BottomSheetDialogTheme)
-//            bottomsheet.show((activity as MainActivity).supportFragmentManager, null)
-//
-//        }
     }
 
     override fun onSubTaskClicked(task: SubTaskProject, position: Int) {}

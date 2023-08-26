@@ -282,7 +282,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/edt_info_pro"
                             android:layout_width="match_parent"
-                            android:layout_height="100dp"
+                            android:layout_height="130dp"
                             android:backgroundTint="?attr/colorPrimaryVariant"
                             android:gravity="top"
                             android:textColor="?attr/colorOnSecondary" />

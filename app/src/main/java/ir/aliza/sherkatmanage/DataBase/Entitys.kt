@@ -108,8 +108,8 @@ data class Project(
     val nameProject: String,
     val descriptionProject: String,
     val noDeadlineProject: Boolean? = false,
-    val watchProject: String? = "0",
-    val dateProject: String? = "0",
+    val watchDeadlineProject: String? = "0",
+    val dateDeadlineProject: String? = "0",
     val typeProject: String,
     val budgetProject: String? = "0",
 
@@ -118,10 +118,6 @@ data class Project(
 
     val numberSubTaskProject: Int? = 0,
     val numberDoneSubTaskProject: Int? = 0,
-
-    val year: Int,
-    val month: Int,
-    val day: Int,
 
 )
 
@@ -148,9 +144,13 @@ data class SubTaskProject(
     val idProject: Int,
 
     val nameSubTask: String,
-    val descriptionTask: String,
-    val doneSubTask: Boolean? = null
-)
+    val descriptionSubTask: String,
+    val doneSubTask: Boolean? = false,
+    val noDeadlineSubTask: Boolean? = false,
+    val watchDeadlineSubTask: String? = "0",
+    val dateDeadlineSubTask: String? = "0",
+    val volumeTask: Int,
+    )
 
 @Entity(tableName = "efficiency_table")
 data class EfficiencyEmployee(

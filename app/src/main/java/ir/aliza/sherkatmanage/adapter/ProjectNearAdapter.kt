@@ -37,13 +37,13 @@ class ProjectNearAdapter(
             if (data[position].noDeadlineProject!!) {
                 binding.txtDatePro.text = " "
             } else {
-                if (data[position].dateProject != "" && data[position].watchProject == "")
-                    binding.txtDatePro.text = data[position].dateProject
-                else if (data[position].dateProject == "" && data[position].watchProject != "")
-                    binding.txtDatePro.text = "امروز" + "\n" + data[position].watchProject
-                else if (data[position].dateProject != "" && data[position].watchProject != "")
+                if (data[position].dateDeadlineProject != "" && data[position].watchDeadlineProject == "")
+                    binding.txtDatePro.text = data[position].dateDeadlineProject
+                else if (data[position].dateDeadlineProject == "" && data[position].watchDeadlineProject != "")
+                    binding.txtDatePro.text = "امروز" + "\n" + data[position].watchDeadlineProject
+                else if (data[position].dateDeadlineProject != "" && data[position].watchDeadlineProject != "")
                     binding.txtDatePro.text =
-                        data[position].dateProject + "\n" + data[position].watchProject
+                        data[position].dateDeadlineProject + "\n" + data[position].watchDeadlineProject
             }
 
             binding.progressLimit4.progress = data[position].progressProject!!
@@ -53,8 +53,8 @@ class ProjectNearAdapter(
                 projectNearEvents.onProjectClicked(
                     data[position],
                     position,
-                    data[position].dateProject!!,
-                    data[position].watchProject!!
+                    data[position].dateDeadlineProject!!,
+                    data[position].watchDeadlineProject!!
                 )
             }
 

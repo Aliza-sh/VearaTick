@@ -43,9 +43,6 @@ class NewProjectFragment(
     var valueBtnWatch = false
     var valueBtnCalendar = false
 
-    var btnNoSettlement = false
-    var btnSettlement = false
-
     var valueWatch = ""
     var valueCalendar = ""
 
@@ -315,21 +312,16 @@ class NewProjectFragment(
             val txtDate = valueCalendar
             val txtType = binding.edtTypeProject.text.toString()
             val txtDescription = binding.edtInfoPro.text.toString()
-            val day = PersianCalendar()
             val txtBudget = formattedValue
 
             val newProject = Project(
                 nameProject = txtname,
                 noDeadlineProject = noDeadline,
-                watchProject = txtWatch,
-                dateProject = txtDate,
+                watchDeadlineProject =  txtWatch,
+                dateDeadlineProject = txtDate,
                 typeProject = txtType,
                 descriptionProject = txtDescription,
                 budgetProject = txtBudget,
-
-                year = day.year,
-                month = day.month,
-                day = day.day
 
             )
             projectAdapter.addProject(newProject)

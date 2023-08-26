@@ -151,7 +151,6 @@
                     android:text="00 : 00"
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="20sp"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView4"
                     app:layout_constraintEnd_toStartOf="@+id/imageView4"
                     app:layout_constraintTop_toTopOf="@+id/imageView4" />
@@ -166,7 +165,6 @@
                     android:letterSpacing="0.1"
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="24sp"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -181,7 +179,6 @@
                     android:text="1402/3/2"
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="20sp"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView3"
                     app:layout_constraintEnd_toStartOf="@+id/imageView3"
                     app:layout_constraintTop_toTopOf="@+id/imageView3" />
@@ -216,7 +213,6 @@
                     android:letterSpacing="0.1"
                     android:textColor="?attr/colorOnSurfaceVariant"
                     android:textSize="24sp"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -246,7 +242,6 @@
                     android:text="0 تومان"
                     android:textColor="@color/firoze"
                     android:textSize="24sp"
-                    android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/textView160"
                     app:layout_constraintTop_toBottomOf="@+id/textView160" />
 
@@ -259,7 +254,6 @@
                     android:text=" تصویه"
                     android:textColor="@color/whity"
                     android:textSize="16sp"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="@+id/btn_go_to_settlement"
                     app:layout_constraintStart_toEndOf="@+id/btn_go_to_settlement"
                     app:layout_constraintTop_toTopOf="@+id/btn_go_to_settlement" />
@@ -303,8 +297,8 @@
                 <Button
                     android:id="@+id/btn_see_more_sub_task_pro"
                     style="@style/Widget.Material3.Button.OutlinedButton.Icon"
-                    android:layout_width="60dp"
-                    android:layout_height="35dp"
+                    android:layout_width="75dp"
+                    android:layout_height="40dp"
                     android:layout_marginStart="12dp"
                     android:gravity="center"
                     android:paddingLeft="0dp"
@@ -312,8 +306,8 @@
                     android:paddingRight="0dp"
                     android:paddingBottom="0dp"
                     android:text="تسک ها"
-                    android:textColor="@color/white"
-                    android:textSize="12sp"
+                    android:textColor="@color/firoze"
+                    android:textSize="16sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/txt_date_target"
                     app:strokeColor="@color/firoze" />

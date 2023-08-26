@@ -1,0 +1,30 @@
+    private fun progressPro():Int {
+        val project1 = projectDao.getProject(project.idProject!!)
+
+        val numSubTask = project1!!.numberSubTaskProject
+        val numDoneSubTask = project1.numberDoneSubTaskProject
+        var efficiencyProject = 0
+
+        if (numSubTask != null) {
+            efficiencyProject = ((numDoneSubTask!!.toDouble() / numSubTask) * 100).toInt()
+
+        }
+        val newProject = Project(
+            idProject = project1.idProject,
+            nameProject = project1.nameProject,
+            dateProject = project1.dateProject,
+            watchProject = project1.watchProject,
+            typeProject = project1.typeProject,
+            descriptionProject = project1.descriptionProject,
+            numberSubTaskProject = project1.numberSubTaskProject,
+            numberDoneSubTaskProject = project1.numberDoneSubTaskProject,
+            progressProject = efficiencyProject,
+            year = project.year,
+            month = project.month,
+            day = project.day
+
+        )
+        projectDao.update(newProject)
+
+        return efficiencyProject
+    }

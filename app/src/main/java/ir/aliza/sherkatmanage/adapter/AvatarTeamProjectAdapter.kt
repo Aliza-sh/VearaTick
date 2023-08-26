@@ -45,7 +45,7 @@ class AvatarTeamProjectAdapter(private val data: ArrayList<TeamProject>) :
     }
 
     override fun getItemCount(): Int {
-        return 5
+        return data.size
     }
 
 }
