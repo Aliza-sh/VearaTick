@@ -1,5 +1,6 @@
 package ir.aliza.sherkatmanage.fgmSub
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -27,7 +28,7 @@ class EmployeeStatisticsFragment(
         binding = FragmentEmployeeStatisticsBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
-
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -37,9 +38,8 @@ class EmployeeStatisticsFragment(
         if (efficiencyEmployee != null) {
             if (day.persianWeekDayName.toString() == "\u062c\u0645\u0639\u0647") {
 
-
-                val weekWatch = efficiencyEmployee?.totalWeekWatch
-                var monthWatch = efficiencyEmployee?.totalMonthWatch
+                val weekWatch = efficiencyEmployee.totalWeekWatch
+                var monthWatch = efficiencyEmployee.totalMonthWatch
                 monthWatch = weekWatch!! + monthWatch!!
 
                 val efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence
@@ -68,8 +68,8 @@ class EmployeeStatisticsFragment(
                 efficiencyEmployeeDao.update(newEfficiencyEmployee)
 
             } else {
-                efficiencyEmployee?.totalMonthWatch =
-                    efficiencyEmployee?.totalWeekWatch!! + efficiencyEmployee.totalMonthWatch!!
+                efficiencyEmployee.totalMonthWatch =
+                    efficiencyEmployee.totalWeekWatch!! + efficiencyEmployee.totalMonthWatch!!
                 efficiencyEmployee.efficiencyTotalPresence =
                     efficiencyEmployee.efficiencyTotalPresence!! + efficiencyEmployee.efficiencyWeekPresence!!
             }

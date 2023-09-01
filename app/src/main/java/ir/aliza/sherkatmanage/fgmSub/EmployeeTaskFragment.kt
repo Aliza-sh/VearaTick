@@ -71,10 +71,9 @@ class EmployeeTaskFragment(
                 selectedDate.toPersianCalendar().persianDay,
                 day.time.hours
             )
-            bottomsheet.setStyle(R.style.BottomSheetStyle,R.style.BottomSheetDialogTheme)
+            bottomsheet.setStyle(R.style.BottomSheetStyle, R.style.BottomSheetDialogTheme)
             bottomsheet.show(parentFragmentManager, null)
         }
-
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -177,7 +176,6 @@ class EmployeeTaskFragment(
                     )
 
                 }
-
 
                 val colorRes = if (day.date == selectedDate) {
                     R.color.firoze

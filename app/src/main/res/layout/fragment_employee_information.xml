@@ -57,7 +57,7 @@
                 android:layout_marginEnd="8dp">
 
                 <com.mikhaellopez.circularprogressbar.CircularProgressBar
-                    android:id="@+id/progress_circular"
+                    android:id="@+id/prg_total_emp"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     app:cpb_background_progressbar_color="@color/white"
@@ -76,10 +76,10 @@
                     android:layout_width="60dp"
                     android:layout_height="60dp"
                     android:layout_gravity="center|top"
-                    app:layout_constraintBottom_toBottomOf="@+id/progress_circular"
-                    app:layout_constraintEnd_toEndOf="@+id/progress_circular"
-                    app:layout_constraintStart_toStartOf="@+id/progress_circular"
-                    app:layout_constraintTop_toTopOf="@+id/progress_circular"
+                    app:layout_constraintBottom_toBottomOf="@+id/prg_total_emp"
+                    app:layout_constraintEnd_toEndOf="@+id/prg_total_emp"
+                    app:layout_constraintStart_toStartOf="@+id/prg_total_emp"
+                    app:layout_constraintTop_toTopOf="@+id/prg_total_emp"
                     app:srcCompat="@drawable/img_male" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>

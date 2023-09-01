@@ -128,9 +128,9 @@ class EmployeeInformationFragment(
         binding.txtNameEmp.text = employee.name + " " + employee.family
         binding.txtSpecialtyEmp.text = employee.specialty
 
-//        val progress = efficiencyEmployeeDao.getEfficiencyEmployee(employee.idEmployee!!)
-//        val progressEmployee  = progress!!.efficiencyTotal
-//        binding.progressCircular.progress = progressEmployee!!.toFloat()
+        val progress = efficiencyEmployeeDao.getEfficiencyEmployee(employee.idEmployee!!)
+        val progressEmployee  = progress!!.efficiencyTotal
+       binding.prgTotalEmp.progress = progressEmployee!!.toFloat()
 
         if (employee.gender == "زن") {
             binding.btnInfoPrn.setImageResource(R.drawable.img_matter)
