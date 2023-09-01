@@ -1,8 +1,11 @@
 package ir.aliza.sherkatmanage.Dialog
 
-import android.app.AlertDialog
 import android.app.Dialog
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.view.Window
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.DialogFragment
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
@@ -10,7 +13,6 @@ import ir.aliza.sherkatmanage.DataBase.SubTaskProject
 import ir.aliza.sherkatmanage.DataBase.SubTaskProjectDao
 import ir.aliza.sherkatmanage.adapter.SubTaskProjectAdapter
 import ir.aliza.sherkatmanage.databinding.FragmentDialogDeleteSubtaskProjectBinding
-import ir.aliza.sherkatmanage.databinding.FragmentProjectInformationBinding
 
 class DeleteSubTaskProjectDialogFragment(
     private val subTaskProject: SubTaskProject,
@@ -19,15 +21,17 @@ class DeleteSubTaskProjectDialogFragment(
     val subTaskProjectAdapter: SubTaskProjectAdapter,
     val projectDao: ProjectDao,
     val project: Project,
-    val binding1: FragmentProjectInformationBinding
 ) : DialogFragment() {
 
     lateinit var binding: FragmentDialogDeleteSubtaskProjectBinding
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dialog = AlertDialog.Builder(context)
+
         binding = FragmentDialogDeleteSubtaskProjectBinding.inflate(layoutInflater, null, false)
-        dialog.setView(binding.root)
+        val dialog = Dialog(binding.root.context)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setContentView(binding.root)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.Transparent.toArgb()))
         dialog.setCancelable(true)
         binding.dialogBtnDeleteCansel.setOnClickListener {
             dismiss()
@@ -37,39 +41,44 @@ class DeleteSubTaskProjectDialogFragment(
             deleteItem(subTaskProject, position)
         }
 
-        return dialog.create()
-
+        return dialog
     }
 
     fun deleteItem(subTaskProject: SubTaskProject, position: Int) {
-        subTaskProjectAdapter.deleteSubTask(subTaskProject, position)
-        subTaskProjectDao.delete(subTaskProject)
 
         val project1 = projectDao.getProject(project.idProject!!)
-
         var numberDonSubTaskProject = project1!!.numberDoneSubTaskProject
         var numberSubTaskProject = project1.numberSubTaskProject
 
-        if (numberSubTaskProject != 0 && numberDonSubTaskProject != 0) {
+        if (subTaskProject.doneSubTask!!) {
             numberSubTaskProject = numberSubTaskProject!! - 1
             numberDonSubTaskProject = numberDonSubTaskProject!! - 1
-        }
+        } else
+            numberSubTaskProject = numberSubTaskProject!! - 1
+
+        subTaskProjectAdapter.deleteSubTask(subTaskProject, position)
+        subTaskProjectDao.delete(subTaskProject)
+
+        var efficiencyProject = 0
+
+        if (numberSubTaskProject != null)
+            efficiencyProject =
+                ((numberDonSubTaskProject!!.toDouble() / numberSubTaskProject) * 100).toInt()
 
         val newProject = Project(
             idProject = project1.idProject,
             nameProject = project1.nameProject,
+            noDeadlineProject = project1.noDeadlineProject,
             dateDeadlineProject = project1.dateDeadlineProject,
             watchDeadlineProject = project1.watchDeadlineProject,
             typeProject = project1.typeProject,
             descriptionProject = project1.descriptionProject,
             numberSubTaskProject = numberSubTaskProject,
             numberDoneSubTaskProject = numberDonSubTaskProject,
-
+            progressProject = efficiencyProject,
+            budgetProject = project1.budgetProject,
+            doneProject = project1.doneProject
         )
         projectDao.update(newProject)
-
-        binding1.txtNumTaskPro.text =
-            numberDonSubTaskProject.toString() + " از " + numberSubTaskProject.toString()
     }
-
 }

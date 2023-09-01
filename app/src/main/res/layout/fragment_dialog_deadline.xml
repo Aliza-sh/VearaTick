@@ -142,7 +142,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="32dp"
             android:background="@drawable/shape_dore_button"
-            android:backgroundTint="@color/firoze"
+            app:backgroundTint="@color/firoze"
             android:text="تایید"
             android:textColor="@color/white"
             android:textSize="16sp"

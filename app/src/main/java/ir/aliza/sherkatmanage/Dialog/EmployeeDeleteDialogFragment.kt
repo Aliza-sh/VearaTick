@@ -31,6 +31,7 @@ class EmployeeDeleteDialogFragment(
     lateinit var efficiencyDao: EfficiencyDao
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
+
         binding = FragmentDialogDeleteItemEmployeeBinding.inflate(layoutInflater, null, false)
         val dialog = Dialog(binding.root.context)
         efficiencyDao = AppDatabase.getDataBase(binding.root.context).efficiencyDao
@@ -48,7 +49,6 @@ class EmployeeDeleteDialogFragment(
         }
 
         return dialog
-
     }
 
     fun onBackPressed() {

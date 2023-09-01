@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [Project::class,TeamProject::class, Employee::class,Day::class, EfficiencyEmployee::class, TaskEmployee::class, Time::class, SubTaskProject::class],
+    entities = [Project::class,TeamProject::class, Employee::class,Day::class, EfficiencyEmployee::class, TaskEmployee::class, Time::class, SubTaskProject::class,TeamSubTask::class],
     version = 1,
     exportSchema = false
 )
@@ -19,7 +19,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val efficiencyDao: EfficiencyDao
     abstract val TaskDao: TaskEmployeeDao
     abstract val timeDao: TimeDao
-    //abstract val subTaskEmployeeTackDao: SubTaskEmployeeTackDao
+    abstract val teamSubTaskDao: TeamSubTaskDao
     abstract val subTaskEmployeeProjectDao: SubTaskProjectDao
     companion object {
 

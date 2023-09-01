@@ -1,27 +1,34 @@
 package ir.aliza.sherkatmanage.fgmSub
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.PopupMenu
 import androidx.activity.OnBackPressedCallback
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.Fragment
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.DataBase.SubTaskProject
 import ir.aliza.sherkatmanage.DataBase.SubTaskProjectDao
-import ir.aliza.sherkatmanage.Dialog.DeleteSubTaskProjectDialogFragment
 import ir.aliza.sherkatmanage.Dialog.ProjectDeleteDialogFragment
-import ir.aliza.sherkatmanage.MainActivity
+import ir.aliza.sherkatmanage.Dialog.ProjectUpdateSubTaskFromInfoBottomsheetFragment
 import ir.aliza.sherkatmanage.ProAndEmpActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.SubTaskProjectAdapter
 import ir.aliza.sherkatmanage.adapter.TeamProjectAdapter
 import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
+import ir.aliza.sherkatmanage.databinding.FragmentDialogDeleteSubtaskProjectBinding
 import ir.aliza.sherkatmanage.databinding.FragmentProjectInformationBinding
+import ir.aliza.sherkatmanage.databinding.ItemSubTaskBinding
 
 class ProjectInformationFragment(
     var project: Project,
@@ -34,7 +41,10 @@ class ProjectInformationFragment(
 ) : Fragment(), SubTaskProjectAdapter.SubTaskEvent {
 
     lateinit var binding: FragmentProjectInformationBinding
+    lateinit var bindingDialogDeleteSubtaskProject: FragmentDialogDeleteSubtaskProjectBinding
+    lateinit var bindingItemSubTask: ItemSubTaskBinding
     lateinit var subTaskProjectAdapter: SubTaskProjectAdapter
+    var numberDonSubTaskProject = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,6 +52,10 @@ class ProjectInformationFragment(
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentProjectInformationBinding.inflate(layoutInflater, container, false)
+        bindingItemSubTask = ItemSubTaskBinding.inflate(layoutInflater, container, false)
+        bindingDialogDeleteSubtaskProject =
+            FragmentDialogDeleteSubtaskProjectBinding.inflate(layoutInflater, container, false)
+
         return binding.root
     }
 
@@ -50,7 +64,7 @@ class ProjectInformationFragment(
         onBackPressed()
 
         project = projectDao.getProject(project.idProject!!)!!
-        setData(view)
+        setData()
 
         binding.btnBck.setOnClickListener {
             parentFragmentManager.beginTransaction().detach(this@ProjectInformationFragment)
@@ -60,7 +74,16 @@ class ProjectInformationFragment(
         binding.btnAddNewPerson.setOnClickListener {
             val transaction =
                 (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.layout_pro_and_emp, NewPersonAddToProjectFragment(project))
+            transaction.replace(
+                R.id.layout_pro_and_emp,
+                ProjectAddNewTeamFragment(
+                    project,
+                    subTaskProjectDao,
+                    projectDao,
+                    position,
+                    bindingActivityProAndEmp
+                )
+            )
                 .addToBackStack(null)
                 .commit()
         }
@@ -68,7 +91,16 @@ class ProjectInformationFragment(
         binding.btnSeeMoreSubTaskPro.setOnClickListener {
             val transaction =
                 (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.layout_pro_and_emp, ProjectSubTaskFragment(project,projectDao,position,bindingActivityProAndEmp,subTaskProjectDao))
+            transaction.replace(
+                R.id.layout_pro_and_emp,
+                ProjectSubTaskFragment(
+                    project,
+                    projectDao,
+                    position,
+                    bindingActivityProAndEmp,
+                    subTaskProjectDao
+                )
+            )
                 .addToBackStack(null)
                 .commit()
         }
@@ -79,15 +111,14 @@ class ProjectInformationFragment(
     }
 
     @SuppressLint("SetTextI18n")
-    fun setData(view: View) {
+    fun setData() {
 
         binding.txtNamePro.text = project.nameProject
         binding.txtDescription.text = project.descriptionProject
+        numberDonSubTaskProject = project.numberDoneSubTaskProject!!
 
-        val word = "تومان"
-        val containsWord = project.budgetProject!!.contains(word, ignoreCase = true)
-        if (containsWord) {
-            binding.txtBudget.text = project.budgetProject
+        if (project.budgetProject != "0") {
+            binding.txtBudget.text = project.budgetProject + " تومان"
 
         } else {
             binding.txtBudget.visibility = View.GONE
@@ -115,15 +146,21 @@ class ProjectInformationFragment(
             binding.txtNoDeadline.text = "پروژه ددلاین \nندارد"
         }
 
-        binding.progressPro.progress = project.progressProject!!
-        binding.txtProg.text = project.progressProject.toString() + "%"
+        val numSubTask = project.numberSubTaskProject
+        var efficiencyProject = 0
+
+        if (numSubTask != null)
+            efficiencyProject = ((numberDonSubTaskProject.toDouble() / numSubTask) * 100).toInt()
+
+        binding.progressPro.progress = efficiencyProject
+        binding.txtProg.text = "$efficiencyProject%"
 
         binding.txtNumTaskPro.text =
             project.numberDoneSubTaskProject.toString() + " از " + project.numberSubTaskProject.toString()
 
         if (project.idProject != null) {
 
-            val teamProjectDao = AppDatabase.getDataBase(view.context).teamProjectDao
+            val teamProjectDao = AppDatabase.getDataBase(binding.root.context).teamProjectDao
             val teamProjectData = teamProjectDao.getListTeamProject(project.idProject!!)
             val teamProjectAdapter = TeamProjectAdapter(ArrayList(teamProjectData))
             binding.rcvTeam.adapter = teamProjectAdapter
@@ -142,7 +179,34 @@ class ProjectInformationFragment(
         }
 
     }
+    fun setDataOnDone() {
 
+        val project1 = projectDao.getProject(project.idProject!!)!!
+
+        val numSubTask = project1.numberSubTaskProject
+        var efficiencyProject = 0
+
+        if (numSubTask != null)
+            efficiencyProject = ((numberDonSubTaskProject.toDouble() / numSubTask) * 100).toInt()
+
+        binding.progressPro.progress = efficiencyProject
+        binding.txtProg.text = project1.progressProject.toString() + "%"
+
+        binding.txtNumTaskPro.text =
+            numberDonSubTaskProject.toString() + " از " + project1.numberSubTaskProject.toString()
+
+        val subTaskProjectData = subTaskProjectDao.getSubTaskProject(project1.idProject!!)
+        subTaskProjectAdapter =
+            SubTaskProjectAdapter(
+                ArrayList(subTaskProjectData),
+                this,
+                project1,
+                projectDao,
+                subTaskProjectDao,
+            )
+        binding.rcvTskPro.adapter = subTaskProjectAdapter
+
+    }
     private fun onBackPressed() {
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
@@ -154,23 +218,24 @@ class ProjectInformationFragment(
                 }
             })
     }
-
     override fun onResume() {
         super.onResume()
+        setDataOnDone()
         updateYourData()
+        setData()
     }
-
     private fun updateYourData() {
         project = projectDao.getProject(project.idProject!!)!!
     }
-
     private fun onMenuClicked(popupMenu: PopupMenu) {
 
         popupMenu.menuInflater.inflate(R.menu.menu_project, popupMenu.menu)
         binding.btnMenuProject.setOnClickListener {
             popupMenu.show()
             popupMenu.setOnMenuItemClickListener { item ->
+
                 when (item.itemId) {
+
                     R.id.menu_project_edit -> {
                         val transaction =
                             (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
@@ -188,7 +253,6 @@ class ProjectInformationFragment(
                         )
                             .addToBackStack(null)
                             .commit()
-
                     }
 
                     R.id.menu_project_done -> {
@@ -212,20 +276,232 @@ class ProjectInformationFragment(
             }
         }
     }
-
     override fun onSubTaskClicked(task: SubTaskProject, position: Int) {}
+    override fun onSubTaskLongClicked(subTask: SubTaskProject, position: Int) {}
+    override fun onMenuItemClick(subTask: SubTaskProject, position: Int) {
 
-    override fun onSubTaskLongClicked(subTask: SubTaskProject, position: Int) {
-        val dialog = DeleteSubTaskProjectDialogFragment(
-            subTask,
-            position,
-            subTaskProjectDao,
-            subTaskProjectAdapter,
-            projectDao,
-            project,
-            binding
-        )
-        dialog.show((activity as MainActivity).supportFragmentManager, null)
+        val onClickSubTask = subTaskProjectDao.getOnClickSubTaskProject(subTask.idSubTask!!)
+        val viewHolder =
+            binding.rcvTskPro.findViewHolderForAdapterPosition(position) as SubTaskProjectAdapter.SubTaskProjectViewHolder
+        viewHolder.let { holder ->
+            val btnMenuSubTaskProject = holder.btnMenuSubTaskProject
+            val popupMenu = PopupMenu(context, btnMenuSubTaskProject)
+            popupMenu.inflate(R.menu.menu_project)
+            popupMenu.show()
+
+            val doneMenuItem = popupMenu.menu.findItem(R.id.menu_project_done)
+            if (onClickSubTask!!.doneSubTask!!) {
+                doneMenuItem.title = "تکمیل نشد"
+            } else {
+                doneMenuItem.title = "تکمیل شد"
+            }
+
+            popupMenu.setOnMenuItemClickListener { item ->
+
+                when (item.itemId) {
+
+                    R.id.menu_project_edit -> {
+                        val bottomsheet = ProjectUpdateSubTaskFromInfoBottomsheetFragment(
+                            subTaskProjectDao,
+                            project,
+                            subTaskProjectAdapter,
+                            projectDao,
+                            position,
+                            bindingActivityProAndEmp,
+                            subTask
+                        )
+                        bottomsheet.setStyle(
+                            R.style.BottomSheetStyle,
+                            R.style.BottomSheetDialogTheme
+                        )
+                        bottomsheet.show(parentFragmentManager, null)
+                        true
+                    }
+
+                    R.id.menu_project_done -> {
+                        doneSubTask(onClickSubTask, doneMenuItem)
+                        setDataOnDone()
+                        true
+                    }
+
+                    R.id.menu_project_delete -> {
+                        showDeleteDialog(onClickSubTask)
+                        true
+                    }
+
+                    else -> false
+                }
+            }
+        }
 
     }
+    override fun onTeamSubTaskClick(subTask: SubTaskProject, project: Project, position: Int) {
+        parentFragmentManager.beginTransaction().detach(this@ProjectInformationFragment)
+            .replace(
+                R.id.layout_pro_and_emp,
+                SubTaskAddNewTeamFromInfoFragment(
+                    project,
+                    subTask,
+                    position,
+                    bindingActivityProAndEmp,
+                    subTaskProjectDao,
+                    projectDao
+                )
+            )
+            .commit()
+    }
+    private fun doneSubTask(onClickSubTask: SubTaskProject, doneMenuItem: MenuItem) {
+
+        if (onClickSubTask.doneSubTask!!) {
+
+            doneMenuItem.title = "تکمیل شد"
+
+            bindingItemSubTask.txtDedlineSubTask.visibility = View.VISIBLE
+            bindingItemSubTask.imgDone.visibility = View.GONE
+
+            val newSubTask = SubTaskProject(
+                idSubTask = onClickSubTask.idSubTask,
+                idProject = onClickSubTask.idProject,
+                nameSubTask = onClickSubTask.nameSubTask,
+                noDeadlineSubTask = onClickSubTask.noDeadlineSubTask,
+                doneSubTask = false,
+                descriptionSubTask = onClickSubTask.descriptionSubTask,
+                watchDeadlineSubTask = onClickSubTask.watchDeadlineSubTask,
+                dateDeadlineSubTask = onClickSubTask.dateDeadlineSubTask,
+                volumeTask = onClickSubTask.volumeTask
+            )
+            subTaskProjectDao.update(newSubTask)
+
+            val project1 = projectDao.getProject(project.idProject!!)
+            numberDonSubTaskProject = project1!!.numberDoneSubTaskProject!!
+            numberDonSubTaskProject--
+            val numSubTask = project1.numberSubTaskProject
+            var efficiencyProject = 0
+
+            if (numberDonSubTaskProject != null)
+                efficiencyProject =
+                    ((numberDonSubTaskProject.toDouble() / numSubTask!!) * 100).toInt()
+
+            val newProject = Project(
+                idProject = project.idProject,
+                nameProject = project.nameProject,
+                noDeadlineProject = project.noDeadlineProject,
+                dateDeadlineProject = project.dateDeadlineProject,
+                watchDeadlineProject = project.watchDeadlineProject,
+                typeProject = project.typeProject,
+                descriptionProject = project.descriptionProject,
+                numberSubTaskProject = project1.numberSubTaskProject,
+                numberDoneSubTaskProject = numberDonSubTaskProject,
+                progressProject = efficiencyProject,
+                budgetProject = project.budgetProject
+            )
+            projectDao.update(newProject)
+
+        } else {
+
+            doneMenuItem.title = "تکمیل نشد"
+
+            bindingItemSubTask.txtDedlineSubTask.visibility = View.GONE
+            bindingItemSubTask.imgDone.visibility = View.VISIBLE
+
+            val newSubTask = SubTaskProject(
+                idSubTask = onClickSubTask.idSubTask,
+                idProject = onClickSubTask.idProject,
+                nameSubTask = onClickSubTask.nameSubTask,
+                noDeadlineSubTask = onClickSubTask.noDeadlineSubTask,
+                doneSubTask = true,
+                descriptionSubTask = onClickSubTask.descriptionSubTask,
+                watchDeadlineSubTask = onClickSubTask.watchDeadlineSubTask,
+                dateDeadlineSubTask = onClickSubTask.dateDeadlineSubTask,
+                volumeTask = onClickSubTask.volumeTask
+            )
+            subTaskProjectDao.update(newSubTask)
+
+            val project1 = projectDao.getProject(project.idProject!!)
+            numberDonSubTaskProject = project1!!.numberDoneSubTaskProject!!
+            numberDonSubTaskProject++
+            val numSubTask = project1.numberSubTaskProject
+            var efficiencyProject = 0
+
+            if (numberDonSubTaskProject != null)
+                efficiencyProject =
+                    ((numberDonSubTaskProject.toDouble() / numSubTask!!) * 100).toInt()
+
+            val newProject = Project(
+                idProject = project.idProject,
+                nameProject = project.nameProject,
+                dateDeadlineProject = project.dateDeadlineProject,
+                watchDeadlineProject = project.watchDeadlineProject,
+                typeProject = project.typeProject,
+                noDeadlineProject = project.noDeadlineProject,
+                descriptionProject = project.descriptionProject,
+                numberSubTaskProject = project1.numberSubTaskProject,
+                numberDoneSubTaskProject = numberDonSubTaskProject,
+                progressProject = efficiencyProject,
+                budgetProject = project.budgetProject
+            )
+            projectDao.update(newProject)
+
+        }
+    }
+    private fun showDeleteDialog(onClickSubTask: SubTaskProject) {
+
+        val parent = bindingDialogDeleteSubtaskProject.root.parent as? ViewGroup
+        parent?.removeView(bindingDialogDeleteSubtaskProject.root)
+        val dialogBuilder = AlertDialog.Builder(bindingDialogDeleteSubtaskProject.root.context)
+        dialogBuilder.setView(bindingDialogDeleteSubtaskProject.root)
+
+        val alertDialog = dialogBuilder.create()
+        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.Transparent.toArgb()))
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+        bindingDialogDeleteSubtaskProject.dialogBtnDeleteCansel.setOnClickListener {
+            alertDialog.dismiss()
+        }
+        bindingDialogDeleteSubtaskProject.dialogBtnDeleteSure.setOnClickListener {
+
+            deleteItem(onClickSubTask, position)
+            setDataOnDone()
+            alertDialog.dismiss()
+        }
+    }
+    fun deleteItem(subTaskProject: SubTaskProject, position: Int) {
+
+        val project1 = projectDao.getProject(project.idProject!!)
+
+        var numberDonSubTaskProject = project1!!.numberDoneSubTaskProject
+        var numberSubTaskProject = project1.numberSubTaskProject
+
+        if (subTaskProject.doneSubTask!!) {
+            numberSubTaskProject = numberSubTaskProject!! - 1
+            numberDonSubTaskProject = numberDonSubTaskProject!! - 1
+        } else
+            numberSubTaskProject = numberSubTaskProject!! - 1
+
+        subTaskProjectAdapter.deleteSubTask(subTaskProject, position)
+        subTaskProjectDao.delete(subTaskProject)
+
+        var efficiencyProject = 0
+        if (numberSubTaskProject != null)
+            efficiencyProject =
+                ((numberDonSubTaskProject!!.toDouble() / numberSubTaskProject) * 100).toInt()
+
+        val newProject = Project(
+            idProject = project1.idProject,
+            nameProject = project1.nameProject,
+            dateDeadlineProject = project1.dateDeadlineProject,
+            watchDeadlineProject = project1.watchDeadlineProject,
+            typeProject = project1.typeProject,
+            descriptionProject = project1.descriptionProject,
+            numberSubTaskProject = numberSubTaskProject,
+            numberDoneSubTaskProject = numberDonSubTaskProject,
+            noDeadlineProject = project.noDeadlineProject,
+            progressProject = efficiencyProject,
+            budgetProject = project.budgetProject
+
+        )
+        projectDao.update(newProject)
+    }
+
 }

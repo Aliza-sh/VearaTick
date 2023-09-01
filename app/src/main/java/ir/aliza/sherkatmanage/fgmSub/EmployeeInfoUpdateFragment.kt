@@ -55,6 +55,7 @@ class EmployeeInfoUpdateFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onBackPressed()
+        setdata(employee)
 
         val gender = listOf(
             "مرد",
@@ -65,8 +66,6 @@ class EmployeeInfoUpdateFragment(
         (binding.dialogMainEdtGdrperson.editText as AutoCompleteTextView).setAdapter(
             myAdapteredt
         )
-
-        setdata(employee)
 
         binding.sheetBtnDone.setOnClickListener {
             addNewEmployee()

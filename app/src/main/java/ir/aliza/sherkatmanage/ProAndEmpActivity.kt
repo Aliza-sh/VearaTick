@@ -1,5 +1,6 @@
 package ir.aliza.sherkatmanage
 
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
@@ -21,6 +22,11 @@ class ProAndEmpActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         firstRun()
+
+        binding.btnBck.setOnClickListener{
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+        }
 
         binding.btnProjrct.setOnClickListener() {
             binding.icProject.setColorFilter(ContextCompat.getColor(this, R.color.firoze), PorterDuff.Mode.SRC_IN)

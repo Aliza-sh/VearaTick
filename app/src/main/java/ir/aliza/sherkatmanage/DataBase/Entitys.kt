@@ -132,6 +132,7 @@ data class TeamProject(
     val nameEmployee: String? = null,
     val familyEmployee: String? = null,
     val genderEmployee: String? = null,
+    val specialtyEmployee: String? = null,
 
 )
 
@@ -150,6 +151,22 @@ data class SubTaskProject(
     val watchDeadlineSubTask: String? = "0",
     val dateDeadlineSubTask: String? = "0",
     val volumeTask: Int,
+    )
+
+@Entity(tableName = "teamSubTask_table")
+data class TeamSubTask(
+
+    @PrimaryKey(autoGenerate = true)
+    val idTeam: Int? = null,
+
+    val idProject: Int,
+    val idSubTask: Int,
+    val idEmployee: Int? = null,
+    val nameEmployee: String? = null,
+    val familyEmployee: String? = null,
+    val genderEmployee: String? = null,
+    val specialtyEmployee: String? = null,
+
     )
 
 @Entity(tableName = "efficiency_table")

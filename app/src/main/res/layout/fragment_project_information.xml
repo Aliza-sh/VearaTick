@@ -126,7 +126,7 @@
                     android:id="@+id/imageView4"
                     android:layout_width="25dp"
                     android:layout_height="25dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="12dp"
                     android:src="@drawable/ic_watch"
                     app:layout_constraintEnd_toEndOf="@+id/textView28"
                     app:layout_constraintTop_toBottomOf="@+id/textView28" />
@@ -136,7 +136,7 @@
                     android:layout_width="25dp"
                     android:layout_height="25dp"
                     android:layout_marginTop="16dp"
-                    android:layout_marginBottom="20dp"
+                    android:layout_marginBottom="15dp"
                     android:src="@drawable/ic_calendar"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="@+id/imageView4"
@@ -332,7 +332,7 @@
                     android:layout_marginTop="10dp"
                     android:text="0 از 0"
                     android:textColor="@color/firoze"
-                    android:textSize="25sp"
+                    android:textSize="30sp"
                     app:layout_constraintEnd_toEndOf="@+id/txt_date_target"
                     app:layout_constraintTop_toBottomOf="@+id/txt_date_target" />
 
@@ -431,9 +431,8 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcv_team"
                     android:layout_width="match_parent"
-                    android:layout_height="80dp"
+                    android:layout_height="76dp"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
                     android:layoutDirection="rtl"
@@ -478,17 +477,16 @@
         app:layout_constraintTop_toBottomOf="@+id/cons_lyt" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:layout_marginTop="-40dp"
         android:elevation="21dp"
         android:id="@+id/rcv_tsk_pro"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/shape_background_navi"
         android:backgroundTint="?attr/colorOnPrimary"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cons_lyt"
+        app:layout_constraintTop_toTopOf="@+id/recyclerView"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
         tools:listitem="@layout/item_sub_task" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

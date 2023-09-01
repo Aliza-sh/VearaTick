@@ -32,7 +32,6 @@
 
         <ImageButton
             android:id="@+id/btn_bck"
-
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginTop="12dp"
@@ -45,6 +44,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/btn_menu_project"
             app:tint="@color/white" />
+
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

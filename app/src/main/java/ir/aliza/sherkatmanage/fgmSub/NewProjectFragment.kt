@@ -127,8 +127,7 @@ class NewProjectFragment(
                     formattedValue = decimalFormat.format(value)
                     binding.edtBudget.setText(formattedValue)
                     binding.edtBudget.setSelection(formattedValue.length)
-                    formattedValue = formatCurrency(value)
-                    binding.txtBudget.text = formattedValue
+                    binding.txtBudget.text = formatCurrency(value)
                 }
                 isUpdating = false
             }
@@ -213,7 +212,6 @@ class NewProjectFragment(
 
             alertDialog.dismiss()
         }
-
     }
 
     fun onCreatePicker() {

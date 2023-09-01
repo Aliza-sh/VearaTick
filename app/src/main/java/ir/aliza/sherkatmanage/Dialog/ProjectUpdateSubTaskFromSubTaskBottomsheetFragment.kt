@@ -1,22 +1,17 @@
-package ir.aliza.sherkatmanage.fgmSub
+package ir.aliza.sherkatmanage.Dialog
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
-import android.widget.ArrayAdapter
-import android.widget.AutoCompleteTextView
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import androidx.fragment.app.Fragment
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
 import com.wdullaer.materialdatetimepicker.time.Timepoint
 import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints
@@ -27,26 +22,27 @@ import com.xdev.arch.persiancalendar.datepicker.Month
 import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
+import ir.aliza.sherkatmanage.DataBase.SubTaskProject
 import ir.aliza.sherkatmanage.DataBase.SubTaskProjectDao
 import ir.aliza.sherkatmanage.ProAndEmpActivity
 import ir.aliza.sherkatmanage.R
+import ir.aliza.sherkatmanage.adapter.SubTaskProjectAdapter
 import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
+import ir.aliza.sherkatmanage.databinding.BottomsheetfragmentSubtaskProjectBinding
 import ir.aliza.sherkatmanage.databinding.FragmentDialogDeadlineBinding
-import ir.aliza.sherkatmanage.databinding.FragmentProjectUpdateInfoBinding
-import ir.aliza.sherkatmanage.projectAdapter
-import java.text.DecimalFormat
+import ir.aliza.sherkatmanage.fgmSub.ProjectSubTaskFragment
 
-class ProjectUpdateInfoFragment(
-    val project: Project,
-    val position: Int,
-    val projectDao: ProjectDao,
-    val day: String,
-    val monthName: String,
+class ProjectUpdateSubTaskFromSubTaskBottomsheetFragment(
     val subTaskProjectDao: SubTaskProjectDao,
+    val project: Project,
+    val subTaskProjectAdapter: SubTaskProjectAdapter,
+    val projectDao: ProjectDao,
+    val position: Int,
     val bindingActivityProAndEmp: ActivityProAndEmpBinding,
-) : Fragment() {
+    val subTaskProject: SubTaskProject
+) : BottomSheetDialogFragment() {
 
-    lateinit var binding: FragmentProjectUpdateInfoBinding
+    lateinit var binding: BottomsheetfragmentSubtaskProjectBinding
     lateinit var bindingDialogView: FragmentDialogDeadlineBinding
 
     var valueBtnNoDate = false
@@ -56,133 +52,53 @@ class ProjectUpdateInfoFragment(
     var valueWatch = ""
     var valueCalendar = ""
 
-    private var isUpdating = false
-    var formattedValue = "0"
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentProjectUpdateInfoBinding.inflate(layoutInflater, null, false)
+        binding = BottomsheetfragmentSubtaskProjectBinding.inflate(layoutInflater, container, false)
         bindingDialogView = FragmentDialogDeadlineBinding.inflate(layoutInflater, container, false)
-        return binding.root
 
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        onBackPressed()
-        setdata(project)
+        setdata()
 
-        val typeProject = listOf(
-            "اندروید",
-            "بک اند",
-            "فرانت اند",
-            "رباتیک",
-            "طراحی",
-            "سئو"
-        )
-
-        val myAdapteredt = ArrayAdapter(requireContext(), R.layout.item_gender, typeProject)
-        (binding.dialogMainEdtGdrperson.editText as AutoCompleteTextView).setAdapter(
-            myAdapteredt
-        )
-
-        binding.btnBck.setOnClickListener {
-            if (parentFragmentManager.backStackEntryCount > 0) {
-                parentFragmentManager.popBackStack()
-            }
+        binding.sheetBtnDone.setOnClickListener {
+            addNewTask()
+            onSubTaskToProject()
         }
 
         binding.btnCalendar.setOnClickListener {
             showDeadlineDialog()
         }
 
-        binding.radioGroup.setOnCheckedChangeListener { _, checkedId ->
+    }
 
-            when (checkedId) {
+    private fun setdata() {
 
-                R.id.btn_no_settlement -> {
-                    binding.budget.visibility = View.GONE
-                }
+        binding.edtNameTask.setText(subTaskProject.nameSubTask)
 
-                R.id.btn_settlement -> {
-                    binding.budget.visibility = View.VISIBLE
-                }
-
-            }
-        }
-
-        val decimalFormat = DecimalFormat("#,###")
-        binding.edtBudget.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-                // قبل از تغییرات متنی
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                // در هنگام تغییرات متنی
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-                // پس از تغییرات متنی
-                if (isUpdating) {
-                    return
-                }
-
-                isUpdating = true
-
-                val input = s.toString().replace(",", "") // حذف ویرگول‌ها از ورودی
-                val value = input.toLongOrNull()
-
-                if (value != null) {
-                    formattedValue = decimalFormat.format(value)
-                    binding.edtBudget.setText(formattedValue)
-                    binding.edtBudget.setSelection(formattedValue.length)
-                    binding.txtBudget.text = formatCurrency(value)
-                }
-                isUpdating = false
-            }
-        })
-
-        binding.sheetBtnDone.setOnClickListener {
-            if (binding.btnSettlement.isChecked) {
-
-                if (binding.edtBudget.length() > 0) {
-                    addNewProject(formattedValue)
-                } else {
-                    Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT)
-                        .show()
-                }
+        if (subTaskProject.doneSubTask!!) {
+            binding.txtDedlineDateTime.setText("پروژه تکمیل \nشده است")
+            valueBtnNoDate = subTaskProject.noDeadlineSubTask!!
+            valueWatch = subTaskProject.watchDeadlineSubTask!!
+            valueCalendar = subTaskProject.dateDeadlineSubTask!!
+            binding.btnCalendar.visibility = View.GONE
+        } else {
+            if (subTaskProject.noDeadlineSubTask!!) {
+                valueBtnNoDate = subTaskProject.noDeadlineSubTask
+                binding.txtDedlineDateTime.setText("پروژه ددلاین \nندارد")
             } else {
-                formattedValue = "0"
-                addNewProject(formattedValue)
+                valueWatch = subTaskProject.watchDeadlineSubTask!!
+                valueCalendar = subTaskProject.dateDeadlineSubTask!!
+                binding.txtDedlineDateTime.setText("${subTaskProject.watchDeadlineSubTask} \n${subTaskProject.dateDeadlineSubTask}")
             }
         }
-    }
-    private fun formatCurrency(value: Long?): String {
-        val decimalFormat = DecimalFormat("#,###")
-        return decimalFormat.format(value) + " تومان"
-    }
-    fun onBackPressed() {
-        requireActivity().onBackPressedDispatcher.addCallback(
-            viewLifecycleOwner,
-            object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-                    parentFragmentManager.beginTransaction().detach(this@ProjectUpdateInfoFragment)
-                        .attach(
-                            ProjectInformationFragment(
-                                project,
-                                day,
-                                monthName,
-                                subTaskProjectDao,
-                                projectDao,
-                                position,
-                                bindingActivityProAndEmp
-                            )
-                        ).commit()
-                }
-            })
+        binding.edtVolumeTask.setText(subTaskProject.volumeTask.toString())
+        binding.edtDescriptionTask.setText(subTaskProject.descriptionSubTask)
     }
     private fun showDeadlineDialog() {
 
@@ -213,6 +129,7 @@ class ProjectUpdateInfoFragment(
                 valueBtnWatch = false
             }
         }
+
         bindingDialogView.btnCalendar.setOnClickListener {
             if (!valueBtnNoDate && !valueBtnCalendar) {
                 onCreateCalendar()
@@ -245,49 +162,6 @@ class ProjectUpdateInfoFragment(
 
             alertDialog.dismiss()
         }
-
-    }
-    fun onProjectInfoUpdate() {
-        parentFragmentManager.beginTransaction()
-            .detach(this@ProjectUpdateInfoFragment)
-            .replace(
-                R.id.layout_pro_and_emp,
-                ProjectInformationFragment(
-                    project,
-                    day,
-                    monthName,
-                    subTaskProjectDao,
-                    projectDao,
-                    position,
-                    bindingActivityProAndEmp
-                )
-            ).commit()
-    }
-    private fun setdata(project: Project) {
-
-        binding.edtNamePro.setText(project.nameProject)
-
-        if (project.budgetProject !="0"){
-            formattedValue = project.budgetProject!!
-            binding.btnSettlement.isChecked = true
-            binding.budget.visibility = View.VISIBLE
-            binding.edtBudget.setText(project.budgetProject)
-            binding.txtBudget.text = project.budgetProject + " تومان"
-        }else
-            binding.btnNoSettlement.isChecked = true
-
-        if (project.noDeadlineProject!!) {
-            valueBtnNoDate = project.noDeadlineProject
-            binding.txtDedlineDateTime.setText("پروژه ددلاین \nندارد")
-        } else {
-            valueWatch = project.watchDeadlineProject!!
-            valueCalendar = project.dateDeadlineProject!!
-            binding.txtDedlineDateTime.setText("${project.dateDeadlineProject} \n${project.watchDeadlineProject}")
-
-        }
-
-        binding.edtTypeProject.setText(project.typeProject)
-        binding.edtDescriptionPro.setText(project.descriptionProject)
 
     }
     fun onCreatePicker() {
@@ -354,41 +228,63 @@ class ProjectUpdateInfoFragment(
         )
 
     }
+    fun onSubTaskToProject() {
+        parentFragmentManager.beginTransaction()
+            .detach(this@ProjectUpdateSubTaskFromSubTaskBottomsheetFragment)
+            .replace(
+                R.id.layout_pro_and_emp,
+                ProjectSubTaskFragment(
+                    project,
+                    projectDao,
+                    position,
+                    bindingActivityProAndEmp,
+                    subTaskProjectDao,
+                )
+            ).commit()
+    }
 
-    private fun addNewProject(formattedValue: String) {
+    private fun addNewTask() {
         if (
-            binding.edtNamePro.length() > 0 &&
-            binding.txtDedlineDateTime.length() > 0 &&
-            binding.edtTypeProject.length() > 0 &&
-            binding.edtDescriptionPro.length() > 0
+            binding.edtNameTask.length() > 0 &&
+            binding.edtDescriptionTask.length() > 0 &&
+            binding.edtVolumeTask.length() > 0 &&
+            binding.txtDedlineDateTime.length() > 0
         ) {
-            val txtNamePro = binding.edtNamePro.text.toString()
+            val txtTask = binding.edtNameTask.text.toString()
+            val txtDescription = binding.edtDescriptionTask.text.toString()
             val noDeadline = valueBtnNoDate
             val txtWatch = valueWatch
             val txtDate = valueCalendar
-            val txtTypeProject = binding.edtTypeProject.text.toString()
-            val txtDescriptionPro = binding.edtDescriptionPro.text.toString()
-            val txtBudget = formattedValue
+            val txtVolume = binding.edtVolumeTask.text.toString()
 
-            val newProject = Project(
-                idProject = project.idProject,
-                nameProject = txtNamePro,
-                descriptionProject = txtDescriptionPro,
-                noDeadlineProject = noDeadline,
-                watchDeadlineProject = txtWatch,
-                dateDeadlineProject = txtDate,
-                typeProject = txtTypeProject,
-                progressProject = project.progressProject,
-                doneProject = project.doneProject,
-                numberSubTaskProject = project.numberSubTaskProject,
-                numberDoneSubTaskProject = project.numberDoneSubTaskProject,
-                budgetProject = txtBudget,
+            val newSubTask = SubTaskProject(
+                idSubTask = subTaskProject.idSubTask,
+                idProject = project.idProject!!,
+                nameSubTask = txtTask,
+                noDeadlineSubTask = noDeadline,
+                descriptionSubTask = txtDescription,
+                watchDeadlineSubTask = txtWatch,
+                dateDeadlineSubTask = txtDate,
+                volumeTask = txtVolume.toInt(),
+                doneSubTask = subTaskProject.doneSubTask
             )
+            subTaskProjectDao.update(newSubTask)
+            subTaskProjectAdapter.updateTask(newSubTask, position)
 
-            projectAdapter.updateProject(newProject, position)
-            projectDao.update(newProject)
-            onProjectInfoUpdate()
-
+            val transaction =
+                (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
+            transaction.replace(
+                R.id.layout_pro_and_emp, ProjectSubTaskFragment(
+                    project,
+                    projectDao,
+                    position,
+                    bindingActivityProAndEmp,
+                    subTaskProjectDao,
+                )
+            )
+                .addToBackStack(null)
+                .commit()
+            dismiss()
         } else {
             Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()
         }

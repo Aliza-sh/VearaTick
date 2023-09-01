@@ -30,15 +30,17 @@ import ir.aliza.sherkatmanage.adapter.SubTaskProjectAdapter
 import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.BottomsheetfragmentSubtaskProjectBinding
 import ir.aliza.sherkatmanage.databinding.FragmentDialogDeadlineBinding
+import ir.aliza.sherkatmanage.fgmSub.ProjectInformationFragment
 import ir.aliza.sherkatmanage.fgmSub.ProjectSubTaskFragment
 
-class ProjectUpdateSubTaskBottomsheetFragment(
+class ProjectUpdateSubTaskFromInfoBottomsheetFragment(
     val subTaskProjectDao: SubTaskProjectDao,
     val project: Project,
     val subTaskProjectAdapter: SubTaskProjectAdapter,
     val projectDao: ProjectDao,
     val position: Int,
     val bindingActivityProAndEmp: ActivityProAndEmpBinding,
+    val subTaskProject: SubTaskProject
 ) : BottomSheetDialogFragment() {
 
     lateinit var binding: BottomsheetfragmentSubtaskProjectBinding
@@ -63,6 +65,7 @@ class ProjectUpdateSubTaskBottomsheetFragment(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        setdata()
 
         binding.sheetBtnDone.setOnClickListener {
             addNewTask()
@@ -73,6 +76,30 @@ class ProjectUpdateSubTaskBottomsheetFragment(
             showDeadlineDialog()
         }
 
+    }
+
+    private fun setdata() {
+
+        binding.edtNameTask.setText(subTaskProject.nameSubTask)
+
+        if (subTaskProject.doneSubTask!!) {
+            binding.txtDedlineDateTime.setText("پروژه تکمیل \nشده است")
+            valueBtnNoDate = subTaskProject.noDeadlineSubTask!!
+            valueWatch = subTaskProject.watchDeadlineSubTask!!
+            valueCalendar = subTaskProject.dateDeadlineSubTask!!
+            binding.btnCalendar.visibility = View.GONE
+        } else {
+            if (subTaskProject.noDeadlineSubTask!!) {
+                valueBtnNoDate = subTaskProject.noDeadlineSubTask
+                binding.txtDedlineDateTime.setText("پروژه ددلاین \nندارد")
+            } else {
+                valueWatch = subTaskProject.watchDeadlineSubTask!!
+                valueCalendar = subTaskProject.dateDeadlineSubTask!!
+                binding.txtDedlineDateTime.setText("${subTaskProject.watchDeadlineSubTask} \n${subTaskProject.dateDeadlineSubTask}")
+            }
+        }
+        binding.edtVolumeTask.setText(subTaskProject.volumeTask.toString())
+        binding.edtDescriptionTask.setText(subTaskProject.descriptionSubTask)
     }
 
     private fun showDeadlineDialog() {
@@ -139,7 +166,6 @@ class ProjectUpdateSubTaskBottomsheetFragment(
         }
 
     }
-
     fun onCreatePicker() {
 
         val persianCalendar = com.kizitonwose.calendarview.utils.persian.PersianCalendar()
@@ -168,7 +194,6 @@ class ProjectUpdateSubTaskBottomsheetFragment(
         timePickerDialog.show(parentFragmentManager, "TimePickerDialog")
 
     }
-
     fun onCreateCalendar() {
 
         val calendar = PersianCalendar()
@@ -205,21 +230,21 @@ class ProjectUpdateSubTaskBottomsheetFragment(
         )
 
     }
-
     fun onSubTaskToProject() {
-        parentFragmentManager.beginTransaction().detach(this@ProjectUpdateSubTaskBottomsheetFragment)
+        parentFragmentManager.beginTransaction()
+            .detach(this@ProjectUpdateSubTaskFromInfoBottomsheetFragment)
             .replace(
                 R.id.layout_pro_and_emp,
-                ProjectSubTaskFragment(
+                ProjectInformationFragment(
                     project,
-                    projectDao,
-                    position,
-                    bindingActivityProAndEmp,
+                    project.watchDeadlineProject!!,
+                    project.dateDeadlineProject!!,
                     subTaskProjectDao,
+                    projectDao,
+                    position,bindingActivityProAndEmp
                 )
             ).commit()
     }
-
     private fun addNewTask() {
         if (
             binding.edtNameTask.length() > 0 &&
@@ -235,35 +260,18 @@ class ProjectUpdateSubTaskBottomsheetFragment(
             val txtVolume = binding.edtVolumeTask.text.toString()
 
             val newSubTask = SubTaskProject(
-
+                idSubTask = subTaskProject.idSubTask,
                 idProject = project.idProject!!,
                 nameSubTask = txtTask,
                 noDeadlineSubTask = noDeadline,
                 descriptionSubTask = txtDescription,
                 watchDeadlineSubTask = txtWatch,
-                dateDeadlineSubTask =txtDate ,
-                volumeTask = txtVolume.toInt()
-
-                )
-            subTaskProjectDao.insert(newSubTask)
-            subTaskProjectAdapter.addTask(newSubTask)
-
-            val project1 = projectDao.getProject(project.idProject)
-
-            var numberSubTaskProject = project1!!.numberSubTaskProject
-
-            val newProject = Project(
-                idProject = project1.idProject,
-                nameProject = project1.nameProject,
-                dateDeadlineProject = project1.dateDeadlineProject,
-                watchDeadlineProject = project1.watchDeadlineProject,
-                typeProject = project1.typeProject,
-                descriptionProject = project1.descriptionProject,
-                numberSubTaskProject = numberSubTaskProject!! + 1,
-                numberDoneSubTaskProject = project1.numberDoneSubTaskProject,
-
-                )
-            projectDao.update(newProject)
+                dateDeadlineSubTask = txtDate,
+                volumeTask = txtVolume.toInt(),
+                doneSubTask = subTaskProject.doneSubTask
+            )
+            subTaskProjectDao.update(newSubTask)
+            subTaskProjectAdapter.updateTask(newSubTask,position)
 
             val transaction =
                 (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()

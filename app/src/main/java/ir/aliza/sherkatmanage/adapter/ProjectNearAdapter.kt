@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
+import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.ItemProjectBinding
 
 class ProjectNearAdapter(
@@ -32,10 +33,21 @@ class ProjectNearAdapter(
                 binding.recyclerView.adapter = teamProjectAdapter
             }
 
+            if (data[position].typeProject == "بک اند")
+                binding.imgProject.setImageResource(R.drawable.img_backend)
+            else if (data[position].typeProject == "فرانت اند")
+                binding.imgProject.setImageResource(R.drawable.img_frontend)
+            else if (data[position].typeProject == "رباتیک")
+                binding.imgProject.setImageResource(R.drawable.img_robotic)
+            else if (data[position].typeProject == "طراحی")
+                binding.imgProject.setImageResource(R.drawable.img_designing)
+            else if (data[position].typeProject == "سئو")
+                binding.imgProject.setImageResource(R.drawable.img_seo)
+
             binding.txtNamePro.text = data[position].nameProject
 
             if (data[position].noDeadlineProject!!) {
-                binding.txtDatePro.text = " "
+                binding.txtDatePro.text = " ددلاین ندارد"
             } else {
                 if (data[position].dateDeadlineProject != "" && data[position].watchDeadlineProject == "")
                     binding.txtDatePro.text = data[position].dateDeadlineProject
@@ -43,7 +55,7 @@ class ProjectNearAdapter(
                     binding.txtDatePro.text = "امروز" + "\n" + data[position].watchDeadlineProject
                 else if (data[position].dateDeadlineProject != "" && data[position].watchDeadlineProject != "")
                     binding.txtDatePro.text =
-                        data[position].dateDeadlineProject + "\n" + data[position].watchDeadlineProject
+                        data[position].watchDeadlineProject + "\n" + data[position].dateDeadlineProject
             }
 
             binding.progressLimit4.progress = data[position].progressProject!!

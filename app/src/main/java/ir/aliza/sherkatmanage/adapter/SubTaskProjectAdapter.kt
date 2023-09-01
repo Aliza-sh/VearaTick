@@ -3,14 +3,12 @@ package ir.aliza.sherkatmanage.adapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.DataBase.SubTaskProject
 import ir.aliza.sherkatmanage.DataBase.SubTaskProjectDao
-import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.ItemSubTaskBinding
 
 class SubTaskProjectAdapter(
@@ -27,7 +25,9 @@ class SubTaskProjectAdapter(
 
     inner class SubTaskProjectViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindData(position: Int) {
+        val btnMenuSubTaskProject = binding.btnMenuSubTaskProject
+
+        fun bindData(position: Int, clickListener: SubTaskEvent) {
 
             binding.txtTack.text = data[position].nameSubTask
             binding.txtDescription.text = data[position].descriptionSubTask
@@ -37,7 +37,7 @@ class SubTaskProjectAdapter(
                 binding.imgDone.visibility = View.VISIBLE
             } else {
                 if (data[position].noDeadlineSubTask!!) {
-                    binding.txtDedlineSubTask.text = " "
+                    binding.txtDedlineSubTask.text = " ددلاین ندارد"
                 } else {
                     if (data[position].dateDeadlineSubTask != "" && data[position].watchDeadlineSubTask == "")
                         binding.txtDedlineSubTask.text = data[position].dateDeadlineSubTask
@@ -46,19 +46,27 @@ class SubTaskProjectAdapter(
                             "امروز" + "\n" + data[position].watchDeadlineSubTask
                     else if (data[position].dateDeadlineSubTask != "" && data[position].watchDeadlineSubTask != "")
                         binding.txtDedlineSubTask.text =
-                            data[position].dateDeadlineSubTask + "\n" + data[position].watchDeadlineSubTask
+                            data[position].watchDeadlineSubTask + "\n" + data[position].dateDeadlineSubTask
                 }
             }
 
-            val popupMenu = PopupMenu(itemView.context,binding.btnMenuSubTaskProject)
-            popupMenu.menuInflater.inflate(R.menu.menu_task_project, popupMenu.menu)
+            if (data[position].idSubTask != null) {
+                val teamSubTaskDao = AppDatabase.getDataBase(itemView.context).teamSubTaskDao
+                val  employeeTeamSubTask = teamSubTaskDao.getListTeamSubTask(
+                    project.idProject!!,
+                    idSubTask = data[position].idSubTask!!
+                )
+
+                val teamSubTaskAdapter = AvatarTeamSubTaskAdapter(ArrayList(employeeTeamSubTask))
+                binding.rcvTeamSubTask.adapter = teamSubTaskAdapter
+            }
+
             binding.btnMenuSubTaskProject.setOnClickListener {
-                onMenuClicked(popupMenu, position,it)
+                clickListener.onMenuItemClick(data[position], position)
             }
-
-            itemView.setOnClickListener {
+            binding.btnAddNewPerson.setOnClickListener {
+                clickListener.onTeamSubTaskClick(data[position], project, position)
             }
-
             itemView.setOnLongClickListener {
                 subTaskEvent.onSubTaskLongClicked(data[position], position)
                 true
@@ -72,7 +80,7 @@ class SubTaskProjectAdapter(
     }
 
     override fun onBindViewHolder(holder: SubTaskProjectViewHolder, position: Int) {
-        holder.bindData(position)
+        holder.bindData(position, subTaskEvent)
     }
 
     override fun getItemId(position: Int): Long {
@@ -107,84 +115,16 @@ class SubTaskProjectAdapter(
         notifyDataSetChanged()
     }
 
-    private fun onMenuClicked(popupMenu: PopupMenu, position: Int, view: View) {
-
-            popupMenu.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-
-                    R.id.menu_project_edit -> {
-                        Toast.makeText(view.context, "jndljknas", Toast.LENGTH_SHORT).show()
-                    }
-
-                    R.id.menu_project_done -> {
-
-                        if (data[position].doneSubTask!!) {
-
-                            val menu = popupMenu.menu
-                            val groupId = menu.getItem(0).groupId
-                            menu.setGroupCheckable(groupId, true, true)
-                            menu.findItem(groupId).title = "تکمیل شد"
-
-                            binding.txtDedlineSubTask.visibility = View.VISIBLE
-                            binding.imgDone.visibility = View.GONE
-
-                            val newSubTask = SubTaskProject(
-                                idSubTask=data[position].idSubTask,
-                                idProject = data[position].idProject,
-                                nameSubTask = data[position].nameSubTask,
-                                noDeadlineSubTask = data[position].noDeadlineSubTask,
-                                doneSubTask = false,
-                                descriptionSubTask = data[position].descriptionSubTask,
-                                watchDeadlineSubTask = data[position].watchDeadlineSubTask,
-                                dateDeadlineSubTask = data[position].dateDeadlineSubTask,
-                                volumeTask = data[position].volumeTask
-                            )
-                            subTaskProjectDao.update(newSubTask)
-                            updateTask(newSubTask,position)
-
-                        } else {
-
-                            val menu = popupMenu.menu
-                            val groupId = menu.getItem(0).groupId
-                            menu.setGroupCheckable(groupId, true, true)
-                            menu.findItem(groupId).title = "تکمیل نشد"
-
-                            binding.txtDedlineSubTask.visibility = View.GONE
-                            binding.imgDone.visibility = View.VISIBLE
-
-                            val newSubTask = SubTaskProject(
-                                idSubTask=data[position].idSubTask,
-                                idProject = data[position].idProject,
-                                nameSubTask = data[position].nameSubTask,
-                                noDeadlineSubTask = data[position].noDeadlineSubTask,
-                                doneSubTask = true,
-                                descriptionSubTask = data[position].descriptionSubTask,
-                                watchDeadlineSubTask = data[position].watchDeadlineSubTask,
-                                dateDeadlineSubTask = data[position].dateDeadlineSubTask,
-                                volumeTask = data[position].volumeTask
-                            )
-                            subTaskProjectDao.update(newSubTask)
-                            updateTask(newSubTask,position)
-                        }
-                    }
-
-                    R.id.menu_project_delete -> {
-
-                    }
-                }
-                true
-            }
-            popupMenu.show()
-
-    }
-
-
     interface SubTaskEvent {
+
         fun onSubTaskClicked(
             task: SubTaskProject,
             position: Int,
         )
 
         fun onSubTaskLongClicked(subTask: SubTaskProject, position: Int)
+        fun onMenuItemClick(subTask: SubTaskProject, position: Int)
+        fun onTeamSubTaskClick(subTask: SubTaskProject, project: Project, position: Int)
+
     }
 }

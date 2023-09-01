@@ -119,6 +119,20 @@ interface SubTaskProjectDao : BaceDao<SubTaskProject> {
     fun getAllSubTaskProject(): List<SubTaskProject>
     @Query("SELECT * FROM subTaskProject_table WHERE idProject = :idProject")
     fun getSubTaskProject(idProject: Int,): List<SubTaskProject>
+    @Query("SELECT * FROM subTaskProject_table WHERE idSubTask = :idSubTaskProject")
+    fun getOnClickSubTaskProject(idSubTaskProject: Int,): SubTaskProject?
+}
+
+@Dao
+interface TeamSubTaskDao : BaceDao<TeamSubTask> {
+    @Query("SELECT * FROM teamSubTask_table")
+    fun getAllTeamSubTask(): List<TeamSubTask>
+    @Query("SELECT * FROM teamSubTask_table WHERE  idProject = :idProject AND idSubTask = :idSubTask")
+    fun getListTeamSubTask(idProject: Int,idSubTask: Int): List<TeamSubTask>
+    @Query("SELECT * FROM teamSubTask_table WHERE idProject = :idProject AND idSubTask = :idSubTask")
+    fun getTeamSubTask(idProject: Int,idSubTask: Int): TeamSubTask?
+    @Query("SELECT * FROM teamSubTask_table WHERE idEmployee = :idEmployee AND idProject = :idProject AND idSubTask = :idSubTaskProject")
+    fun getEmployeeTeamSubTask(idEmployee: Int, idProject: Int,idSubTaskProject: Int): TeamSubTask?
 }
 
 @Dao

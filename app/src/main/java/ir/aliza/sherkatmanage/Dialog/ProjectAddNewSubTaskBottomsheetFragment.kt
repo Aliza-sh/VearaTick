@@ -66,7 +66,6 @@ class ProjectAddNewSubTaskBottomsheetFragment(
 
         binding.sheetBtnDone.setOnClickListener {
             addNewTask()
-            onSubTaskToProject()
         }
 
         binding.btnCalendar.setOnClickListener {
@@ -139,7 +138,6 @@ class ProjectAddNewSubTaskBottomsheetFragment(
         }
 
     }
-
     fun onCreatePicker() {
 
         val persianCalendar = com.kizitonwose.calendarview.utils.persian.PersianCalendar()
@@ -168,7 +166,6 @@ class ProjectAddNewSubTaskBottomsheetFragment(
         timePickerDialog.show(parentFragmentManager, "TimePickerDialog")
 
     }
-
     fun onCreateCalendar() {
 
         val calendar = PersianCalendar()
@@ -205,7 +202,6 @@ class ProjectAddNewSubTaskBottomsheetFragment(
         )
 
     }
-
     fun onSubTaskToProject() {
         parentFragmentManager.beginTransaction().detach(this@ProjectAddNewSubTaskBottomsheetFragment)
             .replace(
@@ -219,7 +215,6 @@ class ProjectAddNewSubTaskBottomsheetFragment(
                 )
             ).commit()
     }
-
     private fun addNewTask() {
         if (
             binding.edtNameTask.length() > 0 &&
@@ -251,18 +246,27 @@ class ProjectAddNewSubTaskBottomsheetFragment(
             val project1 = projectDao.getProject(project.idProject)
 
             var numberSubTaskProject = project1!!.numberSubTaskProject
+            var efficiencyProject = 0
+
+            if (numberSubTaskProject != null) {
+                numberSubTaskProject ++
+                efficiencyProject =
+                    ((project1.numberDoneSubTaskProject!!.toDouble() / numberSubTaskProject) * 100).toInt()
+            }
 
             val newProject = Project(
                 idProject = project1.idProject,
                 nameProject = project1.nameProject,
+                noDeadlineProject = project.noDeadlineProject,
                 dateDeadlineProject = project1.dateDeadlineProject,
                 watchDeadlineProject = project1.watchDeadlineProject,
                 typeProject = project1.typeProject,
                 descriptionProject = project1.descriptionProject,
-                numberSubTaskProject = numberSubTaskProject!! + 1,
+                numberSubTaskProject = numberSubTaskProject!!,
                 numberDoneSubTaskProject = project1.numberDoneSubTaskProject,
-
-                )
+                progressProject = efficiencyProject,
+                budgetProject = project.budgetProject
+            )
             projectDao.update(newProject)
 
             val transaction =
@@ -279,6 +283,7 @@ class ProjectAddNewSubTaskBottomsheetFragment(
                 .addToBackStack(null)
                 .commit()
             dismiss()
+            onSubTaskToProject()
         } else {
             Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()
         }
