@@ -17,7 +17,7 @@ import ir.aliza.sherkatmanage.MainActivity
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.FragmentCompanyBinding
 import ir.aliza.sherkatmanage.databinding.ItemProjectBinding
-import ir.aliza.sherkatmanage.fgmSub.NumberProjectFragment
+import ir.aliza.sherkatmanage.fgmSub.ProjectNumberFragment
 
 
 class CompanyFragment : Fragment() {
@@ -60,7 +60,7 @@ class CompanyFragment : Fragment() {
 
         binding.btnSeeMoreNumPro.setOnClickListener {
             val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frame_layout_main, NumberProjectFragment(projectDao))
+            transaction.replace(R.id.frame_layout_main, ProjectNumberFragment(projectDao))
                 .addToBackStack(null)
                 .commit()
         }

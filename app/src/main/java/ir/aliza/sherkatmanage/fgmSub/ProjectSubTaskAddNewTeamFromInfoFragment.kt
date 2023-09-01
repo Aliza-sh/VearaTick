@@ -20,7 +20,7 @@ import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.FragmentProjectAddNewTeamBinding
 import ir.aliza.sherkatmanage.databinding.ItemAddEmployeeToProjectBinding
 
-class SubTaskAddNewTeamFromSubTaskFragment(
+class ProjectSubTaskAddNewTeamFromInfoFragment(
     val project: Project,
     val subTaskProject: SubTaskProject,
     val position: Int,
@@ -34,7 +34,9 @@ class SubTaskAddNewTeamFromSubTaskFragment(
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = FragmentProjectAddNewTeamBinding.inflate(layoutInflater, null, false)
         return binding.root
@@ -45,8 +47,8 @@ class SubTaskAddNewTeamFromSubTaskFragment(
         onBackPressed()
 
         binding.btnBck.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .detach(this@SubTaskAddNewTeamFromSubTaskFragment).replace(
+            parentFragmentManager.beginTransaction().detach(this@ProjectSubTaskAddNewTeamFromInfoFragment)
+                .replace(
                     R.id.layout_pro_and_emp, ProjectInformationFragment(
                         project,
                         project.watchDeadlineProject!!,
@@ -66,10 +68,13 @@ class SubTaskAddNewTeamFromSubTaskFragment(
             object : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
                 override fun onCreateViewHolder(
-                    parent: ViewGroup, viewType: Int
+                    parent: ViewGroup,
+                    viewType: Int
                 ): RecyclerView.ViewHolder {
                     bindingItemAddEmployeeToProject = ItemAddEmployeeToProjectBinding.inflate(
-                        LayoutInflater.from(parent.context), parent, false
+                        LayoutInflater.from(parent.context),
+                        parent,
+                        false
                     )
                     return object : RecyclerView.ViewHolder(bindingItemAddEmployeeToProject.root) {}
                 }
@@ -81,10 +86,13 @@ class SubTaskAddNewTeamFromSubTaskFragment(
                         AppDatabase.getDataBase(holder.itemView.context).teamSubTaskDao
                     val employee = employeeDao.getEmployee(data[position].idEmployee!!)
                     val teamSubTask = teamSubTaskDao.getTeamSubTask(
-                        project.idProject!!, subTaskProject.idSubTask!!
+                        project.idProject!!,
+                        subTaskProject.idSubTask!!
                     )
                     val employeeTeamSubTask = teamSubTaskDao.getEmployeeTeamSubTask(
-                        data[position].idEmployee!!, project.idProject, subTaskProject.idSubTask
+                        data[position].idEmployee!!,
+                        project.idProject,
+                        subTaskProject.idSubTask
                     )
 
                     if (data[position].genderEmployee == "زن") {
@@ -97,7 +105,7 @@ class SubTaskAddNewTeamFromSubTaskFragment(
                         data[position].specialtyEmployee
 
                     if (teamSubTask?.idSubTask != null && employeeTeamSubTask != null) {
-                        if (subTaskProject.idSubTask == teamSubTask.idSubTask && employeeTeamSubTask.idEmployee == employee!!.idEmployee) {
+                        if ( subTaskProject.idSubTask == teamSubTask.idSubTask && employeeTeamSubTask.idEmployee == employee!!.idEmployee) {
                             bindingItemAddEmployeeToProject.ckbEmployee.isChecked = true
                         }
                     }
@@ -137,7 +145,9 @@ class SubTaskAddNewTeamFromSubTaskFragment(
         val teamSubTaskDao = AppDatabase.getDataBase(itemView.context).teamSubTaskDao
         val employee = employeeDao.getEmployee(employee1.idEmployee!!)
         val employeeTeamProject = teamSubTaskDao.getEmployeeTeamSubTask(
-            employee!!.idEmployee!!, project.idProject!!, subTaskProject.idSubTask!!
+            employee!!.idEmployee!!,
+            project.idProject!!,
+            subTaskProject.idSubTask!!
         )
 
         if (b) {
@@ -167,19 +177,25 @@ class SubTaskAddNewTeamFromSubTaskFragment(
     }
 
     private fun onBackPressed() {
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner,
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     parentFragmentManager.beginTransaction()
-                        .detach(this@SubTaskAddNewTeamFromSubTaskFragment).replace(
-                            R.id.layout_pro_and_emp, ProjectSubTaskFragment(
+                        .detach(this@ProjectSubTaskAddNewTeamFromInfoFragment)
+                        .replace(
+                            R.id.layout_pro_and_emp,
+                            ProjectInformationFragment(
                                 project,
+                                project.watchDeadlineProject!!,
+                                project.dateDeadlineProject!!,
+                                subTaskProjectDao,
                                 projectDao,
                                 position,
-                                bindingActivityProAndEmp,
-                                subTaskProjectDao
+                                bindingActivityProAndEmp
                             )
-                        ).commit()
+                        )
+                        .commit()
                 }
             }
         )

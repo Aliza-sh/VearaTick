@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.databinding.FragmentNumberProjectBinding
 
-class NumberProjectFragment(val projectDao: ProjectDao) : Fragment() {
+class ProjectNumberFragment(val projectDao: ProjectDao) : Fragment() {
 
     lateinit var binding:FragmentNumberProjectBinding
     override fun onCreateView(

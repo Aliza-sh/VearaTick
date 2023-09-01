@@ -339,7 +339,7 @@ class ProjectInformationFragment(
         parentFragmentManager.beginTransaction().detach(this@ProjectInformationFragment)
             .replace(
                 R.id.layout_pro_and_emp,
-                SubTaskAddNewTeamFromInfoFragment(
+                ProjectSubTaskAddNewTeamFromInfoFragment(
                     project,
                     subTask,
                     position,

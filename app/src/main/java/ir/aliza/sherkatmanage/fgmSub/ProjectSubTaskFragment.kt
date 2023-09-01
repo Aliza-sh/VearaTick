@@ -255,7 +255,7 @@ class ProjectSubTaskFragment(
         parentFragmentManager.beginTransaction().detach(this@ProjectSubTaskFragment)
             .replace(
                 R.id.layout_pro_and_emp,
-                SubTaskAddNewTeamFromSubTaskFragment(
+                ProjectSubTaskAddNewTeamFromSubTaskFragment(
                     project,
                     subTask,
                     position,

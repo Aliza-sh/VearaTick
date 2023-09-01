@@ -20,7 +20,8 @@ import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.FragmentEmployeesBinding
 import ir.aliza.sherkatmanage.employeeAdapter
 
-class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBinding) : Fragment(), EmployeeAdapter.EmployeeEvents {
+class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBinding) : Fragment(),
+    EmployeeAdapter.EmployeeEvents {
 
     lateinit var binding: FragmentEmployeesBinding
     lateinit var efficiencyEmployeeDao: EfficiencyDao
@@ -51,13 +52,15 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
         onFabClicked()
     }
 
-    fun onBackPressed(){
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                val intent = Intent(requireContext(), MainActivity::class.java)
-                startActivity(intent)
-            }
-        })
+    fun onBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    startActivity(intent)
+                }
+            })
     }
 
     override fun onResume() {
@@ -72,11 +75,13 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
     }
 
 
-
     fun onFabClicked() {
         bindingActivityProAndEmpBinding.btnAdd.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.layout_pro_and_emp, EmployeeRecruitmentFragment(bindingActivityProAndEmpBinding,efficiencyEmployeeDao))
+            transaction.replace(
+                R.id.layout_pro_and_emp,
+                EmployeeRecruitmentFragment(bindingActivityProAndEmpBinding, efficiencyEmployeeDao)
+            )
                 .addToBackStack(null)
                 .commit()
         }
@@ -86,7 +91,13 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
         val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
         transaction.replace(
             R.id.layout_pro_and_emp,
-            EmployeeInformationFragment(employee, efficiencyEmployeeDao,position,employeeDao,bindingActivityProAndEmpBinding)
+            EmployeeInformationFragment(
+                employee,
+                efficiencyEmployeeDao,
+                position,
+                employeeDao,
+                bindingActivityProAndEmpBinding
+            )
         )
             .addToBackStack(null)
             .commit()

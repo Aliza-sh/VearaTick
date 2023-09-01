@@ -77,7 +77,7 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
     fun onFabClicked() {
         bindingActivityProAndEmp.btnAdd.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.add(R.id.layout_pro_and_emp, NewProjectFragment(projectDao,bindingActivityProAndEmp))
+            transaction.add(R.id.layout_pro_and_emp, ProjectNewFragment(projectDao,bindingActivityProAndEmp))
                 .addToBackStack(null)
                 .commit()
         }

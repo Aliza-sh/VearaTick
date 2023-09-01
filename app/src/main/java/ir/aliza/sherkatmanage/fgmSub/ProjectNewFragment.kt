@@ -32,7 +32,7 @@ import ir.aliza.sherkatmanage.projectAdapter
 import java.text.DecimalFormat
 
 
-class NewProjectFragment(
+class ProjectNewFragment(
     val projectDao: ProjectDao,
     val bindingActivityProAndEmp: ActivityProAndEmpBinding,
 ) : Fragment() {
@@ -285,14 +285,14 @@ class NewProjectFragment(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    parentFragmentManager.beginTransaction().detach(this@NewProjectFragment)
+                    parentFragmentManager.beginTransaction().detach(this@ProjectNewFragment)
                         .attach(ProjectFragment(bindingActivityProAndEmp)).commit()
                 }
             })
     }
 
     fun onNewProject() {
-        parentFragmentManager.beginTransaction().detach(this@NewProjectFragment)
+        parentFragmentManager.beginTransaction().detach(this@ProjectNewFragment)
             .replace(R.id.frame_layout_sub, ProjectFragment(bindingActivityProAndEmp))
             .commit()
     }
