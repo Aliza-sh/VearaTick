@@ -21,7 +21,6 @@
             app:cpb_background_progressbar_color="@color/white"
             app:cpb_background_progressbar_width="5dp"
             app:cpb_progress="0"
-            android:layout_marginEnd="@dimen/text_margin"
             app:cpb_progress_max="100"
             app:cpb_progressbar_color="@color/firoze"
             app:cpb_progressbar_width="5dp"
@@ -82,6 +81,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lin_name" />
 
+        <View
+            android:id="@+id/view9"
+            android:layout_width="1dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="6dp"
+            android:background="@color/gray"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/textView2"
+            app:layout_constraintStart_toEndOf="@+id/textView1"
+            app:layout_constraintTop_toBottomOf="@+id/lin_name" />
+
         <TextView
             android:id="@+id/txt_presence_week"
             android:layout_width="wrap_content"
@@ -127,6 +137,7 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="2dp"
             android:layout_marginBottom="8dp"
             android:text="بازدهی در هفته"

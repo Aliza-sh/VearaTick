@@ -15,6 +15,7 @@
         android:background="@drawable/shape_circle"
         android:elevation="20dp"
         android:rotationY="180"
+        app:tint="@color/white"
         android:src="@drawable/ic_back"
         app:backgroundTint="?attr/colorPrimaryVariant"
         app:layout_constraintEnd_toEndOf="parent"

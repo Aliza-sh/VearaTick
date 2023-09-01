@@ -36,7 +36,6 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
         binding = FragmentEmployeesBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onBackPressed()
@@ -51,7 +50,6 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
 
         onFabClicked()
     }
-
     fun onBackPressed() {
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
@@ -62,19 +60,15 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
                 }
             })
     }
-
     override fun onResume() {
         super.onResume()
         updateYourData()
     }
-
     private fun updateYourData() {
         employeeData = employeeDao.getAllEmployee()
         employeeAdapter = EmployeeAdapter(ArrayList(employeeData), this, efficiencyEmployeeDao)
         binding.recyclerViewEmployee.adapter = employeeAdapter
     }
-
-
     fun onFabClicked() {
         bindingActivityProAndEmpBinding.btnAdd.setOnClickListener {
             val transaction = requireActivity().supportFragmentManager.beginTransaction()
@@ -86,7 +80,6 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
                 .commit()
         }
     }
-
     override fun onEmployeeClicked(employee: Employee, position: Int) {
         val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
         transaction.replace(
@@ -102,7 +95,6 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
             .addToBackStack(null)
             .commit()
     }
-
     override fun onEmployeeLongClicked(employee: Employee, position: Int) {}
 
 }

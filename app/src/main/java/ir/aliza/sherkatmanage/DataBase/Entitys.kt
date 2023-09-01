@@ -14,10 +14,10 @@ data class Employee(
     val age: Int,
     val gender: String,
     val cellularPhone: Long,
-    val homePhone: Long,
-    val address: String,
+    val homePhone: Long? = 0,
+    val address: String? = "",
     val specialty: String,
-    val skill: String,
+    val skill: String? = "",
     val imgEmployee: ByteArray? = null,
 
     )

@@ -146,9 +146,7 @@ class EmployeeRecruitmentFragment(
             binding.edtNameEpm.length() > 0 &&
             binding.edtFamEmp.length() > 0 &&
             binding.edtAgeEmp.length() > 0 &&
-            binding.edtAddressEmp.length() > 0 &&
             binding.edtGenEmp.length() > 0 &&
-            binding.edtMaharatEmp.length() > 0 &&
             binding.edtNumEmp.length() > 0 &&
             binding.edtTakhasosEmp.length() > 0
         ) {
@@ -158,9 +156,12 @@ class EmployeeRecruitmentFragment(
             val txtGender = binding.edtGenEmp.text.toString()
             val txtSpecialty = binding.edtTakhasosEmp.text.toString()
             val txtNumber = binding.edtNumEmp.text.toString()
-            val txtNumberHome = binding.edtNumbhomeEmp.text.toString()
+            var txtNumberHome = binding.edtNumbhomeEmp.text.toString()
             val txtAddress = binding.edtAddressEmp.text.toString()
             val txtMaharat = binding.edtMaharatEmp.text.toString()
+
+            if (txtNumberHome == "")
+                txtNumberHome = "0"
 
             newEmployee = Employee(
                 name = txtname,

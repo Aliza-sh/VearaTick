@@ -39,11 +39,8 @@ class EmployeeInformationFragment(
         return binding.root
 
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
         onBackPressed()
-
         setData(employee)
 
         val myAdapter = ViewPagerEmployeeAdapter(employee, this, efficiencyEmployeeDao, position)
@@ -75,7 +72,6 @@ class EmployeeInformationFragment(
                 .replace(R.id.frame_layout_sub,EmployeeFragment(bindingActivityProAndEmpBinding)).commit()
         }
     }
-
     private fun onBackPressed() {
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
@@ -86,7 +82,6 @@ class EmployeeInformationFragment(
                 }
             })
     }
-
     private fun onMenuClicked(popupMenu: PopupMenu) {
         popupMenu.menuInflater.inflate(R.menu.menu_employee, popupMenu.menu)
         binding.btnMenuEmployee.setOnClickListener {
@@ -119,22 +114,23 @@ class EmployeeInformationFragment(
             }
         }
     }
-
     override fun onResume() {
         super.onResume()
         updateYourData()
         setData(employee)
     }
-
     private fun updateYourData() {
             employee = employeeDao.getEmployee(employee.idEmployee!!)!!
     }
-
     @SuppressLint("SetTextI18n")
     private fun setData(employee: Employee) {
 
         binding.txtNameEmp.text = employee.name + " " + employee.family
         binding.txtSpecialtyEmp.text = employee.specialty
+
+//        val progress = efficiencyEmployeeDao.getEfficiencyEmployee(employee.idEmployee!!)
+//        val progressEmployee  = progress!!.efficiencyTotal
+//        binding.progressCircular.progress = progressEmployee!!.toFloat()
 
         if (employee.gender == "زن") {
             binding.btnInfoPrn.setImageResource(R.drawable.img_matter)
