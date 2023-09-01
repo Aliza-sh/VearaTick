@@ -109,7 +109,6 @@ class ProjectInformationFragment(
         onMenuClicked(popupMenu)
 
     }
-
     @SuppressLint("SetTextI18n")
     fun setData() {
 
@@ -184,6 +183,7 @@ class ProjectInformationFragment(
         val project1 = projectDao.getProject(project.idProject!!)!!
 
         val numSubTask = project1.numberSubTaskProject
+        numberDonSubTaskProject = project1.numberDoneSubTaskProject!!
         var efficiencyProject = 0
 
         if (numSubTask != null)
