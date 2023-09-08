@@ -69,15 +69,18 @@ class DeleteSubTaskProjectDialogFragment(
             idProject = project1.idProject,
             nameProject = project1.nameProject,
             noDeadlineProject = project1.noDeadlineProject,
-            dateDeadlineProject = project1.dateDeadlineProject,
-            watchDeadlineProject = project1.watchDeadlineProject,
+            dayCreation = project1.dayCreation,
+            monthCreation = project1.monthCreation,
+            yearCreation = project1.yearCreation,
+            valueCalendar = project1.valueCalendar,
+            deadlineTask = project1.deadlineTask,
+            doneProject = project1.doneProject,
             typeProject = project1.typeProject,
             descriptionProject = project1.descriptionProject,
             numberSubTaskProject = numberSubTaskProject,
             numberDoneSubTaskProject = numberDonSubTaskProject,
             progressProject = efficiencyProject,
             budgetProject = project1.budgetProject,
-            doneProject = project1.doneProject
         )
         projectDao.update(newProject)
     }

@@ -51,8 +51,6 @@ class ProjectSubTaskAddNewTeamFromInfoFragment(
                 .replace(
                     R.id.layout_pro_and_emp, ProjectInformationFragment(
                         project,
-                        project.watchDeadlineProject!!,
-                        project.dateDeadlineProject!!,
                         subTaskProjectDao,
                         projectDao,
                         position,
@@ -187,8 +185,6 @@ class ProjectSubTaskAddNewTeamFromInfoFragment(
                             R.id.layout_pro_and_emp,
                             ProjectInformationFragment(
                                 project,
-                                project.watchDeadlineProject!!,
-                                project.dateDeadlineProject!!,
                                 subTaskProjectDao,
                                 projectDao,
                                 position,

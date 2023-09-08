@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/shape_back_bottomsheet"
     android:orientation="vertical"
-    android:background="?attr/colorPrimaryVariant"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Dialog.EmployeeSubTaskBottomsheetFragment">
+    tools:context=".Dialog.EmployeeTaskBottomsheetFragment">
 
     <ImageView
         android:layout_marginTop="-20dp"
@@ -16,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center|top"
         android:scaleType="centerCrop"
+        app:tint="@color/gray"
         android:src="@drawable/ic_remove"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -60,31 +60,68 @@
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/textInputLayout2"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    <LinearLayout
+        android:id="@+id/linearLayout4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
         android:layout_marginBottom="8dp"
-        android:layout_weight="0.8"
-        android:hint="وظیفه"
-        android:textColorHint="?attr/colorOnSecondary"
-        app:boxStrokeColor="@color/firoze"
-        app:layout_constraintBottom_toTopOf="@+id/textInputLayout3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        android:layout_weight="2"
+        android:layoutDirection="rtl"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/textInputLayout3">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edt_name_task"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:singleLine="true"
-            android:textColor="?attr/colorOnSecondary" />
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="0.8"
+            android:hint="وظیفه"
+            app:hintTextColor="@color/firoze"
+            android:textColorHint="?attr/colorOnSecondary"
+            app:boxStrokeColor="@color/firoze">
 
-    </com.google.android.material.textfield.TextInputLayout>
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/dialog_edt_task"
+                android:layout_width="match_parent"
+                android:cursorVisible="false"
+                android:layout_height="wrap_content"
+                android:inputType="text"
+                android:singleLine="true"
+                android:textColor="?attr/colorOnSecondary" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="5dp"
+            android:layout_weight="2"
+            android:hint="حجم تسک"
+            app:hintTextColor="@color/firoze"
+            android:textColorHint="?attr/colorOnSecondary"
+            app:boxStrokeColor="@color/firoze">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/edt_Volume_task"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:cursorVisible="false"
+                android:backgroundTint="?attr/colorPrimaryVariant"
+                android:inputType="phone"
+                android:maxLength="3"
+                android:singleLine="true"
+                android:textColor="?attr/colorOnSecondary" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout3"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
@@ -96,19 +133,16 @@
         android:hint="توضیحات"
         android:textColorHint="?attr/colorOnSecondary"
         app:boxStrokeColor="@color/firoze"
+        app:hintTextColor="@color/firoze"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/edt_description_task"
+            android:id="@+id/dialog_edt_tozih"
             android:layout_width="match_parent"
-            android:layout_height="130dp"
+            android:layout_height="150dp"
             android:gravity="top"
-            android:inputType="text"
-            android:maxHeight="20dp"
-            android:maxEms="10"
-            android:minWidth="20dp"
             android:textColor="?attr/colorOnSecondary" />
 
     </com.google.android.material.textfield.TextInputLayout>

@@ -69,8 +69,6 @@ class ProjectSubTaskFragment(
                 .replace(
                     R.id.layout_pro_and_emp, ProjectInformationFragment(
                         project,
-                        project.watchDeadlineProject!!,
-                        project.dateDeadlineProject!!,
                         subTaskProjectDao,
                         projectDao,
                         position,
@@ -171,8 +169,6 @@ class ProjectSubTaskFragment(
                         .replace(
                             R.id.layout_pro_and_emp, ProjectInformationFragment(
                                 project,
-                                project.watchDeadlineProject!!,
-                                project.dateDeadlineProject!!,
                                 subTaskProjectDao,
                                 projectDao,
                                 position,
@@ -278,11 +274,12 @@ class ProjectSubTaskFragment(
                 idSubTask = onClickSubTask.idSubTask,
                 idProject = onClickSubTask.idProject,
                 nameSubTask = onClickSubTask.nameSubTask,
-                noDeadlineSubTask = onClickSubTask.noDeadlineSubTask,
                 doneSubTask = false,
                 descriptionSubTask = onClickSubTask.descriptionSubTask,
-                watchDeadlineSubTask = onClickSubTask.watchDeadlineSubTask,
-                dateDeadlineSubTask = onClickSubTask.dateDeadlineSubTask,
+                dayCreation = onClickSubTask.dayCreation,
+                monthCreation = onClickSubTask.monthCreation,
+                yearCreation = onClickSubTask.yearCreation,
+                valueCalendar = onClickSubTask.valueCalendar,
                 volumeTask = onClickSubTask.volumeTask
             )
             subTaskProjectDao.update(newSubTask)
@@ -301,8 +298,12 @@ class ProjectSubTaskFragment(
             val newProject = Project(
                 idProject = project.idProject,
                 nameProject = project.nameProject,
-                dateDeadlineProject = project.dateDeadlineProject,
-                watchDeadlineProject = project.watchDeadlineProject,
+                dayCreation = project.dayCreation,
+                monthCreation = project.monthCreation,
+                yearCreation = project.yearCreation,
+                valueCalendar = project.valueCalendar,
+                deadlineTask = project.deadlineTask,
+                doneProject = project.doneProject,
                 typeProject = project.typeProject,
                 descriptionProject = project.descriptionProject,
                 noDeadlineProject = project.noDeadlineProject,
@@ -324,11 +325,12 @@ class ProjectSubTaskFragment(
                 idSubTask = onClickSubTask.idSubTask,
                 idProject = onClickSubTask.idProject,
                 nameSubTask = onClickSubTask.nameSubTask,
-                noDeadlineSubTask = onClickSubTask.noDeadlineSubTask,
                 doneSubTask = true,
                 descriptionSubTask = onClickSubTask.descriptionSubTask,
-                watchDeadlineSubTask = onClickSubTask.watchDeadlineSubTask,
-                dateDeadlineSubTask = onClickSubTask.dateDeadlineSubTask,
+                dayCreation = onClickSubTask.dayCreation,
+                monthCreation = onClickSubTask.monthCreation,
+                yearCreation = onClickSubTask.yearCreation,
+                valueCalendar = onClickSubTask.valueCalendar,
                 volumeTask = onClickSubTask.volumeTask
             )
             subTaskProjectDao.update(newSubTask)
@@ -345,8 +347,12 @@ class ProjectSubTaskFragment(
             val newProject = Project(
                 idProject = project.idProject,
                 nameProject = project.nameProject,
-                dateDeadlineProject = project.dateDeadlineProject,
-                watchDeadlineProject = project.watchDeadlineProject,
+                dayCreation = project.dayCreation,
+                monthCreation = project.monthCreation,
+                yearCreation = project.yearCreation,
+                valueCalendar = project.valueCalendar,
+                deadlineTask = project.deadlineTask,
+                doneProject = project.doneProject,
                 typeProject = project.typeProject,
                 noDeadlineProject = project.noDeadlineProject,
                 descriptionProject = project.descriptionProject,
@@ -404,8 +410,12 @@ class ProjectSubTaskFragment(
         val newProject = Project(
             idProject = project1.idProject,
             nameProject = project1.nameProject,
-            dateDeadlineProject = project1.dateDeadlineProject,
-            watchDeadlineProject = project1.watchDeadlineProject,
+            dayCreation = project1.dayCreation,
+            monthCreation = project1.monthCreation,
+            yearCreation = project1.yearCreation,
+            valueCalendar = project1.valueCalendar,
+            deadlineTask = project1.deadlineTask,
+            doneProject = project.doneProject,
             typeProject = project1.typeProject,
             descriptionProject = project1.descriptionProject,
             numberSubTaskProject = numberSubTaskProject,

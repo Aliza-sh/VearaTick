@@ -21,19 +21,19 @@
             android:layout_height="0dp"
             android:background="?attr/colorPrimary"
             android:gravity="center"
-            android:lineSpacingExtra="2.6dp"
+            android:lineSpacingExtra="1.6dp"
+            android:text="سه شنبه\n10 اردیبهشت"
             android:textAllCaps="true"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="10sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:cardCornerRadius="10dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintDimensionRatio="W,2:1"
+            app:layout_constraintDimensionRatio="W,1.4:1"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_default="percent"
-            app:layout_constraintWidth_percent="0.119"
-            android:text="سه شنبه\n10 اردیبهشت" />
+            app:layout_constraintWidth_percent="0.2" />
 
         <!--Colored view divider-->
         <View
@@ -50,14 +50,14 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="@id/itemDateText"
-            app:layout_constraintDimensionRatio="W,1:1.8"
+            app:layout_constraintDimensionRatio="W,1:2"
             app:layout_constraintStart_toEndOf="@id/itemDateText"
             app:layout_constraintTop_toTopOf="@id/itemDateText">
 
             <ImageView
                 android:id="@+id/imageView5"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_gravity="center_vertical|end"
                 android:src="@drawable/img_in"
                 app:layout_constraintStart_toEndOf="@+id/view8"
@@ -73,11 +73,12 @@
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="@id/itemFlightDepartureImage"
-            app:layout_constraintDimensionRatio="W,4:2.5"
+            app:layout_constraintDimensionRatio="W,4:3.5"
             app:layout_constraintStart_toEndOf="@id/itemFlightDepartureImage"
             app:layout_constraintTop_toTopOf="@id/itemFlightDepartureImage">
 
             <TextView
+                android:letterSpacing="0.06"
                 android:id="@+id/txt_time_in_must"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -85,7 +86,7 @@
                 android:gravity="top|center"
                 android:text="14:30"
                 android:textColor="?attr/colorPrimary"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -93,18 +94,19 @@
                 android:gravity="center"
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="16sp"
+                android:textStyle="bold"
                 android:text="ورود" />
 
             <TextView
                 android:layout_marginTop="2dp"
-
+                android:letterSpacing="0.06"
                 android:id="@+id/txt_time_in"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:elevation="20dp"
                 android:gravity="bottom|center"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:text="14:30" />
 
         </LinearLayout>
@@ -119,8 +121,8 @@
             app:layout_constraintTop_toTopOf="@id/itemFlightDepartureLayout">
 
             <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="34dp"
+                android:layout_height="35dp"
                 android:layout_gravity="center_vertical|end"
                 app:srcCompat="@drawable/img_out"
                 app:tint="?attr/colorOnSurface" />
@@ -133,18 +135,19 @@
             android:gravity="center"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="@id/itemFlightDestinationImage"
-            app:layout_constraintDimensionRatio="W,4:2.5"
+            app:layout_constraintDimensionRatio="W,4:3.1"
             app:layout_constraintStart_toEndOf="@id/itemFlightDestinationImage"
             app:layout_constraintTop_toTopOf="@id/itemFlightDestinationImage">
 
             <TextView
+                android:letterSpacing="0.06"
                 android:id="@+id/txt_time_out_must"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="20:00"
                 android:textColor="?attr/colorPrimary"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/txt_out"
@@ -152,10 +155,12 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="خروج"
+                android:textStyle="bold"
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="16sp" />
 
             <TextView
+                android:letterSpacing="0.06"
                 android:layout_marginTop="2dp"
                 android:id="@+id/txt_time_out"
                 android:layout_width="match_parent"
@@ -163,7 +168,7 @@
                 android:gravity="center"
                 android:text="20:00"
                 android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
         <!--Departure/Destination dividers-->
@@ -175,6 +180,19 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/itemFlightDepartureLayout"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageButton
+            android:id="@+id/btn_menu_entry_exit"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_gravity="start"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="10dp"
+            android:background="#313131"
+            android:elevation="50dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_menu" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

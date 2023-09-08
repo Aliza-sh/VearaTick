@@ -43,7 +43,7 @@ class EmployeeInformationFragment(
         onBackPressed()
         setData(employee)
 
-        val myAdapter = ViewPagerEmployeeAdapter(employee, this, efficiencyEmployeeDao, position)
+        val myAdapter = ViewPagerEmployeeAdapter(employee, this, efficiencyEmployeeDao, position,employeeDao,bindingActivityProAndEmpBinding)
         binding.viewpagerEmp.adapter = myAdapter
         binding.viewpagerEmp.offscreenPageLimit = 2
 

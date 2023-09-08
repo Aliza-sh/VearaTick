@@ -73,6 +73,7 @@
             android:background="?attr/colorPrimaryVariant"
             android:padding="5dp"
             android:src="@drawable/ic_notifications"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="@+id/img_logo"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/img_logo" />
@@ -168,6 +169,7 @@
                                 android:layout_marginBottom="8dp"
                                 android:background="?attr/colorOnPrimary"
                                 android:padding="5dp"
+                                android:rotation="45"
                                 android:src="@drawable/go_to"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
@@ -227,6 +229,7 @@
                                 android:layout_marginBottom="8dp"
                                 android:background="#05A0A7"
                                 android:padding="5dp"
+                                android:rotation="-45"
                                 android:src="@drawable/go_to"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"

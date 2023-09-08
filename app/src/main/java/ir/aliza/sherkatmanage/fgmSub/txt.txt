@@ -1,0 +1,215 @@
+ fun calendarViewCreate(this1: EmployeeTaskFragment) {
+
+        class DayViewContainer(view: View) : ViewContainer(view) {
+            val binding1 = ItemCalendarDayTaskBinding.bind(view)
+            val dayText = binding1.exSevenDayText
+            val dateText = binding1.exSevenDateText
+            val selectedView = binding1.exSevenSelectedView
+
+            lateinit var day: CalendarDay
+
+            init {
+
+                view.setOnClickListener {
+
+                    Toast.makeText(context, "$taskDay", Toast.LENGTH_SHORT).show()
+
+                    if (day.owner == DayOwner.THIS_MONTH) {
+                        if (selectedDate != day.date) {
+                            val oldDate = selectedDate
+                            selectedDate = day.date
+                            binding.exSevenCalendar.notifyDateChanged(day.date)
+                            oldDate?.let { binding.exSevenCalendar.notifyDateChanged(it) }
+
+                        }
+                    }
+                }
+            }
+
+            fun bind(day: CalendarDay) {
+
+                val persianlCalendar = day.date.yearMonth.persianlCalendar()
+                val monthTitle =
+                    "${persianlCalendar.persianMonthName} ${
+                        persianlCalendar.persianYear.toString().persianNumbers()
+                    }"
+                binding.txtYM.text = monthTitle
+
+                this.day = day
+                dateText.text = day.persianCalendar.persianDay.toString().persianNumbers()
+                dayText.text = day.persianCalendar.persianWeekDayName.persianNumbers()
+
+
+
+                binding1.exSevenSelectedView.isVisible =
+                    day.persianCalendar.persianDay == selectedDate.toPersianCalendar().persianDay
+
+            }
+        }
+
+        binding.exSevenCalendar.dayBinder = object : DayBinder<DayViewContainer> {
+            override fun create(view: View) = DayViewContainer(view)
+            override fun bind(container: DayViewContainer, day: CalendarDay) = container.bind(day)
+        }
+
+        val currentMonth = YearMonth.now()
+        // Value for firstDayOfWeek does not matter since inDates and outDates are not generated.
+        binding.exSevenCalendar.setup(
+            currentMonth.minusMonths(12),
+            currentMonth.plusMonths(12),
+            DayOfWeek.SATURDAY
+        )
+        binding.exSevenCalendar.scrollToDate(LocalDate.now())
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                binding.ckbDoneTaskEmployee.setOnCheckedChangeListener() { compoundButton: CompoundButton, b: Boolean ->
+
+                    if (b) {
+
+                        val efficiencyEmployee =
+                            efficiencyEmployeeDao.getEfficiencyEmployee(data[position].idEmployee)
+
+                        val newTask = TaskEmployee(
+                            idTask = data[position].idTask,
+                            idEmployee = data[position].idEmployee,
+                            nameTask = data[position].nameTask,
+                            dayTaskDeadline = data[position].dayTaskDeadline,
+                            watchTaskDeadline = data[position].watchTaskDeadline,
+                            descriptionTask = data[position].descriptionTask,
+                            volumeTask = data[position].volumeTask,
+                            doneTask = b,
+                            yearDoneTask = date.persianYear,
+                            monthDoneTask = date.persianMonth,
+                            dayDoneTask = date.persianDay,
+                            watchDoneTask = date.time.hours,
+                            yearCreation = data[position].yearCreation,
+                            monthCreation = data[position].monthCreation,
+                            dayCreation = data[position].dayCreation,
+                            watchCreation = data[position].watchCreation,
+                        )
+                        taskEmployeeDao.update(newTask)
+
+                        val task = taskEmployeeDao.getInTaskDay(data[position].idTask!!,data[position].dayCreation)
+                        var efficiencyWeekDuties = 0
+                        var gradeDuties = data[position].volumeTask
+                        val startDate = DateTime(task!!.yearCreation, task.monthCreation, task.dayCreation, 0, 0, 0)
+                        val endDate = DateTime(task.yearDoneTask!!, task.monthDoneTask!!, task.dayDoneTask!!, 0, 0, 0)
+                        var daysBetween = Days.daysBetween(startDate, endDate).days
+                        if (daysBetween == 0)
+                            daysBetween = 1
+
+                        if (data[position].dayTaskDeadline <= 1) {
+                            val task = taskEmployeeDao.getInTaskDay(data[position].idTask!!,data[position].dayCreation)
+                            val watchTaskDeadline = task!!.watchTaskDeadline
+                            val watchDoneTask = task.watchDoneTask
+                            efficiencyWeekDuties = ((watchTaskDeadline.toDouble() / watchDoneTask!!) * 100).toInt()
+
+                        } else {
+                            val task = taskEmployeeDao.getInTaskDay(data[position].idTask!!,data[position].dayCreation)
+                            val dayTaskDeadline = task!!.dayTaskDeadline
+                            efficiencyWeekDuties = ((dayTaskDeadline.toDouble() / daysBetween)* 100).toInt()
+                        }
+
+                        val newEfficiencyEmployee = EfficiencyEmployee(
+                            idEfficiency = efficiencyEmployee!!.idEfficiency,
+                            idEmployee = efficiencyEmployee.idEmployee,
+                            mustWeekWatch = efficiencyEmployee.mustWeekWatch,
+                            numberDay = efficiencyEmployee.numberDay,
+                            totalWeekWatch = efficiencyEmployee.totalWeekWatch,
+                            totalWatch = efficiencyEmployee.totalWatch,
+                            efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
+                            efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
+                            totalWeekDuties = efficiencyEmployee.totalWeekDuties!! + gradeDuties,
+                            totalMonthDuties = efficiencyEmployee.totalMonthDuties,
+                            totalDuties = efficiencyEmployee.totalDuties,
+                            efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties!! + efficiencyWeekDuties,
+                            efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
+                            efficiencyTotal = efficiencyEmployee.efficiencyTotal,
+                            totalMonthWatch = efficiencyEmployee.totalMonthWatch
+                        )
+                        efficiencyEmployeeDao.update(newEfficiencyEmployee)
+
+                    }
+                    else {
+
+                        val efficiencyEmployee =
+                            efficiencyEmployeeDao.getEfficiencyEmployee(data[position].idEmployee)
+
+                        val task = taskEmployeeDao.getInTaskDay(data[position].idTask!!,data[position].dayCreation)
+                        var efficiencyWeekDuties = 0
+                        var gradeDuties = data[position].volumeTask
+                        val startDate = DateTime(task!!.yearCreation, task.monthCreation, task.dayCreation, 0, 0, 0)
+                        val endDate = DateTime(task.yearDoneTask!!, task.monthDoneTask!!, task.dayDoneTask!!, 0, 0, 0)
+                        var daysBetween = Days.daysBetween(startDate, endDate).days
+                        if (daysBetween == 0)
+                            daysBetween = 1
+
+                        if (data[position].dayTaskDeadline <= 1) {
+                            val watchTaskDeadline = task.watchTaskDeadline
+                            val watchDoneTask = task.watchDoneTask
+                            efficiencyWeekDuties = ((watchTaskDeadline.toDouble() / watchDoneTask!!) * 100).toInt()
+
+                        } else {
+                            val dayTaskDeadline = task.dayTaskDeadline
+                            efficiencyWeekDuties = ((dayTaskDeadline.toDouble() / daysBetween)* 100).toInt()
+                        }
+
+                        val newTask = TaskEmployee(
+                            idTask = data[position].idTask,
+                            idEmployee = data[position].idEmployee,
+                            nameTask = data[position].nameTask,
+                            dayTaskDeadline = data[position].dayTaskDeadline,
+                            watchTaskDeadline = data[position].watchTaskDeadline,
+                            descriptionTask = data[position].descriptionTask,
+                            volumeTask = data[position].volumeTask,
+                            doneTask = b,
+                            yearDoneTask = 0,
+                            monthDoneTask = 0,
+                            dayDoneTask = 0,
+                            watchDoneTask = 0,
+                            yearCreation = data[position].yearCreation,
+                            monthCreation = data[position].monthCreation,
+                            dayCreation = data[position].dayCreation,
+                            watchCreation = data[position].watchCreation,
+                        )
+                        taskEmployeeDao.update(newTask)
+
+                        val newEfficiencyEmployee = EfficiencyEmployee(
+                            idEfficiency = efficiencyEmployee!!.idEfficiency,
+                            idEmployee = efficiencyEmployee.idEmployee,
+                            mustWeekWatch = efficiencyEmployee.mustWeekWatch,
+                            numberDay = efficiencyEmployee.numberDay,
+                            totalWeekWatch = efficiencyEmployee.totalWeekWatch,
+                            totalWatch = efficiencyEmployee.totalWatch,
+                            efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
+                            efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
+                            totalWeekDuties = efficiencyEmployee.totalWeekDuties!! - gradeDuties,
+                            totalMonthDuties = efficiencyEmployee.totalMonthDuties,
+                            totalDuties = efficiencyEmployee.totalDuties,
+                            efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties!! - efficiencyWeekDuties,
+                            efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
+                            efficiencyTotal = efficiencyEmployee.efficiencyTotal,
+                            totalMonthWatch = efficiencyEmployee.totalMonthWatch
+                        )
+                        efficiencyEmployeeDao.update(newEfficiencyEmployee)
+                    }
+                }

@@ -49,8 +49,6 @@ class ProjectSubTaskAddNewTeamFromSubTaskFragment(
                 .detach(this@ProjectSubTaskAddNewTeamFromSubTaskFragment).replace(
                     R.id.layout_pro_and_emp, ProjectInformationFragment(
                         project,
-                        project.watchDeadlineProject!!,
-                        project.dateDeadlineProject!!,
                         subTaskProjectDao,
                         projectDao,
                         position,
@@ -177,7 +175,7 @@ class ProjectSubTaskAddNewTeamFromSubTaskFragment(
                                 projectDao,
                                 position,
                                 bindingActivityProAndEmp,
-                                subTaskProjectDao
+                                subTaskProjectDao,
                             )
                         ).commit()
                 }

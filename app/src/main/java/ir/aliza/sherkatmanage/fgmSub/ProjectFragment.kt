@@ -83,9 +83,9 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
         }
     }
 
-    override fun onProjectClicked(project: Project, position: Int, dateProject: String, watchProject: String) {
+    override fun onProjectClicked(project: Project, position: Int) {
         val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
-        transaction.add(R.id.layout_pro_and_emp, ProjectInformationFragment(project,watchProject,dateProject,subTaskProjectDao,
+        transaction.add(R.id.layout_pro_and_emp, ProjectInformationFragment(project,subTaskProjectDao,
             projectDao,position,bindingActivityProAndEmp))
             .addToBackStack(null)
             .commit()

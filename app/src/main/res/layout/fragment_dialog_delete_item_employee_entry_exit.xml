@@ -4,53 +4,53 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     app:cardBackgroundColor="?attr/colorPrimaryVariant"
-    app:cardCornerRadius="25dp">
+    app:cardCornerRadius="20dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layoutDirection="ltr"
-        style="@style/Theme.Material3.Light.Dialog"
         android:layout_height="wrap_content"
+        android:layoutDirection="ltr"
         android:padding="10dp">
 
         <TextView
             android:id="@+id/textView"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="این کارمندت امروز اومده ؟"
+            android:text=" میخوای این گزارش رو حذف کنی ؟"
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="28sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.button.MaterialButton
-            android:id="@+id/dialog_btn_Sure"
+            android:id="@+id/dialog_btn_deleteSure"
             android:layout_width="80dp"
             android:layout_height="40dp"
             android:layout_marginStart="8dp"
             android:background="@drawable/shape_dore_button"
             android:backgroundTint="?attr/colorPrimary"
-            android:text="آره"
+            android:text=" آره"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/dialog_btn_Cansel"
-            app:layout_constraintTop_toTopOf="@+id/dialog_btn_Cansel" />
+            app:layout_constraintStart_toEndOf="@+id/dialog_btn_deleteCansel"
+            app:layout_constraintTop_toTopOf="@+id/dialog_btn_deleteCansel" />
 
         <TextView
-            android:id="@+id/dialog_btn_Cansel"
+            android:id="@+id/dialog_btn_deleteCansel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="32dp"
             android:layout_marginBottom="16dp"
             android:backgroundTint="?attr/colorPrimaryVariant"
             android:paddingStart="40dp"
             android:paddingTop="5dp"
             android:paddingEnd="40dp"
             android:paddingBottom="5dp"
-            android:text="نه"
+            android:text=" نه"
             android:textColor="@color/firoze"
             android:textSize="20sp"
             android:textStyle="bold"

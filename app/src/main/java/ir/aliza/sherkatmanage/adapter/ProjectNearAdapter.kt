@@ -1,15 +1,22 @@
 package ir.aliza.sherkatmanage.adapter
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.jakewharton.threetenabp.AndroidThreeTen
+import com.kizitonwose.calendarview.utils.persian.toPersianCalendar
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.ItemProjectBinding
+import org.joda.time.DateTime
+import org.joda.time.Days
+import org.threeten.bp.LocalDate
 
 class ProjectNearAdapter(
     private val data: ArrayList<Project>,
@@ -24,6 +31,7 @@ class ProjectNearAdapter(
 
         @SuppressLint("SetTextI18n")
         fun bindData(position: Int) {
+            AndroidThreeTen.init(itemView.context)
 
             val teamProjectDao = AppDatabase.getDataBase(itemView.context).teamProjectDao
 
@@ -46,16 +54,43 @@ class ProjectNearAdapter(
 
             binding.txtNamePro.text = data[position].nameProject
 
-            if (data[position].noDeadlineProject!!) {
-                binding.txtDatePro.text = " ددلاین ندارد"
-            } else {
-                if (data[position].dateDeadlineProject != "" && data[position].watchDeadlineProject == "")
-                    binding.txtDatePro.text = data[position].dateDeadlineProject
-                else if (data[position].dateDeadlineProject == "" && data[position].watchDeadlineProject != "")
-                    binding.txtDatePro.text = "امروز" + "\n" + data[position].watchDeadlineProject
-                else if (data[position].dateDeadlineProject != "" && data[position].watchDeadlineProject != "")
-                    binding.txtDatePro.text =
-                        data[position].watchDeadlineProject + "\n" + data[position].dateDeadlineProject
+            if (data[position].doneProject!!){
+                binding.txtDatePro.visibility = View.GONE
+                binding.imgDone2.visibility =View.VISIBLE
+            }
+            else {
+                if (!data[position].noDeadlineProject!!) {
+                    val today = LocalDate.now().toPersianCalendar()
+                    val startDate =
+                        DateTime(today.persianYear, today.persianMonth , today.persianDay, 0, 0, 0)
+                    val endDate = DateTime(
+                        data[position].yearCreation,
+                        data[position].monthCreation,
+                        data[position].dayCreation,
+                        0,
+                        0,
+                        0
+                    )
+                    var daysBetween = Days.daysBetween(startDate, endDate).days
+
+                    if (daysBetween > 0)
+                        binding.txtDatePro.text = data[position].valueCalendar
+                    else if (daysBetween == 0)
+                        binding.txtDatePro.text = "امروز"
+                    else {
+                        val shape = GradientDrawable()
+                        shape.shape = GradientDrawable.RECTANGLE
+                        shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                        shape.setStroke(
+                            5,
+                            ContextCompat.getColor(binding.root.context, R.color.red_800)
+                        )
+                        binding.txtDatePro.background = shape
+                        binding.txtDatePro.text = "مهلت پروژه\n به اتمام رسید"
+                    }
+                } else {
+                    binding.txtDatePro.text = "پروژه ددلاین \nندارد"
+                }
             }
 
             binding.progressLimit4.progress = data[position].progressProject!!
@@ -65,8 +100,6 @@ class ProjectNearAdapter(
                 projectNearEvents.onProjectClicked(
                     data[position],
                     position,
-                    data[position].dateDeadlineProject!!,
-                    data[position].watchDeadlineProject!!
                 )
             }
 
@@ -125,8 +158,6 @@ class ProjectNearAdapter(
         fun onProjectClicked(
             project: Project,
             position: Int,
-            dateProject: String,
-            watchProject: String
         )
 
         fun onProjectLongClicked(project: Project, position: Int)

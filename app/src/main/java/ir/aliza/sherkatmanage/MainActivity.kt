@@ -12,7 +12,7 @@ import ir.aliza.sherkatmanage.DataBase.EmployeeDao
 import ir.aliza.sherkatmanage.DataBase.TaskEmployeeDao
 import ir.aliza.sherkatmanage.DataBase.TimeDao
 import ir.aliza.sherkatmanage.adapter.EmployeeAdapter
-import ir.aliza.sherkatmanage.adapter.InOutAdapter
+import ir.aliza.sherkatmanage.adapter.EntryExitEmployeeAdapter
 import ir.aliza.sherkatmanage.adapter.ProjectNearAdapter
 import ir.aliza.sherkatmanage.adapter.TaskEmployeeAdapter
 import ir.aliza.sherkatmanage.databinding.ActivityMainBinding
@@ -25,7 +25,7 @@ lateinit var timeDao: TimeDao
 lateinit var taskEmployeeDao: TaskEmployeeDao
 lateinit var projectAdapter: ProjectNearAdapter
 lateinit var taskAdapter: TaskEmployeeAdapter
-lateinit var inOutAdapter: InOutAdapter
+lateinit var inOutAdapter: EntryExitEmployeeAdapter
 lateinit var employeeAdapter: EmployeeAdapter
 
 class MainActivity : AppCompatActivity() {

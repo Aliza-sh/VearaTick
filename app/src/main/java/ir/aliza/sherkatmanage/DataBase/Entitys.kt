@@ -62,25 +62,18 @@ data class TaskEmployee(
     val idEmployee: Int,
 
     val nameTask: String,
-    val dayTaskDeadline: Int,
-    val watchTaskDeadline: Int,
     val descriptionTask: String,
+    val yearCreation: Int,
+    val monthCreation: Int,
+    val dayCreation: Int,
     val volumeTask: Int,
 
-    val doneTask: Boolean? = null,
-    val yearDoneTask: Int? = 0,
-    val monthDoneTask: Int? = 0,
-    val dayDoneTask: Int? = 0,
-    val watchDoneTask: Int? = 0,
+    val doneTask: Boolean? = false,
+    val deadlineTask: Int? = 0
 
     //val progressTask: Int? = 0,
     //val numberSubTaskEmployeeTask: Int? = 0,
     //val numberDoneSubTaskEmployeeTask: Int? = 0,
-
-    val yearCreation: Int,
-    val monthCreation: Int,
-    val dayCreation: Int,
-    val watchCreation: Int,
 
 )
 
@@ -107,9 +100,12 @@ data class Project(
 
     val nameProject: String,
     val descriptionProject: String,
+    val valueCalendar : String,
     val noDeadlineProject: Boolean? = false,
-    val watchDeadlineProject: String? = "0",
-    val dateDeadlineProject: String? = "0",
+    val yearCreation: Int,
+    val monthCreation: Int,
+    val dayCreation: Int,
+    val deadlineTask: Int? = 0,
     val typeProject: String,
     val budgetProject: String? = "0",
 
@@ -147,9 +143,11 @@ data class SubTaskProject(
     val nameSubTask: String,
     val descriptionSubTask: String,
     val doneSubTask: Boolean? = false,
-    val noDeadlineSubTask: Boolean? = false,
-    val watchDeadlineSubTask: String? = "0",
-    val dateDeadlineSubTask: String? = "0",
+    val valueCalendar : String,
+    val yearCreation: Int,
+    val monthCreation: Int,
+    val dayCreation: Int,
+    val deadlineTask: Int? = 0,
     val volumeTask: Int,
     )
 

@@ -1,15 +1,23 @@
 package ir.aliza.sherkatmanage.adapter
 
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.jakewharton.threetenabp.AndroidThreeTen
+import com.kizitonwose.calendarview.utils.persian.toPersianCalendar
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.DataBase.SubTaskProject
 import ir.aliza.sherkatmanage.DataBase.SubTaskProjectDao
+import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.ItemSubTaskBinding
+import org.joda.time.DateTime
+import org.joda.time.Days
+import org.threeten.bp.LocalDate
 
 class SubTaskProjectAdapter(
     private val data: ArrayList<SubTaskProject>,
@@ -28,31 +36,50 @@ class SubTaskProjectAdapter(
         val btnMenuSubTaskProject = binding.btnMenuSubTaskProject
 
         fun bindData(position: Int, clickListener: SubTaskEvent) {
+            AndroidThreeTen.init(itemView.context)
 
             binding.txtTack.text = data[position].nameSubTask
             binding.txtDescription.text = data[position].descriptionSubTask
+            val today = LocalDate.now().toPersianCalendar()
 
             if (data[position].doneSubTask!!) {
                 binding.txtDedlineSubTask.visibility = View.GONE
                 binding.imgDone.visibility = View.VISIBLE
-            } else {
-                if (data[position].noDeadlineSubTask!!) {
-                    binding.txtDedlineSubTask.text = " ددلاین ندارد"
-                } else {
-                    if (data[position].dateDeadlineSubTask != "" && data[position].watchDeadlineSubTask == "")
-                        binding.txtDedlineSubTask.text = data[position].dateDeadlineSubTask
-                    else if (data[position].dateDeadlineSubTask == "" && data[position].watchDeadlineSubTask != "")
-                        binding.txtDedlineSubTask.text =
-                            "امروز" + "\n" + data[position].watchDeadlineSubTask
-                    else if (data[position].dateDeadlineSubTask != "" && data[position].watchDeadlineSubTask != "")
-                        binding.txtDedlineSubTask.text =
-                            data[position].watchDeadlineSubTask + "\n" + data[position].dateDeadlineSubTask
+            }
+            else {
+                val startDate =
+                    DateTime(today.persianYear, today.persianMonth , today.persianDay, 0, 0, 0)
+                val endDate = DateTime(
+                    data[position].yearCreation,
+                    data[position].monthCreation,
+                    data[position].dayCreation,
+                    0,
+                    0,
+                    0
+                )
+                var daysBetween = Days.daysBetween(startDate, endDate).days
+
+                if (daysBetween > 0)
+                    binding.txtDedlineSubTask.text = "$daysBetween روز دیگر باقیمانده است "
+                else if (daysBetween == 0)
+                    binding.txtDedlineSubTask.text = "امروز باید تسک تحویل داده شه"
+                else {
+                    daysBetween = -daysBetween
+                    binding.txtDedlineSubTask.text = "$daysBetween روز از تحویل تسک گذشته "
+                    val shape = GradientDrawable()
+                    shape.shape = GradientDrawable.RECTANGLE
+                    shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                    shape.setStroke(
+                        5,
+                        ContextCompat.getColor(binding.root.context, R.color.red_800)
+                    )
+                    binding.txtDedlineSubTask.background = shape
                 }
             }
 
             if (data[position].idSubTask != null) {
                 val teamSubTaskDao = AppDatabase.getDataBase(itemView.context).teamSubTaskDao
-                val  employeeTeamSubTask = teamSubTaskDao.getListTeamSubTask(
+                val employeeTeamSubTask = teamSubTaskDao.getListTeamSubTask(
                     project.idProject!!,
                     idSubTask = data[position].idSubTask!!
                 )

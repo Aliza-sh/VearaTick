@@ -6,18 +6,23 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ir.aliza.sherkatmanage.DataBase.Day
 import ir.aliza.sherkatmanage.DataBase.Time
-import ir.aliza.sherkatmanage.databinding.FragmentDialogDoneEntryBinding
-import ir.aliza.sherkatmanage.databinding.ItemInOutBinding
+import ir.aliza.sherkatmanage.databinding.ItemEntryExitBinding
 
-class InOutAdapter(val data: ArrayList<Time>, val entryExit: Day?, val nameDay: String) :
-    RecyclerView.Adapter<InOutAdapter.CalendarViewHolder>() {
+class EntryExitEmployeeAdapter(
+    val data: ArrayList<Time>,
+    val entryExit: Day?,
+    val nameDay: String,
+    private val entryExitEmployee: EntryExitEmployeeEvent,
+    val layout: View
+) :
+    RecyclerView.Adapter<EntryExitEmployeeAdapter.EntryExitEmployeeViewHolder>() {
 
-    lateinit var binding: ItemInOutBinding
-    lateinit var binding1: FragmentDialogDoneEntryBinding
+    lateinit var binding: ItemEntryExitBinding
 
-    inner class CalendarViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class EntryExitEmployeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindData(position: Int) {
+        val btnMenu = binding.btnMenuEntryExit
+        fun bindData(position: Int, clickListener: EntryExitEmployeeEvent) {
 
             binding.txtTimeOutMust.text = entryExit?.exit
             binding.txtTimeInMust.text = entryExit?.entry
@@ -26,19 +31,22 @@ class InOutAdapter(val data: ArrayList<Time>, val entryExit: Day?, val nameDay: 
             binding.txtTimeOut.text = data[position].exit
             binding.itemDateText.text = "$nameDay \n ${data[position].day} ${data[position].month}"
 
+            binding.btnMenuEntryExit.setOnClickListener {
+                clickListener.onMenuItemClick(data[position], position,layout)
+            }
+
         }
 
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CalendarViewHolder {
-        binding = ItemInOutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        binding1 =
-            FragmentDialogDoneEntryBinding.inflate(LayoutInflater.from(parent.context), null, false)
-        return CalendarViewHolder(binding.root)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EntryExitEmployeeViewHolder {
+        binding = ItemEntryExitBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+
+        return EntryExitEmployeeViewHolder(binding.root)
     }
 
-    override fun onBindViewHolder(holder: CalendarViewHolder, position: Int) {
-        holder.bindData(position)
+    override fun onBindViewHolder(holder: EntryExitEmployeeViewHolder, position: Int) {
+        holder.bindData(position,entryExitEmployee)
     }
 
     override fun getItemId(position: Int): Long {
@@ -73,6 +81,10 @@ class InOutAdapter(val data: ArrayList<Time>, val entryExit: Day?, val nameDay: 
         data.set(position, newInOut)
         notifyItemChanged(position)
 
+    }
+
+    interface EntryExitEmployeeEvent {
+        fun onMenuItemClick(time: Time, position: Int, layout: View)
     }
 
 }

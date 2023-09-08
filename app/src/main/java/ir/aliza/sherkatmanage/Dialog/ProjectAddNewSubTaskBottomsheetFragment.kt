@@ -1,19 +1,12 @@
 package ir.aliza.sherkatmanage.Dialog
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.Toast
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
-import com.wdullaer.materialdatetimepicker.time.Timepoint
 import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints
 import com.xdev.arch.persiancalendar.datepicker.DateValidatorPointForward
 import com.xdev.arch.persiancalendar.datepicker.MaterialDatePicker
@@ -29,7 +22,6 @@ import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.SubTaskProjectAdapter
 import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.BottomsheetfragmentSubtaskProjectBinding
-import ir.aliza.sherkatmanage.databinding.FragmentDialogDeadlineBinding
 import ir.aliza.sherkatmanage.fgmSub.ProjectSubTaskFragment
 
 class ProjectAddNewSubTaskBottomsheetFragment(
@@ -42,14 +34,8 @@ class ProjectAddNewSubTaskBottomsheetFragment(
 ) : BottomSheetDialogFragment() {
 
     lateinit var binding: BottomsheetfragmentSubtaskProjectBinding
-    lateinit var bindingDialogView: FragmentDialogDeadlineBinding
 
-    var valueBtnNoDate = false
-    var valueBtnWatch = false
-    var valueBtnCalendar = false
-
-    var valueWatch = ""
-    var valueCalendar = ""
+    var valueCalendar :PersianCalendar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,7 +43,6 @@ class ProjectAddNewSubTaskBottomsheetFragment(
         savedInstanceState: Bundle?
     ): View {
         binding = BottomsheetfragmentSubtaskProjectBinding.inflate(layoutInflater, container, false)
-        bindingDialogView = FragmentDialogDeadlineBinding.inflate(layoutInflater, container, false)
 
         return binding.root
     }
@@ -69,103 +54,11 @@ class ProjectAddNewSubTaskBottomsheetFragment(
         }
 
         binding.btnCalendar.setOnClickListener {
-            showDeadlineDialog()
+            onCreateCalendar()
         }
 
     }
 
-    private fun showDeadlineDialog() {
-
-        val parent = bindingDialogView.root.parent as? ViewGroup
-        parent?.removeView(bindingDialogView.root)
-        val dialogBuilder = AlertDialog.Builder(bindingDialogView.root.context)
-        dialogBuilder.setView(bindingDialogView.root)
-
-        bindingDialogView.btnNoDate.setOnClickListener {
-            if (!valueBtnNoDate && !valueBtnWatch && !valueBtnCalendar) {
-                bindingDialogView.btnNoDate.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
-                valueBtnNoDate = true
-
-            } else {
-                bindingDialogView.btnNoDate.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
-                valueBtnNoDate = false
-
-            }
-        }
-
-        bindingDialogView.btnWatch.setOnClickListener {
-            if (!valueBtnNoDate && !valueBtnWatch) {
-                onCreatePicker()
-            } else {
-                bindingDialogView.btnWatch.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
-                bindingDialogView.txtWatch.text = "ساعت"
-                bindingDialogView.txtWatch.textSize = 20f
-                valueBtnWatch = false
-            }
-        }
-
-        bindingDialogView.btnCalendar.setOnClickListener {
-            if (!valueBtnNoDate && !valueBtnCalendar) {
-                onCreateCalendar()
-            } else {
-                bindingDialogView.txtCalendar.text = "تقویم"
-                bindingDialogView.txtCalendar.textSize = 20f
-                bindingDialogView.btnCalendar.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
-                valueBtnCalendar = false
-            }
-        }
-
-        val alertDialog = dialogBuilder.create()
-        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.Transparent.toArgb()))
-        alertDialog.setCancelable(false)
-        alertDialog.show()
-        bindingDialogView.dialogBtnCansel.setOnClickListener {
-            alertDialog.dismiss()
-        }
-        bindingDialogView.dialogBtnSure.setOnClickListener {
-
-            if (valueBtnNoDate)
-                binding.txtDedlineDateTime.text = "پروژه ددلاین \n ندارد "
-            if (valueBtnWatch && !valueBtnCalendar)
-                binding.txtDedlineDateTime.text = valueWatch
-            if (!valueBtnWatch && valueBtnCalendar)
-                binding.txtDedlineDateTime.text = valueCalendar
-            if (valueBtnWatch && valueBtnCalendar)
-                binding.txtDedlineDateTime.text = "$valueCalendar \n$valueWatch "
-
-            alertDialog.dismiss()
-        }
-
-    }
-    fun onCreatePicker() {
-
-        val persianCalendar = com.kizitonwose.calendarview.utils.persian.PersianCalendar()
-
-        val timePickerDialog = TimePickerDialog.newInstance(
-            TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute, second ->
-                valueWatch = "$hourOfDay:$minute"
-                bindingDialogView.txtWatch.text = valueWatch
-                bindingDialogView.txtWatch.textSize = 24f
-                bindingDialogView.btnWatch.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
-                valueBtnWatch = true
-            },
-
-            true
-        )
-        timePickerDialog.isThemeDark = true
-        timePickerDialog.setCancelText("بیخیال")
-        timePickerDialog.setOkText("تایید")
-        timePickerDialog.setTimeInterval(1, 1, 10)
-        timePickerDialog.setInitialSelection(
-            Timepoint(
-                persianCalendar.time.hours,
-                persianCalendar.time.minutes
-            )
-        )
-        timePickerDialog.show(parentFragmentManager, "TimePickerDialog")
-
-    }
     fun onCreateCalendar() {
 
         val calendar = PersianCalendar()
@@ -192,11 +85,8 @@ class ProjectAddNewSubTaskBottomsheetFragment(
                 @SuppressLint("SetTextI18n")
                 override fun onPositiveButtonClick(selection: Long?) {
                     val date = PersianCalendar(selection!!)
-                    valueCalendar = date.toString()
-                    bindingDialogView.txtCalendar.text = valueCalendar
-                    bindingDialogView.txtCalendar.textSize = 22f
-                    bindingDialogView.btnCalendar.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
-                    valueBtnCalendar = true
+                    valueCalendar = date
+                    binding.txtDedlineDateTime.text = "${date.year}/${date.month + 1}/${date.day}"
                 }
             }
         )
@@ -224,21 +114,18 @@ class ProjectAddNewSubTaskBottomsheetFragment(
         ) {
             val txtTask = binding.edtNameTask.text.toString()
             val txtDescription = binding.edtDescriptionTask.text.toString()
-            val noDeadline = valueBtnNoDate
-            val txtWatch = valueWatch
-            val txtDate = valueCalendar
             val txtVolume = binding.edtVolumeTask.text.toString()
 
             val newSubTask = SubTaskProject(
 
                 idProject = project.idProject!!,
                 nameSubTask = txtTask,
-                noDeadlineSubTask = noDeadline,
                 descriptionSubTask = txtDescription,
-                watchDeadlineSubTask = txtWatch,
-                dateDeadlineSubTask =txtDate ,
-                volumeTask = txtVolume.toInt()
-
+                volumeTask = txtVolume.toInt(),
+                dayCreation = valueCalendar!!.day,
+                monthCreation = valueCalendar!!.month,
+                yearCreation = valueCalendar!!.year,
+                valueCalendar = "${valueCalendar!!.year}/${valueCalendar!!.month + 1}/${valueCalendar!!.day}"
                 )
             subTaskProjectDao.insert(newSubTask)
             subTaskProjectAdapter.addTask(newSubTask)
@@ -257,9 +144,13 @@ class ProjectAddNewSubTaskBottomsheetFragment(
             val newProject = Project(
                 idProject = project1.idProject,
                 nameProject = project1.nameProject,
-                noDeadlineProject = project.noDeadlineProject,
-                dateDeadlineProject = project1.dateDeadlineProject,
-                watchDeadlineProject = project1.watchDeadlineProject,
+                noDeadlineProject = project1.noDeadlineProject,
+                dayCreation = project1.dayCreation,
+                monthCreation = project1.monthCreation,
+                yearCreation = project1.yearCreation,
+                valueCalendar = project1.valueCalendar,
+                deadlineTask = project1.deadlineTask,
+                doneProject = project1.doneProject,
                 typeProject = project1.typeProject,
                 descriptionProject = project1.descriptionProject,
                 numberSubTaskProject = numberSubTaskProject!!,

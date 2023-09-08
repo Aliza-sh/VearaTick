@@ -43,7 +43,7 @@ class ProjectPayingEmployeesFragment(
         binding.btnBck.setOnClickListener {
             parentFragmentManager.beginTransaction().detach(this@ProjectPayingEmployeesFragment)
                 .replace(R.id.layout_pro_and_emp, ProjectInformationFragment(project,
-                    project.watchDeadlineProject!!,project.dateDeadlineProject!!,subTaskProjectDao,projectDao,position,bindingActivityProAndEmp)).commit()
+                    subTaskProjectDao,projectDao,position,bindingActivityProAndEmp)).commit()
         }
 
     }

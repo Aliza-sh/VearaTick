@@ -17,8 +17,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.Fragment
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog
-import com.wdullaer.materialdatetimepicker.time.Timepoint
 import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints
 import com.xdev.arch.persiancalendar.datepicker.DateValidatorPointForward
 import com.xdev.arch.persiancalendar.datepicker.MaterialDatePicker
@@ -40,8 +38,6 @@ class ProjectUpdateInfoFragment(
     val project: Project,
     val position: Int,
     val projectDao: ProjectDao,
-    val day: String,
-    val monthName: String,
     val subTaskProjectDao: SubTaskProjectDao,
     val bindingActivityProAndEmp: ActivityProAndEmpBinding,
 ) : Fragment() {
@@ -50,11 +46,12 @@ class ProjectUpdateInfoFragment(
     lateinit var bindingDialogView: FragmentDialogDeadlineBinding
 
     var valueBtnNoDate = false
-    var valueBtnWatch = false
     var valueBtnCalendar = false
 
-    var valueWatch = ""
     var valueCalendar = ""
+    var valueDay = 0
+    var valueMonth = 0
+    var valueYear = 0
 
     private var isUpdating = false
     var formattedValue = "0"
@@ -173,8 +170,6 @@ class ProjectUpdateInfoFragment(
                         .attach(
                             ProjectInformationFragment(
                                 project,
-                                day,
-                                monthName,
                                 subTaskProjectDao,
                                 projectDao,
                                 position,
@@ -192,7 +187,7 @@ class ProjectUpdateInfoFragment(
         dialogBuilder.setView(bindingDialogView.root)
 
         bindingDialogView.btnNoDate.setOnClickListener {
-            if (!valueBtnNoDate && !valueBtnWatch && !valueBtnCalendar) {
+            if (!valueBtnNoDate && !valueBtnCalendar) {
                 bindingDialogView.btnNoDate.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
                 valueBtnNoDate = true
 
@@ -203,16 +198,6 @@ class ProjectUpdateInfoFragment(
             }
         }
 
-        bindingDialogView.btnWatch.setOnClickListener {
-            if (!valueBtnNoDate && !valueBtnWatch) {
-                onCreatePicker()
-            } else {
-                bindingDialogView.btnWatch.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
-                bindingDialogView.txtWatch.text = "ساعت"
-                bindingDialogView.txtWatch.textSize = 20f
-                valueBtnWatch = false
-            }
-        }
         bindingDialogView.btnCalendar.setOnClickListener {
             if (!valueBtnNoDate && !valueBtnCalendar) {
                 onCreateCalendar()
@@ -236,12 +221,8 @@ class ProjectUpdateInfoFragment(
 
             if (valueBtnNoDate)
                 binding.txtDedlineDateTime.text = "پروژه ددلاین \n ندارد "
-            if (valueBtnWatch && !valueBtnCalendar)
-                binding.txtDedlineDateTime.text = valueWatch
-            if (!valueBtnWatch && valueBtnCalendar)
+            else
                 binding.txtDedlineDateTime.text = valueCalendar
-            if (valueBtnWatch && valueBtnCalendar)
-                binding.txtDedlineDateTime.text = "$valueCalendar \n$valueWatch "
 
             alertDialog.dismiss()
         }
@@ -254,8 +235,6 @@ class ProjectUpdateInfoFragment(
                 R.id.layout_pro_and_emp,
                 ProjectInformationFragment(
                     project,
-                    day,
-                    monthName,
                     subTaskProjectDao,
                     projectDao,
                     position,
@@ -280,42 +259,16 @@ class ProjectUpdateInfoFragment(
             valueBtnNoDate = project.noDeadlineProject
             binding.txtDedlineDateTime.setText("پروژه ددلاین \nندارد")
         } else {
-            valueWatch = project.watchDeadlineProject!!
-            valueCalendar = project.dateDeadlineProject!!
-            binding.txtDedlineDateTime.setText("${project.dateDeadlineProject} \n${project.watchDeadlineProject}")
+            valueCalendar = project.valueCalendar
+            valueDay = project.dayCreation
+            valueMonth = project.monthCreation
+            valueYear = project.yearCreation
+            binding.txtDedlineDateTime.setText(valueCalendar)
 
         }
 
         binding.edtTypeProject.setText(project.typeProject)
         binding.edtDescriptionPro.setText(project.descriptionProject)
-
-    }
-    fun onCreatePicker() {
-
-        val persianCalendar = com.kizitonwose.calendarview.utils.persian.PersianCalendar()
-
-        val timePickerDialog = TimePickerDialog.newInstance(
-            TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute, second ->
-                valueWatch = "$hourOfDay:$minute"
-                bindingDialogView.txtWatch.text = valueWatch
-                bindingDialogView.txtWatch.textSize = 24f
-                bindingDialogView.btnWatch.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
-                valueBtnWatch = true
-            },
-
-            true
-        )
-        timePickerDialog.isThemeDark = true
-        timePickerDialog.setCancelText("بیخیال")
-        timePickerDialog.setOkText("تایید")
-        timePickerDialog.setTimeInterval(1, 1, 10)
-        timePickerDialog.setInitialSelection(
-            Timepoint(
-                persianCalendar.time.hours,
-                persianCalendar.time.minutes
-            )
-        )
-        timePickerDialog.show(parentFragmentManager, "TimePickerDialog")
 
     }
     fun onCreateCalendar() {
@@ -344,8 +297,11 @@ class ProjectUpdateInfoFragment(
                 @SuppressLint("SetTextI18n")
                 override fun onPositiveButtonClick(selection: Long?) {
                     val date = PersianCalendar(selection!!)
-                    valueCalendar = date.toString()
-                    bindingDialogView.txtCalendar.text = valueCalendar
+                    valueCalendar = "${date.year}/${date.month + 1}/${date.day}"
+                    valueDay  = date.day
+                    valueMonth= date.month
+                    valueYear= date.year
+                    binding.txtDedlineDateTime.text = valueCalendar
                     bindingDialogView.txtCalendar.textSize = 22f
                     bindingDialogView.btnCalendar.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
                     valueBtnCalendar = true
@@ -364,7 +320,6 @@ class ProjectUpdateInfoFragment(
         ) {
             val txtNamePro = binding.edtNamePro.text.toString()
             val noDeadline = valueBtnNoDate
-            val txtWatch = valueWatch
             val txtDate = valueCalendar
             val txtTypeProject = binding.edtTypeProject.text.toString()
             val txtDescriptionPro = binding.edtDescriptionPro.text.toString()
@@ -375,8 +330,10 @@ class ProjectUpdateInfoFragment(
                 nameProject = txtNamePro,
                 descriptionProject = txtDescriptionPro,
                 noDeadlineProject = noDeadline,
-                watchDeadlineProject = txtWatch,
-                dateDeadlineProject = txtDate,
+                yearCreation =  valueYear.toInt(),
+                monthCreation = valueMonth.toInt(),
+                dayCreation = valueDay.toInt(),
+                valueCalendar = valueCalendar,
                 typeProject = txtTypeProject,
                 progressProject = project.progressProject,
                 doneProject = project.doneProject,

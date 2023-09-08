@@ -3,6 +3,7 @@ package ir.aliza.sherkatmanage.fgmSub
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.MenuItem
@@ -10,10 +11,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.jakewharton.threetenabp.AndroidThreeTen
+import com.kizitonwose.calendarview.utils.persian.toPersianCalendar
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
@@ -29,11 +34,12 @@ import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.FragmentDialogDeleteSubtaskProjectBinding
 import ir.aliza.sherkatmanage.databinding.FragmentProjectInformationBinding
 import ir.aliza.sherkatmanage.databinding.ItemSubTaskBinding
+import org.joda.time.DateTime
+import org.joda.time.Days
+import org.threeten.bp.LocalDate
 
 class ProjectInformationFragment(
     var project: Project,
-    val watchProject: String,
-    val dateProject: String,
     val subTaskProjectDao: SubTaskProjectDao,
     val projectDao: ProjectDao,
     val position: Int,
@@ -61,6 +67,8 @@ class ProjectInformationFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        AndroidThreeTen.init(view.context)
+
         onBackPressed()
 
         project = projectDao.getProject(project.idProject!!)!!
@@ -109,6 +117,7 @@ class ProjectInformationFragment(
         onMenuClicked(popupMenu)
 
     }
+
     @SuppressLint("SetTextI18n")
     fun setData() {
 
@@ -125,24 +134,72 @@ class ProjectInformationFragment(
             binding.txtSettlement.visibility = View.GONE
             binding.txtNoBudget.text = "پروژه بودجه \nندارد"
         }
+        if (project.doneProject!!) {
+            binding.txtDay.visibility = View.GONE
+            binding.txt.visibility = View.GONE
+            binding.textView28.visibility = View.GONE
+            binding.txtDone.visibility = View.VISIBLE
+            val shape = GradientDrawable()
+            shape.shape = GradientDrawable.RECTANGLE
+            shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+            shape.setStroke(
+                5,
+                ContextCompat.getColor(binding.root.context, R.color.green_700)
+            )
+            shape.setColor(ContextCompat.getColor(binding.root.context, R.color.blacke))
+            binding.txtDay.setTextColor(android.graphics.Color.parseColor("#c62828"))
+            binding.cardView5.background = shape
 
-        if (!project.noDeadlineProject!!) {
-            if (project.dateDeadlineProject != "" && project.watchDeadlineProject != "") {
-                binding.txtWatch.text = watchProject
-                binding.txtDate.text = dateProject
-            } else if (project.dateDeadlineProject != "" && project.watchDeadlineProject == "") {
-                binding.txtWatch.text = " ندارد"
-                binding.txtDate.text = dateProject
-            } else if (project.dateDeadlineProject == "" && project.watchDeadlineProject != "") {
-                binding.txtWatch.text = watchProject
-                binding.txtDate.text = " امروز"
-            }
         } else {
-            binding.imageView4.visibility = View.GONE
-            binding.imageView3.visibility = View.GONE
-            binding.txtDate.visibility = View.GONE
-            binding.txtWatch.visibility = View.GONE
-            binding.txtNoDeadline.text = "پروژه ددلاین \nندارد"
+            if (!project.noDeadlineProject!!) {
+                val today = LocalDate.now().toPersianCalendar()
+                val startDate =
+                    DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
+                val endDate = DateTime(
+                    project.yearCreation,
+                    project.monthCreation,
+                    project.dayCreation,
+                    0,
+                    0,
+                    0
+                )
+                var daysBetween = Days.daysBetween(startDate, endDate).days
+
+                if (daysBetween > 0) {
+                    binding.txtDay.text = "$daysBetween روز "
+                    binding.txt.text = " دیگر باقیمانده است "
+                    val shape = GradientDrawable()
+                    shape.shape = GradientDrawable.RECTANGLE
+                    shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                    shape.setStroke(
+                        5,
+                        ContextCompat.getColor(binding.root.context, R.color.firoze)
+                    )
+                    shape.setColor(ContextCompat.getColor(binding.root.context, R.color.blacke))
+                    binding.cardView5.background = shape
+                } else if (daysBetween == 0)
+                    binding.txtNoDeadline.text = " امروز باید تسک تحویل داده شه"
+                else {
+                    daysBetween = -daysBetween
+                    binding.txtDay.text = "$daysBetween روز "
+                    binding.txt.text = " از تحویل پروژه گذشته"
+                    val shape = GradientDrawable()
+                    shape.shape = GradientDrawable.RECTANGLE
+                    shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                    shape.setStroke(
+                        5,
+                        ContextCompat.getColor(binding.root.context, R.color.red_800)
+                    )
+                    shape.setColor(ContextCompat.getColor(binding.root.context, R.color.blacke))
+                    binding.txtDay.setTextColor(android.graphics.Color.parseColor("#c62828"))
+                    binding.cardView5.background = shape
+
+                }
+            } else {
+                binding.txtDay.visibility = View.GONE
+                binding.txt.visibility = View.GONE
+                binding.txtNoDeadline.text = "پروژه ددلاین \nندارد"
+            }
         }
 
         val numSubTask = project.numberSubTaskProject
@@ -178,6 +235,7 @@ class ProjectInformationFragment(
         }
 
     }
+
     fun setDataOnDone() {
 
         val project1 = projectDao.getProject(project.idProject!!)!!
@@ -207,6 +265,7 @@ class ProjectInformationFragment(
         binding.rcvTskPro.adapter = subTaskProjectAdapter
 
     }
+
     private fun onBackPressed() {
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
@@ -218,20 +277,30 @@ class ProjectInformationFragment(
                 }
             })
     }
+
     override fun onResume() {
         super.onResume()
         setDataOnDone()
         updateYourData()
         setData()
     }
+
     private fun updateYourData() {
         project = projectDao.getProject(project.idProject!!)!!
     }
+
     private fun onMenuClicked(popupMenu: PopupMenu) {
 
         popupMenu.menuInflater.inflate(R.menu.menu_project, popupMenu.menu)
         binding.btnMenuProject.setOnClickListener {
             popupMenu.show()
+
+            val doneMenuItem = popupMenu.menu.findItem(R.id.menu_project_done)
+            if (project.doneProject!!) {
+                doneMenuItem.title = "تکمیل نشد"
+            } else {
+                doneMenuItem.title = "تکمیل شد"
+            }
             popupMenu.setOnMenuItemClickListener { item ->
 
                 when (item.itemId) {
@@ -245,8 +314,6 @@ class ProjectInformationFragment(
                                 project,
                                 position,
                                 projectDao,
-                                watchProject,
-                                dateProject,
                                 subTaskProjectDao,
                                 bindingActivityProAndEmp
                             )
@@ -256,7 +323,9 @@ class ProjectInformationFragment(
                     }
 
                     R.id.menu_project_done -> {
-
+                        doneProject(doneMenuItem)
+                        parentFragmentManager.beginTransaction().detach(this@ProjectInformationFragment)
+                            .replace(R.id.frame_layout_sub, ProjectFragment(bindingActivityProAndEmp)).commit()
                     }
 
                     R.id.menu_project_delete -> {
@@ -276,6 +345,58 @@ class ProjectInformationFragment(
             }
         }
     }
+
+    private fun doneProject(doneMenuItem: MenuItem) {
+
+        if (project.doneProject!!) {
+
+            doneMenuItem.title = "تکمیل شد"
+
+            val newProject = Project(
+                idProject = project.idProject,
+                nameProject = project.nameProject,
+                noDeadlineProject = project.noDeadlineProject,
+                dayCreation = project.dayCreation,
+                monthCreation = project.monthCreation,
+                yearCreation = project.yearCreation,
+                typeProject = project.typeProject,
+                valueCalendar = project.valueCalendar,
+                deadlineTask = project.deadlineTask,
+                doneProject = false,
+                descriptionProject = project.descriptionProject,
+                numberSubTaskProject = project.numberSubTaskProject,
+                numberDoneSubTaskProject = project.numberDoneSubTaskProject,
+                progressProject = project.progressProject,
+                budgetProject = project.budgetProject,
+            )
+            projectDao.update(newProject)
+
+        } else {
+
+            doneMenuItem.title = "تکمیل نشد"
+
+            val newProject = Project(
+                idProject = project.idProject,
+                nameProject = project.nameProject,
+                noDeadlineProject = project.noDeadlineProject,
+                dayCreation = project.dayCreation,
+                monthCreation = project.monthCreation,
+                yearCreation = project.yearCreation,
+                typeProject = project.typeProject,
+                valueCalendar = project.valueCalendar,
+                deadlineTask = project.deadlineTask,
+                doneProject = true,
+                descriptionProject = project.descriptionProject,
+                numberSubTaskProject = project.numberSubTaskProject,
+                numberDoneSubTaskProject = project.numberDoneSubTaskProject,
+                progressProject = project.progressProject,
+                budgetProject = project.budgetProject,
+            )
+            projectDao.update(newProject)
+            Toast.makeText(context, " پروژه ${project.nameProject} تکمیل شد. ", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     override fun onSubTaskClicked(task: SubTaskProject, position: Int) {}
     override fun onSubTaskLongClicked(subTask: SubTaskProject, position: Int) {}
     override fun onMenuItemClick(subTask: SubTaskProject, position: Int) {
@@ -286,10 +407,10 @@ class ProjectInformationFragment(
         viewHolder.let { holder ->
             val btnMenuSubTaskProject = holder.btnMenuSubTaskProject
             val popupMenu = PopupMenu(context, btnMenuSubTaskProject)
-            popupMenu.inflate(R.menu.menu_project)
+            popupMenu.inflate(R.menu.menu_task_project)
             popupMenu.show()
 
-            val doneMenuItem = popupMenu.menu.findItem(R.id.menu_project_done)
+            val doneMenuItem = popupMenu.menu.findItem(R.id.menu_task_project_done)
             if (onClickSubTask!!.doneSubTask!!) {
                 doneMenuItem.title = "تکمیل نشد"
             } else {
@@ -300,7 +421,7 @@ class ProjectInformationFragment(
 
                 when (item.itemId) {
 
-                    R.id.menu_project_edit -> {
+                    R.id.menu_task_project_edit -> {
                         val bottomsheet = ProjectUpdateSubTaskFromInfoBottomsheetFragment(
                             subTaskProjectDao,
                             project,
@@ -318,13 +439,13 @@ class ProjectInformationFragment(
                         true
                     }
 
-                    R.id.menu_project_done -> {
+                    R.id.menu_task_project_done -> {
                         doneSubTask(onClickSubTask, doneMenuItem)
                         setDataOnDone()
                         true
                     }
 
-                    R.id.menu_project_delete -> {
+                    R.id.menu_task_project_delete -> {
                         showDeleteDialog(onClickSubTask)
                         true
                     }
@@ -335,6 +456,7 @@ class ProjectInformationFragment(
         }
 
     }
+
     override fun onTeamSubTaskClick(subTask: SubTaskProject, project: Project, position: Int) {
         parentFragmentManager.beginTransaction().detach(this@ProjectInformationFragment)
             .replace(
@@ -350,6 +472,7 @@ class ProjectInformationFragment(
             )
             .commit()
     }
+
     private fun doneSubTask(onClickSubTask: SubTaskProject, doneMenuItem: MenuItem) {
 
         if (onClickSubTask.doneSubTask!!) {
@@ -363,11 +486,12 @@ class ProjectInformationFragment(
                 idSubTask = onClickSubTask.idSubTask,
                 idProject = onClickSubTask.idProject,
                 nameSubTask = onClickSubTask.nameSubTask,
-                noDeadlineSubTask = onClickSubTask.noDeadlineSubTask,
                 doneSubTask = false,
                 descriptionSubTask = onClickSubTask.descriptionSubTask,
-                watchDeadlineSubTask = onClickSubTask.watchDeadlineSubTask,
-                dateDeadlineSubTask = onClickSubTask.dateDeadlineSubTask,
+                dayCreation = onClickSubTask.dayCreation,
+                monthCreation = onClickSubTask.monthCreation,
+                yearCreation = onClickSubTask.yearCreation,
+                valueCalendar = onClickSubTask.valueCalendar,
                 volumeTask = onClickSubTask.volumeTask
             )
             subTaskProjectDao.update(newSubTask)
@@ -386,14 +510,18 @@ class ProjectInformationFragment(
                 idProject = project.idProject,
                 nameProject = project.nameProject,
                 noDeadlineProject = project.noDeadlineProject,
-                dateDeadlineProject = project.dateDeadlineProject,
-                watchDeadlineProject = project.watchDeadlineProject,
+                dayCreation = project.dayCreation,
+                monthCreation = project.monthCreation,
+                yearCreation = project.yearCreation,
                 typeProject = project.typeProject,
+                valueCalendar = project.valueCalendar,
+                deadlineTask = project.deadlineTask,
+                doneProject = project.doneProject,
                 descriptionProject = project.descriptionProject,
                 numberSubTaskProject = project1.numberSubTaskProject,
                 numberDoneSubTaskProject = numberDonSubTaskProject,
                 progressProject = efficiencyProject,
-                budgetProject = project.budgetProject
+                budgetProject = project.budgetProject,
             )
             projectDao.update(newProject)
 
@@ -408,11 +536,12 @@ class ProjectInformationFragment(
                 idSubTask = onClickSubTask.idSubTask,
                 idProject = onClickSubTask.idProject,
                 nameSubTask = onClickSubTask.nameSubTask,
-                noDeadlineSubTask = onClickSubTask.noDeadlineSubTask,
                 doneSubTask = true,
                 descriptionSubTask = onClickSubTask.descriptionSubTask,
-                watchDeadlineSubTask = onClickSubTask.watchDeadlineSubTask,
-                dateDeadlineSubTask = onClickSubTask.dateDeadlineSubTask,
+                dayCreation = onClickSubTask.dayCreation,
+                monthCreation = onClickSubTask.monthCreation,
+                yearCreation = onClickSubTask.yearCreation,
+                valueCalendar = onClickSubTask.valueCalendar,
                 volumeTask = onClickSubTask.volumeTask
             )
             subTaskProjectDao.update(newSubTask)
@@ -430,9 +559,13 @@ class ProjectInformationFragment(
             val newProject = Project(
                 idProject = project.idProject,
                 nameProject = project.nameProject,
-                dateDeadlineProject = project.dateDeadlineProject,
-                watchDeadlineProject = project.watchDeadlineProject,
+                dayCreation = project.dayCreation,
+                monthCreation = project.monthCreation,
+                yearCreation = project.yearCreation,
                 typeProject = project.typeProject,
+                valueCalendar = project.valueCalendar,
+                deadlineTask = project.deadlineTask,
+                doneProject = project.doneProject,
                 noDeadlineProject = project.noDeadlineProject,
                 descriptionProject = project.descriptionProject,
                 numberSubTaskProject = project1.numberSubTaskProject,
@@ -444,6 +577,7 @@ class ProjectInformationFragment(
 
         }
     }
+
     private fun showDeleteDialog(onClickSubTask: SubTaskProject) {
 
         val parent = bindingDialogDeleteSubtaskProject.root.parent as? ViewGroup
@@ -466,6 +600,7 @@ class ProjectInformationFragment(
             alertDialog.dismiss()
         }
     }
+
     fun deleteItem(subTaskProject: SubTaskProject, position: Int) {
 
         val project1 = projectDao.getProject(project.idProject!!)
@@ -490,8 +625,12 @@ class ProjectInformationFragment(
         val newProject = Project(
             idProject = project1.idProject,
             nameProject = project1.nameProject,
-            dateDeadlineProject = project1.dateDeadlineProject,
-            watchDeadlineProject = project1.watchDeadlineProject,
+            dayCreation = project.dayCreation,
+            monthCreation = project.monthCreation,
+            yearCreation = project.yearCreation,
+            valueCalendar = project.valueCalendar,
+            deadlineTask = project.deadlineTask,
+            doneProject = project.doneProject,
             typeProject = project1.typeProject,
             descriptionProject = project1.descriptionProject,
             numberSubTaskProject = numberSubTaskProject,
@@ -503,5 +642,4 @@ class ProjectInformationFragment(
         )
         projectDao.update(newProject)
     }
-
 }

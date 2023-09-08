@@ -19,16 +19,49 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="ددلاین پروژه را تعیین کنید."
+            android:text=" ساعت ورود و خروج رو مشخص کن."
             android:textColor="?attr/colorOnSecondary"
             android:textSize="28sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <LinearLayout
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
+            android:id="@+id/btn_no_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:background="@drawable/shape_background_deadline_blacke"
+            android:gravity="center"
+            android:layoutDirection="rtl"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="@+id/btn_entry"
+            app:layout_constraintStart_toStartOf="@+id/btn_exit"
+            app:layout_constraintTop_toBottomOf="@+id/textView">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/ic_no_deadline" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                android:text="امروز نیومده"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+
+        </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/btn_calendar"
+            android:id="@+id/btn_exit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/shape_background_deadline_blacke"
@@ -37,8 +70,8 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btn_no_date"
-            app:layout_constraintTop_toTopOf="@+id/btn_no_date">
+            app:layout_constraintStart_toEndOf="@+id/btn_entry"
+            app:layout_constraintTop_toTopOf="@+id/btn_entry">
 
             <ImageView
                 app:tint="@color/white"
@@ -48,36 +81,36 @@
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
-                android:src="@drawable/ic_calendar" />
+                android:src="@drawable/img_out" />
 
             <TextView
-                android:id="@+id/txt_calendar"
+                android:id="@+id/txt_exit"
                 android:letterSpacing="0.04"
                 android:textAlignment="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="30dp"
-                android:text="تقویم"
+                android:text=" خروج"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/btn_no_date"
+            android:id="@+id/btn_entry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/shape_background_deadline_blacke"
             android:gravity="center"
+            android:layout_marginTop="24dp"
             android:layoutDirection="rtl"
             android:orientation="horizontal"
-            app:layout_constraintEnd_toStartOf="@+id/btn_calendar"
+            app:layout_constraintEnd_toStartOf="@+id/btn_exit"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView">
+            app:layout_constraintTop_toBottomOf="@+id/btn_no_date">
 
             <ImageView
                 android:layout_width="30dp"
@@ -86,16 +119,17 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="15dp"
-                android:src="@drawable/ic_no_deadline" />
+                android:src="@drawable/img_in"
+                app:tint="@color/white" />
 
             <TextView
-                android:id="@+id/txt_watch"
+                android:id="@+id/txt_entry"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="30dp"
                 android:letterSpacing="0.02"
-                android:text="پروژه ددلاین ندارد"
+                android:text=" ورود"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="20sp" />
@@ -115,7 +149,7 @@
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/dialog_btn_Cansel"
-            app:layout_constraintTop_toBottomOf="@+id/btn_no_date" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_entry" />
 
         <TextView
             android:id="@+id/dialog_btn_Cansel"
