@@ -192,9 +192,7 @@ class EmployeeStatisticsFragment(
                 efficiencyEmployee.totalMonthDuties!! + efficiencyEmployee.totalDuties!!
             efficiencyEmployee.efficiencyTotalDuties =
                 efficiencyEmployee.efficiencyTotalDuties!! + efficiencyEmployee.efficiencyMonthDuties!!
-            efficiencyEmployee.efficiencyTotalDuties =
-                efficiencyEmployee.efficiencyTotalDuties!! + efficiencyEmployee.efficiencyMonthDuties!!+ efficiencyEmployee.efficiencyWeekDuties!!
-        }
+            }
 
         binding.txtTackWeek.text = efficiencyEmployee.totalWeekDuties.toString() + " تا"
         binding.txtTackMonth.text = efficiencyEmployee.totalMonthDuties.toString() + " تا"
