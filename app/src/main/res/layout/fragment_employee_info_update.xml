@@ -180,7 +180,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="5dp"
-                        android:layout_weight="1.5"
+                        android:layout_weight="1.1"
                         android:hint="سن  *"
 
                         android:textColorHint="?attr/colorOnSecondary"
@@ -213,6 +213,29 @@
 
                         <AutoCompleteTextView
                             android:id="@+id/edt_gen_emp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            android:singleLine="true"
+                            android:textColor="?attr/colorOnSecondary" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/dialog_main_edt_rank_person"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="5dp"
+                        android:layout_weight="1"
+                        android:hint="رتبه  *"
+                        android:textColorHint="?attr/colorOnSecondary"
+                        app:boxStrokeColor="@color/firoze">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/edt_rank_emp"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:inputType="none"

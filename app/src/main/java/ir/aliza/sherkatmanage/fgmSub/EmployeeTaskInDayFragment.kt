@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.animation.LinearInterpolator
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -112,7 +113,7 @@ class EmployeeTaskInDayFragment(
             taskEmployeeAdapter =
                 TaskEmployeeAdapter(
                     ArrayList(taskData),
-                    this, taskEmployeeDao, employee, today
+                    this, taskEmployeeDao, employee, today, efficiencyEmployeeDao
                 )
             binding.recyclerView.adapter = taskEmployeeAdapter
         }
@@ -291,13 +292,35 @@ class EmployeeTaskInDayFragment(
             val efficiencyEmployee =
                 efficiencyEmployeeDao.getEfficiencyEmployee(onClickSubTask.idEmployee)
 
+            val startDate =
+                DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
+            val endDate = DateTime(
+                onClickSubTask.yearCreation,
+                onClickSubTask.monthCreation,
+                onClickSubTask.dayCreation,
+                0,
+                0,
+                0
+            )
+            var daysBetween = Days.daysBetween(startDate, endDate).days
+            Toast.makeText(context, "$daysBetween", Toast.LENGTH_SHORT).show()
             var efficiencyWeekDuties = 0
-            var gradeDuties = onClickSubTask.volumeTask
+            val gradeDuties = onClickSubTask.volumeTask
+            var deadlineTask = onClickSubTask.deadlineTask
+            val sub = deadlineTask - daysBetween
 
-            if (onClickSubTask.deadlineTask == 0) {
-                efficiencyWeekDuties = 100
-            } else {
-                efficiencyWeekDuties = (onClickSubTask.deadlineTask!! * 100)
+            if (deadlineTask==0) {
+                deadlineTask = 1
+                if (sub == 0) {
+                    efficiencyWeekDuties = ((deadlineTask * 100) / deadlineTask).toInt()
+                    efficiencyWeekDuties += 100
+                } else if (sub > 0) {
+                    efficiencyWeekDuties = ((sub * 100) / deadlineTask).toInt()
+                    efficiencyWeekDuties += 100
+                } else if (sub < 0) {
+                    efficiencyWeekDuties = ((sub * 100) / -deadlineTask).toInt()
+                    efficiencyWeekDuties += 100
+                }
             }
 
             val newTask = TaskEmployee(
@@ -310,7 +333,7 @@ class EmployeeTaskInDayFragment(
                 yearCreation = onClickSubTask.yearCreation,
                 monthCreation = onClickSubTask.monthCreation,
                 dayCreation = onClickSubTask.dayCreation,
-                deadlineTask = 0,
+                deadlineTask = onClickSubTask.deadlineTask,
             )
             taskEmployeeDao.update(newTask)
 
@@ -343,6 +366,20 @@ class EmployeeTaskInDayFragment(
             val efficiencyEmployee =
                 efficiencyEmployeeDao.getEfficiencyEmployee(onClickSubTask.idEmployee)
 
+            val newTask = TaskEmployee(
+                idTask = onClickSubTask.idTask,
+                idEmployee = onClickSubTask.idEmployee,
+                nameTask = onClickSubTask.nameTask,
+                descriptionTask = onClickSubTask.descriptionTask,
+                volumeTask = onClickSubTask.volumeTask,
+                doneTask = true,
+                deadlineTask = onClickSubTask.deadlineTask,
+                yearCreation = onClickSubTask.yearCreation,
+                monthCreation = onClickSubTask.monthCreation,
+                dayCreation = onClickSubTask.dayCreation,
+            )
+            taskEmployeeDao.update(newTask)
+
             val startDate =
                 DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
             val endDate = DateTime(
@@ -354,28 +391,24 @@ class EmployeeTaskInDayFragment(
                 0
             )
             var daysBetween = Days.daysBetween(startDate, endDate).days
-
-            val newTask = TaskEmployee(
-                idTask = onClickSubTask.idTask,
-                idEmployee = onClickSubTask.idEmployee,
-                nameTask = onClickSubTask.nameTask,
-                descriptionTask = onClickSubTask.descriptionTask,
-                volumeTask = onClickSubTask.volumeTask,
-                doneTask = true,
-                deadlineTask = daysBetween,
-                yearCreation = onClickSubTask.yearCreation,
-                monthCreation = onClickSubTask.monthCreation,
-                dayCreation = onClickSubTask.dayCreation,
-            )
-            taskEmployeeDao.update(newTask)
-
+            Toast.makeText(context, "$daysBetween", Toast.LENGTH_SHORT).show()
             var efficiencyWeekDuties = 0
-            var gradeDuties = onClickSubTask.volumeTask
+            val gradeDuties = onClickSubTask.volumeTask
+            var deadlineTask = onClickSubTask.deadlineTask
+            val sub = deadlineTask - daysBetween
 
-            if (onClickSubTask.deadlineTask == 0) {
-                efficiencyWeekDuties = 100
-            } else {
-                efficiencyWeekDuties = (onClickSubTask.deadlineTask!! * 100)
+            if (deadlineTask==0) {
+                deadlineTask = 1
+                if (sub == 0) {
+                    efficiencyWeekDuties = ((deadlineTask * 100) / deadlineTask).toInt()
+                    efficiencyWeekDuties += 100
+                } else if (sub > 0) {
+                    efficiencyWeekDuties = ((sub * 100) / deadlineTask).toInt()
+                    efficiencyWeekDuties += 100
+                } else if (sub < 0) {
+                    efficiencyWeekDuties = ((sub * 100) / -deadlineTask).toInt()
+                    efficiencyWeekDuties += 100
+                }
             }
 
             val newEfficiencyEmployee = EfficiencyEmployee(
@@ -427,13 +460,35 @@ class EmployeeTaskInDayFragment(
         val efficiencyEmployee =
             efficiencyEmployeeDao.getEfficiencyEmployee(onClickSubTask.idEmployee)
 
+        val startDate =
+            DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
+        val endDate = DateTime(
+            onClickSubTask.yearCreation,
+            onClickSubTask.monthCreation,
+            onClickSubTask.dayCreation,
+            0,
+            0,
+            0
+        )
+        var daysBetween = Days.daysBetween(startDate, endDate).days
+        Toast.makeText(context, "$daysBetween", Toast.LENGTH_SHORT).show()
         var efficiencyWeekDuties = 0
-        var gradeDuties = onClickSubTask.volumeTask
+        val gradeDuties = onClickSubTask.volumeTask
+        var deadlineTask = onClickSubTask.deadlineTask
+        val sub = deadlineTask - daysBetween
 
-        if (onClickSubTask.deadlineTask == 0) {
-            efficiencyWeekDuties = 100
-        } else {
-            efficiencyWeekDuties = (onClickSubTask.deadlineTask!! * 100)
+        if (deadlineTask==0) {
+            deadlineTask = 1
+            if (sub == 0) {
+                efficiencyWeekDuties = ((deadlineTask * 100) / deadlineTask).toInt()
+                efficiencyWeekDuties += 100
+            } else if (sub > 0) {
+                efficiencyWeekDuties = ((sub * 100) / deadlineTask).toInt()
+                efficiencyWeekDuties += 100
+            } else if (sub < 0) {
+                efficiencyWeekDuties = ((sub * 100) / -deadlineTask).toInt()
+                efficiencyWeekDuties += 100
+            }
         }
 
         val newTask = TaskEmployee(

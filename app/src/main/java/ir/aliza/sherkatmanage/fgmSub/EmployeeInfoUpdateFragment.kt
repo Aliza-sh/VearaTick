@@ -67,9 +67,19 @@ class EmployeeInfoUpdateFragment(
             myAdapteredt
         )
 
+        val rank = listOf(
+            "سهام دار",
+            "کارمند",
+            "کارآموز"
+        )
+
+        val myAdapterRank = ArrayAdapter(requireContext(), R.layout.item_rank, rank)
+        (binding.dialogMainEdtRankPerson.editText as AutoCompleteTextView).setAdapter(
+            myAdapterRank
+        )
+
         binding.sheetBtnDone.setOnClickListener {
             addNewEmployee()
-            onEmployeeInfoUpdate()
         }
 
         binding.imgprn2.setOnClickListener {
@@ -120,6 +130,7 @@ class EmployeeInfoUpdateFragment(
         binding.edtAgeEmp.setText(employee.age.toString())
         binding.edtAddressEmp.setText(employee.address)
         binding.edtGenEmp.setText(employee.gender)
+        binding.edtRankEmp.setText(employee.rank)
         binding.edtMaharatEmp.setText(employee.skill)
         binding.edtNumEmp.setText(employee.cellularPhone.toString())
         binding.edtTakhasosEmp.setText(employee.specialty)
@@ -175,6 +186,7 @@ class EmployeeInfoUpdateFragment(
             binding.edtFamEmp.length() > 0 &&
             binding.edtAgeEmp.length() > 0 &&
             binding.edtGenEmp.length() > 0 &&
+            binding.edtRankEmp.length() > 0 &&
             binding.edtNumEmp.length() > 0 &&
             binding.edtTakhasosEmp.length() > 0
         ) {
@@ -182,6 +194,7 @@ class EmployeeInfoUpdateFragment(
             val txtFamily = binding.edtFamEmp.text.toString()
             val txtAge = binding.edtAgeEmp.text.toString()
             val txtGender = binding.edtGenEmp.text.toString()
+            val txtRank = binding.edtRankEmp.text.toString()
             val txtSpecialty = binding.edtTakhasosEmp.text.toString()
             val txtNumber = binding.edtNumEmp.text.toString()
             var txtNumberHome = binding.edtNumbhomeEmp.text.toString()
@@ -202,6 +215,7 @@ class EmployeeInfoUpdateFragment(
                 address = txtAddress,
                 specialty = txtSpecialty,
                 skill = txtMaharat,
+                rank = txtRank
             )
 
             if (imageUri != null) {
@@ -219,11 +233,13 @@ class EmployeeInfoUpdateFragment(
                     address = txtAddress,
                     specialty = txtSpecialty,
                     skill = txtMaharat,
-                    imgEmployee = imageBytes
+                    imgEmployee = imageBytes,
+                    rank = txtRank
                 )
             }
             employeeAdapter.updateEmployee(newEmployee, position)
             employeeDao.update(newEmployee)
+            onEmployeeInfoUpdate()
 
         } else {
             Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()

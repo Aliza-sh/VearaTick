@@ -27,8 +27,8 @@ class EntryExitEmployeeAdapter(
             binding.txtTimeOutMust.text = entryExit?.exit
             binding.txtTimeInMust.text = entryExit?.entry
 
-            binding.txtTimeIn.text = data[position].entry
-            binding.txtTimeOut.text = data[position].exit
+            binding.txtTimeIn.text = data[position].entry.toString()
+            binding.txtTimeOut.text = data[position].exit.toString()
             binding.itemDateText.text = "$nameDay \n ${data[position].day} ${data[position].month}"
 
             binding.btnMenuEntryExit.setOnClickListener {

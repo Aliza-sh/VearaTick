@@ -17,6 +17,7 @@ data class Employee(
     val homePhone: Long? = 0,
     val address: String? = "",
     val specialty: String,
+    val rank: String,
     val skill: String? = "",
     val imgEmployee: ByteArray? = null,
 
@@ -49,8 +50,8 @@ data class Time(
     val day: String,
     val arrival: Boolean,
 
-    val entry: String,
-    val exit: String
+    val entry: Int,
+    val exit: Int
 )
 
 @Entity(tableName = "taskEmployee_table")
@@ -69,7 +70,7 @@ data class TaskEmployee(
     val volumeTask: Int,
 
     val doneTask: Boolean? = false,
-    val deadlineTask: Int? = 0
+    val deadlineTask: Int
 
     //val progressTask: Int? = 0,
     //val numberSubTaskEmployeeTask: Int? = 0,
@@ -114,8 +115,10 @@ data class Project(
 
     val numberSubTaskProject: Int? = 0,
     val numberDoneSubTaskProject: Int? = 0,
+    val doneVolumeProject: Int? = 0,
+    val totalVolumeProject: Int? = 0,
 
-)
+    )
 
 @Entity(tableName = "teamProject_table")
 data class TeamProject(

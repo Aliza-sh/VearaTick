@@ -16,6 +16,8 @@ import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.BottomsheetfragmentTaskEmployeeBinding
 import ir.aliza.sherkatmanage.fgmSub.EmployeeTaskInDayFragment
+import org.joda.time.DateTime
+import org.joda.time.Days
 
 class EmployeeTaskBottomsheetFragment(
     var employee: Employee,
@@ -73,6 +75,18 @@ class EmployeeTaskBottomsheetFragment(
             val txtDescription = binding.dialogEdtTozih.text.toString()
             val txtVolumeTask = binding.edtVolumeTask.text.toString()
 
+            val startDate =
+                DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
+            val endDate = DateTime(
+                selectedDate.persianYear,
+                selectedDate.persianMonth,
+                selectedDate.persianDay,
+                0,
+                0,
+                0
+            )
+            var daysBetween = Days.daysBetween(startDate, endDate).days
+
             val newTask = TaskEmployee(
                 idEmployee = employee.idEmployee!!,
                 nameTask = txtTask,
@@ -81,6 +95,7 @@ class EmployeeTaskBottomsheetFragment(
                 yearCreation = selectedDate.persianYear,
                 monthCreation = selectedDate.persianMonth,
                 dayCreation = selectedDate.persianDay,
+                deadlineTask = daysBetween
             )
             taskEmployeeDao.insert(newTask)
             onTaskToEmployee()

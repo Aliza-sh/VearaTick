@@ -340,6 +340,8 @@ class ProjectUpdateInfoFragment(
                 numberSubTaskProject = project.numberSubTaskProject,
                 numberDoneSubTaskProject = project.numberDoneSubTaskProject,
                 budgetProject = txtBudget,
+                totalVolumeProject = project.totalVolumeProject,
+                doneVolumeProject = project.doneVolumeProject
             )
 
             projectAdapter.updateProject(newProject, position)

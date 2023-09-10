@@ -1,9 +1,11 @@
 package ir.aliza.sherkatmanage.adapter
 
 import android.annotation.SuppressLint
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.EfficiencyEmployee
@@ -24,10 +26,72 @@ class EmployeeAdapter(
 
         fun bindData(position: Int) {
 
+            if (data[position].rank == "سهام دار") {
+
+                binding.txtRank.text = "سهام دار"
+                val shape = GradientDrawable()
+                shape.shape = GradientDrawable.RECTANGLE
+                shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                shape.setStroke(
+                    5,
+                    ContextCompat.getColor(binding.root.context, R.color.green_dark_rank)
+                )
+                shape.setColor(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        R.color.green_light_rank
+                    )
+                )
+                binding.txtRank.setTextColor(android.graphics.Color.parseColor("#227158"))
+                binding.txtRank.background = shape
+
+            } else if (data[position].rank == "کارمند") {
+
+                binding.txtRank.text = "کارمند"
+                val shape = GradientDrawable()
+                shape.shape = GradientDrawable.RECTANGLE
+                shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                shape.setStroke(
+                    5,
+                    ContextCompat.getColor(binding.root.context, R.color.blue_dark_rank)
+                )
+                shape.setColor(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        R.color.blue_light_rank
+                    )
+                )
+                binding.txtRank.setTextColor(android.graphics.Color.parseColor("#215DAD"))
+                binding.txtRank.background = shape
+
+            } else if (data[position].rank == "کارآموز") {
+                binding.txtRank.text = "کارآموز"
+                val shape = GradientDrawable()
+                shape.shape = GradientDrawable.RECTANGLE
+                shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                shape.setStroke(
+                    5,
+                    ContextCompat.getColor(binding.root.context, R.color.red_dark_rank)
+                )
+                shape.setColor(ContextCompat.getColor(binding.root.context, R.color.red_light_rank))
+                binding.txtRank.setTextColor(android.graphics.Color.parseColor("#AF694C"))
+                binding.txtRank.background = shape
+            }
 
             if (data[position].idEmployee != null) {
 
-                val efficiencyEmployee = efficiencyEmployeeDao.getEfficiencyEmployee(data[position].idEmployee!!)
+                val efficiencyEmployee =
+                    efficiencyEmployeeDao.getEfficiencyEmployee(data[position].idEmployee!!)
+
+                val progress =
+                    efficiencyEmployeeDao.getEfficiencyEmployee(data[position].idEmployee!!)
+                val efficiencyTotalPresence =
+                    progress!!.efficiencyWeekPresence!! + progress.efficiencyTotalPresence!!
+                val efficiencyTotalDuties =
+                    progress.efficiencyWeekDuties!! + progress.efficiencyMonthDuties!! + progress.efficiencyTotalDuties!!
+                val efficiencyTotal =
+                    (efficiencyTotalPresence + efficiencyTotalDuties) / 2
+                binding.progressCircular.progress = efficiencyTotal.toFloat()
 
                 if (efficiencyEmployee!!.totalWeekWatch != 0 && efficiencyEmployee.mustWeekWatch != 0) {
 
@@ -64,11 +128,12 @@ class EmployeeAdapter(
                 binding.txtDutiesWeek.text =
                     efficiencyEmployee?.efficiencyWeekDuties.toString() + "%"
             }
-                binding.txtnameprn.text = data[position].name + " " + data[position].family
-                binding.txttkhprn.text = data[position].specialty
-                if (data[position].gender == "زن") {
-                    binding.imgprn.setImageResource(R.drawable.img_matter);
-                }
+
+            binding.txtnameprn.text = data[position].name + " " + data[position].family
+            binding.txttkhprn.text = data[position].specialty
+            if (data[position].gender == "زن") {
+                binding.imgprn.setImageResource(R.drawable.img_matter);
+            }
             itemView.setOnClickListener {
                 employeeEvents.onEmployeeClicked(data[position], position)
             }

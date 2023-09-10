@@ -57,14 +57,24 @@ class EmployeeRecruitmentFragment(
             "زن"
         )
 
-        val myAdapteredt = ArrayAdapter(requireContext(), R.layout.item_gender, gender)
+        val myAdapterGender = ArrayAdapter(requireContext(), R.layout.item_gender, gender)
         (binding.dialogMainEdtGdrperson.editText as AutoCompleteTextView).setAdapter(
-            myAdapteredt
+            myAdapterGender
+        )
+
+        val rank = listOf(
+            "سهام دار",
+            "کارمند",
+            "کارآموز"
+        )
+
+        val myAdapterRank = ArrayAdapter(requireContext(), R.layout.item_rank, rank)
+        (binding.dialogMainEdtRankPerson.editText as AutoCompleteTextView).setAdapter(
+            myAdapterRank
         )
 
         binding.sheetBtnDone.setOnClickListener {
             addNewEmployee()
-            onRecruitment()
         }
 
         binding.imgprn2.setOnClickListener {
@@ -147,6 +157,7 @@ class EmployeeRecruitmentFragment(
             binding.edtFamEmp.length() > 0 &&
             binding.edtAgeEmp.length() > 0 &&
             binding.edtGenEmp.length() > 0 &&
+            binding.edtRankEmp.length() > 0 &&
             binding.edtNumEmp.length() > 0 &&
             binding.edtTakhasosEmp.length() > 0
         ) {
@@ -154,6 +165,7 @@ class EmployeeRecruitmentFragment(
             val txtFamily = binding.edtFamEmp.text.toString()
             val txtAge = binding.edtAgeEmp.text.toString()
             val txtGender = binding.edtGenEmp.text.toString()
+            val txtRank = binding.edtRankEmp.text.toString()
             val txtSpecialty = binding.edtTakhasosEmp.text.toString()
             val txtNumber = binding.edtNumEmp.text.toString()
             var txtNumberHome = binding.edtNumbhomeEmp.text.toString()
@@ -173,6 +185,7 @@ class EmployeeRecruitmentFragment(
                 address = txtAddress,
                 specialty = txtSpecialty,
                 skill = txtMaharat,
+                rank = txtRank
             )
 
             if (imageUri != null) {
@@ -189,7 +202,8 @@ class EmployeeRecruitmentFragment(
                     address = txtAddress,
                     specialty = txtSpecialty,
                     skill = txtMaharat,
-                    imgEmployee = imageBytes
+                    imgEmployee = imageBytes,
+                    rank = txtRank
                 )
             }
 
@@ -202,6 +216,7 @@ class EmployeeRecruitmentFragment(
                 idEmployee = employee?.idEmployee!!,
             )
             efficiencyEmployeeDao.insert(newEfficiencyEmployee)
+            onRecruitment()
 
         } else {
             Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()

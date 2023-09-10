@@ -34,6 +34,16 @@
     <color name="green_dark">#60AA83</color>
     <color name="green_light">#65B68B</color>
 
+    <color name="green_dark_rank">#227158</color>
+    <color name="green_light_rank">#C6EAD0</color>
+
+    <color name="blue_dark_rank">#215DAD</color>
+    <color name="blue_light_rank">#D3E3F9</color>
+
+    <color name="red_dark_rank">#AF694C</color>
+    <color name="red_light_rank">#FBDCC6</color>
+
+
     <color name="example_4_grey">#474747</color>
     <color name="example_4_green">#008489</color>
     <color name="example_4_continuous_selection">#0F000000</color>

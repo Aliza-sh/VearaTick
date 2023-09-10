@@ -183,6 +183,22 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+        <TextView
+            android:id="@+id/txt_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="#C6EAD0"
+            android:paddingStart="10dp"
+            android:paddingTop="2dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="2dp"
+            android:text="کار آموز"
+            android:textColor="#227158"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout8"
+            app:layout_constraintTop_toTopOf="@+id/linearLayout8" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.viewpager2.widget.ViewPager2

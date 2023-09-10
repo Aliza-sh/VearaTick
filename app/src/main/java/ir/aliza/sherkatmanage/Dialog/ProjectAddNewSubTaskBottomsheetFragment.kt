@@ -132,14 +132,14 @@ class ProjectAddNewSubTaskBottomsheetFragment(
 
             val project1 = projectDao.getProject(project.idProject)
 
-            var numberSubTaskProject = project1!!.numberSubTaskProject
+            val numberSubTaskProject = project1!!.numberSubTaskProject!! + 1
+            val oldVolumeProject = project1.totalVolumeProject
+            val sumVolumeProject = txtVolume.toInt() + oldVolumeProject!!.toInt()
             var efficiencyProject = 0
 
-            if (numberSubTaskProject != null) {
-                numberSubTaskProject ++
                 efficiencyProject =
-                    ((project1.numberDoneSubTaskProject!!.toDouble() / numberSubTaskProject) * 100).toInt()
-            }
+                    ((project1.doneVolumeProject!!.toDouble() / sumVolumeProject) * 100).toInt()
+
 
             val newProject = Project(
                 idProject = project1.idProject,
@@ -153,10 +153,12 @@ class ProjectAddNewSubTaskBottomsheetFragment(
                 doneProject = project1.doneProject,
                 typeProject = project1.typeProject,
                 descriptionProject = project1.descriptionProject,
-                numberSubTaskProject = numberSubTaskProject!!,
+                numberSubTaskProject = numberSubTaskProject,
                 numberDoneSubTaskProject = project1.numberDoneSubTaskProject,
                 progressProject = efficiencyProject,
-                budgetProject = project.budgetProject
+                budgetProject = project.budgetProject,
+                totalVolumeProject = sumVolumeProject.toInt(),
+                doneVolumeProject = project1.doneVolumeProject
             )
             projectDao.update(newProject)
 

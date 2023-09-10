@@ -9,6 +9,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.utils.persian.PersianCalendar
+import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.DataBase.TaskEmployee
 import ir.aliza.sherkatmanage.DataBase.TaskEmployeeDao
@@ -22,7 +23,8 @@ class TaskEmployeeAdapter(
     private val tackEvent: TaskEvent,
     val taskEmployeeDao: TaskEmployeeDao,
     val employee: Employee,
-    val today: PersianCalendar
+    val today: PersianCalendar,
+    val efficiencyEmployeeDao: EfficiencyDao
 ) :
 
     RecyclerView.Adapter<TaskEmployeeAdapter.TaskEmployeeViewHolder>() {
@@ -66,6 +68,7 @@ class TaskEmployeeAdapter(
                     shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
                     shape.setStroke(5, ContextCompat.getColor(binding.root.context, R.color.red_800))
                     binding.txtDedlineTaskEmployee.background = shape
+
                 }
             }
 

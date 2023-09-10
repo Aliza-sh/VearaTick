@@ -73,9 +73,9 @@ class EmployeeCalendarFragment(
     var valueBtnNoDate = false
     var valueBtnDoneEntry = false
     var valueBtnDoneExit = false
-    var valueHourDoneEntry = ""
+    var valueHourDoneEntry = 0
     var valueAllDoneEntry = ""
-    var valueHourDoneExit = ""
+    var valueHourDoneExit = 0
     var valueAllDoneExit = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -131,7 +131,7 @@ class EmployeeCalendarFragment(
                             }
 
                             val nameDay = dayDao.getAllNameDay(
-                                position,
+                                employee.idEmployee!!,
                                 day.persianCalendar.persianYear.toString(),
                                 day.persianCalendar.persianMonthName,
                                 selectedDate!!.toPersianCalendar().persianWeekDayName
@@ -155,13 +155,13 @@ class EmployeeCalendarFragment(
                             }
 
                             val timeDayData = timeDao.getDayTime(
-                                position, day.persianCalendar.persianDay.toString()
+                                employee.idEmployee, day.persianCalendar.persianDay.toString()
                             )
                             val timeDay = timeDao.getTime(
-                                position, selectedDate!!.toPersianCalendar().persianDay
+                                employee.idEmployee, selectedDate!!.toPersianCalendar().persianDay
                             )
                             val entryExit = dayDao.getAllEntryExit(
-                                position,
+                                employee.idEmployee,
                                 selectedDate!!.toPersianCalendar().persianYear.toString(),
                                 selectedDate!!.toPersianCalendar().persianMonthName.toString(),
                                 selectedDate!!.toPersianCalendar().persianWeekDayName.toString(),
@@ -212,7 +212,7 @@ class EmployeeCalendarFragment(
                         else 0
                     )
                     val arrivalDay = timeDao.getAllArrivalDay(
-                        position,
+                        employee.idEmployee!!,
                         day.persianCalendar.persianYear.toString(),
                         day.persianCalendar.persianMonthName,
                         day.persianCalendar.persianDay.toString()
@@ -267,8 +267,8 @@ class EmployeeCalendarFragment(
                                     6 -> tv.text =
                                         "\u062c\u0645\u0639\u0647" // jome
                                 }
-                                val dayData = dayDao.getDay(("${tv.id}${position}").toLong())
-                                if ((dayData?.idDay) == ("${tv.id}${position}").toLong() && dayData.idEmployee == position) {
+                                val dayData = dayDao.getDay(("${tv.id}${employee.idEmployee!!}").toLong())
+                                if ((dayData?.idDay) == ("${tv.id}${employee.idEmployee}").toLong() && dayData.idEmployee == employee.idEmployee) {
                                     tv.setBackgroundColor(
                                         ContextCompat.getColor(
                                             view.context, R.color.firoze
@@ -276,13 +276,13 @@ class EmployeeCalendarFragment(
                                     )
                                 }
                                 tv.setOnClickListener {
-                                    val dayData = dayDao.getDay(("${tv.id}${position}").toLong())
-                                    if (dayData?.idDay != ("${tv.id}${position}").toLong()) {
+                                    val dayData = dayDao.getDay(("${tv.id}${employee.idEmployee}").toLong())
+                                    if (dayData?.idDay != ("${tv.id}${employee.idEmployee}").toLong()) {
                                         showEntryAndExitDialog(tv, month, container.legendLayout)
-                                    } else if (dayData.idDay == ("${tv.id}${position}").toLong() && dayData.idEmployee == position) {
-                                        val newDay = position.let { it1 ->
+                                    } else if (dayData.idDay == ("${tv.id}${employee.idEmployee}").toLong() && dayData.idEmployee == employee.idEmployee) {
+                                        val newDay = employee.idEmployee.let { it1 ->
                                             Day(
-                                                idDay = ("${tv.id}${position}").toLong(),
+                                                idDay = ("${tv.id}${employee.idEmployee}").toLong(),
                                                 idEmployee = it1,
                                                 year = month.persianCalendar.persianYear.toString(),
                                                 month = month.persianCalendar.persianMonthName,
@@ -296,12 +296,12 @@ class EmployeeCalendarFragment(
                                             )
                                         )
                                         val efficiencyEmployee =
-                                            efficiencyEmployeeDao.getEfficiencyEmployee(position)
+                                            efficiencyEmployeeDao.getEfficiencyEmployee(employee.idEmployee!!)
                                         var time = dayData.exit!!.toInt() - dayData.entry!!.toInt()
                                         time = efficiencyEmployee?.mustWeekWatch!! - time
                                         val newEfficiencyEmployee = EfficiencyEmployee(
                                             idEfficiency = efficiencyEmployee.idEfficiency,
-                                            idEmployee = position,
+                                            idEmployee = employee.idEmployee,
                                             mustWeekWatch = time,
                                             totalWeekWatch = efficiencyEmployee.totalWeekWatch,
                                             efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
@@ -556,9 +556,9 @@ class EmployeeCalendarFragment(
         valueBtnNoDate = false
         valueBtnDoneEntry = false
         valueBtnDoneExit = false
-        valueHourDoneEntry = ""
+        valueHourDoneEntry = 0
         valueAllDoneEntry = ""
-        valueHourDoneExit = ""
+        valueHourDoneExit = 0
         valueAllDoneExit = ""
         bindingDialogEmployeeDoneEntryExit.txtEntry.text = "ورود"
         bindingDialogEmployeeDoneEntryExit.txtExit.text = "خروج"
@@ -613,7 +613,7 @@ class EmployeeCalendarFragment(
             if (!valueBtnNoDate && !valueBtnDoneExit && !valueBtnDoneEntry)
                 Toast.makeText(context, " لطفا تمام مقادیر را وارد کنید.", Toast.LENGTH_SHORT)
                     .show()
-            else if (valueHourDoneExit < valueHourDoneEntry)
+            else if (valueHourDoneExit.toInt() < valueHourDoneEntry.toInt())
                 Toast.makeText(
                     context,
                     " چطور میشه که ساعت خروج قبل ساعت ورود باشه.",
@@ -629,8 +629,8 @@ class EmployeeCalendarFragment(
                     month = month,
                     day = day.toString(),
                     arrival = false,
-                    entry = "0",
-                    exit = "0"
+                    entry = 0,
+                    exit = 0
                 )
                 val efficiencyEmployee = efficiencyEmployeeDao.getEfficiencyEmployee(idEmployee)
                 val numberDay = efficiencyEmployee?.numberDay
@@ -776,7 +776,7 @@ class EmployeeCalendarFragment(
 
         val timePickerDialog = TimePickerDialog.newInstance(
             { view, hourOfDay, minute, second ->
-                valueHourDoneEntry = "$hourOfDay"
+                valueHourDoneEntry = hourOfDay
                 valueAllDoneEntry = "$hourOfDay:$minute"
                 bindingDialogEmployeeDoneEntryExit.txtEntry.text = valueAllDoneEntry
                 bindingDialogEmployeeDoneEntryExit.txtEntry.textSize = 24f
@@ -803,7 +803,7 @@ class EmployeeCalendarFragment(
 
         val timePickerDialog = TimePickerDialog.newInstance(
             { view, hourOfDay, minute, second ->
-                valueHourDoneExit = "$hourOfDay"
+                valueHourDoneExit = hourOfDay
                 valueAllDoneExit = "$hourOfDay:$minute"
                 bindingDialogEmployeeDoneEntryExit.txtExit.text = valueAllDoneExit
                 bindingDialogEmployeeDoneEntryExit.txtExit.textSize = 24f

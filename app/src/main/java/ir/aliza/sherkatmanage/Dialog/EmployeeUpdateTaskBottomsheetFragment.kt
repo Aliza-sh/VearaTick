@@ -16,6 +16,8 @@ import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.BottomsheetfragmentUpdeteTaskEmployeeBinding
 import ir.aliza.sherkatmanage.fgmSub.EmployeeTaskInDayFragment
+import org.joda.time.DateTime
+import org.joda.time.Days
 
 class EmployeeUpdateTaskBottomsheetFragment(
     var employee: Employee,
@@ -89,7 +91,17 @@ class EmployeeUpdateTaskBottomsheetFragment(
              txtTask = binding.dialogEdtTask.text.toString()
              txtDescription = binding.dialogEdtTozih.text.toString()
              txtVolumeTask = binding.edtVolumeTask.text.toString()
-
+            val startDate =
+                DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
+            val endDate = DateTime(
+                selectedDate.persianYear,
+                selectedDate.persianMonth,
+                selectedDate.persianDay,
+                0,
+                0,
+                0
+            )
+            var daysBetween = Days.daysBetween(startDate, endDate).days
             val newTask = TaskEmployee(
                 idTask = onClickSubTask.idTask,
                 idEmployee = onClickSubTask.idEmployee,
@@ -99,7 +111,8 @@ class EmployeeUpdateTaskBottomsheetFragment(
                 yearCreation = onClickSubTask.yearCreation,
                 monthCreation = onClickSubTask.monthCreation,
                 dayCreation = onClickSubTask.dayCreation,
-                doneTask = onClickSubTask.doneTask
+                doneTask = onClickSubTask.doneTask,
+                deadlineTask = daysBetween
             )
             taskEmployeeDao.update(newTask)
             onTaskToEmployee()
