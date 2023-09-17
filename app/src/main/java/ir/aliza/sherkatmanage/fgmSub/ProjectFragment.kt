@@ -47,7 +47,7 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
         binding.recyclerViewProject.adapter = projectAdapter
         binding.recyclerViewProject.layoutManager = GridLayoutManager(context, 2)
 
-        subTaskProjectDao = AppDatabase.getDataBase(view.context).subTaskEmployeeProjectDao
+        subTaskProjectDao = AppDatabase.getDataBase(view.context).subTaskProjectDao
 
         onFabClicked()
     }
@@ -71,7 +71,7 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
         projectAdapter = ProjectNearAdapter(ArrayList(projectNearData), this, projectDao)
         binding.recyclerViewProject.adapter = projectAdapter
         binding.recyclerViewProject.layoutManager = GridLayoutManager(context, 2)
-        subTaskProjectDao = AppDatabase.getDataBase(binding.root.context).subTaskEmployeeProjectDao
+        subTaskProjectDao = AppDatabase.getDataBase(binding.root.context).subTaskProjectDao
     }
 
     fun onFabClicked() {

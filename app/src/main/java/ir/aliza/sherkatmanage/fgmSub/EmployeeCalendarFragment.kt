@@ -268,7 +268,7 @@ class EmployeeCalendarFragment(
                                         "\u062c\u0645\u0639\u0647" // jome
                                 }
                                 val dayData = dayDao.getDay(("${tv.id}${employee.idEmployee!!}").toLong())
-                                if ((dayData?.idDay) == ("${tv.id}${employee.idEmployee}").toLong() && dayData.idEmployee == employee.idEmployee) {
+                               if ((dayData?.idDay) == ("${tv.id}${employee.idEmployee}").toLong() && dayData.idEmployee == employee.idEmployee) {
                                     tv.setBackgroundColor(
                                         ContextCompat.getColor(
                                             view.context, R.color.firoze

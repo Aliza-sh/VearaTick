@@ -1,6 +1,7 @@
 package ir.aliza.sherkatmanage.fgmMain
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,7 +10,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.ghanshyam.graphlibs.Graph
 import com.ghanshyam.graphlibs.GraphData
+import ir.aliza.sherkatmanage.CompanyPaymentActivity
+import ir.aliza.sherkatmanage.CompanyReceiptActivity
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
+import ir.aliza.sherkatmanage.DataBase.CompanyReceiptDao
 import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.DataBase.SubTaskProjectDao
@@ -18,6 +22,7 @@ import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.FragmentCompanyBinding
 import ir.aliza.sherkatmanage.databinding.ItemProjectBinding
 import ir.aliza.sherkatmanage.fgmSub.ProjectNumberFragment
+import java.text.DecimalFormat
 
 
 class CompanyFragment : Fragment() {
@@ -27,6 +32,7 @@ class CompanyFragment : Fragment() {
     lateinit var projectDao: ProjectDao
     lateinit var efficiencyDao: EfficiencyDao
     lateinit var subTaskProjectDao: SubTaskProjectDao
+    lateinit var companyReceiptDao: CompanyReceiptDao
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,15 +45,27 @@ class CompanyFragment : Fragment() {
         return binding.root
 
     }
-
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         efficiencyDao = AppDatabase.getDataBase(view.context).efficiencyDao
         projectDao = AppDatabase.getDataBase(view.context).projectDao
+        subTaskProjectDao = AppDatabase.getDataBase(view.context).subTaskProjectDao
+        companyReceiptDao = AppDatabase.getDataBase(view.context).companyReceiptDao
 
-        subTaskProjectDao = AppDatabase.getDataBase(view.context).subTaskEmployeeProjectDao
+        val sumCompanyReceipt = companyReceiptDao.getReceiptSum()
+        binding.txtReceipt.text = formatCurrency(sumCompanyReceipt.toLong())
+
+        binding.btnReceipt.setOnClickListener {
+            val intent = Intent(requireContext(), CompanyReceiptActivity::class.java)
+            startActivity(intent)
+
+        }
+        binding.btnPayment.setOnClickListener {
+            val intent = Intent(requireContext(), CompanyPaymentActivity::class.java)
+            startActivity(intent)
+        }
 
         binding.progressEfficiencyPro.setPercent(efficiencyProject())
         binding.txtEfficiencyPro.text = efficiencyProject().toString() + "%"
@@ -60,7 +78,7 @@ class CompanyFragment : Fragment() {
 
         binding.btnSeeMoreNumPro.setOnClickListener {
             val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frame_layout_main, ProjectNumberFragment(projectDao))
+            transaction.replace(R.id.frame_layout_main2, ProjectNumberFragment(projectDao))
                 .addToBackStack(null)
                 .commit()
         }
@@ -68,7 +86,10 @@ class CompanyFragment : Fragment() {
         progressNumProject(binding.progressNumProject)
 
     }
-
+    private fun formatCurrency(value: Long?): String {
+        val decimalFormat = DecimalFormat("#,###")
+        return decimalFormat.format(value) + " تومان"
+    }
     private fun progressNumProject(graph: Graph) {
 
         val numAndroid = projectDao.getNumberProject("اندروید", true).size
@@ -116,7 +137,6 @@ class CompanyFragment : Fragment() {
 
         graph.setData(data)
     }
-
 
     private fun efficiencyProject(): Int {
         val numberProject = projectDao.getAllProject().size

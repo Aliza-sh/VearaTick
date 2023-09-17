@@ -12,7 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <item name="fontFamily">@font/mahboubeh_mehravar</item>
+        <item name="fontFamily">@font/iransans</item>
         <!-- backgriund gradiant. -->
         <item name="paddingStart">@color/blacke</item>
         <!-- color. -->

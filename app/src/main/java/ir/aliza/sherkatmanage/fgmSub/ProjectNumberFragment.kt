@@ -4,9 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
+import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.FragmentNumberProjectBinding
+import ir.aliza.sherkatmanage.fgmMain.CompanyFragment
 
 class ProjectNumberFragment(val projectDao: ProjectDao) : Fragment() {
 
@@ -22,6 +25,15 @@ class ProjectNumberFragment(val projectDao: ProjectDao) : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        onBackPressed()
+
+        binding.btnBck.setOnClickListener {
+            parentFragmentManager.beginTransaction().detach(this@ProjectNumberFragment)
+                .replace(
+                    R.id.frame_layout_main,
+                    CompanyFragment()
+                ).commit()
+        }
 
         val numAndroid = projectDao.getNumberProject("اندروید",true).size
         binding.txtNumProAndroid.text = " $numAndroid"
@@ -36,6 +48,20 @@ class ProjectNumberFragment(val projectDao: ProjectDao) : Fragment() {
         val numSeo = projectDao.getNumberProject("سئو",true).size
         binding.txtNumProSeo.text = " $numSeo"
 
+    }
+    private fun onBackPressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    parentFragmentManager.beginTransaction()
+                        .detach(this@ProjectNumberFragment)
+                        .replace(
+                            R.id.frame_layout_main,
+                            CompanyFragment()
+                        ).commit()
+                }
+            })
     }
 
 }

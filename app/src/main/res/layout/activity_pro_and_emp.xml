@@ -108,7 +108,7 @@
         app:layout_anchor="@id/bottomAppBar"
         app:maxImageSize="40dp" />
 
-    <androidx.fragment.app.FragmentContainerView
+    <FrameLayout
         android:id="@+id/layout_pro_and_emp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

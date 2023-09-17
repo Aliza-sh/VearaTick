@@ -199,3 +199,65 @@ data class EfficiencyEmployee(
 
     val efficiencyTotal: Int? = 0
 )
+@Entity(tableName = "companyReceipt_table")
+data class CompanyReceipt(
+
+    @PrimaryKey(autoGenerate = true)
+    val idCompanyReceipt:Int? = null,
+    val companyReceipt: Long? = 0,
+    val companyReceiptDate: String? = "",
+    val companyReceiptDescription: String? = "",
+)
+@Entity(tableName = "companyExpenses_table")
+data class CompanyExpenses(
+
+    @PrimaryKey(autoGenerate = true)
+    val idCompanyExpenses:Int? = null,
+    val companyExpenses: Long? = 0,
+    val companyExpensesDate: String? = "",
+    val companyExpensesDescription: String? = "",
+)
+@Entity(tableName = "employeeInvestment_table")
+data class EmployeeInvestment(
+
+    @PrimaryKey(autoGenerate = true)
+    val idInvestment:Int? = null,
+    val idEmployee: Int,
+    val investment: Long? = 0,
+    val investmentDate: String? = "",
+    val investmentDescription: String? = "",
+)
+@Entity(tableName = "employeeHarvest_table")
+data class EmployeeHarvest(
+
+    @PrimaryKey(autoGenerate = true)
+    val idHarvest:Int? = null,
+    val idEmployee: Int,
+    val harvest: Long? = 0,
+    val harvestDate: String? = "",
+    val harvestDescription: String? = "",
+)
+
+//@Entity(tableName = "employeeSalary_table")
+//data class EmployeeSalary(
+//
+//    @PrimaryKey(autoGenerate = true)
+//    val idSalary:Int? = null,
+//    val idEmployee: Int,
+//    val investmentEmployee: Long? = 0,
+//    val harvestEmployee: Long? = 0,
+//    val paymentEmployee: Long? = 0,
+//
+//    val total: Long? = 0
+//)
+
+//@Entity(tableName = "employeePayment_table")
+//data class EmployeePayment(
+//
+//    @PrimaryKey(autoGenerate = true)
+//    val idPayment:Int? = null,
+//    val idEmployee: Int,
+//    val payment: Long? = 0,
+//    val paymentDate: String? = "",
+//    val paymentDescription: String? = "",
+//)

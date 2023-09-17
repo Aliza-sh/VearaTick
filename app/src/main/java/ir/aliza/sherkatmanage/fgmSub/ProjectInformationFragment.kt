@@ -68,7 +68,6 @@ class ProjectInformationFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         AndroidThreeTen.init(view.context)
-
         onBackPressed()
 
         project = projectDao.getProject(project.idProject!!)!!
