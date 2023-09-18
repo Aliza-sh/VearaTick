@@ -17,7 +17,7 @@ class SalaryShareholdersAdapter(
     private val dataEmployee: ArrayList<Employee>,
     private val employeeHarvestDao: EmployeeHarvestDao,
     private val employeeInvestmentDao: EmployeeInvestmentDao,
-    private val paymentShareholdersEvents: PaymentShareholdersEvents,
+    private val shareholdersEvents: ShareholdersEvents,
 ) :
     RecyclerView.Adapter<SalaryShareholdersAdapter.PaymentShareholdersViewHolder>() {
 
@@ -25,7 +25,7 @@ class SalaryShareholdersAdapter(
 
     inner class PaymentShareholdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindData(position: Int, clickListener: PaymentShareholdersEvents) {
+        fun bindData(position: Int, clickListener: ShareholdersEvents) {
 
             binding.txtRank.text = "سهام دار"
             val shape = GradientDrawable()
@@ -51,20 +51,35 @@ class SalaryShareholdersAdapter(
                 binding.btnInfoPrn.setImageResource(R.drawable.img_matter);
             }
 
-            val sumCompanyReceipt = employeeInvestmentDao.getEmployeeInvestmentSum(dataEmployee[position].idEmployee!!)
-            binding.txtInvestment.text = formatCurrency(sumCompanyReceipt.toLong())
+            val sumEmployeeInvestment =
+                employeeInvestmentDao.getEmployeeInvestmentSum(dataEmployee[position].idEmployee!!)
+            binding.txtInvestment.text = formatCurrency(sumEmployeeInvestment.toLong())
             binding.btnInvestment.setOnClickListener {
                 clickListener.onBtnInvestmentClick(
                     dataEmployee[position],
                     employeeInvestmentDao, position
                 )
             }
+            val sumEmployeeHarvest =
+                employeeHarvestDao.getEmployeeHarvestSum(dataEmployee[position].idEmployee!!)
+            binding.txtHarvest.text = formatCurrency(sumEmployeeHarvest.toLong())
             binding.btnPayment.setOnClickListener {
-                val employeeHarvestData = employeeHarvestDao.getEmployeeHarvest(dataEmployee[position].idEmployee!!)
                 clickListener.onBtnPaymentClick(
                     dataEmployee[position],
                     employeeHarvestDao, position
                 )
+            }
+            var total = sumEmployeeInvestment - sumEmployeeHarvest
+
+            if (total > 0) {
+                val value = formatCurrency(total)
+                binding.txtTotal.text = value + " +"
+            } else if (total < 0) {
+                total = -total
+                val value = formatCurrency(total)
+                binding.txtTotal.text = value + " -"
+            } else {
+                binding.txtTotal.text = "0"
             }
 
             itemView.setOnClickListener {}
@@ -85,7 +100,7 @@ class SalaryShareholdersAdapter(
     }
 
     override fun onBindViewHolder(holder: PaymentShareholdersViewHolder, position: Int) {
-        holder.bindData(position, paymentShareholdersEvents)
+        holder.bindData(position, shareholdersEvents)
     }
 
     override fun getItemId(position: Int): Long {
@@ -99,11 +114,13 @@ class SalaryShareholdersAdapter(
     override fun getItemCount(): Int {
         return dataEmployee.size
     }
+
     private fun formatCurrency(value: Long?): String {
         val decimalFormat = DecimalFormat("#,###")
         return decimalFormat.format(value) + " تومان"
     }
-    interface PaymentShareholdersEvents {
+
+    interface ShareholdersEvents {
         fun onPaymentShareholdersClicked(employee: Employee, position: Int)
         fun onPaymentShareholdersLongClicked(employee: Employee, position: Int)
         fun onBtnInvestmentClick(
@@ -111,6 +128,11 @@ class SalaryShareholdersAdapter(
             employeeInvestmentDao: EmployeeInvestmentDao,
             position: Int
         )
-        fun onBtnPaymentClick(employee: Employee, employeeInvestmentDao: EmployeeHarvestDao, position: Int)
+
+        fun onBtnPaymentClick(
+            employee: Employee,
+            employeeInvestmentDao: EmployeeHarvestDao,
+            position: Int
+        )
     }
 }

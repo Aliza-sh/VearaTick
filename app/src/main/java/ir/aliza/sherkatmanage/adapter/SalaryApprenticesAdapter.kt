@@ -1,65 +1,72 @@
 package ir.aliza.sherkatmanage.adapter
 
-import android.annotation.SuppressLint
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.Employee
+import ir.aliza.sherkatmanage.DataBase.EmployeeHarvestDao
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.ItemPaymentApprenticesBinding
+import java.text.DecimalFormat
 
 class SalaryApprenticesAdapter(
-    private val data: ArrayList<Employee>,
-    private val employeeEvents: EmployeeEvents,
-    private val efficiencyEmployeeDao: EfficiencyDao
+    private val dataEmployee: ArrayList<Employee>,
+    private val employeeHarvestDao: EmployeeHarvestDao,
+    private val apprenticesEvents: ApprenticesEvents,
 ) :
-    RecyclerView.Adapter<SalaryApprenticesAdapter.EmployeeViewHolder>() {
+    RecyclerView.Adapter<SalaryApprenticesAdapter.ApprenticesViewHolder>() {
 
     lateinit var binding: ItemPaymentApprenticesBinding
 
-    inner class EmployeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class ApprenticesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindData(position: Int) {
+        fun bindData(position: Int, clickListener: ApprenticesEvents) {
 
-                binding.txtRank.text = "کارآموز"
-                val shape = GradientDrawable()
-                shape.shape = GradientDrawable.RECTANGLE
-                shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
-                shape.setStroke(
-                    5,
-                    ContextCompat.getColor(binding.root.context, R.color.red_dark_rank)
-                )
-                shape.setColor(ContextCompat.getColor(binding.root.context, R.color.red_light_rank))
-                binding.txtRank.setTextColor(android.graphics.Color.parseColor("#AF694C"))
-                binding.txtRank.background = shape
-            binding.txtNameEmp.text = data[position].name + " " + data[position].family
-            binding.txtSpecialtyEmp.text = data[position].specialty
+            binding.txtRank.text = "کارآموز"
+            val shape = GradientDrawable()
+            shape.shape = GradientDrawable.RECTANGLE
+            shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+            shape.setStroke(
+                5,
+                ContextCompat.getColor(binding.root.context, R.color.red_dark_rank)
+            )
+            shape.setColor(ContextCompat.getColor(binding.root.context, R.color.red_light_rank))
+            binding.txtRank.setTextColor(android.graphics.Color.parseColor("#AF694C"))
+            binding.txtRank.background = shape
+            binding.txtNameEmp.text =
+                dataEmployee[position].name + " " + dataEmployee[position].family
+            binding.txtSpecialtyEmp.text = dataEmployee[position].specialty
 
-            if (data[position].gender == "زن") {
+            if (dataEmployee[position].gender == "زن") {
                 binding.btnInfoPrn.setImageResource(R.drawable.img_matter);
             }
-            itemView.setOnClickListener {
-                employeeEvents.onEmployeeClicked(data[position], position)
-            }
 
-            itemView.setOnLongClickListener {
-                employeeEvents.onEmployeeLongClicked(data[position], position)
-                true
+            val sumEmployeeHarvest =
+                employeeHarvestDao.getEmployeeHarvestSum(dataEmployee[position].idEmployee!!)
+            binding.txtHarvest.text = formatCurrency(sumEmployeeHarvest.toLong())
+            binding.btnHarvest.setOnClickListener {
+                clickListener.onBtnHarvestClick(
+                    dataEmployee[position],
+                    employeeHarvestDao, position
+                )
             }
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmployeeViewHolder {
-        binding = ItemPaymentApprenticesBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return EmployeeViewHolder(binding.root)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ApprenticesViewHolder {
+        binding = ItemPaymentApprenticesBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return ApprenticesViewHolder(binding.root)
     }
 
-    override fun onBindViewHolder(holder: EmployeeViewHolder, position: Int) {
-        holder.bindData(position)
+    override fun onBindViewHolder(holder: ApprenticesViewHolder, position: Int) {
+        holder.bindData(position, apprenticesEvents)
     }
 
     override fun getItemId(position: Int): Long {
@@ -71,35 +78,21 @@ class SalaryApprenticesAdapter(
     }
 
     override fun getItemCount(): Int {
-        return data.size
+        return dataEmployee.size
     }
 
-    fun addEmployee(newEmployee: Employee) {
-        data.add(data.size, newEmployee)
-        notifyItemInserted(data.size)
+    private fun formatCurrency(value: Long?): String {
+        val decimalFormat = DecimalFormat("#,###")
+        return decimalFormat.format(value) + " تومان"
     }
 
-    fun removeEmployee(oldEmployee: Employee, oldPosition: Int) {
-        data.remove(oldEmployee)
-        notifyItemRemoved(oldPosition)
-    }
-
-    fun updateEmployee(newEmployee: Employee, position: Int) {
-
-        data.set(position, newEmployee)
-        notifyItemChanged(position)
-
-    }
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun setData(newList: ArrayList<Employee>) {
-        data.clear()
-        data.addAll(newList)
-        notifyDataSetChanged()
-    }
-
-    interface EmployeeEvents {
-        fun onEmployeeClicked(employee: Employee, position: Int)
-        fun onEmployeeLongClicked(employee: Employee, position: Int)
+    interface ApprenticesEvents {
+        fun onApprenticesClicked(employee: Employee, position: Int)
+        fun onApprenticesLongClicked(employee: Employee, position: Int)
+        fun onBtnHarvestClick(
+            employee: Employee,
+            employeeInvestmentDao: EmployeeHarvestDao,
+            position: Int
+        )
     }
 }

@@ -17,7 +17,7 @@ import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.SalaryShareholdersAdapter
 import ir.aliza.sherkatmanage.databinding.FragmentSalaryShareholdersBinding
 
-class SalaryShareholdersFragment : Fragment(), SalaryShareholdersAdapter.PaymentShareholdersEvents {
+class SalaryShareholdersFragment : Fragment(), SalaryShareholdersAdapter.ShareholdersEvents {
 
     lateinit var binding: FragmentSalaryShareholdersBinding
     lateinit var employeeDao: EmployeeDao
@@ -79,5 +79,16 @@ class SalaryShareholdersFragment : Fragment(), SalaryShareholdersAdapter.Payment
         employeeHarvestDao: EmployeeHarvestDao,
         position: Int
     ) {
+        val transaction =
+            (activity as CompanyPaymentActivity).supportFragmentManager.beginTransaction()
+        transaction.replace(
+            R.id.layout_company_payment,
+            SalaryShareholdersHarvestFragment(
+                employee,
+                employeeHarvestDao
+            )
+        )
+            .addToBackStack(null)
+            .commit()
     }
 }

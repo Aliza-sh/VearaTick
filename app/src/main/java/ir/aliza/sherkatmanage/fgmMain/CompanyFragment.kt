@@ -13,8 +13,10 @@ import com.ghanshyam.graphlibs.GraphData
 import ir.aliza.sherkatmanage.CompanyPaymentActivity
 import ir.aliza.sherkatmanage.CompanyReceiptActivity
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
+import ir.aliza.sherkatmanage.DataBase.CompanyExpensesDao
 import ir.aliza.sherkatmanage.DataBase.CompanyReceiptDao
 import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
+import ir.aliza.sherkatmanage.DataBase.EmployeeHarvestDao
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.DataBase.SubTaskProjectDao
 import ir.aliza.sherkatmanage.MainActivity
@@ -33,6 +35,8 @@ class CompanyFragment : Fragment() {
     lateinit var efficiencyDao: EfficiencyDao
     lateinit var subTaskProjectDao: SubTaskProjectDao
     lateinit var companyReceiptDao: CompanyReceiptDao
+    lateinit var companyExpensesDao: CompanyExpensesDao
+    lateinit var employeeHarvestDao: EmployeeHarvestDao
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,15 +57,21 @@ class CompanyFragment : Fragment() {
         projectDao = AppDatabase.getDataBase(view.context).projectDao
         subTaskProjectDao = AppDatabase.getDataBase(view.context).subTaskProjectDao
         companyReceiptDao = AppDatabase.getDataBase(view.context).companyReceiptDao
+        companyExpensesDao = AppDatabase.getDataBase(view.context).companyExpensesDao
+        employeeHarvestDao = AppDatabase.getDataBase(view.context).employeeHarvestDao
 
         val sumCompanyReceipt = companyReceiptDao.getReceiptSum()
         binding.txtReceipt.text = formatCurrency(sumCompanyReceipt.toLong())
-
         binding.btnReceipt.setOnClickListener {
             val intent = Intent(requireContext(), CompanyReceiptActivity::class.java)
             startActivity(intent)
 
         }
+
+        val sumCompanyExpenses = companyExpensesDao.getExpensesSum()
+        val sumEmployeeHarvest = employeeHarvestDao.getHarvestSum()
+        val sumTotal = sumCompanyExpenses + sumEmployeeHarvest
+        binding.txtPayment.text = formatCurrency(sumTotal.toLong())
         binding.btnPayment.setOnClickListener {
             val intent = Intent(requireContext(), CompanyPaymentActivity::class.java)
             startActivity(intent)

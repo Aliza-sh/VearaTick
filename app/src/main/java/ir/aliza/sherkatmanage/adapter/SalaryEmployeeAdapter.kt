@@ -6,15 +6,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.Employee
+import ir.aliza.sherkatmanage.DataBase.EmployeeHarvestDao
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.ItemPaymentEmployeesBinding
+import java.text.DecimalFormat
 
 class SalaryEmployeeAdapter(
-    private val data: ArrayList<Employee>,
+    private val dataEmployee: ArrayList<Employee>,
+    private val employeeHarvestDao: EmployeeHarvestDao,
     private val employeeEvents: EmployeeEvents,
-    private val efficiencyEmployeeDao: EfficiencyDao
 ) :
     RecyclerView.Adapter<SalaryEmployeeAdapter.EmployeeViewHolder>() {
 
@@ -22,9 +23,7 @@ class SalaryEmployeeAdapter(
 
     inner class EmployeeViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        fun bindData(position: Int) {
-
-
+        fun bindData(position: Int, clickListener: EmployeeEvents) {
 
                 binding.txtRank.text = "کارمند"
                 val shape = GradientDrawable()
@@ -43,19 +42,22 @@ class SalaryEmployeeAdapter(
                 binding.txtRank.setTextColor(android.graphics.Color.parseColor("#215DAD"))
                 binding.txtRank.background = shape
 
-            binding.txtNameEmp.text = data[position].name + " " + data[position].family
-            binding.txtSpecialtyEmp.text = data[position].specialty
-            if (data[position].gender == "زن") {
+            binding.txtNameEmp.text = dataEmployee[position].name + " " + dataEmployee[position].family
+            binding.txtSpecialtyEmp.text = dataEmployee[position].specialty
+            if (dataEmployee[position].gender == "زن") {
                 binding.btnInfoPrn.setImageResource(R.drawable.img_matter);
             }
-            itemView.setOnClickListener {
-                employeeEvents.onEmployeeClicked(data[position], position)
+
+            val sumEmployeeHarvest =
+                employeeHarvestDao.getEmployeeHarvestSum(dataEmployee[position].idEmployee!!)
+            binding.txtHarvest.text = formatCurrency(sumEmployeeHarvest.toLong())
+            binding.btnHarvest.setOnClickListener {
+                clickListener.onBtnHarvestClick(
+                    dataEmployee[position],
+                    employeeHarvestDao, position
+                )
             }
 
-            itemView.setOnLongClickListener {
-                employeeEvents.onEmployeeLongClicked(data[position], position)
-                true
-            }
         }
     }
 
@@ -65,7 +67,7 @@ class SalaryEmployeeAdapter(
     }
 
     override fun onBindViewHolder(holder: EmployeeViewHolder, position: Int) {
-        holder.bindData(position)
+        holder.bindData(position,employeeEvents)
     }
 
     override fun getItemId(position: Int): Long {
@@ -77,10 +79,19 @@ class SalaryEmployeeAdapter(
     }
 
     override fun getItemCount(): Int {
-        return data.size
+        return dataEmployee.size
+    }
+    private fun formatCurrency(value: Long?): String {
+        val decimalFormat = DecimalFormat("#,###")
+        return decimalFormat.format(value) + " تومان"
     }
     interface EmployeeEvents {
         fun onEmployeeClicked(employee: Employee, position: Int)
         fun onEmployeeLongClicked(employee: Employee, position: Int)
+        fun onBtnHarvestClick(
+            employee: Employee,
+            employeeInvestmentDao: EmployeeHarvestDao,
+            position: Int
+        )
     }
 }

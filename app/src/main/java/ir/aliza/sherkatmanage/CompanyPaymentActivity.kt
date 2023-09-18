@@ -22,7 +22,6 @@ class CompanyPaymentActivity : AppCompatActivity() {
         }
 
         val companyReceiptDao = AppDatabase.getDataBase(applicationContext).companyExpensesDao
-
         val sumCompanyReceipt = companyReceiptDao.getExpensesSum()
         binding.txtExpenses.text = formatCurrency(sumCompanyReceipt.toLong())
 
@@ -31,6 +30,14 @@ class CompanyPaymentActivity : AppCompatActivity() {
             transaction.replace(R.id.layout_company_payment, SalaryCompanyExpensesFragment())
                 .commit()
         }
+
+        val employeeInvestmentDao = AppDatabase.getDataBase(applicationContext).employeeInvestmentDao
+        val sumEmployeeInvestment = employeeInvestmentDao.getInvestmentSum()
+        binding.txtInvestment.text = formatCurrency(sumEmployeeInvestment.toLong())
+
+        val employeeHarvestDao = AppDatabase.getDataBase(applicationContext).employeeHarvestDao
+        val sumEmployeeHarvest = employeeHarvestDao.getHarvestSum()
+        binding.txtReceipt.text = formatCurrency(sumEmployeeHarvest.toLong())
         binding.btnCompanyEmployeesSalary.setOnClickListener {
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.layout_company_payment, SalaryEmployeeSFragment())

@@ -168,7 +168,7 @@ interface CompanyReceiptDao : BaceDao<CompanyReceipt> {
     @Query("SELECT * FROM companyReceipt_table WHERE idCompanyReceipt = :idReceipt")
     fun getCompanyReceipt(idReceipt: Int): CompanyReceipt?
     @Query("SELECT SUM(companyReceipt) FROM companyReceipt_table")
-    fun getReceiptSum(): Int
+    fun getReceiptSum(): Long
 }
 @Dao
 interface CompanyExpensesDao : BaceDao<CompanyExpenses> {
@@ -177,7 +177,7 @@ interface CompanyExpensesDao : BaceDao<CompanyExpenses> {
     @Query("SELECT * FROM companyExpenses_table WHERE idCompanyExpenses = :idExpenses")
     fun getCompanyExpenses(idExpenses: Int): CompanyExpenses?
     @Query("SELECT SUM(companyExpenses) FROM companyExpenses_table")
-    fun getExpensesSum(): Int
+    fun getExpensesSum(): Long
 }
 //@Dao
 //interface EmployeeSalaryDao : BaceDao<EmployeeSalary> {
@@ -195,18 +195,22 @@ interface EmployeeInvestmentDao : BaceDao<EmployeeInvestment> {
     @Query("SELECT * FROM employeeInvestment_table WHERE idInvestment = :idInvestment")
     fun getOnClickEmployeeInvestment(idInvestment: Int): EmployeeInvestment?
     @Query("SELECT SUM(investment) FROM employeeInvestment_table WHERE idEmployee = :idEmployee ")
-    fun getEmployeeInvestmentSum(idEmployee: Int): Int
+    fun getEmployeeInvestmentSum(idEmployee: Int): Long
     @Query("SELECT SUM(investment) FROM employeeInvestment_table")
-    fun getInvestmentSum(): Int
+    fun getInvestmentSum(): Long
 }
 @Dao
 interface EmployeeHarvestDao : BaceDao<EmployeeHarvest> {
     @Query("SELECT * FROM employeeHarvest_table")
     fun getAllEmployeeHarvest(): List<EmployeeHarvest>
     @Query("SELECT * FROM employeeHarvest_table WHERE idEmployee = :idEmployee")
-    fun getEmployeeHarvest(idEmployee: Int): EmployeeHarvest?
+    fun getEmployeeHarvest(idEmployee: Int): List<EmployeeHarvest>
+    @Query("SELECT * FROM employeeHarvest_table WHERE idHarvest = :idHarvest")
+    fun getOnClickEmployeeHarvest(idHarvest: Int): EmployeeHarvest?
+    @Query("SELECT SUM(harvest) FROM employeeHarvest_table WHERE idEmployee = :idEmployee ")
+    fun getEmployeeHarvestSum(idEmployee: Int): Long
     @Query("SELECT SUM(harvest) FROM employeeHarvest_table")
-    fun getHarvestSum(): Int
+    fun getHarvestSum(): Long
 }
 //@Dao
 //interface EmployeePaymentDao : BaceDao<EmployeePayment> {

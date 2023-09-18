@@ -6,20 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import ir.aliza.sherkatmanage.CompanyPaymentActivity
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
-import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.DataBase.EmployeeDao
+import ir.aliza.sherkatmanage.DataBase.EmployeeHarvestDao
+import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.SalaryApprenticesAdapter
-import ir.aliza.sherkatmanage.adapter.SalaryEmployeeAdapter
 import ir.aliza.sherkatmanage.databinding.FragmentSalaryApprenticesBinding
 
-class SalaryApprenticesFragment : Fragment(), SalaryEmployeeAdapter.EmployeeEvents,
-    SalaryApprenticesAdapter.EmployeeEvents {
+class SalaryApprenticesFragment : Fragment(), SalaryApprenticesAdapter.ApprenticesEvents {
 
     lateinit var binding: FragmentSalaryApprenticesBinding
     lateinit var employeeDao: EmployeeDao
-    lateinit var efficiencyEmployeeDao: EfficiencyDao
+    lateinit var employeeHarvestDao: EmployeeHarvestDao
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -33,19 +33,32 @@ class SalaryApprenticesFragment : Fragment(), SalaryEmployeeAdapter.EmployeeEven
         super.onViewCreated(view, savedInstanceState)
 
         employeeDao = AppDatabase.getDataBase(view.context).employeeDao
-        efficiencyEmployeeDao = AppDatabase.getDataBase(view.context).efficiencyDao
+        employeeHarvestDao = AppDatabase.getDataBase(view.context).employeeHarvestDao
         val employeeData = employeeDao.rankEmployee("کارآموز")
-        binding.rcvApprentices.adapter = SalaryApprenticesAdapter(ArrayList(employeeData), this, efficiencyEmployeeDao)
+        binding.rcvApprentices.adapter = SalaryApprenticesAdapter(ArrayList(employeeData), employeeHarvestDao,this)
         binding.rcvApprentices.layoutManager = LinearLayoutManager(context)
 
     }
+    override fun onApprenticesClicked(employee: Employee, position: Int) {}
 
-    override fun onEmployeeClicked(employee: Employee, position: Int) {
-        TODO("Not yet implemented")
-    }
+    override fun onApprenticesLongClicked(employee: Employee, position: Int) {}
 
-    override fun onEmployeeLongClicked(employee: Employee, position: Int) {
-        TODO("Not yet implemented")
+    override fun onBtnHarvestClick(
+        employee: Employee,
+        employeeInvestmentDao: EmployeeHarvestDao,
+        position: Int
+    ) {
+        val transaction =
+            (activity as CompanyPaymentActivity).supportFragmentManager.beginTransaction()
+        transaction.replace(
+            R.id.layout_company_payment,
+            SalaryApprenticesHarvestFragment(
+                employee,
+                employeeHarvestDao
+            )
+        )
+            .addToBackStack(null)
+            .commit()
     }
 
 }
