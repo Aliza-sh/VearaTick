@@ -42,7 +42,7 @@ class SalaryShareholdersFragment : Fragment(), SalaryShareholdersAdapter.Shareho
         employeeDao = AppDatabase.getDataBase(view.context).employeeDao
         employeeHarvestDao = AppDatabase.getDataBase(view.context).employeeHarvestDao
         employeeInvestmentDao = AppDatabase.getDataBase(view.context).employeeInvestmentDao
-        val shareholdersData = employeeDao.rankEmployee("سهامدار")
+        val shareholdersData = employeeDao.rankEmployee("سهام دار")
         binding.rcvShareholder.adapter = SalaryShareholdersAdapter(
             ArrayList(shareholdersData),
             employeeHarvestDao,
