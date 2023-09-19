@@ -1,392 +1,441 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorOnPrimary"
-    android:layoutDirection="ltr">
+    android:layoutDirection="ltr"
+    android:orientation="vertical">
 
-    <ImageButton
-        android:id="@+id/btn_bck"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/shape_circle"
-        android:elevation="20dp"
-        android:rotationY="180"
-        app:tint="@color/white"
-        android:src="@drawable/ic_back"
-        app:backgroundTint="?attr/colorPrimaryVariant"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/sheet_btn_done"
-        android:layout_width="80dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginStart="8dp"
-        android:background="@drawable/shape_dore_button"
-        android:text="استخدام"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        app:backgroundTint="@color/firoze"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/textView36"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        android:text="اینجا میتونی اطلاعات کارمند جدید رو وارد کنی ."
-        android:textColor="@color/fi_dark"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView3"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-
-    <ScrollView
-        android:id="@+id/scrollView3"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:elevation="11dp"
-        android:scrollbars="none"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        android:background="@drawable/shape_background_light"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        android:layoutDirection="rtl"
+        app:layout_anchorGravity="top">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/shape_background_navi">
+            android:layout_height="?attr/actionBarSize">
 
-            <ImageView
-                android:id="@+id/imgprn2"
-                android:layout_width="70dp"
-                android:layout_height="70dp"
-                android:layout_gravity="center|top"
-                app:layout_constraintBottom_toBottomOf="@+id/progress_circular2"
-                app:layout_constraintEnd_toEndOf="@+id/progress_circular2"
-                app:layout_constraintStart_toStartOf="@+id/progress_circular2"
-                app:layout_constraintTop_toTopOf="@+id/progress_circular2"
-                app:srcCompat="@drawable/img_male" />
-
-            <com.mikhaellopez.circularprogressbar.CircularProgressBar
-                android:id="@+id/progress_circular2"
-                android:layout_width="90dp"
-                android:layout_height="90dp"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
-                app:cpb_background_progressbar_color="@color/white"
-                app:cpb_background_progressbar_width="5dp"
-                app:cpb_progress="0"
-                app:cpb_progress_max="100"
-                app:cpb_progressbar_color="@color/firoze"
-                app:cpb_progressbar_width="5dp"
-                app:cpb_round_border="true"
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/sheet_btn_done"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/shape_dore_button"
+                android:text="استخدام"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:backgroundTint="@color/firoze"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageButton
+                android:id="@+id/btn_bck"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/shape_circle"
+                android:elevation="20dp"
+                android:rotationY="180"
+                android:src="@drawable/ic_back"
+                app:backgroundTint="?attr/colorOnPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_marginTop="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorOnPrimary"
+            android:layoutDirection="ltr">
+
+
+
             <TextView
-                android:id="@+id/textView5"
+                android:id="@+id/textView36"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="24dp"
-                android:text="اطلاعات شخصی"
-                android:textColor="?attr/colorOnSecondary"
-                android:textSize="24sp"
-                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="اینجا میتونی اطلاعات کارمند جدید رو وارد کنی ."
+                android:textColor="@color/fi_dark"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/scrollView3"
                 app:layout_constraintEnd_toEndOf="parent" />
 
-            <LinearLayout
-                android:id="@+id/linearLayout"
+
+            <ScrollView
+                android:id="@+id/scrollView3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:orientation="vertical"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                app:layout_constraintTop_toBottomOf="@+id/progress_circular2">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layoutDirection="rtl"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_weight="1.1"
-                        android:hint="اسم  *"
-                        android:textColorHint="?attr/colorOnSecondary"
-                        app:boxStrokeColor="@color/firoze">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edt_name_epm"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="text"
-                            android:singleLine="true"
-                            android:textColor="?attr/colorOnSecondary" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_weight="0.9"
-                        android:hint="فامیل  *"
-                        android:textColorHint="?attr/colorOnSecondary"
-                        app:boxStrokeColor="@color/firoze">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edt_fam_emp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="text"
-                            android:singleLine="true"
-                            android:textColor="?attr/colorOnSecondary" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:layoutDirection="rtl"
-                    android:orientation="horizontal">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_weight="1.1"
-                        android:hint="سن  *"
-                        android:textColorHint="?attr/colorOnSecondary"
-                        app:boxStrokeColor="@color/firoze">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edt_age_emp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="number"
-                            android:maxLength="3"
-                            android:singleLine="true"
-                            android:textColor="?attr/colorOnSecondary" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/dialog_main_edt_gdrperson"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_weight="1"
-                        android:hint="جنسیت *"
-                        android:textColorHint="?attr/colorOnSecondary"
-                        app:boxStrokeColor="@color/firoze">
-
-                        <AutoCompleteTextView
-                            android:id="@+id/edt_gen_emp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="none"
-                            android:singleLine="true"
-                            android:textColor="?attr/colorOnSecondary" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:id="@+id/dialog_main_edt_rank_person"
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_weight="1"
-                        android:hint="رتبه  *"
-                        android:textColorHint="?attr/colorOnSecondary"
-                        app:boxStrokeColor="@color/firoze">
-
-                        <AutoCompleteTextView
-                            android:id="@+id/edt_rank_emp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="none"
-                            android:singleLine="true"
-                            android:textColor="?attr/colorOnSecondary" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layoutDirection="rtl"
-                    android:orientation="horizontal"
-                    android:weightSum="2">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_weight="1.1"
-                        android:hint="شماره همراه  *"
-                        android:textColorHint="?attr/colorOnSecondary"
-                        app:boxStrokeColor="@color/firoze">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edt_num_emp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="phone"
-                            android:maxLength="11"
-                            android:singleLine="true"
-                            android:textColor="?attr/colorOnSecondary" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="10dp"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginBottom="5dp"
-                        android:layout_weight="0.9"
-                        android:hint="شماره منزل"
-                        android:textColorHint="?attr/colorOnSecondary"
-                        app:boxStrokeColor="@color/firoze">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/edt_numbhome_emp"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:inputType="phone"
-                            android:maxLength="11"
-                            android:singleLine="true"
-                            android:textColor="?attr/colorOnSecondary" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </LinearLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="5dp"
-                    android:hint="آدرس"
-                    android:textColorHint="?attr/colorOnSecondary"
-                    app:boxStrokeColor="@color/firoze">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/edt_address_emp"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="text"
-                        android:singleLine="true"
-                        android:textColor="?attr/colorOnSecondary" />
-
-                </com.google.android.material.textfield.TextInputLayout>
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/textView32"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginEnd="24dp"
-                android:text="مهارت ها "
-                android:textColor="?attr/colorOnSecondary"
-                android:textSize="24sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/textInputLayout"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
-                android:hint="تخصص  *"
-                android:textColorHint="?attr/colorOnSecondary"
-                app:boxStrokeColor="@color/firoze"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView32">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_Takhasos_emp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:singleLine="true"
-                    android:textColor="?attr/colorOnSecondary" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="20dp"
-                android:layout_marginBottom="40dp"
-                android:hint="مهارت ها"
-                android:textColorHint="?attr/colorOnSecondary"
-                app:boxStrokeColor="@color/firoze"
+                android:elevation="11dp"
+                android:scrollbars="none"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edt_maharat_emp"
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="text"
-                    android:singleLine="true"
-                    android:textColor="?attr/colorOnSecondary" />
+                    android:background="@drawable/shape_background_navi">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <ImageView
+                        android:id="@+id/imgprn2"
+                        android:layout_width="70dp"
+                        android:layout_height="70dp"
+                        android:layout_gravity="center|top"
+                        app:layout_constraintBottom_toBottomOf="@+id/progress_circular2"
+                        app:layout_constraintEnd_toEndOf="@+id/progress_circular2"
+                        app:layout_constraintStart_toStartOf="@+id/progress_circular2"
+                        app:layout_constraintTop_toTopOf="@+id/progress_circular2"
+                        app:srcCompat="@drawable/img_male" />
+
+                    <com.mikhaellopez.circularprogressbar.CircularProgressBar
+                        android:id="@+id/progress_circular2"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginTop="16dp"
+                        app:cpb_background_progressbar_color="@color/white"
+                        app:cpb_background_progressbar_width="5dp"
+                        app:cpb_progress="0"
+                        app:cpb_progress_max="100"
+                        app:cpb_progressbar_color="@color/firoze"
+                        app:cpb_progressbar_width="5dp"
+                        app:cpb_round_border="true"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/textView5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="24dp"
+                        android:text="اطلاعات شخصی"
+                        android:textColor="?attr/colorOnSecondary"
+                        android:textSize="22sp"
+                        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+                        app:layout_constraintEnd_toEndOf="parent" />
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="vertical"
+                        android:paddingStart="10dp"
+                        android:paddingEnd="10dp"
+                        app:layout_constraintTop_toBottomOf="@+id/progress_circular2">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layoutDirection="rtl"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_weight="1.1"
+                                android:hint="اسم  *"
+                                android:textColorHint="?attr/colorOnSecondary"
+                                app:boxStrokeColor="@color/firoze">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/edt_name_epm"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="text"
+                                    android:textSize="13sp"
+                                    android:singleLine="true"
+                                    android:textColor="?attr/colorOnSecondary" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginBottom="5dp"
+                                android:layout_weight="0.9"
+                                android:hint="فامیل  *"
+                                android:textColorHint="?attr/colorOnSecondary"
+                                app:boxStrokeColor="@color/firoze">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/edt_fam_emp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="text"
+                                    android:singleLine="true"
+                                    android:textSize="13sp"
+                                    android:textColor="?attr/colorOnSecondary" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2"
+                            android:layoutDirection="rtl"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginBottom="5dp"
+                                android:layout_weight="1.1"
+                                android:hint="سن  *"
+                                android:textColorHint="?attr/colorOnSecondary"
+                                app:boxStrokeColor="@color/firoze">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/edt_age_emp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="number"
+                                    android:maxLength="3"
+                                    android:singleLine="true"
+                                    android:textSize="13sp"
+                                    android:textColor="?attr/colorOnSecondary" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/dialog_main_edt_gdrperson"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginBottom="5dp"
+                                android:layout_weight="0.9"
+                                android:hint="جنسیت *"
+                                android:textColorHint="?attr/colorOnSecondary"
+                                app:boxStrokeColor="@color/firoze">
+
+                                <AutoCompleteTextView
+                                    android:id="@+id/edt_gen_emp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="none"
+                                    android:singleLine="true"
+                                    android:textSize="13sp"
+                                    android:textColor="?attr/colorOnSecondary" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/dialog_main_edt_rank_person"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginBottom="5dp"
+                                android:layout_weight="1"
+                                android:hint="رتبه  *"
+                                android:textColorHint="?attr/colorOnSecondary"
+                                app:boxStrokeColor="@color/firoze">
+
+                                <AutoCompleteTextView
+                                    android:id="@+id/edt_rank_emp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="none"
+                                    android:singleLine="true"
+                                    android:textSize="13sp"
+                                    android:textColor="?attr/colorOnSecondary" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layoutDirection="rtl"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginBottom="5dp"
+                                android:layout_weight="1.1"
+                                android:hint="شماره همراه  *"
+                                android:textColorHint="?attr/colorOnSecondary"
+                                app:boxStrokeColor="@color/firoze">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/edt_num_emp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="phone"
+                                    android:maxLength="11"
+                                    android:singleLine="true"
+                                    android:textSize="13sp"
+                                    android:textColor="?attr/colorOnSecondary" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginEnd="10dp"
+                                android:layout_marginBottom="5dp"
+                                android:layout_weight="0.9"
+                                android:hint="شماره منزل"
+                                android:textColorHint="?attr/colorOnSecondary"
+                                app:boxStrokeColor="@color/firoze">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/edt_numbhome_emp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="phone"
+                                    android:maxLength="11"
+                                    android:singleLine="true"
+                                    android:textSize="13sp"
+                                    android:textColor="?attr/colorOnSecondary" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                        </LinearLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="5dp"
+                            android:hint="آدرس"
+                            android:textColorHint="?attr/colorOnSecondary"
+                            app:boxStrokeColor="@color/firoze">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/edt_address_emp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="text"
+                                android:singleLine="true"
+                                android:textSize="13sp"
+                                android:textColor="?attr/colorOnSecondary" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/textView32"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="24dp"
+                        android:text="مهارت ها "
+                        android:textColor="?attr/colorOnSecondary"
+                        android:textSize="22sp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/textInputLayout"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginEnd="20dp"
+                        android:hint="تخصص  *"
+                        android:textColorHint="?attr/colorOnSecondary"
+                        app:boxStrokeColor="@color/firoze"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textView32">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edt_Takhasos_emp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:singleLine="true"
+                            android:textSize="13sp"
+                            android:textColor="?attr/colorOnSecondary" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="20dp"
+                        android:layout_marginBottom="40dp"
+                        android:hint="مهارت ها"
+                        android:textColorHint="?attr/colorOnSecondary"
+                        app:boxStrokeColor="@color/firoze"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/textInputLayout">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/edt_maharat_emp"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text"
+                            android:singleLine="true"
+                            android:textSize="13sp"
+                            android:textColor="?attr/colorOnSecondary" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </ScrollView>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

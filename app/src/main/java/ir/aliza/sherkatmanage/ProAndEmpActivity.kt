@@ -29,6 +29,7 @@ class ProAndEmpActivity : AppCompatActivity() {
         }
 
         binding.btnProjrct.setOnClickListener() {
+            binding.txtTitle.text = "پروژها"
             binding.icProject.setColorFilter(ContextCompat.getColor(this, R.color.firoze), PorterDuff.Mode.SRC_IN)
             binding.txtProject.setTextColor(Color.parseColor("#E600ADB5"))
 
@@ -39,6 +40,7 @@ class ProAndEmpActivity : AppCompatActivity() {
         }
 
         binding.btnEmployee.setOnClickListener() {
+            binding.txtTitle.text = "کارکنان"
             binding.icEmployee.setColorFilter(ContextCompat.getColor(this, R.color.firoze), PorterDuff.Mode.SRC_IN)
             binding.txtEmployee.setTextColor(Color.parseColor("#E600ADB5"))
 

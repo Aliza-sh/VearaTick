@@ -8,6 +8,13 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="BottomNavigationTextActive" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">12sp</item> <!-- سایز متن فعال -->
+    </style>
+    <style name="BottomNavigationTextInactive" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">10sp</item> <!-- سایز متن غیرفعال -->
+    </style>
+
     <style name="AppTheme.NoActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>

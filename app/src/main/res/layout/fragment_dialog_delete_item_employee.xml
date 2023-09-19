@@ -14,13 +14,13 @@
         android:padding="10dp">
 
         <TextView
-            android:id="@+id/textView"
+            android:id="@+id/txt_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text=" میخوای این کارمند رو اخراج کنی ؟"
+            android:text="میخوای این کارمند رو اخراج کنی ؟"
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="28sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -30,15 +30,12 @@
             android:id="@+id/dialog_btn_deleteSure"
             android:layout_width="80dp"
             android:layout_height="40dp"
-            android:layout_marginEnd="64dp"
             android:background="@drawable/shape_dore_button"
             android:backgroundTint="?attr/colorPrimary"
             android:text="آره"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/dialog_btn_deleteCansel"
             app:layout_constraintTop_toTopOf="@+id/dialog_btn_deleteCansel" />
 
@@ -46,22 +43,23 @@
             android:id="@+id/dialog_btn_deleteCansel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="60dp"
             android:layout_marginBottom="16dp"
             android:backgroundTint="?attr/colorPrimaryVariant"
             android:paddingStart="40dp"
-            android:paddingTop="5dp"
+            android:paddingTop="8dp"
             android:paddingEnd="40dp"
             android:paddingBottom="5dp"
             android:text=" نه"
             android:textColor="@color/firoze"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/dialog_btn_deleteSure"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+            app:layout_constraintTop_toBottomOf="@+id/txt_title" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

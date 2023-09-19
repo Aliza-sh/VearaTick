@@ -1,5 +1,6 @@
 package ir.aliza.sherkatmanage.fgmSub
 
+import TopMarginItemDecoration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -49,6 +50,9 @@ class SalaryShareholdersFragment : Fragment(), SalaryShareholdersAdapter.Shareho
             this
         )
         binding.rcvShareholder.layoutManager = LinearLayoutManager(context)
+        val topMargin = 130 // اندازه مارجین بالا را از منابع دریافت کنید
+        val itemDecoration = TopMarginItemDecoration(topMargin)
+        binding.rcvShareholder.addItemDecoration(itemDecoration)
 
     }
 

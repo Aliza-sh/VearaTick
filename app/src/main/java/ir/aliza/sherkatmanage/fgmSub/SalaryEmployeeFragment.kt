@@ -1,5 +1,6 @@
 package ir.aliza.sherkatmanage.fgmSub
 
+import TopMarginItemDecoration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -37,6 +38,9 @@ class SalaryEmployeeFragment : Fragment(), SalaryEmployeeAdapter.EmployeeEvents 
         val employeeData = employeeDao.rankEmployee("کارمند")
         binding.rcvEmployee.adapter = SalaryEmployeeAdapter(ArrayList(employeeData),employeeHarvestDao,this)
         binding.rcvEmployee.layoutManager = LinearLayoutManager(context)
+        val topMargin = 130 // اندازه مارجین بالا را از منابع دریافت کنید
+        val itemDecoration = TopMarginItemDecoration(topMargin)
+        binding.rcvEmployee.addItemDecoration(itemDecoration)
 
     }
 

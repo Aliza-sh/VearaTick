@@ -16,6 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
     <FrameLayout
         android:id="@+id/frame_layout_main2"
         android:elevation="100dp"
@@ -31,7 +32,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:elevation="50dp"
+        android:elevation="20dp"
         android:layoutDirection="rtl"
         android:translationZ="10dp"
         app:cardBackgroundColor="?attr/colorPrimaryVariant"
@@ -48,6 +49,8 @@
             app:itemBackground="?attr/colorPrimaryVariant"
             app:itemRippleColor="@color/firoze"
             android:animateLayoutChanges="true"
+            app:itemTextAppearanceActive="@style/BottomNavigationTextActive"
+            app:itemTextAppearanceInactive="@style/BottomNavigationTextInactive"
             app:backgroundTint="?attr/colorPrimaryVariant"
             app:itemIconTint="@color/color_item_bottom_nav_main"
             app:itemTextColor="@color/color_item_bottom_nav_main"

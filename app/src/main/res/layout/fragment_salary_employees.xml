@@ -8,6 +8,7 @@
     android:background="?attr/colorOnPrimary">
 
     <LinearLayout
+        android:elevation="20dp"
         android:id="@+id/LinearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -23,7 +24,7 @@
             android:layout_height="40dp"
             android:layout_marginStart="15dp"
             android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="8dp"
             android:background="@drawable/shape_circle"
             android:rotationY="180"
             android:src="@drawable/ic_back"
@@ -34,19 +35,40 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/txt_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="64dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/shape_background_rcv"
+        android:backgroundTint="@color/blacke"
+        android:elevation="300dp"
+        android:paddingStart="15dp"
+        android:paddingTop="5dp"
+        android:paddingEnd="15dp"
+        android:paddingBottom="5dp"
+        android:text="حساب کارکنان"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.tabs.TabLayout
-        android:layout_marginTop="-35dp"
         android:id="@+id/tablayoutEmp"
         style="@style/Widget.Material3.TabLayout.OnSurface"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="-15dp"
         android:background="@drawable/shape_background_top_pro_emp_act"
         android:backgroundTint="?attr/colorPrimaryVariant"
         android:layoutDirection="rtl"
-        app:tabGravity="center"
+        android:elevation="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/LinearLayout"
+        app:tabGravity="center"
         app:tabMode="scrollable">
 
         <com.google.android.material.tabs.TabItem
@@ -67,6 +89,7 @@
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewpagerEmp"
+        android:layout_marginTop="-20dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layoutDirection="rtl"

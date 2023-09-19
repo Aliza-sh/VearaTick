@@ -173,7 +173,7 @@ class ProjectNewFragment(
                 onCreateCalendar()
             } else {
                 bindingDialogView.txtCalendar.text = "تقویم"
-                bindingDialogView.txtCalendar.textSize = 20f
+                bindingDialogView.txtCalendar.textSize = 16f
                 bindingDialogView.btnCalendar.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
                 valueBtnCalendar = false
             }

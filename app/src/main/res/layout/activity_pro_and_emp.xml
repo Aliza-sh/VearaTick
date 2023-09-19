@@ -12,6 +12,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <TextView
+            android:id="@+id/txt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:text="پروژه ها"
+            android:background="@drawable/shape_background_rcv"
+            android:backgroundTint="@color/blacke"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
         <ImageButton
             android:id="@+id/btn_bck"
             android:layout_width="40dp"
@@ -30,7 +48,7 @@
     </LinearLayout>
 
     <androidx.fragment.app.FragmentContainerView
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="57dp"
         android:layout_marginBottom="20dp"
         android:id="@+id/frame_layout_sub"
         android:layout_width="match_parent"
@@ -93,7 +111,7 @@
                 android:id="@+id/txt_employee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="کارمندان"
+                android:text="کارکنان"
                 android:textColor="@color/gray" />
 
         </LinearLayout>

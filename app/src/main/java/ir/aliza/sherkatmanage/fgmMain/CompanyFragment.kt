@@ -17,6 +17,7 @@ import ir.aliza.sherkatmanage.DataBase.CompanyExpensesDao
 import ir.aliza.sherkatmanage.DataBase.CompanyReceiptDao
 import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.EmployeeHarvestDao
+import ir.aliza.sherkatmanage.DataBase.EmployeeInvestmentDao
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.DataBase.SubTaskProjectDao
 import ir.aliza.sherkatmanage.MainActivity
@@ -37,6 +38,7 @@ class CompanyFragment : Fragment() {
     lateinit var companyReceiptDao: CompanyReceiptDao
     lateinit var companyExpensesDao: CompanyExpensesDao
     lateinit var employeeHarvestDao: EmployeeHarvestDao
+    lateinit var employeeInvestmentDao: EmployeeInvestmentDao
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,6 +51,7 @@ class CompanyFragment : Fragment() {
         return binding.root
 
     }
+
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -59,10 +62,11 @@ class CompanyFragment : Fragment() {
         companyReceiptDao = AppDatabase.getDataBase(view.context).companyReceiptDao
         companyExpensesDao = AppDatabase.getDataBase(view.context).companyExpensesDao
         employeeHarvestDao = AppDatabase.getDataBase(view.context).employeeHarvestDao
+        employeeInvestmentDao = AppDatabase.getDataBase(view.context).employeeInvestmentDao
 
         val sumCompanyReceipt = companyReceiptDao.getReceiptSum()
         binding.txtReceipt.text = formatCurrency(sumCompanyReceipt.toLong())
-        binding.btnReceipt.setOnClickListener {
+        binding.btnIncome.setOnClickListener {
             val intent = Intent(requireContext(), CompanyReceiptActivity::class.java)
             startActivity(intent)
 
@@ -70,12 +74,30 @@ class CompanyFragment : Fragment() {
 
         val sumCompanyExpenses = companyExpensesDao.getExpensesSum()
         val sumEmployeeHarvest = employeeHarvestDao.getHarvestSum()
-        val sumTotal = sumCompanyExpenses + sumEmployeeHarvest
-        binding.txtPayment.text = formatCurrency(sumTotal.toLong())
-        binding.btnPayment.setOnClickListener {
+        val sumTotalExpenses = sumCompanyExpenses + sumEmployeeHarvest
+        binding.txtPayment.text = formatCurrency(sumTotalExpenses.toLong())
+        binding.btnExpense.setOnClickListener {
             val intent = Intent(requireContext(), CompanyPaymentActivity::class.java)
             startActivity(intent)
         }
+
+        var profit = sumCompanyReceipt - sumTotalExpenses
+        if (profit > 0) {
+            val value = formatCurrency(profit)
+            binding.txtProfit.setTextColor(Color.parseColor("#0E7113"))
+            binding.txtProfit.text = value + " +"
+        } else if (profit < 0) {
+            profit = -profit
+            val value = formatCurrency(profit)
+            binding.txtProfit.setTextColor(Color.parseColor("#c62828"))
+            binding.txtProfit.text = value + " -"
+        } else {
+            binding.txtProfit.text = "0"
+        }
+
+        val sumInvestment = employeeInvestmentDao.getInvestmentSum()
+        val sumTotal = (sumInvestment + profit)
+        binding.txtTotalDeposit.text = formatCurrency(sumTotal)
 
         binding.progressEfficiencyPro.setPercent(efficiencyProject())
         binding.txtEfficiencyPro.text = efficiencyProject().toString() + "%"
@@ -92,14 +114,14 @@ class CompanyFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
-
         progressNumProject(binding.progressNumProject)
-
     }
+
     private fun formatCurrency(value: Long?): String {
         val decimalFormat = DecimalFormat("#,###")
         return decimalFormat.format(value) + " تومان"
     }
+
     private fun progressNumProject(graph: Graph) {
 
         val numAndroid = projectDao.getNumberProject("اندروید", true).size

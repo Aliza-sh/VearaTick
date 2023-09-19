@@ -42,7 +42,7 @@ class EmployeeTaskBottomsheetFragment(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        binding.txtTitle.text = "یه وظیفه جدید برای ${employee.name} ایجاد کن."
         binding.sheetBtnDone.setOnClickListener {
             addNewTask()
         }

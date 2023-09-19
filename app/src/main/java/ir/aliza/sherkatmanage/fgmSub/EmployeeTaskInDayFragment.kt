@@ -74,8 +74,20 @@ class EmployeeTaskInDayFragment(
         btnOnScroll()
         setData()
 
+        val startDate =
+            DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
+        val endDate = DateTime(
+            selectedDate.persianYear,
+            selectedDate.persianMonth,
+            selectedDate.persianDay,
+            0,
+            0,
+            0
+        )
+        var daysBetween = Days.daysBetween(startDate, endDate).days
+
         binding.txtClickedDay.text =
-            " ${selectedDate.persianWeekDayName} ${selectedDate.persianDay} ${selectedDate.persianMonthName} ${selectedDate.persianYear}"
+            " ${selectedDate.persianWeekDayName} ${selectedDate.persianDay} ${selectedDate.persianMonthName} \n $daysBetween روز"
 
         binding.btnBck.setOnClickListener {
             parentFragmentManager.beginTransaction().detach(this@EmployeeTaskInDayFragment)

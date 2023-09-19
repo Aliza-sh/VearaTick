@@ -47,15 +47,15 @@
             app:layout_constraintTop_toBottomOf="@+id/btn_bck">
 
             <TextView
-                android:layout_margin="10dp"
                 android:id="@+id/txt_name_pro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="10dp"
                 android:gravity="start"
                 android:layoutDirection="ltr"
                 android:text="پروژه طراحی اپلیکیشن"
                 android:textColor="?attr/colorPrimary"
-                android:textSize="28sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/btn_menu_project"
@@ -72,7 +72,7 @@
                 android:layoutDirection="ltr"
                 android:text="توضیحات"
                 android:textColor="?attr/colorOnSurfaceVariant"
-                android:textSize="16sp"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/txt_name_pro" />
@@ -115,7 +115,7 @@
                     android:layout_marginEnd="8dp"
                     android:text=" مهلت پروژه"
                     android:textColor="?attr/colorOnSurface"
-                    android:textSize="22sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -127,7 +127,7 @@
                     android:layout_marginTop="12dp"
                     android:text="5 روز "
                     android:textColor="@color/firoze"
-                    android:textSize="30sp"
+                    android:textSize="25sp"
                     app:layout_constraintEnd_toEndOf="@+id/textView28"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView28" />
@@ -155,7 +155,7 @@
                     android:letterSpacing="0.1"
                     android:text="دیگر باقیمانده است"
                     android:textColor="?attr/colorOnSurfaceVariant"
-                    android:textSize="18sp"
+                    android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -214,15 +214,13 @@
                     android:id="@+id/textView160"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="60dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="8dp"
                     android:text=" بودجه پروژه"
                     android:textColor="?attr/colorOnSecondary"
-                    android:textSize="22sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
@@ -233,7 +231,7 @@
                     android:layout_marginEnd="8dp"
                     android:text="0 تومان"
                     android:textColor="@color/firoze"
-                    android:textSize="24sp"
+                    android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="@+id/textView160"
                     app:layout_constraintTop_toBottomOf="@+id/textView160" />
 
@@ -245,7 +243,7 @@
                     android:elevation="50dp"
                     android:text=" تصویه"
                     android:textColor="@color/whity"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@+id/btn_go_to_settlement"
                     app:layout_constraintStart_toEndOf="@+id/btn_go_to_settlement"
                     app:layout_constraintTop_toTopOf="@+id/btn_go_to_settlement" />
@@ -299,7 +297,7 @@
                     android:paddingBottom="0dp"
                     android:text="تسک ها"
                     android:textColor="@color/firoze"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/txt_date_target"
                     app:strokeColor="@color/firoze" />
@@ -312,7 +310,7 @@
                     android:layout_marginEnd="8dp"
                     android:text=" وضعیت پروژه"
                     android:textColor="?attr/colorOnSurface"
-                    android:textSize="22sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -324,7 +322,7 @@
                     android:layout_marginTop="10dp"
                     android:text="0 از 0"
                     android:textColor="@color/firoze"
-                    android:textSize="30sp"
+                    android:textSize="25sp"
                     app:layout_constraintEnd_toEndOf="@+id/txt_date_target"
                     app:layout_constraintTop_toBottomOf="@+id/txt_date_target" />
 
@@ -357,7 +355,7 @@
                     android:layout_marginStart="4dp"
                     android:text="0%"
                     android:textColor="?attr/colorOnSecondary"
-                    android:textSize="16sp"
+                    android:textSize="14sp"
                     app:layout_constraintBottom_toTopOf="@+id/progress_pro"
                     app:layout_constraintStart_toStartOf="@+id/progress_pro" />
 
@@ -415,7 +413,7 @@
                     android:layout_marginEnd="8dp"
                     android:text=" تیم پروژه"
                     android:textColor="?attr/colorOnSurface"
-                    android:textSize="22sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

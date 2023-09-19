@@ -11,5 +11,5 @@
     android:singleLine="true"
     android:text="جشنبه"
     android:textColor="?attr/colorOnSecondary"
-    android:textSize="16sp"
+    android:textSize="12sp"
     app:iconPadding="0dp" />

@@ -31,9 +31,9 @@ class EmployeeDeleteDialogFragment(
     lateinit var efficiencyDao: EfficiencyDao
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-
         binding = FragmentDialogDeleteItemEmployeeBinding.inflate(layoutInflater, null, false)
         val dialog = Dialog(binding.root.context)
+        binding.txtTitle.text = "میخوای ${employee.name}رو اخراج کنی ؟"
         efficiencyDao = AppDatabase.getDataBase(binding.root.context).efficiencyDao
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setContentView(binding.root)

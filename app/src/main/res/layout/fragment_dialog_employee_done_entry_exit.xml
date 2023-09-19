@@ -21,7 +21,7 @@
             android:layout_margin="10dp"
             android:text=" ساعت ورود و خروج رو مشخص کن."
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="28sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -56,7 +56,7 @@
                 android:layout_marginEnd="20dp"
                 android:text="امروز نیومده"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -85,15 +85,15 @@
 
             <TextView
                 android:id="@+id/txt_exit"
-                android:letterSpacing="0.04"
-                android:textAlignment="center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="30dp"
+                android:letterSpacing="0.04"
                 android:text=" خروج"
+                android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -132,7 +132,7 @@
                 android:text=" ورود"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 
@@ -143,11 +143,11 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="32dp"
             android:background="@drawable/shape_dore_button"
-            app:backgroundTint="@color/firoze"
             android:text="تایید"
             android:textColor="@color/white"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
+            app:backgroundTint="@color/firoze"
             app:layout_constraintStart_toEndOf="@+id/dialog_btn_Cansel"
             app:layout_constraintTop_toBottomOf="@+id/btn_entry" />
 
@@ -155,15 +155,16 @@
             android:id="@+id/dialog_btn_Cansel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:layout_marginBottom="16dp"
             android:backgroundTint="?attr/colorPrimaryVariant"
             android:paddingStart="20dp"
-            android:paddingTop="5dp"
+            android:paddingTop="8dp"
             android:paddingEnd="20dp"
             android:paddingBottom="5dp"
             android:text=" بیخیال"
             android:textColor="@color/firoze"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -20,7 +20,7 @@
             android:layout_margin="10dp"
             android:text="ساعت ورود و خروج رو مشخص کن."
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="28sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -56,6 +56,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="phone"
                     android:maxLength="2"
+                    android:textSize="13sp"
                     android:singleLine="true"
                     android:textColor="?attr/colorOnSecondary" />
 
@@ -81,6 +82,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="phone"
                     android:maxLength="2"
+                    android:textSize="13sp"
                     android:singleLine="true"
                     android:textColor="?attr/colorOnSecondary" />
 
@@ -98,7 +100,7 @@
             android:layout_marginTop="8dp"
             android:layoutDirection="rtl"
             android:text="آیا برایه تمام روز هایه هفته اعمال شود؟"
-            android:textSize="18sp"
+            android:textSize="14sp"
             app:layout_constraintStart_toStartOf="@+id/linearLayout2"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
 
@@ -106,7 +108,7 @@
             android:id="@+id/dialog_btn_Sure"
             android:layout_width="80dp"
             android:layout_height="40dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="30dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
             android:background="@drawable/shape_dore_button"
