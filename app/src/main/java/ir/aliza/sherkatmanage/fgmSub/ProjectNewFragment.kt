@@ -28,6 +28,8 @@ import ir.aliza.sherkatmanage.databinding.FragmentDialogDeadlineBinding
 import ir.aliza.sherkatmanage.databinding.FragmentNewProjectBinding
 import ir.aliza.sherkatmanage.projectAdapter
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 
 class ProjectNewFragment(
@@ -101,7 +103,9 @@ class ProjectNewFragment(
         }
 
         var formattedValue = "0"
-        val decimalFormat = DecimalFormat("#,###")
+        val decimalFormatSymbols = DecimalFormatSymbols(Locale("fa", "IR"))
+        decimalFormatSymbols.groupingSeparator = ','
+        val decimalFormat = DecimalFormat("#,###",decimalFormatSymbols)
         binding.edtBudget.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // قبل از تغییرات متنی
@@ -288,7 +292,9 @@ class ProjectNewFragment(
     }
 
     private fun formatCurrency(value: Long?): String {
-        val decimalFormat = DecimalFormat("#,###")
+        val decimalFormatSymbols = DecimalFormatSymbols(Locale("fa", "IR"))
+        decimalFormatSymbols.groupingSeparator = ','
+        val decimalFormat = DecimalFormat("#,###",decimalFormatSymbols)
         return decimalFormat.format(value) + " تومان"
     }
 }

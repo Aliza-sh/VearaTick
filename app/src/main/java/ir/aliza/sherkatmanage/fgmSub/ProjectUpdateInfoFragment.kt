@@ -302,7 +302,7 @@ class ProjectUpdateInfoFragment(
                     valueMonth= date.month
                     valueYear= date.year
                     binding.txtDedlineDateTime.text = valueCalendar
-                    bindingDialogView.txtCalendar.textSize = 22f
+                    bindingDialogView.txtCalendar.textSize = 16f
                     bindingDialogView.btnCalendar.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
                     valueBtnCalendar = true
                 }

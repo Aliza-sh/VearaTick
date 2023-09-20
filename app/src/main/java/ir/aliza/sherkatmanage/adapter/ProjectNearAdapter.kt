@@ -93,9 +93,21 @@ class ProjectNearAdapter(
                 }
             }
 
-            binding.progressLimit4.progress = data[position].progressProject!!
-            binding.txtProg.text = data[position].progressProject!!.toString() + "%"
+            val subTaskProjectDao = AppDatabase.getDataBase(itemView.context).subTaskProjectDao
+            if (data[position].idProject!=null) {
+                val totalVolumeProject =
+                    subTaskProjectDao.getTotalVolumeTaskSum(data[position].idProject!!)
+                val doneVolumeProject =
+                    subTaskProjectDao.getDoneVolumeTaskSum(data[position].idProject!!, true)
+                var efficiencyProject = 0
 
+                if (doneVolumeProject != null)
+                    efficiencyProject =
+                        ((doneVolumeProject.toDouble() / totalVolumeProject) * 100).toInt()
+
+                binding.progressLimit4.progress = efficiencyProject
+                binding.txtProg.text = "$efficiencyProject%"
+            }
             itemView.setOnClickListener {
                 projectNearEvents.onProjectClicked(
                     data[position],

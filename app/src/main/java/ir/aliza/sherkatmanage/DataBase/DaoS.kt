@@ -60,6 +60,8 @@ interface TimeDao : BaceDao<Time> {
     fun getDayTimeMenu(idTime: Int): Time?
     @Query("SELECT * FROM time_table WHERE idEmployee = :idEmployee AND year = :year AND month = :month AND day = :day")
     fun getAllArrivalDay(idEmployee: Int, year: String, month: String, day: String): Time?
+    @Query("SELECT * FROM time_table WHERE idEmployee = :idEmployee AND entry = :entry AND exit = :exit ")
+    fun getDeleteTime(idEmployee: Int, entry: Int, exit: Int): Time?
 }
 
 @Dao
@@ -129,6 +131,10 @@ interface SubTaskProjectDao : BaceDao<SubTaskProject> {
     fun getSubTaskProject(idProject: Int,): List<SubTaskProject>
     @Query("SELECT * FROM subTaskProject_table WHERE idSubTask = :idSubTaskProject")
     fun getOnClickSubTaskProject(idSubTaskProject: Int,): SubTaskProject?
+    @Query("SELECT SUM(volumeTask) FROM subTaskProject_table WHERE idProject = :idProject AND doneSubTask = :doneTaskProject")
+    fun getDoneVolumeTaskSum(idProject:Int,doneTaskProject: Boolean): Long
+    @Query("SELECT SUM(volumeTask) FROM subTaskProject_table WHERE idProject = :idProject")
+    fun getTotalVolumeTaskSum(idProject:Int): Long
 }
 
 @Dao

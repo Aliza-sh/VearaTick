@@ -428,12 +428,12 @@
                                 android:id="@+id/textView170"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="16dp"
                                 android:layout_marginTop="8dp"
                                 android:text=" بازدهی کارکنان"
                                 android:textColor="@color/white"
                                 android:textSize="16sp"
-                                app:layout_constraintStart_toStartOf="@+id/progress_efficiency_emp_task"
+                                app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <me.bastanfar.semicirclearcprogressbar.SemiCircleArcProgressBar
@@ -488,12 +488,12 @@
                                 android:id="@+id/textView17"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="8dp"
+                                android:layout_marginStart="16dp"
                                 android:layout_marginTop="8dp"
                                 android:text=" حضور کارکنان"
                                 android:textColor="@color/black"
                                 android:textSize="16sp"
-                                app:layout_constraintStart_toStartOf="@+id/progress_efficiency_emp_presence"
+                                app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toTopOf="parent" />
 
                             <me.bastanfar.semicirclearcprogressbar.SemiCircleArcProgressBar

@@ -8,6 +8,7 @@
 
     <LinearLayout
         android:gravity="center|end"
+        android:elevation="20dp"
         android:background="@drawable/shape_background_top_pro_emp_act"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -48,8 +49,7 @@
     </LinearLayout>
 
     <androidx.fragment.app.FragmentContainerView
-        android:layout_marginTop="57dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginTop="40dp"
         android:id="@+id/frame_layout_sub"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

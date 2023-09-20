@@ -50,7 +50,6 @@ class ProjectInformationFragment(
     lateinit var bindingDialogDeleteSubtaskProject: FragmentDialogDeleteSubtaskProjectBinding
     lateinit var bindingItemSubTask: ItemSubTaskBinding
     lateinit var subTaskProjectAdapter: SubTaskProjectAdapter
-    var numberDonSubTaskProject = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -122,7 +121,6 @@ class ProjectInformationFragment(
 
         binding.txtNamePro.text = project.nameProject
         binding.txtDescription.text = project.descriptionProject
-        numberDonSubTaskProject = project.numberDoneSubTaskProject!!
 
         if (project.budgetProject != "0") {
             binding.txtBudget.text = project.budgetProject + " تومان"
@@ -131,6 +129,15 @@ class ProjectInformationFragment(
             binding.txtBudget.visibility = View.GONE
             binding.btnGoToSettlement.visibility = View.GONE
             binding.txtSettlement.visibility = View.GONE
+            val shape = GradientDrawable()
+            shape.shape = GradientDrawable.RECTANGLE
+            shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+            shape.setStroke(
+                5,
+                ContextCompat.getColor(binding.root.context, R.color.white)
+            )
+            shape.setColor(ContextCompat.getColor(binding.root.context, R.color.blacke))
+            binding.cardView50.background = shape
             binding.txtNoBudget.text = "پروژه بودجه \nندارد"
         }
         if (project.doneProject!!) {
@@ -176,8 +183,19 @@ class ProjectInformationFragment(
                     )
                     shape.setColor(ContextCompat.getColor(binding.root.context, R.color.blacke))
                     binding.cardView5.background = shape
-                } else if (daysBetween == 0)
+                } else if (daysBetween == 0) {
+                    val shape = GradientDrawable()
+                    shape.shape = GradientDrawable.RECTANGLE
+                    shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                    shape.setStroke(
+                        5,
+                        ContextCompat.getColor(binding.root.context, R.color.yelowe_light)
+                    )
+                    shape.setColor(ContextCompat.getColor(binding.root.context, R.color.blacke))
+                    binding.cardView5.background = shape
                     binding.txtNoDeadline.text = " امروز باید تسک تحویل داده شه"
+                    binding.txtNoDeadline.textSize = 18f
+                }
                 else {
                     daysBetween = -daysBetween
                     binding.txtDay.text = "$daysBetween روز "
@@ -198,15 +216,24 @@ class ProjectInformationFragment(
                 binding.txtDay.visibility = View.GONE
                 binding.txt.visibility = View.GONE
                 binding.txtNoDeadline.text = "پروژه ددلاین \nندارد"
+                val shape = GradientDrawable()
+                shape.shape = GradientDrawable.RECTANGLE
+                shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                shape.setStroke(
+                    5,
+                    ContextCompat.getColor(binding.root.context, R.color.white)
+                )
+                shape.setColor(ContextCompat.getColor(binding.root.context, R.color.blacke))
+                binding.cardView5.background = shape
             }
         }
 
-        val totalVolumeProject = project.totalVolumeProject
-        val doneVolumeProject = project.doneVolumeProject
+        val totalVolumeProject = subTaskProjectDao.getTotalVolumeTaskSum(project.idProject!!)
+        val doneVolumeProject = subTaskProjectDao.getDoneVolumeTaskSum(project.idProject!!,true)
         var efficiencyProject = 0
 
         if (doneVolumeProject != null)
-            efficiencyProject = ((doneVolumeProject.toDouble() / totalVolumeProject!!) * 100).toInt()
+            efficiencyProject = ((doneVolumeProject.toDouble() / totalVolumeProject) * 100).toInt()
 
         binding.progressPro.progress = efficiencyProject
         binding.txtProg.text = "$efficiencyProject%"
@@ -240,15 +267,16 @@ class ProjectInformationFragment(
 
         val project1 = projectDao.getProject(project.idProject!!)!!
 
-        val numSubTask = project1.numberSubTaskProject
-        numberDonSubTaskProject = project1.numberDoneSubTaskProject!!
+        val numberDonSubTaskProject = project1.numberDoneSubTaskProject!!
+        val totalVolumeProject = subTaskProjectDao.getTotalVolumeTaskSum(project1.idProject!!)
+        val doneVolumeProject = subTaskProjectDao.getDoneVolumeTaskSum(project1.idProject,true)
         var efficiencyProject = 0
 
-        if (numSubTask != null)
-            efficiencyProject = ((numberDonSubTaskProject.toDouble() / numSubTask) * 100).toInt()
+        if (doneVolumeProject != null)
+            efficiencyProject = ((doneVolumeProject.toDouble() / totalVolumeProject) * 100).toInt()
 
         binding.progressPro.progress = efficiencyProject
-        binding.txtProg.text = project1.progressProject.toString() + "%"
+        binding.txtProg.text = "$efficiencyProject%"
 
         binding.txtNumTaskPro.text =
             numberDonSubTaskProject.toString() + " از " + project1.numberSubTaskProject.toString()
@@ -501,16 +529,8 @@ class ProjectInformationFragment(
             subTaskProjectDao.update(newSubTask)
 
             val project1 = projectDao.getProject(project.idProject!!)
-            numberDonSubTaskProject = project1!!.numberDoneSubTaskProject!!
-            numberDonSubTaskProject--
-            val totalVolumeProject = project1.totalVolumeProject
-            val doneVolumeProject = project1.doneVolumeProject
-            val subVolumeProject = doneVolumeProject!! - onClickSubTask.volumeTask
-            var efficiencyProject = 0
-
-            if (numberDonSubTaskProject != null)
-                efficiencyProject =
-                    ((subVolumeProject.toDouble() / totalVolumeProject!!) * 100).toInt()
+            var numberDonSubTaskProject = project1!!.numberDoneSubTaskProject!!
+            numberDonSubTaskProject -= 1
 
             val newProject = Project(
                 idProject = project.idProject,
@@ -525,11 +545,11 @@ class ProjectInformationFragment(
                 doneProject = project.doneProject,
                 descriptionProject = project.descriptionProject,
                 numberSubTaskProject = project1.numberSubTaskProject,
-                numberDoneSubTaskProject = numberDonSubTaskProject,
-                progressProject = efficiencyProject,
+                numberDoneSubTaskProject = numberDonSubTaskProject--,
+                progressProject = project1.progressProject,
                 budgetProject = project.budgetProject,
-                totalVolumeProject = totalVolumeProject,
-                doneVolumeProject = subVolumeProject
+                totalVolumeProject = project1.totalVolumeProject,
+                doneVolumeProject = project1.doneVolumeProject
             )
             projectDao.update(newProject)
 
@@ -555,20 +575,13 @@ class ProjectInformationFragment(
             subTaskProjectDao.update(newSubTask)
 
             val project1 = projectDao.getProject(project.idProject!!)
-            numberDonSubTaskProject = project1!!.numberDoneSubTaskProject!!
-            numberDonSubTaskProject++
-            val totalVolumeProject = project1.totalVolumeProject
-            val doneVolumeProject = project1.doneVolumeProject
-            val sumVolumeProject = doneVolumeProject!! + onClickSubTask.volumeTask
-            var efficiencyProject = 0
-
-            if (numberDonSubTaskProject != null)
-                efficiencyProject =
-                    ((sumVolumeProject.toDouble() / totalVolumeProject!!) * 100).toInt()
+            var numberDonSubTaskProject = project1!!.numberDoneSubTaskProject!!
+            numberDonSubTaskProject += 1
 
             val newProject = Project(
                 idProject = project.idProject,
                 nameProject = project.nameProject,
+                noDeadlineProject = project.noDeadlineProject,
                 dayCreation = project.dayCreation,
                 monthCreation = project.monthCreation,
                 yearCreation = project.yearCreation,
@@ -576,14 +589,13 @@ class ProjectInformationFragment(
                 valueCalendar = project.valueCalendar,
                 deadlineTask = project.deadlineTask,
                 doneProject = project.doneProject,
-                noDeadlineProject = project.noDeadlineProject,
                 descriptionProject = project.descriptionProject,
                 numberSubTaskProject = project1.numberSubTaskProject,
                 numberDoneSubTaskProject = numberDonSubTaskProject,
-                progressProject = efficiencyProject,
+                progressProject = project1.progressProject,
                 budgetProject = project.budgetProject,
-                totalVolumeProject = totalVolumeProject,
-                doneVolumeProject = sumVolumeProject
+                totalVolumeProject = project1.totalVolumeProject,
+                doneVolumeProject = project1.doneVolumeProject
             )
             projectDao.update(newProject)
 
@@ -629,15 +641,6 @@ class ProjectInformationFragment(
         subTaskProjectAdapter.deleteSubTask(subTaskProject, position)
         subTaskProjectDao.delete(subTaskProject)
 
-        val totalVolumeProject = project1.totalVolumeProject
-        val doneVolumeProject = project1.doneVolumeProject
-        val subDoneVolumeProject = doneVolumeProject!! - subTaskProject.volumeTask
-        val subTotalVolumeProject = totalVolumeProject!! - subTaskProject.volumeTask
-        var efficiencyProject = 0
-        if (numberSubTaskProject != null)
-            efficiencyProject =
-                ((subDoneVolumeProject.toDouble() / subTotalVolumeProject) * 100).toInt()
-
         val newProject = Project(
             idProject = project1.idProject,
             nameProject = project1.nameProject,
@@ -652,10 +655,10 @@ class ProjectInformationFragment(
             numberSubTaskProject = numberSubTaskProject,
             numberDoneSubTaskProject = numberDonSubTaskProject,
             noDeadlineProject = project.noDeadlineProject,
-            progressProject = efficiencyProject,
+            progressProject = project.progressProject,
             budgetProject = project.budgetProject,
-            doneVolumeProject = subDoneVolumeProject,
-            totalVolumeProject = subTotalVolumeProject
+            doneVolumeProject = project.doneVolumeProject,
+            totalVolumeProject = project.totalVolumeProject
         )
         projectDao.update(newProject)
     }

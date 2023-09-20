@@ -51,7 +51,9 @@ data class Time(
     val arrival: Boolean,
 
     val entry: Int,
-    val exit: Int
+    val entryAll: String,
+    val exit: Int? = null,
+    val exitAll: String? = null
 )
 
 @Entity(tableName = "taskEmployee_table")

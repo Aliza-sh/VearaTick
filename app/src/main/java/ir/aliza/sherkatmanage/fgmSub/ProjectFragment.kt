@@ -1,5 +1,8 @@
 package ir.aliza.sherkatmanage.fgmSub
 
+import BottomMarginItemDecoration
+import CustomBottomMarginItemDecoration
+import CustomTopMarginItemDecoration
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -46,6 +49,20 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
         projectAdapter = ProjectNearAdapter(ArrayList(projectNearData), this, projectDao)
         binding.recyclerViewProject.adapter = projectAdapter
         binding.recyclerViewProject.layoutManager = GridLayoutManager(context, 2)
+        val topMargin = 10 // اندازه مارجین بالا را از منابع دریافت کنید
+        val itemDecoratio = CustomTopMarginItemDecoration(topMargin)
+        binding.recyclerViewProject.addItemDecoration(itemDecoratio)
+
+        val itemCount = projectNearData.size // تعداد آیتم‌های موجود در لیست را دریافت کنید
+        if (itemCount % 2 == 0) {
+            val bottomMargin = 100 // اندازه مارجین پایین را از منابع دریافت کنید
+            val itemDecoration = CustomBottomMarginItemDecoration(bottomMargin)
+            binding.recyclerViewProject.addItemDecoration(itemDecoration)
+        } else {
+            val bottomMargin = 100 // اندازه مارجین پایین را از منابع دریافت کنید
+            val itemDecoration = BottomMarginItemDecoration(bottomMargin)
+            binding.recyclerViewProject.addItemDecoration(itemDecoration)
+        }
 
         subTaskProjectDao = AppDatabase.getDataBase(view.context).subTaskProjectDao
 
@@ -72,6 +89,19 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
         binding.recyclerViewProject.adapter = projectAdapter
         binding.recyclerViewProject.layoutManager = GridLayoutManager(context, 2)
         subTaskProjectDao = AppDatabase.getDataBase(binding.root.context).subTaskProjectDao
+        val topMargin = 10 // اندازه مارجین بالا را از منابع دریافت کنید
+        val itemDecoratio = CustomTopMarginItemDecoration(topMargin)
+        binding.recyclerViewProject.addItemDecoration(itemDecoratio)
+        val itemCount = projectNearData.size // تعداد آیتم‌های موجود در لیست را دریافت کنید
+        if (itemCount % 2 == 0) {
+            val bottomMargin = 100 // اندازه مارجین پایین را از منابع دریافت کنید
+            val itemDecoration = CustomBottomMarginItemDecoration(bottomMargin)
+            binding.recyclerViewProject.addItemDecoration(itemDecoration)
+        } else {
+            val bottomMargin = 100 // اندازه مارجین پایین را از منابع دریافت کنید
+            val itemDecoration = BottomMarginItemDecoration(bottomMargin)
+            binding.recyclerViewProject.addItemDecoration(itemDecoration)
+        }
     }
 
     fun onFabClicked() {
