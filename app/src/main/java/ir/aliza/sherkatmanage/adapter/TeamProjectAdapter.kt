@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.TeamProject
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.ItemAvatarBigBinding
@@ -18,9 +19,10 @@ class TeamProjectAdapter(private val data: ArrayList<TeamProject>) :
 
         @SuppressLint("SetTextI18n")
         fun bindData(position: Int) {
-
-            binding.txtNameEmployee.text = data[position].nameEmployee + " " + data[position].familyEmployee
-            if (data[position].genderEmployee == "زن"){
+            val employeeDao  = AppDatabase.getDataBase(itemView.context).employeeDao
+            val employee = employeeDao.getEmployee(data[position].idEmployee!!)
+            binding.txtNameEmployee.text = employee!!.name + " " + employee.family
+            if (employee.gender == "زن"){
                 binding.imgEmployee.setImageResource(R.drawable.img_matter);
             }
 

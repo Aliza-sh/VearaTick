@@ -142,10 +142,6 @@ class ProjectAddNewTeamFragment(
             val newTeamProject = TeamProject(
                 idProject = project.idProject,
                 idEmployee = employee.idEmployee,
-                nameEmployee = employee.name,
-                familyEmployee = employee.family,
-                genderEmployee = employee.gender,
-                specialtyEmployee = employee.specialty
             )
             teamProjectDao.insert(newTeamProject)
         }
@@ -154,10 +150,6 @@ class ProjectAddNewTeamFragment(
                 idTeam = employeeTeamProject?.idTeam,
                 idProject = project.idProject,
                 idEmployee = employee.idEmployee,
-                nameEmployee = employee.name,
-                familyEmployee = employee.family,
-                genderEmployee = employee.gender,
-                specialtyEmployee = employee.specialty
             )
             teamProjectDao.delete(newTeamProject)
         }

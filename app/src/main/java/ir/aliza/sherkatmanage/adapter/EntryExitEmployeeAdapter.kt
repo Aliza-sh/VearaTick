@@ -14,7 +14,6 @@ class EntryExitEmployeeAdapter(
     val entryExit: Day?,
     val nameDay: String,
     private val entryExitEmployee: EntryExitEmployeeEvent,
-    val dayNoEntExtEmp: View,
     val dayEntEmp: View,
     val dayExtEmp: View
 ) :
@@ -27,16 +26,16 @@ class EntryExitEmployeeAdapter(
         val btnMenu = binding.btnMenuEntryExit
         fun bindData(position: Int, clickListener: EntryExitEmployeeEvent) {
 
-            binding.txtTimeOutMust.text = entryExit?.exit
-            binding.txtTimeInMust.text = entryExit?.entry
+            binding.txtTimeOutMust.text = entryExit?.exitAll
+            binding.txtTimeInMust.text = entryExit?.entryAll
 
-            binding.txtTimeIn.text = data[position].entryAll.toString()
-            binding.txtTimeOut.text = data[position].exitAll.toString()
+            binding.txtTimeIn.text = data[position].entryAll
+            binding.txtTimeOut.text = data[position].exitAll
             binding.itemDateText.text = "$nameDay \n ${data[position].day} ${data[position].month}"
 
             binding.btnMenuEntryExit.setOnClickListener {
                 if (binding.txtTimeIn.text != "0")
-                    clickListener.onMenuItemClick(data[position], position, dayNoEntExtEmp,dayEntEmp,dayExtEmp)
+                    clickListener.onMenuItemClick(data[position], position,dayEntEmp,dayExtEmp)
                 else
                     Toast.makeText(itemView.context, "چیزی برای حذف نیست .", Toast.LENGTH_SHORT)
                         .show()
@@ -99,7 +98,6 @@ class EntryExitEmployeeAdapter(
         fun onMenuItemClick(
             time: Time,
             position: Int,
-            dayNoEntExtEmp: View,
             dayEntEmp: View,
             dayExtEmp: View
         )

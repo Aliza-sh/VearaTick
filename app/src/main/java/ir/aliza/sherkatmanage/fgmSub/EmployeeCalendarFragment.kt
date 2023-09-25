@@ -75,6 +75,7 @@ class EmployeeCalendarFragment(
     var valueHourDoneEntry = 0
     var valueAllDoneEntry = ""
     var valueHourDoneExit = 0
+    var valueHourDeleteDoneExit = 0
     var valueAllDoneExit = ""
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -109,7 +110,6 @@ class EmployeeCalendarFragment(
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay // Will be set when this container is bound.
             val bindingItemCalendarDay = ItemCalendarDayBinding.bind(view)
-            val dayNoEntExtEmp = bindingItemCalendarDay.dayNoEntExtEmp
             val dayEntEmp = bindingItemCalendarDay.dayEntEmp
             val dayExtEmp = bindingItemCalendarDay.dayExtEmp
             val textView = bindingItemCalendarDay.txtDayEntExtEmp
@@ -146,7 +146,6 @@ class EmployeeCalendarFragment(
                                         day.persianCalendar.persianDay,
                                         day.persianCalendar.persianMonthName,
                                         day.persianCalendar.persianYear,
-                                        dayNoEntExtEmp,
                                         dayEntEmp,
                                         dayExtEmp
                                     )
@@ -178,7 +177,6 @@ class EmployeeCalendarFragment(
                                         entryExit,
                                         day.persianCalendar.persianWeekDayName,
                                         this@EmployeeCalendarFragment,
-                                        dayNoEntExtEmp,
                                         dayEntEmp,
                                         dayExtEmp
                                     )
@@ -202,7 +200,6 @@ class EmployeeCalendarFragment(
                                         entryExit,
                                         day.persianCalendar.persianWeekDayName,
                                         this@EmployeeCalendarFragment,
-                                        dayNoEntExtEmp,
                                         dayEntEmp,
                                         dayExtEmp
                                     )
@@ -220,7 +217,9 @@ class EmployeeCalendarFragment(
                                         day = selectedDate!!.toPersianCalendar().persianDay.toString(),
                                         arrival = false,
                                         entry = 0,
-                                        exit = 0
+                                        entryAll = "00:00",
+                                        exit = 0,
+                                        exitAll = "00:00"
                                     )
                                 )
                                 inOutAdapter = EntryExitEmployeeAdapter(
@@ -228,7 +227,6 @@ class EmployeeCalendarFragment(
                                     entryExit,
                                     day.persianCalendar.persianWeekDayName,
                                     this@EmployeeCalendarFragment,
-                                    dayNoEntExtEmp,
                                     dayEntEmp,
                                     dayExtEmp
                                 )
@@ -268,21 +266,35 @@ class EmployeeCalendarFragment(
                     )
                     if (arrivalDay != null && arrivalDay.day == day.persianCalendar.persianDay.toString()) {
                         if (arrivalDay.arrival) {
-                            if (arrivalDay.exit == null || arrivalDay.exit == 0)
+                            if (arrivalDay.exit == null || arrivalDay.exit == 0) {
+
                                 container.dayEntEmp.setBackgroundColor(
                                     view.context.getColor(
                                         R.color.green_700
                                     )
                                 )
-                            else
-                                container.dayNoEntExtEmp.setBackgroundColor(
+                            } else {
+                                container.dayEntEmp.setBackgroundColor(
                                     view.context.getColor(
                                         R.color.green_700
                                     )
                                 )
-                        } else if (!arrivalDay.arrival) container.dayNoEntExtEmp.setBackgroundColor(
-                            context!!.getColor(R.color.red_800)
-                        )
+                                container.dayExtEmp.setBackgroundColor(
+                                    view.context.getColor(
+                                        R.color.green_700
+                                    )
+                                )
+                            }
+                        } else {
+                            container.dayExtEmp.setBackgroundColor(
+                                context!!.getColor(R.color.red_800)
+                            )
+                            container.dayEntEmp.setBackgroundColor(
+                                context!!.getColor(
+                                    R.color.red_800
+                                )
+                            )
+                        }
                     }
                 } else {
                     textView.setTextColor(
@@ -435,7 +447,6 @@ class EmployeeCalendarFragment(
                     this@EmployeeCalendarFragment,
                     binding.cardView1,
                     binding.cardView1,
-                    binding.cardView1
                 )
                 binding.rcvInOut.adapter = inOutAdapter
             } else {
@@ -447,7 +458,9 @@ class EmployeeCalendarFragment(
                         day = today.persianDay.toString(),
                         arrival = false,
                         entry = 0,
-                        exit = 0
+                        entryAll = "00:00",
+                        exit = 0,
+                        exitAll = "00:00"
                     )
                 )
                 inOutAdapter = EntryExitEmployeeAdapter(
@@ -457,7 +470,6 @@ class EmployeeCalendarFragment(
                     this@EmployeeCalendarFragment,
                     binding.cardView1,
                     binding.cardView1,
-                    binding.cardView1
                 )
                 binding.rcvInOut.adapter = inOutAdapter
             }
@@ -470,7 +482,9 @@ class EmployeeCalendarFragment(
                     day = today.persianDay.toString(),
                     arrival = false,
                     entry = 0,
-                    exit = 0
+                    entryAll = "00:00",
+                    exit = 0,
+                    exitAll = "00:00"
                 )
             )
             inOutAdapter = EntryExitEmployeeAdapter(
@@ -480,7 +494,6 @@ class EmployeeCalendarFragment(
                 this@EmployeeCalendarFragment,
                 binding.cardView1,
                 binding.cardView1,
-                binding.cardView1
             )
             binding.rcvInOut.adapter = inOutAdapter
         }
@@ -543,7 +556,9 @@ class EmployeeCalendarFragment(
                     month = month.persianCalendar.persianMonthName,
                     nameday = "${tv.text}",
                     entry = "$valueHourEntry",
-                    exit = "$valueHourExit"
+                    exit = "$valueHourExit",
+                    entryAll = valueAllEntry,
+                    exitAll = valueAllExit
                 )
                 dayDao.insert(newDay)
                 tv.setBackgroundColor(
@@ -596,7 +611,9 @@ class EmployeeCalendarFragment(
                     month = month.persianCalendar.persianMonthName,
                     nameday = "${tv.text}",
                     entry = valueHourEntry,
-                    exit = valueHourExit
+                    exit = valueHourExit,
+                    entryAll = valueAllEntry,
+                    exitAll = valueAllExit
                 )
                 dayDao.insertOrUpdateFood(newDay)
 
@@ -694,10 +711,11 @@ class EmployeeCalendarFragment(
         day: Int,
         month: String,
         year: Int,
-        dayNoEntExtEmp: LinearLayout,
         dayEntEmp: View,
         dayExtEmp: View
     ) {
+        val dayOnClicke =
+            timeDao.getAllArrivalDay(employee.idEmployee!!, year.toString(), month, day.toString())
 
         valueBtnNoDate = false
         valueBtnDoneEntry = false
@@ -711,6 +729,34 @@ class EmployeeCalendarFragment(
         bindingDialogEmployeeDoneEntryExit.btnNoDate.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
         bindingDialogEmployeeDoneEntryExit.btnEntry.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
         bindingDialogEmployeeDoneEntryExit.btnExit.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
+
+        if (dayOnClicke != null) {
+            if (dayOnClicke.exit != 0) {
+                valueBtnDoneEntry = true
+                valueBtnDoneExit = true
+                valueHourDoneEntry = dayOnClicke.entry
+                valueAllDoneEntry = dayOnClicke.entryAll
+                valueHourDoneExit = dayOnClicke.exit!!.toInt()
+                valueAllDoneExit = dayOnClicke.exitAll.toString()
+                bindingDialogEmployeeDoneEntryExit.txtEntry.text = valueAllDoneEntry
+                bindingDialogEmployeeDoneEntryExit.txtExit.text = valueAllDoneExit
+                bindingDialogEmployeeDoneEntryExit.btnEntry.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
+                bindingDialogEmployeeDoneEntryExit.btnExit.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
+
+            } else if (dayOnClicke.entry != 0) {
+                valueBtnDoneEntry = true
+                valueHourDoneEntry = dayOnClicke.entry
+                valueAllDoneEntry = dayOnClicke.entryAll
+                bindingDialogEmployeeDoneEntryExit.txtEntry.text = valueAllDoneEntry
+                bindingDialogEmployeeDoneEntryExit.btnEntry.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
+
+            } else if (!dayOnClicke.arrival) {
+                bindingDialogEmployeeDoneEntryExit.btnNoDate.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
+                valueBtnNoDate = true
+            }
+
+        }
+
         val parent = bindingDialogEmployeeDoneEntryExit.root.parent as? ViewGroup
         parent?.removeView(bindingDialogEmployeeDoneEntryExit.root)
         val dialogBuilder = AlertDialog.Builder(bindingDialogEmployeeDoneEntryExit.root.context)
@@ -725,20 +771,13 @@ class EmployeeCalendarFragment(
                 valueBtnNoDate = false
             }
         }
-        val dayOnClicke = timeDao.getAllArrivalDay(employee.idEmployee!!, year.toString(),month,day.toString())
-        if (dayOnClicke?.entry != null ){
-            if (dayOnClicke.entry != 0) {
-                bindingDialogEmployeeDoneEntryExit.btnEntry.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
-                bindingDialogEmployeeDoneEntryExit.txtEntry.text = dayOnClicke.entry.toString()
-            }
-        }
 
         bindingDialogEmployeeDoneEntryExit.btnEntry.setOnClickListener {
             if (!valueBtnNoDate && !valueBtnDoneEntry) {
                 onCreatePickerDoneEntry()
             } else {
                 bindingDialogEmployeeDoneEntryExit.btnEntry.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
-                bindingDialogEmployeeDoneEntryExit.txtEntry.text = " ورود"
+                bindingDialogEmployeeDoneEntryExit.txtEntry.text = "ورود"
                 valueBtnDoneEntry = false
             }
         }
@@ -747,7 +786,10 @@ class EmployeeCalendarFragment(
             if (!valueBtnNoDate && !valueBtnDoneExit) {
                 onCreatePickerDoneExit()
             } else {
-                bindingDialogEmployeeDoneEntryExit.txtExit.text = " خروج"
+                valueHourDeleteDoneExit = valueHourDoneExit
+                valueHourDoneExit = 0
+                valueAllDoneExit = "00:00"
+                bindingDialogEmployeeDoneEntryExit.txtExit.text = "خروج"
                 bindingDialogEmployeeDoneEntryExit.btnExit.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
                 valueBtnDoneExit = false
             }
@@ -766,7 +808,7 @@ class EmployeeCalendarFragment(
             if (!valueBtnNoDate && !valueBtnDoneEntry)
                 Toast.makeText(context, " لطفا تمام مقادیر را وارد کنید.", Toast.LENGTH_SHORT)
                     .show()
-            else if (valueHourDoneExit!= 0 && valueHourDoneExit!!.toInt() < valueHourDoneEntry.toInt())
+            else if (valueHourDoneExit != 0 && valueHourDoneExit.toInt() < valueHourDoneEntry.toInt())
                 Toast.makeText(
                     context,
                     " چطور میشه که ساعت خروج قبل ساعت ورود باشه.",
@@ -784,14 +826,17 @@ class EmployeeCalendarFragment(
                     day = day.toString(),
                     arrival = false,
                     entry = 0,
-                    exit = 0
+                    entryAll = "00:00",
+                    exit = 0,
+                    exitAll = "00:00"
                 )
                 val efficiencyEmployee = efficiencyEmployeeDao.getEfficiencyEmployee(idEmployee)
                 val numberDay = efficiencyEmployee?.numberDay
                 if (day.toString() == timeData?.day) {
+                    timeDao.update(newTime)
 
-                    if (timeData.exit != null) {
-                        var time = timeData.exit.toInt() - timeData.entry.toInt()
+                    if (valueBtnDoneExit) {
+                        var time = timeData.exit!!.toInt() - timeData.entry.toInt()
                         val timeAgo = efficiencyEmployee?.totalWeekWatch!! - time
                         val newEfficiencyEmployee = EfficiencyEmployee(
                             idEfficiency = efficiencyEmployee.idEfficiency,
@@ -811,11 +856,14 @@ class EmployeeCalendarFragment(
                             totalMonthWatch = efficiencyEmployee.totalMonthWatch
                         )
                         efficiencyEmployeeDao.update(newEfficiencyEmployee)
-                        timeDao.update(newTime)
-                        //inOutAdapter.updateInOut(newTime, 0)
-                        dayNoEntExtEmp.setBackgroundColor(it.context.getColor(R.color.red_800))
+                        inOutAdapter.updateInOut(newTime, 0)
+                        dayExtEmp.setBackgroundColor(it.context.getColor(R.color.red_800))
+                        dayEntEmp.setBackgroundColor(
+                            it.context.getColor(R.color.red_800)
+                        )
                     }
-                } else {
+                }
+                else {
                     val newEfficiencyEmployee = EfficiencyEmployee(
                         idEfficiency = efficiencyEmployee?.idEfficiency,
                         idEmployee = idEmployee,
@@ -835,7 +883,10 @@ class EmployeeCalendarFragment(
                     )
                     efficiencyEmployeeDao.update(newEfficiencyEmployee)
                     timeDao.insert(newTime)
-                    dayNoEntExtEmp.setBackgroundColor(it.context.getColor(R.color.red_800))
+                    dayExtEmp.setBackgroundColor(it.context.getColor(R.color.red_800))
+                    dayEntEmp.setBackgroundColor(
+                        it.context.getColor(R.color.red_800)
+                    )
                 }
 
                 alertDialog.dismiss()
@@ -843,7 +894,8 @@ class EmployeeCalendarFragment(
 
                 val efficiencyEmployee = efficiencyEmployeeDao.getEfficiencyEmployee(idEmployee!!)
                 val numberDay = efficiencyEmployee?.numberDay
-                val timeData = timeDao.getAllArrivalDay(idEmployee, year.toString(),month, day.toString())
+                var timeData =
+                    timeDao.getAllArrivalDay(idEmployee, year.toString(), month, day.toString())
 
                 val newTime = Time(
                     timeData?.idTime,
@@ -853,16 +905,50 @@ class EmployeeCalendarFragment(
                     day = day.toString(),
                     arrival = true,
                     entry = valueHourDoneEntry,
-                    exit = valueHourDoneExit
+                    exit = valueHourDoneExit,
+                    entryAll = valueAllDoneEntry,
+                    exitAll = valueAllDoneExit
                 )
 
                 if (day.toString() == timeData?.day) {
+                    timeDao.update(newTime)
 
-                    if (timeData.exit != null) {
+                    var time = 0
+                    var timeAgo = 0
+                    var timeNew = 0
 
-                        var time = timeData.exit.toInt() - timeData.entry.toInt()
-                        val timeAgo = efficiencyEmployee?.totalWeekWatch!! - time
-                        val timeNew = valueHourDoneExit!!
+                    if (valueAllDoneExit == "00:00"){
+                        time = valueHourDeleteDoneExit - valueHourDoneEntry
+                        timeAgo = efficiencyEmployee?.totalWeekWatch!! - time
+
+                        val newEfficiencyEmployee = EfficiencyEmployee(
+                            idEfficiency = efficiencyEmployee.idEfficiency,
+                            idEmployee = idEmployee,
+                            mustWeekWatch = efficiencyEmployee.mustWeekWatch,
+                            numberDay = efficiencyEmployee.numberDay,
+                            totalWeekWatch = timeAgo,
+                            totalWatch = efficiencyEmployee.totalWatch,
+                            efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
+                            efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
+                            totalWeekDuties = efficiencyEmployee.totalWeekDuties,
+                            totalMonthDuties = efficiencyEmployee.totalMonthDuties,
+                            totalDuties = efficiencyEmployee.totalDuties,
+                            efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties,
+                            efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
+                            efficiencyTotal = efficiencyEmployee.efficiencyTotal,
+                            totalMonthWatch = efficiencyEmployee.totalMonthWatch,
+                            efficiencyMonthDuties = efficiencyEmployee.totalMonthDuties
+                        )
+                        efficiencyEmployeeDao.update(newEfficiencyEmployee)
+                    }
+
+
+                    if (valueBtnDoneExit) {
+
+                        if (timeData.exit != 0)
+                            time = timeData.exit!!.toInt() - timeData.entry.toInt()
+                        timeAgo = efficiencyEmployee?.totalWeekWatch!! - time
+                        timeNew = valueHourDoneExit
                             .toInt() - valueHourDoneEntry.toInt()
 
                         time = timeNew + timeAgo
@@ -886,46 +972,64 @@ class EmployeeCalendarFragment(
                             efficiencyMonthDuties = efficiencyEmployee.totalMonthDuties
                         )
                         efficiencyEmployeeDao.update(newEfficiencyEmployee)
-
-                        timeDao.update(newTime)
-                        //inOutAdapter.updateInOut(newTime, 0)
-                        if (!valueBtnDoneExit)
-                            dayEntEmp.setBackgroundColor(it.context.getColor(R.color.green_700))
-                        else
-                            dayNoEntExtEmp.setBackgroundColor(it.context.getColor(R.color.green_700))
-
                     }
+                    inOutAdapter.updateInOut(newTime, 0)
+                    if (!valueBtnDoneExit) {
+                        dayEntEmp.setBackgroundColor(it.context.getColor(R.color.green_700))
+                        dayExtEmp.setBackgroundColor(
+                            it.context.getColor(R.color.blacke)
+                        )
+                    } else {
+                        dayEntEmp.setBackgroundColor(it.context.getColor(R.color.green_700))
+                        dayExtEmp.setBackgroundColor(
+                            it.context.getColor(R.color.green_700)
+                        )
+                    }
+
                 } else {
 
                     val timeAgo = efficiencyEmployee?.totalWeekWatch!!
-                    val timeNew = valueHourDoneExit!!
-                        .toInt() - valueHourDoneEntry.toInt()
-
-                    val time = timeNew + timeAgo
-
-                    val newEfficiencyEmployee = EfficiencyEmployee(
-                        idEfficiency = efficiencyEmployee.idEfficiency,
-                        idEmployee = idEmployee,
-                        mustWeekWatch = efficiencyEmployee.mustWeekWatch,
-                        totalWeekWatch = time,
-                        numberDay = numberDay!! + 1,
-                        totalWatch = efficiencyEmployee.totalWatch,
-                        efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
-                        efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
-                        totalWeekDuties = efficiencyEmployee.totalWeekDuties,
-                        totalMonthDuties = efficiencyEmployee.totalMonthDuties,
-                        totalDuties = efficiencyEmployee.totalDuties,
-                        efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties,
-                        efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
-                        efficiencyTotal = efficiencyEmployee.efficiencyTotal,
-                        totalMonthWatch = efficiencyEmployee.totalMonthWatch
-                    )
-                    efficiencyEmployeeDao.update(newEfficiencyEmployee)
                     timeDao.insert(newTime)
-                    if (timeData?.exit == null)
+
+                    if (valueBtnDoneExit) {
+                        val timeNew = valueHourDoneExit
+                            .toInt() - valueHourDoneEntry.toInt()
+
+                        val time = timeNew + timeAgo
+
+                        val newEfficiencyEmployee = EfficiencyEmployee(
+                            idEfficiency = efficiencyEmployee.idEfficiency,
+                            idEmployee = idEmployee,
+                            mustWeekWatch = efficiencyEmployee.mustWeekWatch,
+                            totalWeekWatch = time,
+                            numberDay = numberDay!! + 1,
+                            totalWatch = efficiencyEmployee.totalWatch,
+                            efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
+                            efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
+                            totalWeekDuties = efficiencyEmployee.totalWeekDuties,
+                            totalMonthDuties = efficiencyEmployee.totalMonthDuties,
+                            totalDuties = efficiencyEmployee.totalDuties,
+                            efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties,
+                            efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
+                            efficiencyTotal = efficiencyEmployee.efficiencyTotal,
+                            totalMonthWatch = efficiencyEmployee.totalMonthWatch
+                        )
+                        efficiencyEmployeeDao.update(newEfficiencyEmployee)
+                    }
+                    inOutAdapter.updateInOut(newTime, 0)
+
+                    if (!valueBtnDoneExit) {
                         dayEntEmp.setBackgroundColor(it.context.getColor(R.color.green_700))
-                    else
-                        dayNoEntExtEmp.setBackgroundColor(it.context.getColor(R.color.green_700))
+                        dayExtEmp.setBackgroundColor(
+                            it.context.getColor(R.color.blacke)
+                        )
+                    } else {
+                        dayEntEmp.setBackgroundColor(it.context.getColor(R.color.green_700))
+                        dayExtEmp.setBackgroundColor(
+                            it.context.getColor(R.color.green_700)
+                        )
+                    }
+
 
                 }
 
@@ -994,7 +1098,6 @@ class EmployeeCalendarFragment(
     override fun onMenuItemClick(
         onClicktime: Time,
         position: Int,
-        dayNoEntExtEmp: View,
         dayEntEmp: View,
         dayExtEmp: View
     ) {
@@ -1012,9 +1115,11 @@ class EmployeeCalendarFragment(
                 when (item.itemId) {
 
                     R.id.menu_employee_entry_exit_delete -> {
-                        showDeleteEntryExitEmployeeDialog(onClicktime, dayNoEntExtEmp,
+                        showDeleteEntryExitEmployeeDialog(
+                            onClicktime,
                             dayEntEmp,
-                            dayExtEmp)
+                            dayExtEmp
+                        )
                         true
                     }
 
@@ -1026,7 +1131,6 @@ class EmployeeCalendarFragment(
 
     private fun showDeleteEntryExitEmployeeDialog(
         onClicktime: Time,
-        dayNoEntExtEmp: View,
         dayEntEmp: View,
         dayExtEmp: View
     ) {
@@ -1046,15 +1150,21 @@ class EmployeeCalendarFragment(
         }
         bindingDialogDeleteItemEmployeeEntryExit.dialogBtnDeleteSure.setOnClickListener {
 
-            daleteEntryExit(onClicktime, dayNoEntExtEmp,
+            daleteEntryExit(
+                onClicktime,
                 dayEntEmp,
-                dayExtEmp)
+                dayExtEmp
+            )
 
             alertDialog.dismiss()
         }
     }
 
-    private fun daleteEntryExit(onClicktime: Time, dayNoEntExtEmp: View, dayEntEmp: View, dayExtEmp: View) {
+    private fun daleteEntryExit(
+        onClicktime: Time,
+        dayEntEmp: View,
+        dayExtEmp: View
+    ) {
         val newTime = Time(
             idTime = onClicktime.idTime,
             idEmployee = onClicktime.idEmployee,
@@ -1063,12 +1173,14 @@ class EmployeeCalendarFragment(
             day = onClicktime.day,
             arrival = onClicktime.arrival,
             entry = onClicktime.entry,
-            exit = onClicktime.exit
+            exit = onClicktime.exit,
+            entryAll = onClicktime.entryAll,
+            exitAll = onClicktime.exitAll
         )
         val efficiencyEmployee = efficiencyEmployeeDao.getEfficiencyEmployee(onClicktime.idEmployee)
 
-        if (onClicktime.exit != null) {
-            var time = onClicktime.exit - onClicktime.entry
+        if (onClicktime.exit != 0) {
+            val time = onClicktime.exit!! - onClicktime.entry
             val timeAgo = efficiencyEmployee?.totalWeekWatch!! - time
             val newEfficiencyEmployee = EfficiencyEmployee(
                 idEfficiency = efficiencyEmployee.idEfficiency,
@@ -1089,22 +1201,33 @@ class EmployeeCalendarFragment(
             )
             efficiencyEmployeeDao.update(newEfficiencyEmployee)
             timeDao.delete(newTime)
-            inOutAdapter.removeInOut(newTime, position)
-            dayNoEntExtEmp.setBackgroundColor(
-                bindingDialogDeleteItemEmployeeEntryExit.root.context.getColor(
-                    R.color.blacke
-                )
+        } else
+            timeDao.delete(newTime)
+
+        val newTime1 = Time(
+            idTime = onClicktime.idTime,
+            idEmployee = onClicktime.idEmployee,
+            year = onClicktime.year,
+            month = onClicktime.month,
+            day = onClicktime.day,
+            arrival = onClicktime.arrival,
+            entry = 0,
+            exit = 0,
+            entryAll = "00:00",
+            exitAll = "00:00"
+        )
+        inOutAdapter.updateInOut(newTime1, 0)
+
+        dayEntEmp.setBackgroundColor(
+            bindingDialogDeleteItemEmployeeEntryExit.root.context.getColor(
+                R.color.blacke
             )
-            dayEntEmp.setBackgroundColor(
-                bindingDialogDeleteItemEmployeeEntryExit.root.context.getColor(
-                    R.color.blacke
-                )
+        )
+        dayExtEmp.setBackgroundColor(
+            bindingDialogDeleteItemEmployeeEntryExit.root.context.getColor(
+                R.color.blacke
             )
-            dayExtEmp.setBackgroundColor(
-                bindingDialogDeleteItemEmployeeEntryExit.root.context.getColor(
-                    R.color.blacke
-                )
-            )
-        }
+        )
+
     }
 }

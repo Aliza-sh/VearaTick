@@ -62,9 +62,6 @@ class AddEmployeeToProjectAdapter(private val data: ArrayList<Employee>, val pro
                     val newTeamProject = TeamProject(
                         idProject = project.idProject,
                         idEmployee = employee!!.idEmployee,
-                        nameEmployee = employee.name,
-                        familyEmployee = employee.family,
-                        genderEmployee = employee.gender
                     )
 
                     teamProjectDao.insert(newTeamProject)
@@ -75,9 +72,7 @@ class AddEmployeeToProjectAdapter(private val data: ArrayList<Employee>, val pro
                         idTeam = employeeTeamProject?.idTeam,
                         idProject = project.idProject,
                         idEmployee = employee!!.idEmployee,
-                        nameEmployee = employee.name,
-                        familyEmployee = employee.family,
-                        genderEmployee = employee.gender
+
                     )
                     teamProjectDao.delete(newTeamProject)
 

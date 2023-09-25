@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.TeamSubTask
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.ItemAvatarSmallBinding
@@ -16,9 +17,11 @@ class AvatarTeamSubTaskAdapter(private val data: ArrayList<TeamSubTask>) :
     inner class AvatarNearViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
         @SuppressLint("SetTextI18n")
         fun bindData(position: Int) {
+            val employeeDao  = AppDatabase.getDataBase(itemView.context).employeeDao
+            val employee = employeeDao.getEmployee(data[position].idEmployee!!)
 
-            binding.txtNameEmployee.text = data[position].nameEmployee + " " + data[position].familyEmployee
-            if (data[position].genderEmployee == "زن"){
+            binding.txtNameEmployee.text = employee!!.name + " " + employee.family
+            if (employee.gender == "زن"){
                 binding.imgEmployee.setImageResource(R.drawable.img_matter);
             }
         }

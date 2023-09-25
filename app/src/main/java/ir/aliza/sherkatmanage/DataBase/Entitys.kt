@@ -35,7 +35,9 @@ data class Day(
     val nameday: String,
 
     val entry: String? = null,
-    val exit: String? = null
+    val entryAll: String? = null,
+    val exit: String? = null,
+    val exitAll: String? = null
 )
 
 @Entity(tableName = "time_table")
@@ -52,8 +54,9 @@ data class Time(
 
     val entry: Int,
     val entryAll: String,
-    val exit: Int? = null,
-    val exitAll: String? = null
+    val exit: Int? = 0,
+    val exitAll: String? = "00:00"
+
 )
 
 @Entity(tableName = "taskEmployee_table")
@@ -130,10 +133,7 @@ data class TeamProject(
 
     val idProject: Int,
     val idEmployee: Int? = null,
-    val nameEmployee: String? = null,
-    val familyEmployee: String? = null,
-    val genderEmployee: String? = null,
-    val specialtyEmployee: String? = null,
+
 
 )
 
@@ -165,10 +165,6 @@ data class TeamSubTask(
     val idProject: Int,
     val idSubTask: Int,
     val idEmployee: Int? = null,
-    val nameEmployee: String? = null,
-    val familyEmployee: String? = null,
-    val genderEmployee: String? = null,
-    val specialtyEmployee: String? = null,
 
     )
 

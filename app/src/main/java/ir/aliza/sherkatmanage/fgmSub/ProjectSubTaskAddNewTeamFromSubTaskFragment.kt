@@ -79,20 +79,20 @@ class ProjectSubTaskAddNewTeamFromSubTaskFragment(
                         AppDatabase.getDataBase(holder.itemView.context).teamSubTaskDao
                     val employee = employeeDao.getEmployee(data[position].idEmployee!!)
                     val teamSubTask = teamSubTaskDao.getTeamSubTask(
-                        project.idProject!!, subTaskProject.idSubTask!!
+                        project.idProject, subTaskProject.idSubTask!!
                     )
                     val employeeTeamSubTask = teamSubTaskDao.getEmployeeTeamSubTask(
                         data[position].idEmployee!!, project.idProject, subTaskProject.idSubTask
                     )
 
-                    if (data[position].genderEmployee == "زن") {
+                    if (employee!!.gender == "زن") {
                         bindingItemAddEmployeeToProject.imgprn2.setImageResource(R.drawable.img_matter)
                     }
 
                     bindingItemAddEmployeeToProject.txtNameEmployee.text =
-                        data[position].nameEmployee + " " + data[position].familyEmployee
+                        employee.name + " " + employee.family
                     bindingItemAddEmployeeToProject.txtJobEmployee.text =
-                        data[position].specialtyEmployee
+                        employee.specialty
 
                     if (teamSubTask?.idSubTask != null && employeeTeamSubTask != null) {
                         if (subTaskProject.idSubTask == teamSubTask.idSubTask && employeeTeamSubTask.idEmployee == employee!!.idEmployee) {
@@ -143,10 +143,6 @@ class ProjectSubTaskAddNewTeamFromSubTaskFragment(
                 idProject = project.idProject,
                 idSubTask = subTaskProject.idSubTask,
                 idEmployee = employee.idEmployee,
-                nameEmployee = employee.name,
-                familyEmployee = employee.family,
-                genderEmployee = employee.gender,
-                specialtyEmployee = employee.specialty
             )
             teamSubTaskDao.insert(newTeamProject)
         } else {
@@ -155,10 +151,7 @@ class ProjectSubTaskAddNewTeamFromSubTaskFragment(
                 idProject = project.idProject,
                 idSubTask = subTaskProject.idSubTask,
                 idEmployee = employee.idEmployee,
-                nameEmployee = employee.name,
-                familyEmployee = employee.family,
-                genderEmployee = employee.gender,
-                specialtyEmployee = employee.specialty
+
             )
             teamSubTaskDao.delete(newTeamProject)
         }
