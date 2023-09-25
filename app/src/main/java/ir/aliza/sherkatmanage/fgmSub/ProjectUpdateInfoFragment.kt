@@ -157,10 +157,12 @@ class ProjectUpdateInfoFragment(
             }
         }
     }
+
     private fun formatCurrency(value: Long?): String {
         val decimalFormat = DecimalFormat("#,###")
         return decimalFormat.format(value) + " تومان"
     }
+
     fun onBackPressed() {
         requireActivity().onBackPressedDispatcher.addCallback(
             viewLifecycleOwner,
@@ -179,12 +181,53 @@ class ProjectUpdateInfoFragment(
                 }
             })
     }
+
+    private fun setdata(project: Project) {
+
+        binding.edtNamePro.setText(project.nameProject)
+
+        if (project.budgetProject != "0") {
+            formattedValue = project.budgetProject!!
+            binding.btnSettlement.isChecked = true
+            binding.budget.visibility = View.VISIBLE
+            binding.edtBudget.setText(project.budgetProject)
+            binding.txtBudget.text = project.budgetProject + " تومان"
+        } else
+            binding.btnNoSettlement.isChecked = true
+
+        if (project.noDeadlineProject!!) {
+            valueBtnNoDate = project.noDeadlineProject
+            binding.txtDedlineDateTime.setText("پروژه ددلاین \nندارد")
+            valueBtnNoDate = true
+            bindingDialogView.btnNoDate.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
+
+        } else {
+            valueCalendar = project.valueCalendar
+            valueDay = project.dayCreation
+            valueMonth = project.monthCreation
+            valueYear = project.yearCreation
+            binding.txtDedlineDateTime.setText(valueCalendar)
+            bindingDialogView.txtCalendar.text = valueCalendar
+            valueBtnCalendar = true
+            bindingDialogView.btnCalendar.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
+
+        }
+
+        binding.edtTypeProject.setText(project.typeProject)
+        binding.edtDescriptionPro.setText(project.descriptionProject)
+
+    }
+
     private fun showDeadlineDialog() {
 
         val parent = bindingDialogView.root.parent as? ViewGroup
         parent?.removeView(bindingDialogView.root)
         val dialogBuilder = AlertDialog.Builder(bindingDialogView.root.context)
         dialogBuilder.setView(bindingDialogView.root)
+
+        if (valueBtnNoDate) {
+
+        }
 
         bindingDialogView.btnNoDate.setOnClickListener {
             if (!valueBtnNoDate && !valueBtnCalendar) {
@@ -203,7 +246,6 @@ class ProjectUpdateInfoFragment(
                 onCreateCalendar()
             } else {
                 bindingDialogView.txtCalendar.text = "تقویم"
-                bindingDialogView.txtCalendar.textSize = 16f
                 bindingDialogView.btnCalendar.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
                 valueBtnCalendar = false
             }
@@ -228,6 +270,7 @@ class ProjectUpdateInfoFragment(
         }
 
     }
+
     fun onProjectInfoUpdate() {
         parentFragmentManager.beginTransaction()
             .detach(this@ProjectUpdateInfoFragment)
@@ -242,35 +285,7 @@ class ProjectUpdateInfoFragment(
                 )
             ).commit()
     }
-    private fun setdata(project: Project) {
 
-        binding.edtNamePro.setText(project.nameProject)
-
-        if (project.budgetProject !="0"){
-            formattedValue = project.budgetProject!!
-            binding.btnSettlement.isChecked = true
-            binding.budget.visibility = View.VISIBLE
-            binding.edtBudget.setText(project.budgetProject)
-            binding.txtBudget.text = project.budgetProject + " تومان"
-        }else
-            binding.btnNoSettlement.isChecked = true
-
-        if (project.noDeadlineProject!!) {
-            valueBtnNoDate = project.noDeadlineProject
-            binding.txtDedlineDateTime.setText("پروژه ددلاین \nندارد")
-        } else {
-            valueCalendar = project.valueCalendar
-            valueDay = project.dayCreation
-            valueMonth = project.monthCreation
-            valueYear = project.yearCreation
-            binding.txtDedlineDateTime.setText(valueCalendar)
-
-        }
-
-        binding.edtTypeProject.setText(project.typeProject)
-        binding.edtDescriptionPro.setText(project.descriptionProject)
-
-    }
     fun onCreateCalendar() {
 
         val calendar = PersianCalendar()
@@ -298,11 +313,11 @@ class ProjectUpdateInfoFragment(
                 override fun onPositiveButtonClick(selection: Long?) {
                     val date = PersianCalendar(selection!!)
                     valueCalendar = "${date.year}/${date.month + 1}/${date.day}"
-                    valueDay  = date.day
-                    valueMonth= date.month
-                    valueYear= date.year
+                    valueDay = date.day
+                    valueMonth = date.month
+                    valueYear = date.year
                     binding.txtDedlineDateTime.text = valueCalendar
-                    bindingDialogView.txtCalendar.textSize = 16f
+                    bindingDialogView.txtCalendar.text = valueCalendar
                     bindingDialogView.btnCalendar.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
                     valueBtnCalendar = true
                 }
@@ -330,7 +345,7 @@ class ProjectUpdateInfoFragment(
                 nameProject = txtNamePro,
                 descriptionProject = txtDescriptionPro,
                 noDeadlineProject = noDeadline,
-                yearCreation =  valueYear.toInt(),
+                yearCreation = valueYear.toInt(),
                 monthCreation = valueMonth.toInt(),
                 dayCreation = valueDay.toInt(),
                 valueCalendar = valueCalendar,
@@ -341,7 +356,8 @@ class ProjectUpdateInfoFragment(
                 numberDoneSubTaskProject = project.numberDoneSubTaskProject,
                 budgetProject = txtBudget,
                 totalVolumeProject = project.totalVolumeProject,
-                doneVolumeProject = project.doneVolumeProject
+                doneVolumeProject = project.doneVolumeProject,
+                settled = project.settled
             )
 
             projectAdapter.updateProject(newProject, position)

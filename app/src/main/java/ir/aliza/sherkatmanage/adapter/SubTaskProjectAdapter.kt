@@ -50,9 +50,9 @@ class SubTaskProjectAdapter(
                 val startDate =
                     DateTime(today.persianYear, today.persianMonth , today.persianDay, 0, 0, 0)
                 val endDate = DateTime(
-                    data[position].yearCreation,
-                    data[position].monthCreation,
-                    data[position].dayCreation,
+                    data[position].yearDeadline,
+                    data[position].monthDeadline,
+                    data[position].dayDeadline,
                     0,
                     0,
                     0
@@ -81,7 +81,7 @@ class SubTaskProjectAdapter(
                 val teamSubTaskDao = AppDatabase.getDataBase(itemView.context).teamSubTaskDao
                 val employeeTeamSubTask = teamSubTaskDao.getListTeamSubTask(
                     project.idProject!!,
-                    idSubTask = data[position].idSubTask!!
+                    data[position].idSubTask!!
                 )
 
                 val teamSubTaskAdapter = AvatarTeamSubTaskAdapter(ArrayList(employeeTeamSubTask))

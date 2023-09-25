@@ -23,6 +23,8 @@ import ir.aliza.sherkatmanage.adapter.SubTaskProjectAdapter
 import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.BottomsheetfragmentSubtaskProjectBinding
 import ir.aliza.sherkatmanage.fgmSub.ProjectSubTaskFragment
+import org.joda.time.DateTime
+import org.joda.time.Days
 
 class ProjectAddNewSubTaskBottomsheetFragment(
     val subTaskProjectDao: SubTaskProjectDao,
@@ -116,16 +118,33 @@ class ProjectAddNewSubTaskBottomsheetFragment(
             val txtDescription = binding.edtDescriptionTask.text.toString()
             val txtVolume = binding.edtVolumeTask.text.toString()
 
+            val today = com.kizitonwose.calendarview.utils.persian.PersianCalendar()
+            val startDate =
+                DateTime(today.persianYear, today.persianMonth , today.persianDay, 0, 0, 0)
+            val endDate = DateTime(
+                valueCalendar!!.year,
+                valueCalendar!!.month,
+                valueCalendar!!.day,
+                0,
+                0,
+                0
+            )
+            var daysBetween = Days.daysBetween(startDate, endDate).days
+
             val newSubTask = SubTaskProject(
 
                 idProject = project.idProject!!,
                 nameSubTask = txtTask,
                 descriptionSubTask = txtDescription,
                 volumeTask = txtVolume.toInt(),
-                dayCreation = valueCalendar!!.day,
-                monthCreation = valueCalendar!!.month,
-                yearCreation = valueCalendar!!.year,
-                valueCalendar = "${valueCalendar!!.year}/${valueCalendar!!.month + 1}/${valueCalendar!!.day}"
+                dayDeadline = valueCalendar!!.day,
+                monthDeadline = valueCalendar!!.month,
+                yearDeadline = valueCalendar!!.year,
+                dayCreation = today.persianDay,
+                monthCreation = today.persianMonth,
+                yearCreation = today.persianYear,
+                valueCalendar = "${valueCalendar!!.year}/${valueCalendar!!.month + 1}/${valueCalendar!!.day}",
+                deadlineTask = daysBetween
                 )
             subTaskProjectDao.insert(newSubTask)
             subTaskProjectAdapter.addTask(newSubTask)
@@ -158,7 +177,8 @@ class ProjectAddNewSubTaskBottomsheetFragment(
                 progressProject = efficiencyProject,
                 budgetProject = project.budgetProject,
                 totalVolumeProject = sumVolumeProject.toInt(),
-                doneVolumeProject = project1.doneVolumeProject
+                doneVolumeProject = project1.doneVolumeProject,
+                settled = project1.settled
             )
             projectDao.update(newProject)
 

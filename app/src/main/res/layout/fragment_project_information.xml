@@ -168,7 +168,7 @@
                     android:gravity="center"
                     android:text="پروژه \nتکمیل شد"
                     android:textColor="#2F8558"
-                    android:textSize="28sp"
+                    android:textSize="22sp"
                     android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

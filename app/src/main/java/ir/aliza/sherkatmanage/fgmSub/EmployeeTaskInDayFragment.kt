@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.animation.LinearInterpolator
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -54,7 +53,6 @@ class EmployeeTaskInDayFragment(
     lateinit var taskEmployeeAdapter: TaskEmployeeAdapter
     private var isScrollingUp = false
     private var buttonAnimator: ObjectAnimator? = null
-    var numberDonSubTaskProject = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -315,7 +313,6 @@ class EmployeeTaskInDayFragment(
                 0
             )
             val daysBetween = Days.daysBetween(startDate, endDate).days
-            Toast.makeText(context, "$daysBetween", Toast.LENGTH_SHORT).show()
             var efficiencyWeekDuties = 0
             val gradeDuties = onClickSubTask.volumeTask
             val deadlineTask = onClickSubTask.deadlineTask
@@ -403,7 +400,6 @@ class EmployeeTaskInDayFragment(
                 0
             )
             val daysBetween = Days.daysBetween(startDate, endDate).days
-            Toast.makeText(context, "$daysBetween", Toast.LENGTH_SHORT).show()
             var efficiencyWeekDuties = 0
             val gradeDuties = onClickSubTask.volumeTask
             val deadlineTask = onClickSubTask.deadlineTask
@@ -483,7 +479,6 @@ class EmployeeTaskInDayFragment(
             0
         )
         val daysBetween = Days.daysBetween(startDate, endDate).days
-        Toast.makeText(context, "$daysBetween", Toast.LENGTH_SHORT).show()
         var efficiencyWeekDuties = 0
         var gradeDuties = 0
         if (onClickSubTask.doneTask!!) {

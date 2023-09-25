@@ -18,12 +18,17 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.jakewharton.threetenabp.AndroidThreeTen
+import com.kizitonwose.calendarview.utils.persian.PersianCalendar
 import com.kizitonwose.calendarview.utils.persian.toPersianCalendar
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
+import ir.aliza.sherkatmanage.DataBase.CompanyReceipt
+import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
+import ir.aliza.sherkatmanage.DataBase.EfficiencyEmployee
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.DataBase.SubTaskProject
 import ir.aliza.sherkatmanage.DataBase.SubTaskProjectDao
+import ir.aliza.sherkatmanage.DataBase.TeamSubTaskDao
 import ir.aliza.sherkatmanage.Dialog.ProjectDeleteDialogFragment
 import ir.aliza.sherkatmanage.Dialog.ProjectUpdateSubTaskFromInfoBottomsheetFragment
 import ir.aliza.sherkatmanage.ProAndEmpActivity
@@ -31,6 +36,7 @@ import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.SubTaskProjectAdapter
 import ir.aliza.sherkatmanage.adapter.TeamProjectAdapter
 import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
+import ir.aliza.sherkatmanage.databinding.FragmentDialogCheckoutProjectBinding
 import ir.aliza.sherkatmanage.databinding.FragmentDialogDeleteSubtaskProjectBinding
 import ir.aliza.sherkatmanage.databinding.FragmentProjectInformationBinding
 import ir.aliza.sherkatmanage.databinding.ItemSubTaskBinding
@@ -48,8 +54,11 @@ class ProjectInformationFragment(
 
     lateinit var binding: FragmentProjectInformationBinding
     lateinit var bindingDialogDeleteSubtaskProject: FragmentDialogDeleteSubtaskProjectBinding
+    lateinit var bindingDialogCheckoutProject: FragmentDialogCheckoutProjectBinding
     lateinit var bindingItemSubTask: ItemSubTaskBinding
     lateinit var subTaskProjectAdapter: SubTaskProjectAdapter
+    lateinit var efficiencyEmployeeDao: EfficiencyDao
+    lateinit var teamSubTaskDao: TeamSubTaskDao
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,6 +69,8 @@ class ProjectInformationFragment(
         bindingItemSubTask = ItemSubTaskBinding.inflate(layoutInflater, container, false)
         bindingDialogDeleteSubtaskProject =
             FragmentDialogDeleteSubtaskProjectBinding.inflate(layoutInflater, container, false)
+        bindingDialogCheckoutProject =
+            FragmentDialogCheckoutProjectBinding.inflate(layoutInflater, container, false)
 
         return binding.root
     }
@@ -70,11 +81,19 @@ class ProjectInformationFragment(
         onBackPressed()
 
         project = projectDao.getProject(project.idProject!!)!!
+        efficiencyEmployeeDao =
+            AppDatabase.getDataBase(bindingItemSubTask.root.context).efficiencyDao
+        teamSubTaskDao = AppDatabase.getDataBase(bindingItemSubTask.root.context).teamSubTaskDao
+
         setData()
 
         binding.btnBck.setOnClickListener {
             parentFragmentManager.beginTransaction().detach(this@ProjectInformationFragment)
                 .replace(R.id.frame_layout_sub, ProjectFragment(bindingActivityProAndEmp)).commit()
+        }
+
+        binding.btnGoToSettlement.setOnClickListener {
+            showCheckoutDialog()
         }
 
         binding.btnAddNewPerson.setOnClickListener {
@@ -153,7 +172,6 @@ class ProjectInformationFragment(
                 ContextCompat.getColor(binding.root.context, R.color.green_700)
             )
             shape.setColor(ContextCompat.getColor(binding.root.context, R.color.blacke))
-            binding.txtDay.setTextColor(android.graphics.Color.parseColor("#c62828"))
             binding.cardView5.background = shape
 
         } else {
@@ -195,8 +213,7 @@ class ProjectInformationFragment(
                     binding.cardView5.background = shape
                     binding.txtNoDeadline.text = " امروز باید تسک تحویل داده شه"
                     binding.txtNoDeadline.textSize = 18f
-                }
-                else {
+                } else {
                     daysBetween = -daysBetween
                     binding.txtDay.text = "$daysBetween روز "
                     binding.txt.text = " از تحویل پروژه گذشته"
@@ -229,7 +246,7 @@ class ProjectInformationFragment(
         }
 
         val totalVolumeProject = subTaskProjectDao.getTotalVolumeTaskSum(project.idProject!!)
-        val doneVolumeProject = subTaskProjectDao.getDoneVolumeTaskSum(project.idProject!!,true)
+        val doneVolumeProject = subTaskProjectDao.getDoneVolumeTaskSum(project.idProject!!, true)
         var efficiencyProject = 0
 
         if (doneVolumeProject != null)
@@ -263,14 +280,34 @@ class ProjectInformationFragment(
 
     }
 
+    @SuppressLint("SetTextI18n")
     fun setDataOnDone() {
 
         val project1 = projectDao.getProject(project.idProject!!)!!
 
         val numberDonSubTaskProject = project1.numberDoneSubTaskProject!!
         val totalVolumeProject = subTaskProjectDao.getTotalVolumeTaskSum(project1.idProject!!)
-        val doneVolumeProject = subTaskProjectDao.getDoneVolumeTaskSum(project1.idProject,true)
+        val doneVolumeProject = subTaskProjectDao.getDoneVolumeTaskSum(project1.idProject, true)
         var efficiencyProject = 0
+
+        if (project1.settled!!) {
+            binding.textView160.visibility = View.GONE
+            binding.txtBudget.visibility = View.GONE
+            binding.txtSettlement.visibility = View.GONE
+            binding.btnGoToSettlement.visibility = View.GONE
+            binding.txtNoBudget.visibility = View.VISIBLE
+            binding.txtNoBudget.text = "پروژه\nتسویه شد"
+            val shape = GradientDrawable()
+            shape.shape = GradientDrawable.RECTANGLE
+            shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+            shape.setStroke(
+                5,
+                ContextCompat.getColor(binding.root.context, R.color.green_700)
+            )
+            shape.setColor(ContextCompat.getColor(binding.root.context, R.color.blacke))
+            binding.cardView50.background = shape
+            binding.txtNoBudget.setTextColor(android.graphics.Color.parseColor("#2F8558"))
+        }
 
         if (doneVolumeProject != null)
             efficiencyProject = ((doneVolumeProject.toDouble() / totalVolumeProject) * 100).toInt()
@@ -281,7 +318,7 @@ class ProjectInformationFragment(
         binding.txtNumTaskPro.text =
             numberDonSubTaskProject.toString() + " از " + project1.numberSubTaskProject.toString()
 
-        val subTaskProjectData = subTaskProjectDao.getSubTaskProject(project1.idProject!!)
+        val subTaskProjectData = subTaskProjectDao.getSubTaskProject(project1.idProject)
         subTaskProjectAdapter =
             SubTaskProjectAdapter(
                 ArrayList(subTaskProjectData),
@@ -352,8 +389,12 @@ class ProjectInformationFragment(
 
                     R.id.menu_project_done -> {
                         doneProject(doneMenuItem)
-                        parentFragmentManager.beginTransaction().detach(this@ProjectInformationFragment)
-                            .replace(R.id.frame_layout_sub, ProjectFragment(bindingActivityProAndEmp)).commit()
+                        parentFragmentManager.beginTransaction()
+                            .detach(this@ProjectInformationFragment)
+                            .replace(
+                                R.id.frame_layout_sub,
+                                ProjectFragment(bindingActivityProAndEmp)
+                            ).commit()
                     }
 
                     R.id.menu_project_delete -> {
@@ -397,7 +438,8 @@ class ProjectInformationFragment(
                 progressProject = project.progressProject,
                 budgetProject = project.budgetProject,
                 doneVolumeProject = project.doneVolumeProject,
-                totalVolumeProject = project.totalVolumeProject
+                totalVolumeProject = project.totalVolumeProject,
+                settled = project.settled
             )
             projectDao.update(newProject)
 
@@ -422,10 +464,12 @@ class ProjectInformationFragment(
                 progressProject = project.progressProject,
                 budgetProject = project.budgetProject,
                 doneVolumeProject = project.doneVolumeProject,
-                totalVolumeProject = project.totalVolumeProject
+                totalVolumeProject = project.totalVolumeProject,
+                settled = project.settled
             )
             projectDao.update(newProject)
-            Toast.makeText(context, " پروژه ${project.nameProject} تکمیل شد. ", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, " پروژه ${project.nameProject} تکمیل شد. ", Toast.LENGTH_SHORT)
+                .show()
         }
     }
 
@@ -505,8 +549,67 @@ class ProjectInformationFragment(
             .commit()
     }
 
-    private fun doneSubTask(onClickSubTask: SubTaskProject, doneMenuItem: MenuItem) {
+    private fun showCheckoutDialog() {
+        val parent = bindingDialogCheckoutProject.root.parent as? ViewGroup
+        parent?.removeView(bindingDialogCheckoutProject.root)
+        val dialogBuilder = AlertDialog.Builder(bindingDialogCheckoutProject.root.context)
+        dialogBuilder.setView(bindingDialogCheckoutProject.root)
 
+        val alertDialog = dialogBuilder.create()
+        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.Transparent.toArgb()))
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+        bindingDialogCheckoutProject.dialogBtnDeleteCansel.setOnClickListener {
+            alertDialog.dismiss()
+        }
+        bindingDialogCheckoutProject.dialogBtnDeleteSure.setOnClickListener {
+
+            checkoutProject()
+            setDataOnDone()
+            alertDialog.dismiss()
+        }
+    }
+
+    private fun checkoutProject() {
+        val companyReceiptDao =
+            AppDatabase.getDataBase(bindingDialogCheckoutProject.root.context).companyReceiptDao
+        var budgetProject = project.budgetProject
+        budgetProject = budgetProject!!.replace(",", "")
+        val today = PersianCalendar()
+
+        val newProject = Project(
+            idProject = project.idProject,
+            nameProject = project.nameProject,
+            dayCreation = project.dayCreation,
+            monthCreation = project.monthCreation,
+            yearCreation = project.yearCreation,
+            valueCalendar = project.valueCalendar,
+            deadlineTask = project.deadlineTask,
+            doneProject = project.doneProject,
+            typeProject = project.typeProject,
+            descriptionProject = project.descriptionProject,
+            numberSubTaskProject = project.numberSubTaskProject,
+            numberDoneSubTaskProject = project.numberDoneSubTaskProject,
+            noDeadlineProject = project.noDeadlineProject,
+            progressProject = project.progressProject,
+            budgetProject = project.budgetProject,
+            doneVolumeProject = project.doneVolumeProject,
+            totalVolumeProject = project.totalVolumeProject,
+            settled = true
+        )
+        projectDao.update(newProject)
+
+        val newReceipt = CompanyReceipt(
+            companyReceipt = budgetProject.toLong(),
+            companyReceiptDescription = "بابت پروژه ${project.nameProject}",
+            companyReceiptDate = "${today.persianYear}/${today.persianMonth}/${today.persianDay}"
+        )
+        companyReceiptDao.insert(newReceipt)
+    }
+
+    private fun doneSubTask(onClickSubTask: SubTaskProject, doneMenuItem: MenuItem) {
+        val today = PersianCalendar()
         if (onClickSubTask.doneSubTask!!) {
 
             doneMenuItem.title = "تکمیل شد"
@@ -523,10 +626,16 @@ class ProjectInformationFragment(
                 dayCreation = onClickSubTask.dayCreation,
                 monthCreation = onClickSubTask.monthCreation,
                 yearCreation = onClickSubTask.yearCreation,
+                dayDeadline = onClickSubTask.dayDeadline,
+                monthDeadline = onClickSubTask.monthDeadline,
+                yearDeadline = onClickSubTask.yearDeadline,
                 valueCalendar = onClickSubTask.valueCalendar,
-                volumeTask = onClickSubTask.volumeTask
+                volumeTask = onClickSubTask.volumeTask,
+                deadlineTask = onClickSubTask.deadlineTask,
+                dayDone = 0,
+                monthDone = 0,
+                yearDone = 0
             )
-            subTaskProjectDao.update(newSubTask)
 
             val project1 = projectDao.getProject(project.idProject!!)
             var numberDonSubTaskProject = project1!!.numberDoneSubTaskProject!!
@@ -549,10 +658,80 @@ class ProjectInformationFragment(
                 progressProject = project1.progressProject,
                 budgetProject = project.budgetProject,
                 totalVolumeProject = project1.totalVolumeProject,
-                doneVolumeProject = project1.doneVolumeProject
+                doneVolumeProject = project1.doneVolumeProject,
+                settled = project.settled
             )
             projectDao.update(newProject)
 
+            val employeeSubTaskProjects = teamSubTaskDao.getListTeamSubTask(
+                project1.idProject!!,
+                onClickSubTask.idSubTask!!
+            )
+
+            for (employeeSubTaskProject in employeeSubTaskProjects) {
+
+                val efficiencyEmployee =
+                    efficiencyEmployeeDao.getEfficiencyEmployee(employeeSubTaskProject.idEmployee!!)
+                Toast.makeText(context, "$employeeSubTaskProject", Toast.LENGTH_LONG).show()
+
+                val startDate =
+                    DateTime(
+                        onClickSubTask.yearDone!!,
+                        onClickSubTask.monthDone!!,
+                        onClickSubTask.dayDone!!,
+
+                        0,
+                        0,
+                        0
+                    )
+                val endDate = DateTime(
+                    onClickSubTask.yearDeadline,
+                    onClickSubTask.monthDeadline,
+                    onClickSubTask.dayDeadline,
+                    0,
+                    0,
+                    0
+                )
+                val daysBetween = Days.daysBetween(startDate, endDate).days
+                var efficiencyWeekDuties = 0
+                val gradeDuties = onClickSubTask.volumeTask
+                val deadlineTask = onClickSubTask.deadlineTask
+
+                if (deadlineTask == 0) {
+                    if (daysBetween == 0)
+                        efficiencyWeekDuties += 100
+                    else {
+                        efficiencyWeekDuties = ((deadlineTask * 100) / deadlineTask).toInt()
+                        efficiencyWeekDuties += 100
+                    }
+                } else if (deadlineTask > 0) {
+                    efficiencyWeekDuties = ((daysBetween * 100) / deadlineTask).toInt()
+                    efficiencyWeekDuties += 100
+                } else if (deadlineTask < 0) {
+                    efficiencyWeekDuties = ((daysBetween * 100) / -deadlineTask).toInt()
+                    efficiencyWeekDuties += 100
+                }
+
+                val newEfficiencyEmployee = EfficiencyEmployee(
+                    idEfficiency = efficiencyEmployee!!.idEfficiency,
+                    idEmployee = efficiencyEmployee.idEmployee,
+                    mustWeekWatch = efficiencyEmployee.mustWeekWatch,
+                    numberDay = efficiencyEmployee.numberDay,
+                    totalWeekWatch = efficiencyEmployee.totalWeekWatch,
+                    totalWatch = efficiencyEmployee.totalWatch,
+                    efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
+                    efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
+                    totalWeekDuties = efficiencyEmployee.totalWeekDuties!! - gradeDuties,
+                    totalMonthDuties = efficiencyEmployee.totalMonthDuties,
+                    totalDuties = efficiencyEmployee.totalDuties,
+                    efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties!! - efficiencyWeekDuties,
+                    efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
+                    efficiencyTotal = efficiencyEmployee.efficiencyTotal,
+                    totalMonthWatch = efficiencyEmployee.totalMonthWatch
+                )
+                efficiencyEmployeeDao.update(newEfficiencyEmployee)
+            }
+            subTaskProjectDao.update(newSubTask)
         } else {
 
             doneMenuItem.title = "تکمیل نشد"
@@ -569,8 +748,15 @@ class ProjectInformationFragment(
                 dayCreation = onClickSubTask.dayCreation,
                 monthCreation = onClickSubTask.monthCreation,
                 yearCreation = onClickSubTask.yearCreation,
+                dayDeadline = onClickSubTask.dayDeadline,
+                monthDeadline = onClickSubTask.monthDeadline,
+                yearDeadline = onClickSubTask.yearDeadline,
                 valueCalendar = onClickSubTask.valueCalendar,
-                volumeTask = onClickSubTask.volumeTask
+                volumeTask = onClickSubTask.volumeTask,
+                deadlineTask = onClickSubTask.deadlineTask,
+                dayDone = today.persianDay,
+                monthDone = today.persianMonth,
+                yearDone = today.persianYear
             )
             subTaskProjectDao.update(newSubTask)
 
@@ -595,10 +781,77 @@ class ProjectInformationFragment(
                 progressProject = project1.progressProject,
                 budgetProject = project.budgetProject,
                 totalVolumeProject = project1.totalVolumeProject,
-                doneVolumeProject = project1.doneVolumeProject
+                doneVolumeProject = project1.doneVolumeProject,
+                settled = project.settled
             )
             projectDao.update(newProject)
 
+            val employeeSubTaskProjects = teamSubTaskDao.getListTeamSubTask(
+                project1.idProject!!,
+                onClickSubTask.idSubTask!!
+            )
+
+            for (employeeSubTaskProject in employeeSubTaskProjects) {
+                val efficiencyEmployee =
+                    efficiencyEmployeeDao.getEfficiencyEmployee(employeeSubTaskProject.idEmployee!!)
+
+                val startDate =
+                    DateTime(
+                        today.persianYear,
+                        today.persianMonth,
+                        today.persianDay,
+                        0,
+                        0,
+                        0
+                    )
+                val endDate = DateTime(
+                    onClickSubTask.yearDeadline,
+                    onClickSubTask.monthDeadline,
+                    onClickSubTask.dayDeadline,
+                    0,
+                    0,
+                    0
+                )
+                val daysBetween = Days.daysBetween(startDate, endDate).days
+                var efficiencyWeekDuties = 0
+                val gradeDuties = onClickSubTask.volumeTask
+                val deadlineTask = onClickSubTask.deadlineTask
+
+                if (deadlineTask == 0) {
+                    if (daysBetween == 0)
+                        efficiencyWeekDuties += 100
+                    else {
+                        efficiencyWeekDuties = ((deadlineTask * 100) / deadlineTask).toInt()
+                        efficiencyWeekDuties += 100
+                    }
+                } else if (deadlineTask > 0) {
+                    efficiencyWeekDuties = ((daysBetween * 100) / deadlineTask).toInt()
+                    efficiencyWeekDuties += 100
+                } else if (deadlineTask < 0) {
+                    efficiencyWeekDuties = ((daysBetween * 100) / -deadlineTask).toInt()
+                    efficiencyWeekDuties += 100
+                }
+
+                val newEfficiencyEmployee = EfficiencyEmployee(
+                    idEfficiency = efficiencyEmployee!!.idEfficiency,
+                    idEmployee = efficiencyEmployee.idEmployee,
+                    mustWeekWatch = efficiencyEmployee.mustWeekWatch,
+                    numberDay = efficiencyEmployee.numberDay,
+                    totalWeekWatch = efficiencyEmployee.totalWeekWatch,
+                    totalWatch = efficiencyEmployee.totalWatch,
+                    efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
+                    efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
+                    totalWeekDuties = efficiencyEmployee.totalWeekDuties!! + gradeDuties,
+                    totalMonthDuties = efficiencyEmployee.totalMonthDuties,
+                    totalDuties = efficiencyEmployee.totalDuties,
+                    efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties!! + efficiencyWeekDuties,
+                    efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
+                    efficiencyTotal = efficiencyEmployee.efficiencyTotal,
+                    totalMonthWatch = efficiencyEmployee.totalMonthWatch
+                )
+                efficiencyEmployeeDao.update(newEfficiencyEmployee)
+
+            }
         }
     }
 
@@ -628,6 +881,7 @@ class ProjectInformationFragment(
     fun deleteItem(subTaskProject: SubTaskProject, position: Int) {
 
         val project1 = projectDao.getProject(project.idProject!!)
+        val today = PersianCalendar()
 
         var numberDonSubTaskProject = project1!!.numberDoneSubTaskProject
         var numberSubTaskProject = project1.numberSubTaskProject
@@ -635,6 +889,94 @@ class ProjectInformationFragment(
         if (subTaskProject.doneSubTask!!) {
             numberSubTaskProject = numberSubTaskProject!! - 1
             numberDonSubTaskProject = numberDonSubTaskProject!! - 1
+
+            val employeeSubTaskProjects = teamSubTaskDao.getListTeamSubTask(
+                project1.idProject!!,
+                subTaskProject.idSubTask!!
+            )
+            for (employeeSubTaskProject in employeeSubTaskProjects) {
+
+                val efficiencyEmployee =
+                    efficiencyEmployeeDao.getEfficiencyEmployee(employeeSubTaskProject.idEmployee!!)
+
+                val startDate =
+                    DateTime(
+                        subTaskProject.yearDone!!,
+                        subTaskProject.monthDone!!,
+                        subTaskProject.dayDone!!,
+                        0, 0, 0)
+                val endDate = DateTime(
+                    subTaskProject.yearDeadline,
+                    subTaskProject.monthDeadline,
+                    subTaskProject.dayDeadline,
+                    0,
+                    0,
+                    0
+                )
+                val daysBetween = Days.daysBetween(startDate, endDate).days
+                var efficiencyWeekDuties = 0
+                var gradeDuties = 0
+                if (subTaskProject.doneSubTask) {
+                    gradeDuties = subTaskProject.volumeTask
+                    val deadlineTask = subTaskProject.deadlineTask
+
+                    if (deadlineTask == 0) {
+                        if (daysBetween == 0)
+                            efficiencyWeekDuties += 100
+                        else {
+                            efficiencyWeekDuties = ((deadlineTask * 100) / deadlineTask).toInt()
+                            efficiencyWeekDuties += 100
+                        }
+                    } else if (deadlineTask > 0) {
+                        efficiencyWeekDuties = ((daysBetween * 100) / deadlineTask).toInt()
+                        efficiencyWeekDuties += 100
+                    } else if (deadlineTask < 0) {
+                        efficiencyWeekDuties = ((daysBetween * 100) / -deadlineTask).toInt()
+                        efficiencyWeekDuties += 100
+                    }
+                }
+
+                val newTask = SubTaskProject(
+                    idSubTask = subTaskProject.idSubTask,
+                    idProject = subTaskProject.idProject,
+                    nameSubTask = subTaskProject.nameSubTask,
+                    descriptionSubTask = subTaskProject.descriptionSubTask,
+                    volumeTask = subTaskProject.volumeTask,
+                    doneSubTask = subTaskProject.doneSubTask,
+                    yearCreation = subTaskProject.yearCreation,
+                    monthCreation = subTaskProject.monthCreation,
+                    dayCreation = subTaskProject.dayCreation,
+                    deadlineTask = subTaskProject.deadlineTask,
+                    valueCalendar = subTaskProject.valueCalendar,
+                    dayDeadline = subTaskProject.dayDeadline,
+                    yearDeadline = subTaskProject.yearDeadline,
+                    monthDeadline = subTaskProject.monthDeadline,
+                    dayDone = subTaskProject.dayDone,
+                    monthDone = subTaskProject.monthDone,
+                    yearDone = subTaskProject.yearDone
+                )
+                subTaskProjectDao.delete(newTask)
+                subTaskProjectAdapter.deleteSubTask(newTask, position)
+
+                val newEfficiencyEmployee = EfficiencyEmployee(
+                    idEfficiency = efficiencyEmployee!!.idEfficiency,
+                    idEmployee = efficiencyEmployee.idEmployee,
+                    mustWeekWatch = efficiencyEmployee.mustWeekWatch,
+                    numberDay = efficiencyEmployee.numberDay,
+                    totalWeekWatch = efficiencyEmployee.totalWeekWatch,
+                    totalWatch = efficiencyEmployee.totalWatch,
+                    efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
+                    efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
+                    totalWeekDuties = efficiencyEmployee.totalWeekDuties!! - gradeDuties,
+                    totalMonthDuties = efficiencyEmployee.totalMonthDuties,
+                    totalDuties = efficiencyEmployee.totalDuties,
+                    efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties!! - efficiencyWeekDuties,
+                    efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
+                    efficiencyTotal = efficiencyEmployee.efficiencyTotal,
+                    totalMonthWatch = efficiencyEmployee.totalMonthWatch
+                )
+                efficiencyEmployeeDao.update(newEfficiencyEmployee)
+            }
         } else
             numberSubTaskProject = numberSubTaskProject!! - 1
 
@@ -658,7 +1000,8 @@ class ProjectInformationFragment(
             progressProject = project.progressProject,
             budgetProject = project.budgetProject,
             doneVolumeProject = project.doneVolumeProject,
-            totalVolumeProject = project.totalVolumeProject
+            totalVolumeProject = project.totalVolumeProject,
+            settled = project.settled
         )
         projectDao.update(newProject)
     }

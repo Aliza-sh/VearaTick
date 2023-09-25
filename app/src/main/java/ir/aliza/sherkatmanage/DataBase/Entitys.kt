@@ -106,7 +106,7 @@ data class Project(
 
     val nameProject: String,
     val descriptionProject: String,
-    val valueCalendar : String,
+    val valueCalendar: String,
     val noDeadlineProject: Boolean? = false,
     val yearCreation: Int,
     val monthCreation: Int,
@@ -117,12 +117,12 @@ data class Project(
 
     val progressProject: Int? = 0,
     val doneProject: Boolean? = false,
+    val settled: Boolean? = false,
 
     val numberSubTaskProject: Int? = 0,
     val numberDoneSubTaskProject: Int? = 0,
     val doneVolumeProject: Int? = 0,
     val totalVolumeProject: Int? = 0,
-
     )
 
 @Entity(tableName = "teamProject_table")
@@ -133,8 +133,6 @@ data class TeamProject(
 
     val idProject: Int,
     val idEmployee: Int? = null,
-
-
 )
 
 @Entity(tableName = "subTaskProject_table")
@@ -148,13 +146,19 @@ data class SubTaskProject(
     val nameSubTask: String,
     val descriptionSubTask: String,
     val doneSubTask: Boolean? = false,
-    val valueCalendar : String,
+    val valueCalendar: String,
     val yearCreation: Int,
     val monthCreation: Int,
     val dayCreation: Int,
-    val deadlineTask: Int? = 0,
+    val yearDeadline: Int,
+    val monthDeadline: Int,
+    val dayDeadline: Int,
+    val yearDone: Int? = 0,
+    val monthDone: Int? = 0,
+    val dayDone: Int? = 0,
+    val deadlineTask: Int,
     val volumeTask: Int,
-    )
+)
 
 @Entity(tableName = "teamSubTask_table")
 data class TeamSubTask(
@@ -177,7 +181,7 @@ data class EfficiencyEmployee(
     val idEmployee: Int,
 
     var mustWeekWatch: Int? = 0,
-    var numberDay:Int? = 0,
+    var numberDay: Int? = 0,
     var totalWeekWatch: Int? = 0,
     var totalMonthWatch: Int? = 0,
     var totalWatch: Int? = 0,
@@ -197,39 +201,43 @@ data class EfficiencyEmployee(
 
     val efficiencyTotal: Int? = 0
 )
+
 @Entity(tableName = "companyReceipt_table")
 data class CompanyReceipt(
 
     @PrimaryKey(autoGenerate = true)
-    val idCompanyReceipt:Int? = null,
+    val idCompanyReceipt: Int? = null,
     val companyReceipt: Long? = 0,
     val companyReceiptDate: String? = "",
     val companyReceiptDescription: String? = "",
 )
+
 @Entity(tableName = "companyExpenses_table")
 data class CompanyExpenses(
 
     @PrimaryKey(autoGenerate = true)
-    val idCompanyExpenses:Int? = null,
+    val idCompanyExpenses: Int? = null,
     val companyExpenses: Long? = 0,
     val companyExpensesDate: String? = "",
     val companyExpensesDescription: String? = "",
 )
+
 @Entity(tableName = "employeeInvestment_table")
 data class EmployeeInvestment(
 
     @PrimaryKey(autoGenerate = true)
-    val idInvestment:Int? = null,
+    val idInvestment: Int? = null,
     val idEmployee: Int,
     val investment: Long? = 0,
     val investmentDate: String? = "",
     val investmentDescription: String? = "",
 )
+
 @Entity(tableName = "employeeHarvest_table")
 data class EmployeeHarvest(
 
     @PrimaryKey(autoGenerate = true)
-    val idHarvest:Int? = null,
+    val idHarvest: Int? = null,
     val idEmployee: Int,
     val harvest: Long? = 0,
     val harvestDate: String? = "",

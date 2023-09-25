@@ -23,6 +23,8 @@ import ir.aliza.sherkatmanage.adapter.SubTaskProjectAdapter
 import ir.aliza.sherkatmanage.databinding.ActivityProAndEmpBinding
 import ir.aliza.sherkatmanage.databinding.BottomsheetfragmentUpdeteSubtaskProjectBinding
 import ir.aliza.sherkatmanage.fgmSub.ProjectSubTaskFragment
+import org.joda.time.DateTime
+import org.joda.time.Days
 
 class ProjectUpdateSubTaskFromSubTaskBottomsheetFragment(
     val subTaskProjectDao: SubTaskProjectDao,
@@ -151,6 +153,19 @@ class ProjectUpdateSubTaskFromSubTaskBottomsheetFragment(
             val txtDate = valueCalendar
             val txtVolume = binding.edtVolumeTask.text.toString()
 
+            val today = com.kizitonwose.calendarview.utils.persian.PersianCalendar()
+            val startDate =
+                DateTime(subTaskProject.yearCreation, subTaskProject.monthCreation , subTaskProject.dayCreation, 0, 0, 0)
+            val endDate = DateTime(
+                valueYear.toInt() ,
+                valueMonth.toInt(),
+                valueDay.toInt(),
+                0,
+                0,
+                0
+            )
+            var daysBetween = Days.daysBetween(startDate, endDate).days
+
             val newSubTask = SubTaskProject(
                 idSubTask = subTaskProject.idSubTask,
                 idProject = project.idProject!!,
@@ -158,10 +173,17 @@ class ProjectUpdateSubTaskFromSubTaskBottomsheetFragment(
                 descriptionSubTask = txtDescription,
                 volumeTask = txtVolume.toInt(),
                 doneSubTask = subTaskProject.doneSubTask,
-                dayCreation = valueDay.toInt(),
-                monthCreation = valueMonth.toInt(),
-                yearCreation = valueYear.toInt(),
-                valueCalendar = valueCalendar.toString()
+                dayDeadline = valueDay.toInt(),
+                monthDeadline = valueMonth.toInt(),
+                yearDeadline = valueYear.toInt(),
+                dayCreation = subTaskProject.dayCreation,
+                monthCreation = subTaskProject.monthCreation,
+                yearCreation = subTaskProject.yearCreation,
+                valueCalendar = valueCalendar.toString(),
+                deadlineTask = daysBetween,
+                dayDone = subTaskProject.dayDone,
+                monthDone = subTaskProject.monthDone,
+                yearDone = subTaskProject.yearDone
             )
             subTaskProjectDao.update(newSubTask)
             subTaskProjectAdapter.updateTask(newSubTask, position)
