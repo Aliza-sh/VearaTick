@@ -13,6 +13,9 @@
         android:theme="@style/Theme.SherkatManage"
         tools:targetApi="33">
         <activity
+            android:name=".CompanyTaxReportActivity"
+            android:exported="false" />
+        <activity
             android:name=".CompanyPaymentActivity"
             android:exported="false" />
         <activity
@@ -40,10 +43,9 @@
                 android:value="" />
         </activity>
         <activity
-
             android:name=".ProAndEmpActivity"
             android:exported="true"
-        android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

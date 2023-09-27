@@ -243,6 +243,25 @@ data class EmployeeHarvest(
     val harvestDate: String? = "",
     val harvestDescription: String? = "",
 )
+@Entity(tableName = "monthlyTax_table")
+data class MonthlyTax(
+
+    @PrimaryKey()
+    val year: Int? = null,
+    val farvardin: Long? = 0,
+    val ordibehesht: Long? = 0,
+    val khordad: Long? = 0,
+    val tir: Long? = 0,
+    val mordad: Long? = 0,
+    val shahriver: Long? = 0,
+    val mehr: Long? = 0,
+    val aban: Long? = 0,
+    val azar: Long? = 0,
+    val day: Long? = 0,
+    val bahman: Long? = 0,
+    val esfand: Long? = 0,
+
+    )
 
 //@Entity(tableName = "employeeSalary_table")
 //data class EmployeeSalary(

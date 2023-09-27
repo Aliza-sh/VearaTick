@@ -218,6 +218,14 @@ interface EmployeeHarvestDao : BaceDao<EmployeeHarvest> {
     @Query("SELECT SUM(harvest) FROM employeeHarvest_table")
     fun getHarvestSum(): Long
 }
+@Dao
+interface MonthlyTaxDao : BaceDao<MonthlyTax> {
+    @Query("SELECT * FROM monthlyTax_table")
+    fun getAllMonthlyTax(): List<MonthlyTax>
+    @Query("SELECT * FROM monthlyTax_table WHERE year = :year")
+    fun getMonthlyTax(year: Int): List<MonthlyTax>
+
+}
 //@Dao
 //interface EmployeePaymentDao : BaceDao<EmployeePayment> {
 //    @Query("SELECT * FROM employeePayment_table")

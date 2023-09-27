@@ -118,27 +118,39 @@
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="16dp"
-                        android:text=" صندوق شرکت"
+                        android:text=" مالی شرکت"
                         android:textColor="?attr/colorOnSecondary"
                         android:textSize="22sp"
                         android:textStyle="bold"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
+                    <TextView
+                        android:id="@+id/textView11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:elevation="30dp"
+                        android:text=" صندوق شرکت"
+                        android:textColor="?attr/colorOnSecondary"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="@+id/txt_total_deposit"
+                        app:layout_constraintTop_toTopOf="@+id/txt_total_deposit" />
 
                     <TextView
                         android:id="@+id/txt_total_deposit"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
-                        android:layout_marginTop="8dp"
+                        android:layout_marginTop="12dp"
                         android:layout_marginEnd="24dp"
                         android:background="@drawable/shape_background_rcv"
                         android:backgroundTint="@color/blacke"
-                        android:gravity="center"
-                        android:paddingTop="8dp"
+                        android:gravity="center|end"
+                        android:paddingTop="34dp"
                         android:paddingEnd="16dp"
-                        android:paddingBottom="8dp"
+                        android:paddingBottom="16dp"
                         android:text="0 تومان"
                         android:textColor="@color/white"
                         android:textSize="20sp"
@@ -269,19 +281,33 @@
 
                     </androidx.cardview.widget.CardView>
 
+                    <TextView
+                        android:id="@+id/textView110"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:elevation="30dp"
+                        android:text=" سودهی"
+                        android:textColor="?attr/colorOnSecondary"
+                        android:textSize="16sp"
+                        app:layout_constraintStart_toStartOf="@+id/btn"
+                        app:layout_constraintTop_toTopOf="@+id/btn" />
+
                     <LinearLayout
+                        android:id="@+id/btn"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
                         android:layout_marginTop="24dp"
                         android:layout_marginEnd="24dp"
-                        android:layout_marginBottom="8dp"
+                        android:layout_marginBottom="16dp"
                         android:background="@drawable/shape_background_rcv"
                         android:backgroundTint="@color/blacke"
-                        android:gravity="center"
-                        android:paddingTop="8dp"
+                        android:gravity="center|end"
+                        android:paddingTop="35dp"
                         android:paddingEnd="16dp"
-                        android:paddingBottom="8dp"
+                        android:paddingBottom="45dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -300,13 +326,38 @@
                             android:id="@+id/txt_profit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="20dp"
+                            android:layout_marginStart="22dp"
                             android:text="0"
                             android:textColor="@color/white"
                             android:textSize="19sp" />
 
-
                     </LinearLayout>
+
+                    <ImageButton
+                        android:id="@+id/btn_go_to_settlement"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginBottom="8dp"
+                        android:background="?attr/colorOnPrimary"
+                        android:padding="5dp"
+                        android:src="@drawable/go_to"
+                        app:layout_constraintBottom_toBottomOf="@+id/btn"
+                        app:layout_constraintStart_toStartOf="@+id/btn" />
+                    <TextView
+                        android:id="@+id/btn_profit"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="30dp"
+                        android:layout_marginStart="-30dp"
+                        android:elevation="10dp"
+                        android:text="گزارش ماهیانه مالیات"
+                        android:textColor="@color/whity"
+                        android:textSize="14sp"
+                        app:layout_constraintBottom_toBottomOf="@+id/btn_go_to_settlement"
+                        app:layout_constraintStart_toEndOf="@+id/btn_go_to_settlement"
+                        app:layout_constraintTop_toTopOf="@+id/btn_go_to_settlement" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

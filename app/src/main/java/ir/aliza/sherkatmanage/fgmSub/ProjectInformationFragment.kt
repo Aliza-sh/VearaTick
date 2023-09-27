@@ -603,7 +603,7 @@ class ProjectInformationFragment(
         val newReceipt = CompanyReceipt(
             companyReceipt = budgetProject.toLong(),
             companyReceiptDescription = "بابت پروژه ${project.nameProject}",
-            companyReceiptDate = "${today.persianYear}/${today.persianMonth}/${today.persianDay}"
+            companyReceiptDate = "${today.persianYear}/${today.persianMonth + 1}/${today.persianDay}"
         )
         companyReceiptDao.insert(newReceipt)
     }

@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.ghanshyam.graphlibs.Graph
 import com.ghanshyam.graphlibs.GraphData
 import ir.aliza.sherkatmanage.CompanyPaymentActivity
+import ir.aliza.sherkatmanage.CompanyTaxReportActivity
 import ir.aliza.sherkatmanage.CompanyReceiptActivity
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.CompanyExpensesDao
@@ -98,6 +99,10 @@ class CompanyFragment : Fragment() {
         val sumInvestment = employeeInvestmentDao.getInvestmentSum()
         val sumTotal = (sumInvestment + profit)
         binding.txtTotalDeposit.text = formatCurrency(sumTotal)
+        binding.btnProfit.setOnClickListener {
+            val intent = Intent(requireContext(), CompanyTaxReportActivity::class.java)
+            startActivity(intent)
+        }
 
         binding.progressEfficiencyPro.setPercent(efficiencyProject())
         binding.txtEfficiencyPro.text = efficiencyProject().toString() + "%"

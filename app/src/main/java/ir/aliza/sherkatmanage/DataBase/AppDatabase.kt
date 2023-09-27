@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    entities = [Project::class, TeamProject::class, Employee::class, Day::class, EfficiencyEmployee::class, TaskEmployee::class, Time::class, SubTaskProject::class, TeamSubTask::class,CompanyReceipt::class, CompanyExpenses::class, EmployeeHarvest::class, EmployeeInvestment::class],
+    entities = [Project::class, TeamProject::class, Employee::class, Day::class, EfficiencyEmployee::class, TaskEmployee::class, Time::class, SubTaskProject::class, TeamSubTask::class,CompanyReceipt::class, CompanyExpenses::class, EmployeeHarvest::class, EmployeeInvestment::class,MonthlyTax::class],
     version = 1,
     exportSchema = false
 )
@@ -25,6 +25,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val employeeHarvestDao: EmployeeHarvestDao
     abstract val companyExpensesDao: CompanyExpensesDao
     abstract val companyReceiptDao: CompanyReceiptDao
+    abstract val monthlyTaxDao: MonthlyTaxDao
 
     companion object {
 
