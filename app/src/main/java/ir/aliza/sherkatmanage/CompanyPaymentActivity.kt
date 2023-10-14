@@ -31,10 +31,6 @@ class CompanyPaymentActivity : AppCompatActivity() {
                 .commit()
         }
 
-        val employeeInvestmentDao = AppDatabase.getDataBase(applicationContext).employeeInvestmentDao
-        val sumEmployeeInvestment = employeeInvestmentDao.getInvestmentSum()
-        binding.txtInvestment.text = formatCurrency(sumEmployeeInvestment.toLong())
-
         val employeeHarvestDao = AppDatabase.getDataBase(applicationContext).employeeHarvestDao
         val sumEmployeeHarvest = employeeHarvestDao.getHarvestSum()
         binding.txtReceipt.text = formatCurrency(sumEmployeeHarvest.toLong())

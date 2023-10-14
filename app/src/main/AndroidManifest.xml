@@ -13,13 +13,13 @@
         android:theme="@style/Theme.SherkatManage"
         tools:targetApi="33">
         <activity
-            android:name=".CompanyTaxReportActivity"
+            android:name=".CompanyFinancialReportActivity"
             android:exported="false" />
         <activity
             android:name=".CompanyPaymentActivity"
             android:exported="false" />
         <activity
-            android:name=".CompanyReceiptActivity"
+            android:name=".CompanyIncomeActivity"
             android:exported="false" />
         <activity
             android:name=".SplashActivity"

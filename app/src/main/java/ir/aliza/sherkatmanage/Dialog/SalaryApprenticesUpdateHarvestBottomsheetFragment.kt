@@ -16,10 +16,12 @@ import com.xdev.arch.persiancalendar.datepicker.MaterialPickerOnPositiveButtonCl
 import com.xdev.arch.persiancalendar.datepicker.Month
 import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import ir.aliza.sherkatmanage.BottomSheetCallback
-import ir.aliza.sherkatmanage.CompanyReceiptActivity
+import ir.aliza.sherkatmanage.CompanyIncomeActivity
+import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.DataBase.EmployeeHarvest
 import ir.aliza.sherkatmanage.DataBase.EmployeeHarvestDao
+import ir.aliza.sherkatmanage.DataBase.FinancialReport
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.BottomsheetfragmentCompanyNewReceiptBinding
 import java.text.DecimalFormat
@@ -36,7 +38,8 @@ class SalaryApprenticesUpdateHarvestBottomsheetFragment(
     var valueCalendar: PersianCalendar? = null
     private var isUpdating = false
     private var callback: BottomSheetCallback? = null
-
+    var month: Int = 0
+    var year: Int = 0
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -93,6 +96,8 @@ class SalaryApprenticesUpdateHarvestBottomsheetFragment(
         binding.txtDateReceipt.setText(onClickApprenticesHarvest.harvestDate.toString())
         binding.dialogEdtTozih.setText(onClickApprenticesHarvest.harvestDescription)
         binding.txtReceipt.setText(formatCurrency(onClickApprenticesHarvest.harvest))
+        month = onClickApprenticesHarvest.monthHarvest
+        year = onClickApprenticesHarvest.yearHarvest
     }
 
     fun setCallback(callback: BottomSheetCallback) {
@@ -121,7 +126,7 @@ class SalaryApprenticesUpdateHarvestBottomsheetFragment(
             .setTitleText("تاریخ را انتخاب کنید.")
             .setTheme(R.style.AppTheme_PersianCalendar)
             .setCalendarConstraints(constraints).build()
-        datePicker.show((activity as CompanyReceiptActivity).supportFragmentManager, "aTag")
+        datePicker.show((activity as CompanyIncomeActivity).supportFragmentManager, "aTag")
         datePicker.isCancelable
 
         datePicker.addOnPositiveButtonClickListener(
@@ -131,6 +136,8 @@ class SalaryApprenticesUpdateHarvestBottomsheetFragment(
                     val date = PersianCalendar(selection!!)
                     valueCalendar = date
                     binding.txtDateReceipt.text = "${date.year}/${date.month + 1}/${date.day}"
+                    month = date.month + 1
+                    year = date.year
                 }
             }
         )
@@ -158,14 +165,36 @@ class SalaryApprenticesUpdateHarvestBottomsheetFragment(
                 idEmployee = employee.idEmployee!!,
                 harvest = txtReceipt.toLong(),
                 harvestDescription = txtDescription,
-                harvestDate = txtDate.toString()
+                harvestDate = txtDate.toString(),
+                yearHarvest =  month,
+                monthHarvest =year
             )
+            onCompanyFinancialReport(txtReceipt,onClickApprenticesHarvest.harvest!!)
             employeeHarvestDao.update(newEmployeeHarvest)
             onCompanyNewReceipt()
             dismiss()
         } else {
             Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    lateinit var newCompanyFinancialReport: FinancialReport
+    private fun onCompanyFinancialReport(expense: String, oldCompanyExpenses: Long) {
+
+        val financialReportDao = AppDatabase.getDataBase(binding.root.context).financialReportDao
+        val financialReportYearAndMonth = financialReportDao.getFinancialReportYearAndMonthDao(year , month )
+
+        val agoExpense = financialReportYearAndMonth!!.expense
+        val newExpense = (agoExpense!!.toLong() - oldCompanyExpenses) + expense.toLong()
+        newCompanyFinancialReport = FinancialReport(
+            idFinancialReport = financialReportYearAndMonth.idFinancialReport,
+            year = year,
+            month = month,
+            expense = newExpense,
+            income = financialReportYearAndMonth.income,
+            profit = financialReportYearAndMonth.profit
+        )
+        financialReportDao.update(newCompanyFinancialReport)
     }
 
 }

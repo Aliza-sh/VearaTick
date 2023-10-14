@@ -219,11 +219,20 @@ interface EmployeeHarvestDao : BaceDao<EmployeeHarvest> {
     fun getHarvestSum(): Long
 }
 @Dao
-interface MonthlyTaxDao : BaceDao<MonthlyTax> {
-    @Query("SELECT * FROM monthlyTax_table")
-    fun getAllMonthlyTax(): List<MonthlyTax>
-    @Query("SELECT * FROM monthlyTax_table WHERE year = :year")
-    fun getMonthlyTax(year: Int): List<MonthlyTax>
+interface FinancialReportDao : BaceDao<FinancialReport> {
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertOrUpdate(financialReport: FinancialReport)
+    @Query("SELECT * FROM financialReport_table")
+    fun getAllListFinancialReportDao(): List<FinancialReport>
+    @Query("SELECT * FROM financialReport_table WHERE year = :year")
+    fun getAllFinancialYearReportDao(year: Int): List<FinancialReport>
+    @Query("SELECT * FROM financialReport_table WHERE year = :year")
+    fun getFinancialReportYearDao(year: Int): FinancialReport?
+    @Query("SELECT * FROM financialReport_table WHERE year = :year AND month = :month")
+    fun getFinancialReportYearAndMonthDao(year: Int , month: Int): FinancialReport?
+    @Query("SELECT DISTINCT year FROM financialReport_table ORDER BY year ASC")
+    fun getDistinctData(): List<Int>
 
 }
 //@Dao

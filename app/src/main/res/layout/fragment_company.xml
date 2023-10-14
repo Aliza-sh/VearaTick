@@ -135,11 +135,12 @@
                         android:text=" صندوق شرکت"
                         android:textColor="?attr/colorOnSecondary"
                         android:textSize="16sp"
-                        app:layout_constraintStart_toStartOf="@+id/txt_total_deposit"
-                        app:layout_constraintTop_toTopOf="@+id/txt_total_deposit" />
+                        app:layout_constraintStart_toStartOf="@+id/btn_investment"
+                        app:layout_constraintTop_toTopOf="@+id/btn_investment" />
+
 
                     <TextView
-                        android:id="@+id/txt_total_deposit"
+                        android:id="@+id/btn_investment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
@@ -150,15 +151,27 @@
                         android:gravity="center|end"
                         android:paddingTop="34dp"
                         android:paddingEnd="16dp"
-                        android:paddingBottom="16dp"
+                        android:paddingBottom="45dp"
                         android:text="0 تومان"
                         android:textColor="@color/white"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/textView160" />
 
+                    <ImageButton
+                        android:id="@+id/btn_go_to_investment"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start"
+                        android:layout_marginBottom="8dp"
+                        android:background="?attr/colorOnPrimary"
+                        android:padding="5dp"
+                        android:src="@drawable/go_to"
+                        app:layout_constraintBottom_toBottomOf="@+id/btn_investment"
+                        app:layout_constraintStart_toStartOf="@+id/textView11" />
 
                     <androidx.cardview.widget.CardView
                         android:id="@+id/btn_income"
@@ -170,7 +183,7 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toEndOf="@+id/btn_expense"
-                        app:layout_constraintTop_toBottomOf="@+id/txt_total_deposit">
+                        app:layout_constraintTop_toBottomOf="@+id/btn_investment">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -181,17 +194,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="start"
-                                android:layout_marginStart="16dp"
                                 android:layout_marginTop="4dp"
                                 android:layout_marginBottom="8dp"
                                 android:background="?attr/colorOnPrimary"
                                 android:padding="5dp"
-                                android:rotation="-45"
                                 android:src="@drawable/go_to"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/txt_receipt"
-                                app:tint="@color/green_700" />
+                                app:layout_constraintStart_toStartOf="@+id/textView7"
+                                app:layout_constraintTop_toBottomOf="@+id/txt_receipt" />
 
                             <TextView
                                 android:id="@+id/textView7"
@@ -241,17 +251,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_gravity="start"
-                                android:layout_marginStart="16dp"
                                 android:layout_marginTop="4dp"
                                 android:layout_marginBottom="8dp"
                                 android:background="?attr/colorOnPrimary"
                                 android:padding="5dp"
-                                android:rotation="45"
                                 android:src="@drawable/go_to"
                                 app:layout_constraintBottom_toBottomOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/txt_payment"
-                                app:tint="@color/red_800" />
+                                app:layout_constraintStart_toStartOf="@+id/textView8"
+                                app:layout_constraintTop_toBottomOf="@+id/txt_payment" />
 
                             <TextView
                                 android:id="@+id/textView8"
@@ -291,11 +298,11 @@
                         android:text=" سودهی"
                         android:textColor="?attr/colorOnSecondary"
                         android:textSize="16sp"
-                        app:layout_constraintStart_toStartOf="@+id/btn"
-                        app:layout_constraintTop_toTopOf="@+id/btn" />
+                        app:layout_constraintStart_toStartOf="@+id/btn_financial_report"
+                        app:layout_constraintTop_toTopOf="@+id/btn_financial_report" />
 
                     <LinearLayout
-                        android:id="@+id/btn"
+                        android:id="@+id/btn_financial_report"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
@@ -338,26 +345,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="start"
-                        android:layout_marginStart="16dp"
                         android:layout_marginBottom="8dp"
                         android:background="?attr/colorOnPrimary"
                         android:padding="5dp"
                         android:src="@drawable/go_to"
-                        app:layout_constraintBottom_toBottomOf="@+id/btn"
-                        app:layout_constraintStart_toStartOf="@+id/btn" />
-                    <TextView
-                        android:id="@+id/btn_profit"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:paddingStart="30dp"
-                        android:layout_marginStart="-30dp"
-                        android:elevation="10dp"
-                        android:text="گزارش ماهیانه مالیات"
-                        android:textColor="@color/whity"
-                        android:textSize="14sp"
-                        app:layout_constraintBottom_toBottomOf="@+id/btn_go_to_settlement"
-                        app:layout_constraintStart_toEndOf="@+id/btn_go_to_settlement"
-                        app:layout_constraintTop_toTopOf="@+id/btn_go_to_settlement" />
+                        app:layout_constraintBottom_toBottomOf="@+id/btn_financial_report"
+                        app:layout_constraintStart_toStartOf="@+id/textView110" />
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

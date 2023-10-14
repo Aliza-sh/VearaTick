@@ -226,7 +226,9 @@ class SalaryCompanyExpensesFragment : Fragment(), CompanyExpensesAdapter.Company
             idCompanyExpenses = onClickCompanyExpenses!!.idCompanyExpenses,
             companyExpenses = onClickCompanyExpenses.companyExpenses,
             companyExpensesDate = onClickCompanyExpenses.companyExpensesDate,
-            companyExpensesDescription = onClickCompanyExpenses.companyExpensesDescription
+            companyExpensesDescription = onClickCompanyExpenses.companyExpensesDescription,
+            monthCompanyExpenses = onClickCompanyExpenses.monthCompanyExpenses,
+            yearCompanyExpenses = onClickCompanyExpenses.yearCompanyExpenses
         )
         companyExpensesDao.delete(newCompanyExpenses)
     }

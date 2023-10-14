@@ -57,6 +57,8 @@ dependencies {
     implementation 'com.github.ghanshyam34:RoundedPieGraph:fcd69a2acb'
     implementation 'com.github.hadibtf:SemiCircleArcProgressBar:1.1.1'
 
+    //animators for recyclerview
+    implementation("com.ericktijerou.koleton:koleton:1.0.0-beta01")
 
     // The view calendar library
     implementation 'com.kizitonwose.calendar:view:2.3.0'

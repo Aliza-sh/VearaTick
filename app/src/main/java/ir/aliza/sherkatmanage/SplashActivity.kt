@@ -3,8 +3,6 @@ package ir.aliza.sherkatmanage
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
-import android.view.animation.AlphaAnimation
-import android.view.animation.Animation
 import androidx.appcompat.app.AppCompatActivity
 import ir.aliza.sherkatmanage.databinding.ActivitySplashBinding
 
@@ -18,22 +16,25 @@ class SplashActivity : AppCompatActivity() {
         binding = ActivitySplashBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val anim = AlphaAnimation(
-            1f, 0f
-        )
-        anim.duration = 1000
-        anim.fillAfter = true
-        anim.repeatCount = 5
-        anim.repeatMode = Animation.REVERSE
-
-        binding.splashAnimation.startAnimation(anim)
+//        val videoView = binding.videoView
+//        val videoUri = Uri.parse("android.resource://$packageName/${R.raw.logo_motion}")
+//        videoView.setVideoURI(videoUri)
+//        videoView.setOnCompletionListener {
+//            // ویدئو تمام شده است، برای انتقال به اکتیویتی اصلی اقدام کنید
+//            val intent = Intent(this, MainActivity::class.java)
+//            startActivity(intent)
+//            finish()
+//        }
+//        val playbackParams = PlaybackParams()
+//        playbackParams.speed = 2.0f
+//        videoView.start()
 
         Handler().postDelayed( {
 
             val intent = Intent(this@SplashActivity, MainActivity::class.java)
             startActivity(intent)
             finish()
-        }, 2000)
+        }, 1000)
 
     }
 }

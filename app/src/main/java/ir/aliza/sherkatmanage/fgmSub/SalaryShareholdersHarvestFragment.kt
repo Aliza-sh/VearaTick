@@ -240,7 +240,9 @@ class SalaryShareholdersHarvestFragment(
             idEmployee = onClickEmployeeHarvest.idEmployee,
             harvest = onClickEmployeeHarvest.harvest,
             harvestDate = onClickEmployeeHarvest.harvestDate,
-            harvestDescription = onClickEmployeeHarvest.harvestDescription
+            harvestDescription = onClickEmployeeHarvest.harvestDescription,
+            monthHarvest = onClickEmployeeHarvest.monthHarvest,
+            yearHarvest = onClickEmployeeHarvest.yearHarvest
         )
         employeeHarvestDao.delete(newEmployeeHarvest)
 

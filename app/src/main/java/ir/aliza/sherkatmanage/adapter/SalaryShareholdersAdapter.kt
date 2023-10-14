@@ -8,7 +8,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.DataBase.EmployeeHarvestDao
-import ir.aliza.sherkatmanage.DataBase.EmployeeInvestmentDao
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.ItemPaymentShareholdersBinding
 import java.text.DecimalFormat
@@ -16,7 +15,6 @@ import java.text.DecimalFormat
 class SalaryShareholdersAdapter(
     private val dataEmployee: ArrayList<Employee>,
     private val employeeHarvestDao: EmployeeHarvestDao,
-    private val employeeInvestmentDao: EmployeeInvestmentDao,
     private val shareholdersEvents: ShareholdersEvents,
 ) :
     RecyclerView.Adapter<SalaryShareholdersAdapter.PaymentShareholdersViewHolder>() {
@@ -51,36 +49,16 @@ class SalaryShareholdersAdapter(
                 binding.btnInfoPrn.setImageResource(R.drawable.img_matter);
             }
 
-            val sumEmployeeInvestment =
-                employeeInvestmentDao.getEmployeeInvestmentSum(dataEmployee[position].idEmployee!!)
-            binding.txtInvestment.text = formatCurrency(sumEmployeeInvestment.toLong())
-            binding.btnInvestment.setOnClickListener {
-                clickListener.onBtnInvestmentClick(
-                    dataEmployee[position],
-                    employeeInvestmentDao, position
-                )
-            }
             val sumEmployeeHarvest =
                 employeeHarvestDao.getEmployeeHarvestSum(dataEmployee[position].idEmployee!!)
             binding.txtHarvest.text = formatCurrency(sumEmployeeHarvest.toLong())
-            binding.btnPayment.setOnClickListener {
+            binding.btnHarvest.setOnClickListener {
                 clickListener.onBtnPaymentClick(
                     dataEmployee[position],
                     employeeHarvestDao, position
                 )
             }
-            var total = sumEmployeeInvestment - sumEmployeeHarvest
 
-            if (total > 0) {
-                val value = formatCurrency(total)
-                binding.txtTotal.text = value + " +"
-            } else if (total < 0) {
-                total = -total
-                val value = formatCurrency(total)
-                binding.txtTotal.text = value + " -"
-            } else {
-                binding.txtTotal.text = "0"
-            }
 
             itemView.setOnClickListener {}
             itemView.setOnLongClickListener { true }
@@ -123,11 +101,6 @@ class SalaryShareholdersAdapter(
     interface ShareholdersEvents {
         fun onPaymentShareholdersClicked(employee: Employee, position: Int)
         fun onPaymentShareholdersLongClicked(employee: Employee, position: Int)
-        fun onBtnInvestmentClick(
-            employee: Employee,
-            employeeInvestmentDao: EmployeeInvestmentDao,
-            position: Int
-        )
 
         fun onBtnPaymentClick(
             employee: Employee,

@@ -1,122 +1,151 @@
 package ir.aliza.sherkatmanage.adapter
 
+import BottomMarginItemDecoration
+import TopMarginItemDecoration
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.utils.persian.PersianCalendar
-import ir.aliza.sherkatmanage.DataBase.MonthlyTax
+import ir.aliza.sherkatmanage.DataBase.AppDatabase
+import ir.aliza.sherkatmanage.DataBase.FinancialReport
+import ir.aliza.sherkatmanage.DataBase.FinancialReportDao
 import ir.aliza.sherkatmanage.R
-import ir.aliza.sherkatmanage.databinding.ItemAnnualReportBinding
+import ir.aliza.sherkatmanage.databinding.ActivityCompanyFinancialReportBinding
+import ir.aliza.sherkatmanage.databinding.ItemMonthBinding
+import koleton.api.hideSkeleton
+import koleton.api.loadSkeleton
 import java.text.DecimalFormat
 
 class AnnualReportAdapter(
-    private val data: ArrayList<MonthlyTax>,
+    var dataAnnualReport: ArrayList<FinancialReport>,
+    var bindingActivity: ActivityCompanyFinancialReportBinding,
 ) : RecyclerView.Adapter<AnnualReportAdapter.AnnualReportViewHolder>() {
 
-    lateinit var binding: ItemAnnualReportBinding
+    lateinit var bindingItemMonth: ItemMonthBinding
+    lateinit var financialReportDao: FinancialReportDao
 
     inner class AnnualReportViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bind(position: Int) {
 
+            financialReportDao = AppDatabase.getDataBase(itemView.context).financialReportDao
+
+            val item = dataAnnualReport[position]
+
             val calendar = PersianCalendar()
+            if (calendar.persianYear == item.year && calendar.persianMonth + 1 == item.month)
+                bindingItemMonth.viewMonth.setBackgroundColor(itemView.context.getColor(R.color.firoze))
 
-            if (data[position].farvardin != 0.toLong()) {
-                binding.txtTaxFarvardin.text = formatCurrency(data[position].farvardin)
-                binding.viewFarvardin.setBackgroundColor(itemView.context.getColor(R.color.red_800))
+            when (item.month) {
+                1 -> bindingItemMonth.viewMonth.text = "فروردین"
+                2 -> bindingItemMonth.viewMonth.text = "اردیبهشت"
+                3 -> bindingItemMonth.viewMonth.text = "خرداد"
+                4 -> bindingItemMonth.viewMonth.text = "تیر"
+                5 -> bindingItemMonth.viewMonth.text = "مرداد"
+                6 -> bindingItemMonth.viewMonth.text = "شهریور"
+                7 -> bindingItemMonth.viewMonth.text = "مهر"
+                8 -> bindingItemMonth.viewMonth.text = "آبان"
+                9 -> bindingItemMonth.viewMonth.text = "آذر"
+                10 -> bindingItemMonth.viewMonth.text = "دی"
+                11 -> bindingItemMonth.viewMonth.text = "بهمن"
+                12 -> bindingItemMonth.viewMonth.text = "اسفند"
             }
 
-            if (data[position].ordibehesht != 0.toLong()) {
-                binding.txtTaxOrdibehesht.text = formatCurrency(data[position].ordibehesht)
-                binding.viewOrdibehesht.setBackgroundColor(itemView.context.getColor(R.color.red_800))
-            }
+            bindingItemMonth.txtIncomeMonth.text = formatCurrency(item.income)
+            bindingItemMonth.txtExpenseMonth.text = formatCurrency(item.expense)
 
-            if (data[position].khordad != 0.toLong()) {
-                binding.txtTaxKhordad.text = formatCurrency(data[position].khordad)
-                binding.viewKhordad.setBackgroundColor(itemView.context.getColor(R.color.red_800))
-            }
+            val profit = item.income!! - item.expense!!
+            val newCompanyFinancialReport = FinancialReport(
+                idFinancialReport = item.idFinancialReport,
+                year = item.year,
+                month = item.month,
+                expense = item.expense,
+                income = item.income,
+                profit = profit
+            )
+            financialReportDao.update(newCompanyFinancialReport)
 
-            if (data[position].tir != 0.toLong()) {
-                binding.txtTaxTir.text = formatCurrency(data[position].tir)
-                binding.viewTir.setBackgroundColor(itemView.context.getColor(R.color.red_800))
-            }
-
-            if (data[position].mordad != 0.toLong()) {
-                binding.txtTaxMordad.text = formatCurrency(data[position].mordad)
-                binding.viewMordad.setBackgroundColor(itemView.context.getColor(R.color.red_800))
-            }
-
-            if (data[position].shahriver != 0.toLong()) {
-                binding.txtTaxShahriver.text = formatCurrency(data[position].shahriver)
-                binding.viewShahriver.setBackgroundColor(itemView.context.getColor(R.color.red_800))
-            }
-
-            if (data[position].mehr != 0.toLong()) {
-                binding.txtTaxMehr.text = formatCurrency(data[position].mehr)
-                binding.viewMehr.setBackgroundColor(itemView.context.getColor(R.color.red_800))
-            }
-
-            if (data[position].aban != 0.toLong()) {
-                binding.txtTaxAban.text = formatCurrency(data[position].aban)
-                binding.viewAban.setBackgroundColor(itemView.context.getColor(R.color.red_800))
-            }
-
-            if (data[position].azar != 0.toLong()) {
-                binding.txtTaxAzar.text = formatCurrency(data[position].azar)
-                binding.viewAzar.setBackgroundColor(itemView.context.getColor(R.color.red_800))
-            }
-
-            if (data[position].day != 0.toLong()) {
-                binding.txtTaxDay.text = formatCurrency(data[position].day)
-                binding.viewDay.setBackgroundColor(itemView.context.getColor(R.color.red_800))
-            }
-
-            if (data[position].bahman != 0.toLong()) {
-                binding.txtTaxBahman.text = formatCurrency(data[position].bahman)
-                binding.viewBahman.setBackgroundColor(itemView.context.getColor(R.color.red_800))
-            }
-
-            if (data[position].esfand != 0.toLong()) {
-                binding.txtTaxEsfand.text = formatCurrency(data[position].esfand)
-                binding.viewEsfand.setBackgroundColor(itemView.context.getColor(R.color.red_800))
-            }
-
-            if (calendar.persianYear == data[position].year)
-                when (calendar.persianMonth + 1) {
-                    1 -> binding.viewFarvardin.setBackgroundColor(itemView.context.getColor(R.color.firoze))
-                    2 -> binding.viewOrdibehesht.setBackgroundColor(itemView.context.getColor(R.color.firoze))
-                    3 -> binding.viewKhordad.setBackgroundColor(itemView.context.getColor(R.color.firoze))
-                    4 -> binding.viewTir.setBackgroundColor(itemView.context.getColor(R.color.firoze))
-                    5 -> binding.viewMordad.setBackgroundColor(itemView.context.getColor(R.color.firoze))
-                    6 -> binding.viewShahriver.setBackgroundColor(itemView.context.getColor(R.color.firoze))
-                    7 -> binding.viewMehr.setBackgroundColor(itemView.context.getColor(R.color.firoze))
-                    8 -> binding.viewAban.setBackgroundColor(itemView.context.getColor(R.color.firoze))
-                    9 -> binding.viewAzar.setBackgroundColor(itemView.context.getColor(R.color.firoze))
-                    10 -> binding.viewDay.setBackgroundColor(itemView.context.getColor(R.color.firoze))
-                    11 -> binding.viewBahman.setBackgroundColor(itemView.context.getColor(R.color.firoze))
-                    12 -> binding.viewEsfand.setBackgroundColor(itemView.context.getColor(R.color.firoze))
-                }
+            if (profit > 0)
+                bindingItemMonth.txtProfitMonth.text = "${formatCurrency(profit)} +"
+            else if (profit < 0)
+                bindingItemMonth.txtProfitMonth.text = "${formatCurrency(profit)} -"
+            else
+                bindingItemMonth.txtProfitMonth.text = "0"
         }
     }
 
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AnnualReportViewHolder {
-        binding =
-            ItemAnnualReportBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return AnnualReportViewHolder(binding.root)
+        bindingItemMonth =
+            ItemMonthBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return AnnualReportViewHolder(bindingItemMonth.root)
     }
 
     override fun onBindViewHolder(holder: AnnualReportViewHolder, position: Int) {
         holder.bind(position)
     }
 
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
     override fun getItemCount(): Int {
-        return data.size
+        return dataAnnualReport.size
+    }
+
+    fun updateData(year: Int, financialReportDao: FinancialReportDao) {
+        dataAnnualReport.clear()
+        val newDataAnnualReport =
+            financialReportDao.getAllFinancialYearReportDao(year) as ArrayList<FinancialReport>
+        dataAnnualReport.addAll(newDataAnnualReport)
+        val newAdapter = AnnualReportAdapter(ArrayList(newDataAnnualReport), bindingActivity)
+
+        bindingActivity.rcv.loadSkeleton()
+        Handler(Looper.getMainLooper()).postDelayed({
+            bindingActivity.rcv.adapter = newAdapter
+            bindingActivity.rcv.layoutManager = LinearLayoutManager(bindingActivity.root.context)
+            bindingActivity.rcv.hideSkeleton() // مخفی کردن سکلتون
+
+        }, 500)
+
+        topMargin()
+        bottomMargin()
+
+        //Log.v("logAdapter", "dataAnnualReport: "+ dataAnnualReport.toString())
+        //Log.v("logAdapter", "onBind ")
+
     }
 
     private fun formatCurrency(value: Long?): String {
         val decimalFormat = DecimalFormat("#,###")
-        return decimalFormat.format(value) + " تومان"
+        return decimalFormat.format(value)
     }
 
+    private fun topMargin() {
+        val backMargin = -80
+        val backItemDecoratio = TopMarginItemDecoration(backMargin)
+        bindingActivity.rcv.addItemDecoration(backItemDecoratio)
+
+        val topMargin = 80 // اندازه مارجین بالا را از منابع دریافت کنید
+        val itemDecoratio = TopMarginItemDecoration(topMargin)
+        bindingActivity.rcv.addItemDecoration(itemDecoratio)
+    }
+
+    private fun bottomMargin() {
+        val backMargin = -120
+        val backItemDecoratio = BottomMarginItemDecoration(backMargin)
+        bindingActivity.rcv.addItemDecoration(backItemDecoratio)
+
+        val bottomMargin = 120 // اندازه مارجین پایین را از منابع دریافت کنید
+        val itemDecoration = BottomMarginItemDecoration(bottomMargin)
+        bindingActivity.rcv.addItemDecoration(itemDecoration)
+    }
 }

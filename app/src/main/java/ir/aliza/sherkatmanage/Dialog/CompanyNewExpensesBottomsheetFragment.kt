@@ -17,8 +17,10 @@ import com.xdev.arch.persiancalendar.datepicker.Month
 import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import ir.aliza.sherkatmanage.BottomSheetCallback
 import ir.aliza.sherkatmanage.CompanyPaymentActivity
+import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.CompanyExpenses
 import ir.aliza.sherkatmanage.DataBase.CompanyExpensesDao
+import ir.aliza.sherkatmanage.DataBase.FinancialReport
 import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.adapter.CompanyExpensesAdapter
 import ir.aliza.sherkatmanage.databinding.BottomsheetfragmentCompanyNewExpensesBinding
@@ -31,7 +33,7 @@ class CompanyNewExpensesBottomsheetFragment(
 ) : BottomSheetDialogFragment() {
 
     lateinit var binding: BottomsheetfragmentCompanyNewExpensesBinding
-    var valueCalendar : PersianCalendar? = null
+    var valueCalendar: PersianCalendar? = null
     private var isUpdating = false
     private var callback: BottomSheetCallback? = null
 
@@ -40,7 +42,8 @@ class CompanyNewExpensesBottomsheetFragment(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = BottomsheetfragmentCompanyNewExpensesBinding.inflate(layoutInflater, container, false)
+        binding =
+            BottomsheetfragmentCompanyNewExpensesBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -82,9 +85,11 @@ class CompanyNewExpensesBottomsheetFragment(
             addNewReceipt(formattedValue)
         }
     }
+
     fun setCallback(callback: BottomSheetCallback) {
         this.callback = callback
     }
+
     fun onCompanyNewReceipt() {
         callback?.onConfirmButtonClicked()
     }
@@ -122,10 +127,12 @@ class CompanyNewExpensesBottomsheetFragment(
         )
 
     }
+
     private fun formatCurrency(value: Long?): String {
         val decimalFormat = DecimalFormat("#,###")
         return decimalFormat.format(value) + " تومان"
     }
+
     private fun addNewReceipt(formattedValue: String) {
         if (
             binding.edtReceipt.length() > 0 &&
@@ -139,15 +146,45 @@ class CompanyNewExpensesBottomsheetFragment(
             val newReceipt = CompanyExpenses(
                 companyExpenses = txtReceipt.toLong(),
                 companyExpensesDescription = txtDescription,
-                companyExpensesDate = "${valueCalendar?.year}/${valueCalendar?.month!! + 1}/${valueCalendar?.day}"
+                companyExpensesDate = "${valueCalendar?.year}/${valueCalendar?.month!! + 1}/${valueCalendar?.day}",
+                yearCompanyExpenses = valueCalendar?.year!!,
+                monthCompanyExpenses = valueCalendar?.month!! + 1
             )
             companyExpensesDao.insert(newReceipt)
             companyExpensesAdapter.addCompanyExpenses(newReceipt)
             onCompanyNewReceipt()
+            onCompanyFinancialReport(txtReceipt)
             dismiss()
         } else {
             Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()
         }
     }
 
+    lateinit var newCompanyFinancialReport: FinancialReport
+    private fun onCompanyFinancialReport(expense: String) {
+
+        val financialReportDao = AppDatabase.getDataBase(binding.root.context).financialReportDao
+        val financialReportYearAndMonth = financialReportDao.getFinancialReportYearAndMonthDao(valueCalendar!!.year , valueCalendar!!.month + 1)
+
+        if (financialReportYearAndMonth != null) {
+            val agoExpense = financialReportYearAndMonth.expense
+            val newExpense = agoExpense!!.toLong() + expense.toLong()
+            newCompanyFinancialReport = FinancialReport(
+                idFinancialReport = financialReportYearAndMonth.idFinancialReport,
+                year = financialReportYearAndMonth.year,
+                month = financialReportYearAndMonth.month,
+                expense = newExpense,
+                income = financialReportYearAndMonth.income,
+                profit = financialReportYearAndMonth.profit
+            )
+            financialReportDao.update(newCompanyFinancialReport)
+        } else {
+            newCompanyFinancialReport = FinancialReport(
+                year = valueCalendar!!.year,
+                month = valueCalendar!!.month +1,
+                expense = expense.toLong(),
+            )
+            financialReportDao.insert(newCompanyFinancialReport)
+        }
+    }
 }

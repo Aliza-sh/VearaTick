@@ -208,6 +208,8 @@ data class CompanyReceipt(
     @PrimaryKey(autoGenerate = true)
     val idCompanyReceipt: Int? = null,
     val companyReceipt: Long? = 0,
+    val monthCompanyReceipt: Int,
+    val yearCompanyReceipt: Int,
     val companyReceiptDate: String? = "",
     val companyReceiptDescription: String? = "",
 )
@@ -219,6 +221,8 @@ data class CompanyExpenses(
     val idCompanyExpenses: Int? = null,
     val companyExpenses: Long? = 0,
     val companyExpensesDate: String? = "",
+    val monthCompanyExpenses: Int,
+    val yearCompanyExpenses: Int,
     val companyExpensesDescription: String? = "",
 )
 
@@ -241,25 +245,22 @@ data class EmployeeHarvest(
     val idEmployee: Int,
     val harvest: Long? = 0,
     val harvestDate: String? = "",
+    val monthHarvest: Int,
+    val yearHarvest: Int,
     val harvestDescription: String? = "",
 )
-@Entity(tableName = "monthlyTax_table")
-data class MonthlyTax(
+@Entity(tableName = "financialReport_table")
+data class FinancialReport(
 
-    @PrimaryKey()
-    val year: Int? = null,
-    val farvardin: Long? = 0,
-    val ordibehesht: Long? = 0,
-    val khordad: Long? = 0,
-    val tir: Long? = 0,
-    val mordad: Long? = 0,
-    val shahriver: Long? = 0,
-    val mehr: Long? = 0,
-    val aban: Long? = 0,
-    val azar: Long? = 0,
-    val day: Long? = 0,
-    val bahman: Long? = 0,
-    val esfand: Long? = 0,
+    @PrimaryKey(autoGenerate = true)
+    val idFinancialReport: Int? = null,
+
+    val year: Int,
+    val month: Int,
+
+    val income: Long? = 0,
+    val expense: Long? = 0,
+    val profit: Long? = 0,
 
     )
 

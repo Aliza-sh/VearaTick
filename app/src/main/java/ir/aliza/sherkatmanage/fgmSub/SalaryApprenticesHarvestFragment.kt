@@ -237,7 +237,9 @@ class SalaryApprenticesHarvestFragment(
             idEmployee = onClickApprenticesHarvest.idEmployee,
             harvest = onClickApprenticesHarvest.harvest,
             harvestDate = onClickApprenticesHarvest.harvestDate,
-            harvestDescription = onClickApprenticesHarvest.harvestDescription
+            harvestDescription = onClickApprenticesHarvest.harvestDescription,
+            monthHarvest = onClickApprenticesHarvest.monthHarvest,
+            yearHarvest = onClickApprenticesHarvest.yearHarvest
         )
         employeeHarvestDao.delete(newEmployeeHarvest)
     }

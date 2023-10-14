@@ -15,8 +15,8 @@ class ViewPagerEmployeeAdapter(
     fragment: Fragment,
     val efficiencyEmployeeDao: EfficiencyDao,
     val position: Int,
-    val employeeDao: EmployeeDao
-    , val bindingActivityProAndEmpBinding: ActivityProAndEmpBinding,
+    val employeeDao: EmployeeDao,
+    val bindingActivityProAndEmpBinding: ActivityProAndEmpBinding,
 
     ) : FragmentStateAdapter(fragment) {
     override fun getItemCount(): Int {
@@ -25,11 +25,17 @@ class ViewPagerEmployeeAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> EmployeeStatisticsFragment(employee,efficiencyEmployeeDao,position)
+            0 -> EmployeeStatisticsFragment(employee, efficiencyEmployeeDao, position)
 
-            1 -> EmployeeCalendarFragment(employee,efficiencyEmployeeDao,position)
+            1 -> EmployeeCalendarFragment(employee, efficiencyEmployeeDao, position)
 
-            2 -> EmployeeTaskFragment(employee,employeeDao,efficiencyEmployeeDao,position,bindingActivityProAndEmpBinding)
+            2 -> EmployeeTaskFragment(
+                employee,
+                employeeDao,
+                efficiencyEmployeeDao,
+                position,
+                bindingActivityProAndEmpBinding
+            )
 
             else -> Fragment()
         }

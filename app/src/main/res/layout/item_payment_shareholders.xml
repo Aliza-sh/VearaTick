@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="8dp"
-    android:layout_marginTop="10dp"
+    android:layout_marginTop="8dp"
     android:layout_marginEnd="8dp"
     android:layout_marginBottom="8dp"
     android:backgroundTint="?attr/colorPrimaryVariant"
@@ -48,22 +48,34 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_menu" />
 
+        <ImageButton
+            android:id="@+id/img_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="10dp"
+            android:background="?attr/colorPrimaryVariant"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_done" />
+
         <LinearLayout
             android:id="@+id/linearLayout8"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
             android:background="@drawable/shape_background_rcv"
             android:backgroundTint="?attr/colorOnPrimary"
             android:gravity="center"
             android:orientation="horizontal"
-            app:layout_constraintEnd_toStartOf="@+id/btn_menu"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_harvest">
 
             <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_marginStart="16dp"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -76,6 +88,7 @@
                     android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:layoutDirection="ltr"
+                    android:maxWidth="100dp"
                     android:text="علیرضا شهسواری"
                     android:textColor="?attr/colorOnSecondary"
                     android:textSize="14sp"
@@ -112,6 +125,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="12dp">
+
                 <ImageView
                     android:id="@+id/btn_info_prn"
                     android:layout_width="45dp"
@@ -126,152 +140,67 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/txt_total"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/btn_harvest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/shape_background_top_shareholders"
-            android:backgroundTint="?attr/colorOnPrimary"
-            android:paddingStart="10dp"
-            android:paddingTop="5dp"
-            android:paddingEnd="10dp"
-            android:text="0 تومان"
-            android:textStyle="bold"
-            android:textColor="?attr/colorPrimary"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="@+id/linearLayout5"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout8" />
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/linearLayout5"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
             android:layout_marginStart="16dp"
-            android:layout_marginEnd="74dp"
+            android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:background="@drawable/shape_background_shareholders"
+            android:background="@drawable/shape_background_rcv"
             android:backgroundTint="?attr/colorOnPrimary"
             android:gravity="end"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_total">
+            app:layout_constraintTop_toBottomOf="@+id/txt_rank"
+            app:layout_constraintVertical_bias="0.0">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/btn_payment"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                app:layout_constraintEnd_toStartOf="@+id/btn_investment"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent">
 
-                <ImageView
-                    android:id="@+id/img_project"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="start"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="?attr/colorOnPrimary"
-                    android:src="@drawable/img_payment"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
+            <ImageView
+                android:id="@+id/img_project"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_gravity="start"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/colorOnPrimary"
+                android:src="@drawable/img_payment"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
 
-                <TextView
-                    android:id="@+id/textView82"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="دریافتی"
-                    android:textColor="?attr/colorOnSecondary"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/img_project"
-                    app:layout_constraintEnd_toStartOf="@+id/img_project"
-                    app:layout_constraintTop_toTopOf="@+id/img_project" />
+            <TextView
+                android:id="@+id/textView82"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="70dp"
+                android:text="دریافتی"
+                android:textColor="?attr/colorOnSecondary"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/img_project"
+                app:layout_constraintEnd_toStartOf="@+id/img_project"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/img_project" />
 
-                <TextView
-                    android:id="@+id/txt_harvest"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:text="0 تومان"
-                    android:textColor="?attr/colorPrimary"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView82" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <View
-                android:id="@+id/view9"
-                android:layout_width="1dp"
-                android:layout_height="0dp"
+            <TextView
+                android:id="@+id/txt_harvest"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:background="@color/gray"
-                app:layout_constraintBottom_toBottomOf="@+id/btn_payment"
-                app:layout_constraintEnd_toEndOf="@+id/btn_payment"
-                app:layout_constraintStart_toEndOf="@+id/btn_payment"
-                app:layout_constraintTop_toTopOf="@+id/btn_payment" />
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/btn_investment"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/btn_payment"
-                app:layout_constraintTop_toTopOf="@+id/btn_payment">
-
-                <ImageView
-                    android:id="@+id/img_project0"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_gravity="start"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="?attr/colorOnPrimary"
-                    android:src="@drawable/img_investment"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/white" />
-
-                <TextView
-                    android:id="@+id/textView820"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="سرمایه گذاری"
-                    android:textColor="?attr/colorOnSecondary"
-                    android:textSize="15sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="@+id/img_project0"
-                    app:layout_constraintEnd_toStartOf="@+id/img_project0"
-                    app:layout_constraintTop_toTopOf="@+id/img_project0" />
-
-                <TextView
-                    android:id="@+id/txt_investment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:text="0 تومان"
-                    android:textColor="?attr/colorPrimary"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView820" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-
+                android:text="0 تومان"
+                android:textColor="?attr/colorPrimary"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView82" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </androidx.cardview.widget.CardView>

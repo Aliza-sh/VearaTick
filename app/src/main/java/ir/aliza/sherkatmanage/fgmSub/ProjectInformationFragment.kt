@@ -24,6 +24,7 @@ import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.CompanyReceipt
 import ir.aliza.sherkatmanage.DataBase.EfficiencyDao
 import ir.aliza.sherkatmanage.DataBase.EfficiencyEmployee
+import ir.aliza.sherkatmanage.DataBase.FinancialReport
 import ir.aliza.sherkatmanage.DataBase.Project
 import ir.aliza.sherkatmanage.DataBase.ProjectDao
 import ir.aliza.sherkatmanage.DataBase.SubTaskProject
@@ -603,9 +604,40 @@ class ProjectInformationFragment(
         val newReceipt = CompanyReceipt(
             companyReceipt = budgetProject.toLong(),
             companyReceiptDescription = "بابت پروژه ${project.nameProject}",
-            companyReceiptDate = "${today.persianYear}/${today.persianMonth + 1}/${today.persianDay}"
+            companyReceiptDate = "${today.persianYear}/${today.persianMonth + 1}/${today.persianDay}",
+            monthCompanyReceipt = today.persianMonth + 1,
+            yearCompanyReceipt = today.persianYear
         )
         companyReceiptDao.insert(newReceipt)
+        onCompanyFinancialReport(budgetProject,today)
+    }
+
+    lateinit var newCompanyFinancialReport: FinancialReport
+    private fun onCompanyFinancialReport(income: String, today: PersianCalendar) {
+
+        val financialReportDao = AppDatabase.getDataBase(binding.root.context).financialReportDao
+        val financialReportYearAndMonth = financialReportDao.getFinancialReportYearAndMonthDao(today.persianYear , today.persianMonth + 1)
+
+        if (financialReportYearAndMonth != null) {
+            val agoIncome = financialReportYearAndMonth.income
+            val newIncome = agoIncome!!.toLong() + income.toLong()
+            newCompanyFinancialReport = FinancialReport(
+                idFinancialReport = financialReportYearAndMonth.idFinancialReport,
+                year = financialReportYearAndMonth.year,
+                month = financialReportYearAndMonth.month,
+                expense = financialReportYearAndMonth.expense,
+                income = newIncome,
+                profit = financialReportYearAndMonth.profit
+            )
+            financialReportDao.update(newCompanyFinancialReport)
+        } else {
+            newCompanyFinancialReport = FinancialReport(
+                year = today.persianYear,
+                month = today.persianMonth + 1,
+                income = income.toLong(),
+            )
+            financialReportDao.insert(newCompanyFinancialReport)
+        }
     }
 
     private fun doneSubTask(onClickSubTask: SubTaskProject, doneMenuItem: MenuItem) {

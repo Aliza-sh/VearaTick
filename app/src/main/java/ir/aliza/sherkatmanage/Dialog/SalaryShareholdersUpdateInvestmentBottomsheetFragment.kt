@@ -16,7 +16,7 @@ import com.xdev.arch.persiancalendar.datepicker.MaterialPickerOnPositiveButtonCl
 import com.xdev.arch.persiancalendar.datepicker.Month
 import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import ir.aliza.sherkatmanage.BottomSheetCallback
-import ir.aliza.sherkatmanage.CompanyReceiptActivity
+import ir.aliza.sherkatmanage.CompanyIncomeActivity
 import ir.aliza.sherkatmanage.DataBase.Employee
 import ir.aliza.sherkatmanage.DataBase.EmployeeInvestment
 import ir.aliza.sherkatmanage.DataBase.EmployeeInvestmentDao
@@ -121,7 +121,7 @@ class SalaryShareholdersUpdateInvestmentBottomsheetFragment(
             .setTitleText("تاریخ را انتخاب کنید.")
             .setTheme(R.style.AppTheme_PersianCalendar)
             .setCalendarConstraints(constraints).build()
-        datePicker.show((activity as CompanyReceiptActivity).supportFragmentManager, "aTag")
+        datePicker.show((activity as CompanyIncomeActivity).supportFragmentManager, "aTag")
         datePicker.isCancelable
 
         datePicker.addOnPositiveButtonClickListener(

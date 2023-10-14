@@ -10,9 +10,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.ghanshyam.graphlibs.Graph
 import com.ghanshyam.graphlibs.GraphData
+import ir.aliza.sherkatmanage.CompanyFinancialReportActivity
+import ir.aliza.sherkatmanage.CompanyIncomeActivity
 import ir.aliza.sherkatmanage.CompanyPaymentActivity
-import ir.aliza.sherkatmanage.CompanyTaxReportActivity
-import ir.aliza.sherkatmanage.CompanyReceiptActivity
 import ir.aliza.sherkatmanage.DataBase.AppDatabase
 import ir.aliza.sherkatmanage.DataBase.CompanyExpensesDao
 import ir.aliza.sherkatmanage.DataBase.CompanyReceiptDao
@@ -26,6 +26,7 @@ import ir.aliza.sherkatmanage.R
 import ir.aliza.sherkatmanage.databinding.FragmentCompanyBinding
 import ir.aliza.sherkatmanage.databinding.ItemProjectBinding
 import ir.aliza.sherkatmanage.fgmSub.ProjectNumberFragment
+import ir.aliza.sherkatmanage.fgmSub.ShareholdersInvestmentFragment
 import java.text.DecimalFormat
 
 
@@ -65,10 +66,16 @@ class CompanyFragment : Fragment() {
         employeeHarvestDao = AppDatabase.getDataBase(view.context).employeeHarvestDao
         employeeInvestmentDao = AppDatabase.getDataBase(view.context).employeeInvestmentDao
 
+        binding.btnInvestment.setOnClickListener {
+            val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.frame_layout_main2, ShareholdersInvestmentFragment())
+                .commit()
+        }
+
         val sumCompanyReceipt = companyReceiptDao.getReceiptSum()
         binding.txtReceipt.text = formatCurrency(sumCompanyReceipt.toLong())
         binding.btnIncome.setOnClickListener {
-            val intent = Intent(requireContext(), CompanyReceiptActivity::class.java)
+            val intent = Intent(requireContext(), CompanyIncomeActivity::class.java)
             startActivity(intent)
 
         }
@@ -98,9 +105,9 @@ class CompanyFragment : Fragment() {
 
         val sumInvestment = employeeInvestmentDao.getInvestmentSum()
         val sumTotal = (sumInvestment + profit)
-        binding.txtTotalDeposit.text = formatCurrency(sumTotal)
-        binding.btnProfit.setOnClickListener {
-            val intent = Intent(requireContext(), CompanyTaxReportActivity::class.java)
+        binding.btnInvestment.text = formatCurrency(sumTotal)
+        binding.btnFinancialReport.setOnClickListener {
+            val intent = Intent(requireContext(), CompanyFinancialReportActivity::class.java)
             startActivity(intent)
         }
 
