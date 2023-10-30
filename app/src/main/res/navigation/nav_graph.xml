@@ -6,7 +6,7 @@
     app:startDestination="@id/companyFragment2">
     <fragment
         android:id="@+id/companyFragment2"
-        android:name="ir.aliza.sherkatmanage.fgmMain.CompanyFragment"
+        android:name="com.vearad.vearatick.fgmMain.CompanyFragment"
         android:label="fragment_company"
         tools:layout="@layout/fragment_company" >
         <action
@@ -15,7 +15,7 @@
     </fragment>
     <fragment
         android:id="@+id/proAndEmpFragment"
-        android:name="ir.aliza.sherkatmanage.fgmMain.ProAndEmpFragment"
+        android:name="com.vearad.vearatick.fgmMain.ProAndEmpFragment"
         android:label="fragment_pro_and_emp"
         tools:layout="@layout/fragment_pro_and_emp" />
 </navigation>

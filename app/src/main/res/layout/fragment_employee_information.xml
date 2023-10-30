@@ -8,7 +8,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fgmSub.EmployeeInformationFragment">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cons_lyt"
         android:layout_width="match_parent"
@@ -204,7 +203,18 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <ProgressBar
+        android:id="@+id/loading"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:elevation="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cons_lyt"/>
+
     <androidx.viewpager2.widget.ViewPager2
+        android:background="?attr/colorOnPrimary"
         android:id="@+id/viewpagerEmp"
         android:layout_width="match_parent"
         android:layout_height="0dp"

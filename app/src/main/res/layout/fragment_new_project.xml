@@ -34,6 +34,24 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <TextView
+                android:id="@+id/txt_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/shape_background_rcv"
+                android:backgroundTint="@color/blacke"
+                android:paddingStart="15dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="15dp"
+                android:paddingBottom="5dp"
+                android:text="پروژه جدید"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <ImageButton
                 android:id="@+id/btn_bck"
                 android:layout_width="40dp"
@@ -41,7 +59,6 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/shape_circle"
-                android:elevation="20dp"
                 android:rotationY="180"
                 android:src="@drawable/ic_back"
                 app:backgroundTint="?attr/colorOnPrimary"
@@ -64,19 +81,6 @@
             android:layout_height="match_parent"
             android:background="?attr/colorOnPrimary"
             android:layoutDirection="ltr">
-
-            <TextView
-                android:id="@+id/textView36"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginBottom="10dp"
-                android:text="بزن اطلاعات پروژه رو که کلی کار داریم ."
-                android:textColor="@color/fi_dark"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/scrollView3"
-                app:layout_constraintEnd_toEndOf="parent" />
 
             <ScrollView
                 android:id="@+id/scrollView3"

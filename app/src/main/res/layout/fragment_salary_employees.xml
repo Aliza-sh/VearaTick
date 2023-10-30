@@ -43,7 +43,6 @@
         android:layout_marginTop="4dp"
         android:background="@drawable/shape_background_rcv"
         android:backgroundTint="@color/blacke"
-        android:elevation="300dp"
         android:paddingStart="15dp"
         android:paddingTop="5dp"
         android:paddingEnd="15dp"

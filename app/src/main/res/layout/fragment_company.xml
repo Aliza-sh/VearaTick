@@ -28,7 +28,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="12dp"
             android:layout_marginBottom="8sp"
-            android:src="@drawable/logo"
+            android:scaleType="centerInside"
+            android:src="@drawable/img_logo_3d_no_name"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -40,10 +41,10 @@
             android:layout_gravity="end"
             android:layout_marginStart="8dp"
             android:fontFamily="@font/farnaz"
-            android:text=" شرکت"
+            android:text="ویرا"
             android:textColor="#00001D"
             android:textSize="28sp"
-            android:textStyle="bold"
+            android:textStyle="normal"
             app:layout_constraintBottom_toBottomOf="@+id/img_logo"
             app:layout_constraintStart_toEndOf="@+id/img_logo"
             app:layout_constraintTop_toTopOf="@+id/img_logo" />
@@ -53,9 +54,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end"
-            android:text=" مَنِیج"
+            android:layout_marginStart="-5dp"
+            android:text=" تیک"
             android:textColor="@color/firoze"
             android:textSize="28sp"
+            android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/textView9"
             app:layout_constraintStart_toEndOf="@+id/textView9"
             app:layout_constraintTop_toTopOf="@+id/textView9" />
@@ -392,7 +395,7 @@
 
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/card_receipt00"
+                        android:id="@+id/btn_eff_pro"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         app:cardBackgroundColor="@color/blue_light"
@@ -454,7 +457,7 @@
 
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/card_receipt0"
+                        android:id="@+id/btn_eff_emp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
@@ -514,7 +517,7 @@
                     </androidx.cardview.widget.CardView>
 
                     <androidx.cardview.widget.CardView
-                        android:id="@+id/card_receipt000"
+                        android:id="@+id/btn_pre_emp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
