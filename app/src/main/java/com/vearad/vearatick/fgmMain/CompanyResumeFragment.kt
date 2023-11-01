@@ -5,19 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.vearad.vearatick.databinding.FragmentPersonBinding
+import com.vearad.vearatick.databinding.FragmentCompanyResumeBinding
 
-class PersonFragment : Fragment() {
+class CompanyResumeFragment : Fragment() {
 
 
-    lateinit var binding: FragmentPersonBinding
+    lateinit var binding: FragmentCompanyResumeBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentPersonBinding.inflate(layoutInflater, container, false)
+        binding = FragmentCompanyResumeBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 

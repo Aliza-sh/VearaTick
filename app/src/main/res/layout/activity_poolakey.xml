@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:background="?attr/colorOnPrimary">
+
+    <LinearLayout
+        android:id="@+id/linearLayout9"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_background_top_pro_emp_act"
+        android:gravity="center|end"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/txt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="30dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/shape_background_rcv"
+            android:backgroundTint="@color/blacke"
+            android:paddingStart="15dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="15dp"
+            android:paddingBottom="5dp"
+            android:text="ویراتیک"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btn_bck"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/shape_circle"
+            android:rotationY="180"
+            android:src="@drawable/ic_back"
+            app:backgroundTint="?attr/colorOnPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_menu_project"
+            app:tint="@color/white" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout9">
+
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardView0"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/img_logo_3d_no_name"
+                    app:cardBackgroundColor="?attr/colorPrimaryVariant"
+                    app:cardCornerRadius="16dp"
+                    app:cardElevation="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="16dp"
+                        android:paddingBottom="16dp">
+
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="match_parent"
+                            android:layout_height="0dp"
+                            android:rotation="-21"
+                            android:src="@drawable/logo"
+                            app:layout_constraintBottom_toBottomOf="@+id/linearLayout11"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@+id/linearLayout11"
+                            app:tint="#CC838383" />
+
+                        <LinearLayout
+                            android:id="@+id/linearLayout11"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#99333333"
+                            android:orientation="vertical"
+                            android:paddingTop="8dp"
+                            android:paddingBottom="16dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <TextView
+                                android:id="@+id/tv_purchase_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:lineSpacingExtra="8dp"
+                                android:paddingLeft="16dp"
+                                android:paddingRight="16dp"
+                                android:text="خرید اشتراک"
+                                android:textColor="@color/white"
+                                android:textSize="22sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="right|center_vertical"
+                                android:paddingLeft="16dp"
+                                android:paddingRight="16dp"
+                                android:text="با خرید اشتراک میتوانید از بخش مدیریت مالی استفاده کنید."
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/size_14" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:gravity="right|center_vertical"
+                                android:paddingLeft="16dp"
+                                android:paddingRight="16dp"
+                                android:text="که شامل:"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/text_margin" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:lineSpacingExtra="8dp"
+                                android:paddingLeft="16dp"
+                                android:paddingRight="18dp"
+                                android:text=" 1. برداشتی و سرمایه گذاری"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/size_14" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:lineSpacingExtra="8dp"
+                                android:paddingLeft="16dp"
+                                android:paddingRight="16dp"
+                                android:text=" 2. مدیریت حقوق کارمندان"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/size_14" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:lineSpacingExtra="8dp"
+                                android:paddingLeft="16dp"
+                                android:paddingRight="16dp"
+                                android:text=" 3. مدیریت دخل و خرج شرکت"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/size_14" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:lineSpacingExtra="8dp"
+                                android:paddingLeft="16dp"
+                                android:paddingRight="16dp"
+                                android:text=" 4. مدیریت کلیه بحث های مالیاتی"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/size_14" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:lineSpacingExtra="8dp"
+                                android:paddingLeft="16dp"
+                                android:paddingRight="16dp"
+                                android:text=" 5. گزارش گیری ماهانه و سالانه"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/size_14" />
+
+                        </LinearLayout>
+
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/btn_buy"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/img_logo_3d_no_name"
+                    app:cardBackgroundColor="?attr/colorOnPrimary"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <RelativeLayout
+                        android:id="@+id/rl_buy_kt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/tv1"
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:layout_toLeftOf="@+id/rv1"
+                            android:background="@color/firoze"
+                            android:gravity="right|center_vertical"
+                            android:maxLines="1"
+                            android:paddingLeft="24dp"
+                            android:paddingRight="24dp"
+                            android:text="خرید اشتراک"
+                            android:textStyle="bold"
+                            android:textColor="@color/black" />
+
+                        <RelativeLayout
+                            android:id="@+id/rv1"
+                            android:layout_width="56dp"
+                            android:layout_height="70dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginLeft="4dp"
+                            android:background="@color/firoze">
+
+                            <ImageView
+                                android:id="@+id/iv1"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_centerInParent="true"
+                                app:srcCompat="@drawable/ic_buy" />
+                        </RelativeLayout>
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/btn_support"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/img_logo_3d_no_name"
+                    app:cardBackgroundColor="?attr/colorOnPrimary"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="20dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <RelativeLayout
+                        android:id="@+id/rl_support_kt"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                        <TextView
+                            android:id="@+id/tv"
+                            android:layout_width="match_parent"
+                            android:layout_height="70dp"
+                            android:layout_toLeftOf="@+id/rv"
+                            android:background="@color/gray"
+                            android:gravity="right|center_vertical"
+                            android:paddingLeft="24dp"
+                            android:paddingRight="24dp"
+                            android:text="تماس با پشتیبامی"
+                            android:textStyle="bold"
+                            android:textColor="@color/black" />
+
+                        <RelativeLayout
+                            android:id="@+id/rv"
+                            android:layout_width="56dp"
+                            android:layout_height="70dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginLeft="4dp"
+                            android:background="@color/gray">
+
+                            <ImageView
+                                android:id="@+id/iv"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_centerInParent="true"
+                                app:srcCompat="@drawable/img_support" />
+                        </RelativeLayout>
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+        </ScrollView>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

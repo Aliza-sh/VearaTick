@@ -1,5 +1,6 @@
 package com.vearad.vearatick
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.animation.AlphaAnimation
@@ -17,7 +18,7 @@ import com.vearad.vearatick.adapter.ProjectNearAdapter
 import com.vearad.vearatick.adapter.TaskEmployeeAdapter
 import com.vearad.vearatick.databinding.ActivityMainBinding
 import com.vearad.vearatick.fgmMain.CompanyFragment
-import com.vearad.vearatick.fgmMain.PersonFragment
+import com.vearad.vearatick.fgmMain.CompanyResumeFragment
 
 lateinit var employeeDao: EmployeeDao
 lateinit var dayDao: DayDao
@@ -27,6 +28,8 @@ lateinit var projectAdapter: ProjectNearAdapter
 lateinit var taskAdapter: TaskEmployeeAdapter
 lateinit var inOutAdapter: EntryExitEmployeeAdapter
 lateinit var employeeAdapter: EmployeeAdapter
+const val CHEKBUY = "chekBuy"
+const val SHAREDVEARATICK = "sharedVearatick"
 
 class MainActivity : AppCompatActivity() {
 
@@ -36,6 +39,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val sharedPreferences = getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
+        sharedPreferences.getBoolean(CHEKBUY, true)
 
         employeeDao = AppDatabase.getDataBase(this).employeeDao
 
@@ -54,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.menu_settings -> {
-                    replaceFragment(PersonFragment())
+                    replaceFragment(CompanyResumeFragment())
 
                     val anim = AlphaAnimation(
                         1f, 0f

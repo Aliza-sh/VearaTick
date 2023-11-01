@@ -1,15 +1,23 @@
 package com.vearad.vearatick.fgmMain
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
+import android.view.Window
+import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.Fragment
 import com.ghanshyam.graphlibs.Graph
 import com.ghanshyam.graphlibs.GraphData
+import com.vearad.vearatick.CHEKBUY
 import com.vearad.vearatick.CompanyFinancialReportActivity
 import com.vearad.vearatick.CompanyIncomeActivity
 import com.vearad.vearatick.CompanyPaymentActivity
@@ -22,17 +30,22 @@ import com.vearad.vearatick.DataBase.EmployeeInvestmentDao
 import com.vearad.vearatick.DataBase.ProjectDao
 import com.vearad.vearatick.DataBase.SubTaskProjectDao
 import com.vearad.vearatick.MainActivity
+import com.vearad.vearatick.PoolakeyActivity
 import com.vearad.vearatick.ProAndEmpActivity
 import com.vearad.vearatick.R
+import com.vearad.vearatick.SHAREDVEARATICK
 import com.vearad.vearatick.databinding.FragmentCompanyBinding
+import com.vearad.vearatick.databinding.FragmentDialogIncreaseCreditBinding
 import com.vearad.vearatick.databinding.ItemProjectBinding
 import com.vearad.vearatick.fgmSub.ProjectNumberFragment
 import com.vearad.vearatick.fgmSub.ShareholdersInvestmentFragment
 import java.text.DecimalFormat
 
+
 class CompanyFragment : Fragment() {
 
     lateinit var binding: FragmentCompanyBinding
+    lateinit var bindingDialogIncreaseCredit: FragmentDialogIncreaseCreditBinding
     lateinit var bindingItemProject: ItemProjectBinding
     lateinit var projectDao: ProjectDao
     lateinit var efficiencyDao: EfficiencyDao
@@ -41,6 +54,7 @@ class CompanyFragment : Fragment() {
     lateinit var companyExpensesDao: CompanyExpensesDao
     lateinit var employeeHarvestDao: EmployeeHarvestDao
     lateinit var employeeInvestmentDao: EmployeeInvestmentDao
+    lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,6 +63,7 @@ class CompanyFragment : Fragment() {
     ): View {
         binding = FragmentCompanyBinding.inflate(layoutInflater, container, false)
         bindingItemProject = ItemProjectBinding.inflate(layoutInflater, container, false)
+        bindingDialogIncreaseCredit = FragmentDialogIncreaseCreditBinding.inflate(layoutInflater, container, false)
         return binding.root
 
     }
@@ -56,6 +71,18 @@ class CompanyFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        sharedPreferences = requireActivity().getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
+
+        if (sharedPreferences.getBoolean(CHEKBUY, false)== true) {
+            binding.cardLock.visibility = GONE
+        }
+
+        binding.btnFinancial.setOnClickListener {
+            if (sharedPreferences.getBoolean(CHEKBUY, false)== false) {
+                showIncreaseCreditDialog()
+            }
+        }
 
         efficiencyDao = AppDatabase.getDataBase(view.context).efficiencyDao
         projectDao = AppDatabase.getDataBase(view.context).projectDao
@@ -66,17 +93,25 @@ class CompanyFragment : Fragment() {
         employeeInvestmentDao = AppDatabase.getDataBase(view.context).employeeInvestmentDao
 
         binding.btnInvestment.setOnClickListener {
-            val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frame_layout_main2, ShareholdersInvestmentFragment())
-                .commit()
+            if (sharedPreferences.getBoolean(CHEKBUY, false) == false) {
+                showIncreaseCreditDialog()
+            }else {
+                val transaction =
+                    (activity as MainActivity).supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.frame_layout_main2, ShareholdersInvestmentFragment())
+                    .commit()
+            }
         }
 
         val sumCompanyReceipt = companyReceiptDao.getReceiptSum()
         binding.txtReceipt.text = formatCurrency(sumCompanyReceipt.toLong())
         binding.btnIncome.setOnClickListener {
-            val intent = Intent(requireContext(), CompanyIncomeActivity::class.java)
-            startActivity(intent)
-
+            if (sharedPreferences.getBoolean(CHEKBUY, false)== false) {
+                showIncreaseCreditDialog()
+            }else {
+                val intent = Intent(requireContext(), CompanyIncomeActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         val sumCompanyExpenses = companyExpensesDao.getExpensesSum()
@@ -84,8 +119,12 @@ class CompanyFragment : Fragment() {
         val sumTotalExpenses = sumCompanyExpenses + sumEmployeeHarvest
         binding.txtPayment.text = formatCurrency(sumTotalExpenses.toLong())
         binding.btnExpense.setOnClickListener {
-            val intent = Intent(requireContext(), CompanyPaymentActivity::class.java)
-            startActivity(intent)
+            if (sharedPreferences.getBoolean(CHEKBUY, false)== false) {
+                showIncreaseCreditDialog()
+            }else {
+                val intent = Intent(requireContext(), CompanyPaymentActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         var profit = sumCompanyReceipt - sumTotalExpenses
@@ -106,8 +145,12 @@ class CompanyFragment : Fragment() {
         val sumTotal = (sumInvestment + profit)
         binding.btnInvestment.text = formatCurrency(sumTotal)
         binding.btnFinancialReport.setOnClickListener {
-            val intent = Intent(requireContext(), CompanyFinancialReportActivity::class.java)
-            startActivity(intent)
+            if (sharedPreferences.getBoolean(CHEKBUY, false)== false) {
+                showIncreaseCreditDialog()
+            }else {
+                val intent = Intent(requireContext(), CompanyFinancialReportActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         binding.progressEfficiencyPro.setPercent(efficiencyProject())
@@ -119,19 +162,19 @@ class CompanyFragment : Fragment() {
         binding.progressEfficiencyEmpPresence.setPercent(efficiencyEmployeePresence())
         binding.txtEfficiencyEmpPresence.text = efficiencyEmployeePresence().toString() + "%"
 
-        binding.btnEffPro.setOnClickListener{
+        binding.btnEffPro.setOnClickListener {
             val intent = Intent(requireContext(), ProAndEmpActivity::class.java)
             intent.putExtra("itemClicked", 1)
             startActivity(intent)
         }
 
-        binding.btnEffEmp.setOnClickListener{
+        binding.btnEffEmp.setOnClickListener {
             val intent = Intent(requireContext(), ProAndEmpActivity::class.java)
             intent.putExtra("itemClicked", 2)
             startActivity(intent)
         }
 
-        binding.btnPreEmp.setOnClickListener{
+        binding.btnPreEmp.setOnClickListener {
             val intent = Intent(requireContext(), ProAndEmpActivity::class.java)
             intent.putExtra("itemClicked", 2)
             startActivity(intent)
@@ -240,6 +283,30 @@ class CompanyFragment : Fragment() {
             sumEefficiencyEmployeePresence /= numberEmployee
 
         return sumEefficiencyEmployeePresence
+    }
+
+    private fun showIncreaseCreditDialog() {
+        val parent = bindingDialogIncreaseCredit.root.parent as? ViewGroup
+        parent?.removeView(bindingDialogIncreaseCredit.root)
+        val dialogBuilder =
+            AlertDialog.Builder(bindingDialogIncreaseCredit.root.context)
+        dialogBuilder.setView(bindingDialogIncreaseCredit.root)
+
+        val alertDialog = dialogBuilder.create()
+        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        alertDialog.window?.setBackgroundDrawable(ColorDrawable(androidx.compose.ui.graphics.Color.Transparent.toArgb()))
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+        bindingDialogIncreaseCredit.dialogBtnDeleteCansel.setOnClickListener {
+            alertDialog.dismiss()
+        }
+        bindingDialogIncreaseCredit.dialogBtnDeleteSure.setOnClickListener {
+
+            val intent = Intent(requireContext(), PoolakeyActivity::class.java)
+            startActivity(intent)
+
+            alertDialog.dismiss()
+        }
     }
 
 }

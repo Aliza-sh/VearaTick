@@ -8,12 +8,12 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.FinancialReport
 import com.vearad.vearatick.DataBase.FinancialReportDao
 import com.vearad.vearatick.adapter.AnnualReportAdapter
 import com.vearad.vearatick.databinding.ActivityCompanyFinancialReportBinding
+import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import koleton.api.hideSkeleton
 import koleton.api.loadSkeleton
 
@@ -40,7 +40,7 @@ class CompanyFinancialReportActivity : AppCompatActivity() {
 //            sharedPreferences.edit().putBoolean("firstRun", false).apply()
 //        }
         if (financialReportDao.getAllListFinancialReportDao().isEmpty()) {
-                        firstRun()
+            firstRun()
         }
         //Log.v("logActivity", currentYearIndex.toString())
         val listYear = financialReportDao.getDistinctData()
@@ -97,11 +97,11 @@ class CompanyFinancialReportActivity : AppCompatActivity() {
 
     private fun firstRun() {
 
-            val newCompanyFinancialReport = FinancialReport(
-                year = PersianCalendar().year,
-                month = PersianCalendar().month + 1,
-            )
-            financialReportDao.insert(newCompanyFinancialReport)
+        val newCompanyFinancialReport = FinancialReport(
+            year = PersianCalendar().year,
+            month = PersianCalendar().month + 1,
+        )
+        financialReportDao.insert(newCompanyFinancialReport)
 
     }
 
