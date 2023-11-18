@@ -31,6 +31,7 @@ class CompanyFinancialReportActivity : AppCompatActivity() {
         binding.btnBck.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
         financialReportDao = AppDatabase.getDataBase(applicationContext).financialReportDao
         //Log.v("logActivity", " onCreate")
@@ -93,6 +94,12 @@ class CompanyFinancialReportActivity : AppCompatActivity() {
 
         }
 
+    }
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
     }
 
     private fun firstRun() {

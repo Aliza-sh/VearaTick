@@ -55,7 +55,8 @@ data class Time(
     val entry: Int,
     val entryAll: String,
     val exit: Int? = 0,
-    val exitAll: String? = "00:00"
+    val exitAll: String? = "00:00",
+    val differenceTime: Int? = 0
 
 )
 
@@ -66,6 +67,7 @@ data class TaskEmployee(
     val idTask: Int? = null,
 
     val idEmployee: Int,
+    val idTaskProject: Int? = null,
 
     val nameTask: String,
     val descriptionTask: String,
@@ -75,7 +77,10 @@ data class TaskEmployee(
     val volumeTask: Int,
 
     val doneTask: Boolean? = false,
-    val deadlineTask: Int
+    val deadlineTask: Int,
+
+    val efficiencyTask: Int? = 0,
+    val projectTask: Boolean? = false,
 
     //val progressTask: Int? = 0,
     //val numberSubTaskEmployeeTask: Int? = 0,
@@ -180,26 +185,26 @@ data class EfficiencyEmployee(
 
     val idEmployee: Int,
 
-    var mustWeekWatch: Int? = 0,
-    var numberDay: Int? = 0,
-    var totalWeekWatch: Int? = 0,
-    var totalMonthWatch: Int? = 0,
-    var totalWatch: Int? = 0,
-    var efficiencyWeekPresence: Int? = 0,
+    val mustWeekWatch: Int,
+    val numberDay: Int,
+    val totalWeekWatch: Int,
+    val totalMonthWatch: Int,
+    val totalWatch: Int,
+    val efficiencyWeekPresence: Int,
 
-    var efficiencyTotalPresence: Int? = 0,
-
-
-    var totalWeekDuties: Int? = 0,
-    var totalMonthDuties: Int? = 0,
-    var totalDuties: Int? = 0,
-    var efficiencyWeekDuties: Int? = 0,
-    var efficiencyMonthDuties: Int? = 0,
-
-    var efficiencyTotalDuties: Int? = 0,
+    val efficiencyTotalPresence: Int,
 
 
-    val efficiencyTotal: Int? = 0
+    val totalWeekDuties: Int,
+    val totalMonthDuties: Int,
+    val totalDuties: Int,
+    val efficiencyWeekDuties: Int,
+    val efficiencyMonthDuties: Int,
+
+    val efficiencyTotalDuties: Int,
+
+
+    val efficiencyTotal: Int
 )
 
 @Entity(tableName = "companyReceipt_table")

@@ -64,7 +64,7 @@ class EmployeeTaskFragment(
         super.onViewCreated(view, savedInstanceState)
         AndroidThreeTen.init(view.context)
 
-        taskEmployeeDao = AppDatabase.getDataBase(view.context).TaskDao
+        taskEmployeeDao = AppDatabase.getDataBase(view.context).taskDao
 
         calendarViewCreated(view)
 

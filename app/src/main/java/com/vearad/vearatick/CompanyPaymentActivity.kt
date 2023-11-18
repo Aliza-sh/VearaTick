@@ -19,6 +19,7 @@ class CompanyPaymentActivity : AppCompatActivity() {
         binding.btnBck.setOnClickListener{
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
 
         val companyReceiptDao = AppDatabase.getDataBase(applicationContext).companyExpensesDao
@@ -39,6 +40,12 @@ class CompanyPaymentActivity : AppCompatActivity() {
             transaction.replace(R.id.layout_company_payment, SalaryEmployeeSFragment())
                 .commit()
         }
+    }
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
     }
     private fun formatCurrency(value: Long?): String {
         val decimalFormat = DecimalFormat("#,###")

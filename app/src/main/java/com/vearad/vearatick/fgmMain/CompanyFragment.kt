@@ -34,11 +34,11 @@ import com.vearad.vearatick.PoolakeyActivity
 import com.vearad.vearatick.ProAndEmpActivity
 import com.vearad.vearatick.R
 import com.vearad.vearatick.SHAREDVEARATICK
+import com.vearad.vearatick.ShareholdersInvestmentActivity
 import com.vearad.vearatick.databinding.FragmentCompanyBinding
 import com.vearad.vearatick.databinding.FragmentDialogIncreaseCreditBinding
 import com.vearad.vearatick.databinding.ItemProjectBinding
 import com.vearad.vearatick.fgmSub.ProjectNumberFragment
-import com.vearad.vearatick.fgmSub.ShareholdersInvestmentFragment
 import java.text.DecimalFormat
 
 
@@ -96,10 +96,10 @@ class CompanyFragment : Fragment() {
             if (sharedPreferences.getBoolean(CHEKBUY, false) == false) {
                 showIncreaseCreditDialog()
             }else {
-                val transaction =
-                    (activity as MainActivity).supportFragmentManager.beginTransaction()
-                transaction.replace(R.id.frame_layout_main2, ShareholdersInvestmentFragment())
-                    .commit()
+                val intent = Intent(requireContext(), ShareholdersInvestmentActivity::class.java)
+                startActivity(intent)
+                activity?.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
+
             }
         }
 
@@ -111,6 +111,7 @@ class CompanyFragment : Fragment() {
             }else {
                 val intent = Intent(requireContext(), CompanyIncomeActivity::class.java)
                 startActivity(intent)
+                activity?.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
             }
         }
 
@@ -124,6 +125,7 @@ class CompanyFragment : Fragment() {
             }else {
                 val intent = Intent(requireContext(), CompanyPaymentActivity::class.java)
                 startActivity(intent)
+                activity?.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
             }
         }
 
@@ -150,6 +152,8 @@ class CompanyFragment : Fragment() {
             }else {
                 val intent = Intent(requireContext(), CompanyFinancialReportActivity::class.java)
                 startActivity(intent)
+                activity?.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
+
             }
         }
 
@@ -166,18 +170,21 @@ class CompanyFragment : Fragment() {
             val intent = Intent(requireContext(), ProAndEmpActivity::class.java)
             intent.putExtra("itemClicked", 1)
             startActivity(intent)
+            activity?.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
 
         binding.btnEffEmp.setOnClickListener {
             val intent = Intent(requireContext(), ProAndEmpActivity::class.java)
             intent.putExtra("itemClicked", 2)
             startActivity(intent)
+            activity?.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
 
         binding.btnPreEmp.setOnClickListener {
             val intent = Intent(requireContext(), ProAndEmpActivity::class.java)
             intent.putExtra("itemClicked", 2)
             startActivity(intent)
+            activity?.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
 
         binding.btnSeeMoreNumPro.setOnClickListener {
@@ -203,22 +210,9 @@ class CompanyFragment : Fragment() {
         val numDsign = projectDao.getNumberProject("طراحی", true).size
         val numSeo = projectDao.getNumberProject("سئو", true).size
         val numTotalProject = projectDao.getAllDoneProject(true).size
-        var devide = 0.04f
-
-        if (numTotalProject in 11..19)
-            devide = 0.1f
-        if (numTotalProject in 20..50)
-            devide = 0.3f
-        if (numTotalProject in 51..100)
-            devide = 0.5f
-        if (numTotalProject in 101..500)
-            devide = 0.7f
-        if (numTotalProject in 501..1000)
-            devide = 1f
 
         graph.setMinValue(0f)
         graph.setMaxValue(numTotalProject.toFloat())
-        graph.setDevideSize(devide)
         graph.setBackgroundShapeWidthInDp(20)
         graph.setForegroundShapeWidthInPx(50)
         graph.setShapeForegroundColor(Color.parseColor("#202020"))

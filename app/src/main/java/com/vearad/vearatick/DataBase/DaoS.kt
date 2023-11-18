@@ -52,6 +52,8 @@ interface DayDao : BaceDao<Day> {
 interface TimeDao : BaceDao<Time> {
     @Query("SELECT * FROM time_table")
     fun getAllTime(): List<Time>
+    @Query("SELECT * FROM time_table WHERE idEmployee = :idEmployee")
+    fun getEmployeeAllTime(idEmployee: Int): List<Time>
     @Query("SELECT * FROM time_table WHERE idEmployee = :idEmployee AND day = :persianDay ")
     fun getTime(idEmployee: Int, persianDay: Int): Time?
     @Query("SELECT * FROM time_table WHERE idEmployee = :idEmployee AND day = :day")
@@ -80,6 +82,12 @@ interface TaskEmployeeDao : BaceDao<TaskEmployee> {
     fun getAllTaskInInDay(idEmployee: Int, year: Int, month: Int, day: Int): List<TaskEmployee>
     @Query("SELECT * FROM taskEmployee_table WHERE idTask = :idTaskEmployee")
     fun getOnClickTaskEmployee(idTaskEmployee: Int,): TaskEmployee?
+    @Query("SELECT * FROM taskEmployee_table WHERE idTask = :idTaskEmployee")
+    fun getEmployeeAllTask(idTaskEmployee: Int,): List<TaskEmployee>
+    @Query("SELECT * FROM taskEmployee_table WHERE idTaskProject = :idTaskProject")
+    fun getEmployeeTaskProject(idTaskProject: Int,): TaskEmployee?
+    @Query("SELECT * FROM taskEmployee_table WHERE  idEmployee = :idEmployee AND idTaskProject = :idTaskProject ")
+    fun getEmployeeSTaskSProject(idEmployee: Int,idTaskProject: Int): TaskEmployee?
 }
 
 //@Dao
@@ -155,7 +163,6 @@ interface EfficiencyDao : BaceDao<EfficiencyEmployee> {
     fun getAllEfficiency(): List<EfficiencyEmployee>
     @Query("SELECT * FROM efficiency_table WHERE idEmployee = :idEmployee")
     fun getEfficiencyEmployee(idEmployee: Int): EfficiencyEmployee?
-
     @Query("SELECT efficiencyWeekDuties FROM efficiency_table")
     fun getColumnEfficiencyWeekDuties(): List<Int>
     @Query("SELECT efficiencyMonthDuties FROM efficiency_table")

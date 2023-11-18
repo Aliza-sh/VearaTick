@@ -79,7 +79,6 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:cursorVisible="false"
             android:id="@+id/edt_name_task"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -116,7 +115,6 @@
             app:layout_constraintStart_toStartOf="parent">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:cursorVisible="false"
                 android:id="@+id/edt_volume_task"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -174,7 +172,6 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:cursorVisible="false"
             app:hintTextColor="@color/firoze"
             android:id="@+id/edt_description_task"
             android:layout_width="match_parent"

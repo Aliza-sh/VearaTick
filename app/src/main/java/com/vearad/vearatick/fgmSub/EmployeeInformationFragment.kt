@@ -24,6 +24,8 @@ import com.vearad.vearatick.R
 import com.vearad.vearatick.adapter.ViewPagerEmployeeAdapter
 import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
 import com.vearad.vearatick.databinding.FragmentEmployeeInformationBinding
+import koleton.api.hideSkeleton
+import koleton.api.loadSkeleton
 
 class EmployeeInformationFragment(
     var employee: Employee,
@@ -49,20 +51,20 @@ class EmployeeInformationFragment(
         onBackPressed()
         setData(employee)
 
-        val startTime = System.nanoTime()
-        val myAdapter = ViewPagerEmployeeAdapter(
-            employee,
-            this,
-            efficiencyEmployeeDao,
-            position,
-            employeeDao,
-            bindingActivityProAndEmpBinding
-        )
-        val endTime = System.nanoTime()
-        val executionTime = (endTime - startTime) / 1000000
-
+        binding.consLyt.loadSkeleton()
         Handler(Looper.getMainLooper()).postDelayed({
+            // اینجا می‌توانید ViewPager خود را پر کنید
+            // مثال:
+            val myAdapter = ViewPagerEmployeeAdapter(
+                employee,
+                this,
+                efficiencyEmployeeDao,
+                position,
+                employeeDao,
+                bindingActivityProAndEmpBinding
+            )
             binding.viewpagerEmp.adapter = myAdapter
+
             binding.viewpagerEmp.offscreenPageLimit = 2
             val mediator = TabLayoutMediator(
                 binding.tablayoutEmp,
@@ -71,18 +73,16 @@ class EmployeeInformationFragment(
                     override fun onConfigureTab(tab: TabLayout.Tab, position: Int) {
                         when (position) {
                             0 -> tab.text = "آمار"
-
                             1 -> tab.text = "تقویم"
-
                             2 -> tab.text = "وظایف"
-
                         }
                     }
                 })
             mediator.attach()
+            binding.consLyt.hideSkeleton()
             binding.loading.visibility = GONE
-        }, executionTime)
-
+            // پس از لود داده‌ها، Skeleton Loading را مخفی کنید
+        }, 1) // 2 ثانیه
 
         val popupMenu = PopupMenu(this.context, binding.btnMenuEmployee)
         onMenuClicked(popupMenu)

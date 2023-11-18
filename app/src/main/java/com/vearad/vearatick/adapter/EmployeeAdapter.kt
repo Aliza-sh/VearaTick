@@ -117,7 +117,8 @@ class EmployeeAdapter(
                         efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties,
                         efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
                         efficiencyTotal = efficiencyEmployee.efficiencyTotal,
-                        totalMonthWatch = efficiencyEmployee.totalMonthWatch
+                        totalMonthWatch = efficiencyEmployee.totalMonthWatch,
+                        efficiencyMonthDuties = efficiencyEmployee.efficiencyMonthDuties
                     )
                     efficiencyEmployeeDao.update(newEfficiencyEmployee)
                 }

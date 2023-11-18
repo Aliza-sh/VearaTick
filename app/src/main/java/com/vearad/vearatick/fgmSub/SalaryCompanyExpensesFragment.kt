@@ -55,6 +55,7 @@ class SalaryCompanyExpensesFragment : Fragment(), CompanyExpensesAdapter.Company
         binding.btnBck.setOnClickListener {
             val intent = Intent(requireContext(), CompanyPaymentActivity::class.java)
             startActivity(intent)
+            activity?.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
 
         companyExpensesDao = AppDatabase.getDataBase(view.context).companyExpensesDao
@@ -87,6 +88,8 @@ class SalaryCompanyExpensesFragment : Fragment(), CompanyExpensesAdapter.Company
                 override fun handleOnBackPressed() {
                     val intent = Intent(requireContext(), CompanyPaymentActivity::class.java)
                     startActivity(intent)
+                    activity?.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
+
                 }
             })
     }

@@ -19,7 +19,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text=" ساعت ورود و خروج رو مشخص کن."
+            android:text=" ساعت ورود و خروج رو مشخص کنید."
             android:textColor="?attr/colorOnSecondary"
             android:textSize="22sp"
             android:textStyle="bold"
@@ -41,10 +41,10 @@
 
             <ImageView
                 app:tint="@color/white"
-                android:layout_width="30dp"
+                android:layout_width="25dp"
                 android:layout_height="30dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
                 android:src="@drawable/img_out" />
@@ -56,7 +56,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="30dp"
                 android:letterSpacing="0.04"
-                android:text=" خروج"
+                android:text="خروج"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
@@ -79,9 +79,9 @@
             app:layout_constraintTop_toBottomOf="@+id/textView">
 
             <ImageView
-                android:layout_width="30dp"
+                android:layout_width="25dp"
                 android:layout_height="30dp"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="15dp"
@@ -95,7 +95,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="30dp"
                 android:letterSpacing="0.02"
-                android:text=" ورود"
+                android:text="ورود"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="15sp" />
@@ -110,7 +110,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layoutDirection="rtl"
-            android:text="آیا برایه تمام روز هایه هفته اعمال شود؟"
+            android:text="آیا برای تمام روز های هفته اعمال شود؟"
             android:textColor="?attr/colorOnSurface"
             android:textSize="14sp"
             app:layout_constraintStart_toStartOf="parent"

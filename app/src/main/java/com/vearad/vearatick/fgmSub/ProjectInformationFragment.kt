@@ -23,12 +23,13 @@ import com.kizitonwose.calendarview.utils.persian.toPersianCalendar
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.CompanyReceipt
 import com.vearad.vearatick.DataBase.EfficiencyDao
-import com.vearad.vearatick.DataBase.EfficiencyEmployee
 import com.vearad.vearatick.DataBase.FinancialReport
 import com.vearad.vearatick.DataBase.Project
 import com.vearad.vearatick.DataBase.ProjectDao
 import com.vearad.vearatick.DataBase.SubTaskProject
 import com.vearad.vearatick.DataBase.SubTaskProjectDao
+import com.vearad.vearatick.DataBase.TaskEmployee
+import com.vearad.vearatick.DataBase.TaskEmployeeDao
 import com.vearad.vearatick.DataBase.TeamSubTaskDao
 import com.vearad.vearatick.Dialog.ProjectDeleteDialogFragment
 import com.vearad.vearatick.Dialog.ProjectUpdateSubTaskFromInfoBottomsheetFragment
@@ -60,6 +61,7 @@ class ProjectInformationFragment(
     lateinit var subTaskProjectAdapter: SubTaskProjectAdapter
     lateinit var efficiencyEmployeeDao: EfficiencyDao
     lateinit var teamSubTaskDao: TeamSubTaskDao
+    lateinit var taskEmployeeDao: TaskEmployeeDao
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -80,7 +82,7 @@ class ProjectInformationFragment(
         super.onViewCreated(view, savedInstanceState)
         AndroidThreeTen.init(view.context)
         onBackPressed()
-
+        taskEmployeeDao = AppDatabase.getDataBase(view.context).taskDao
         project = projectDao.getProject(project.idProject!!)!!
         efficiencyEmployeeDao =
             AppDatabase.getDataBase(bindingItemSubTask.root.context).efficiencyDao
@@ -609,14 +611,17 @@ class ProjectInformationFragment(
             yearCompanyReceipt = today.persianYear
         )
         companyReceiptDao.insert(newReceipt)
-        onCompanyFinancialReport(budgetProject,today)
+        onCompanyFinancialReport(budgetProject, today)
     }
 
     lateinit var newCompanyFinancialReport: FinancialReport
     private fun onCompanyFinancialReport(income: String, today: PersianCalendar) {
 
         val financialReportDao = AppDatabase.getDataBase(binding.root.context).financialReportDao
-        val financialReportYearAndMonth = financialReportDao.getFinancialReportYearAndMonthDao(today.persianYear , today.persianMonth + 1)
+        val financialReportYearAndMonth = financialReportDao.getFinancialReportYearAndMonthDao(
+            today.persianYear,
+            today.persianMonth + 1
+        )
 
         if (financialReportYearAndMonth != null) {
             val agoIncome = financialReportYearAndMonth.income
@@ -695,73 +700,36 @@ class ProjectInformationFragment(
             )
             projectDao.update(newProject)
 
+            val taskEmployeeDao = AppDatabase.getDataBase(binding.root.context).taskDao
             val employeeSubTaskProjects = teamSubTaskDao.getListTeamSubTask(
                 project1.idProject!!,
                 onClickSubTask.idSubTask!!
             )
 
-            for (employeeSubTaskProject in employeeSubTaskProjects) {
+            if (employeeSubTaskProjects.isNotEmpty()) {
 
-                val efficiencyEmployee =
-                    efficiencyEmployeeDao.getEfficiencyEmployee(employeeSubTaskProject.idEmployee!!)
-                Toast.makeText(context, "$employeeSubTaskProject", Toast.LENGTH_LONG).show()
+                for (employeeSubTaskProject in employeeSubTaskProjects) {
 
-                val startDate =
-                    DateTime(
-                        onClickSubTask.yearDone!!,
-                        onClickSubTask.monthDone!!,
-                        onClickSubTask.dayDone!!,
+                    val onClickTask = taskEmployeeDao.getEmployeeSTaskSProject(
+                        employeeSubTaskProject.idEmployee!!,employeeSubTaskProject.idSubTask)
 
-                        0,
-                        0,
-                        0
+                    val newTask = TaskEmployee(
+                        idTask = onClickTask!!.idTask,
+                        idEmployee = onClickTask.idEmployee,
+                        idTaskProject = onClickTask.idTaskProject,
+                        nameTask = onClickTask.nameTask,
+                        descriptionTask = onClickTask.descriptionTask,
+                        volumeTask = onClickTask.volumeTask,
+                        doneTask = false,
+                        deadlineTask = onClickTask.deadlineTask,
+                        yearCreation = onClickTask.yearCreation,
+                        monthCreation = onClickTask.monthCreation,
+                        dayCreation = onClickTask.dayCreation,
+                        efficiencyTask = 0,
+                        projectTask = onClickTask.projectTask
                     )
-                val endDate = DateTime(
-                    onClickSubTask.yearDeadline,
-                    onClickSubTask.monthDeadline,
-                    onClickSubTask.dayDeadline,
-                    0,
-                    0,
-                    0
-                )
-                val daysBetween = Days.daysBetween(startDate, endDate).days
-                var efficiencyWeekDuties = 0
-                val gradeDuties = onClickSubTask.volumeTask
-                val deadlineTask = onClickSubTask.deadlineTask
-
-                if (deadlineTask == 0) {
-                    if (daysBetween == 0)
-                        efficiencyWeekDuties += 100
-                    else {
-                        efficiencyWeekDuties = ((deadlineTask * 100) / deadlineTask).toInt()
-                        efficiencyWeekDuties += 100
-                    }
-                } else if (deadlineTask > 0) {
-                    efficiencyWeekDuties = ((daysBetween * 100) / deadlineTask).toInt()
-                    efficiencyWeekDuties += 100
-                } else if (deadlineTask < 0) {
-                    efficiencyWeekDuties = ((daysBetween * 100) / -deadlineTask).toInt()
-                    efficiencyWeekDuties += 100
+                    taskEmployeeDao.update(newTask)
                 }
-
-                val newEfficiencyEmployee = EfficiencyEmployee(
-                    idEfficiency = efficiencyEmployee!!.idEfficiency,
-                    idEmployee = efficiencyEmployee.idEmployee,
-                    mustWeekWatch = efficiencyEmployee.mustWeekWatch,
-                    numberDay = efficiencyEmployee.numberDay,
-                    totalWeekWatch = efficiencyEmployee.totalWeekWatch,
-                    totalWatch = efficiencyEmployee.totalWatch,
-                    efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
-                    efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
-                    totalWeekDuties = efficiencyEmployee.totalWeekDuties!! - gradeDuties,
-                    totalMonthDuties = efficiencyEmployee.totalMonthDuties,
-                    totalDuties = efficiencyEmployee.totalDuties,
-                    efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties!! - efficiencyWeekDuties,
-                    efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
-                    efficiencyTotal = efficiencyEmployee.efficiencyTotal,
-                    totalMonthWatch = efficiencyEmployee.totalMonthWatch
-                )
-                efficiencyEmployeeDao.update(newEfficiencyEmployee)
             }
             subTaskProjectDao.update(newSubTask)
         } else {
@@ -818,71 +786,65 @@ class ProjectInformationFragment(
             )
             projectDao.update(newProject)
 
+            val taskEmployeeDao = AppDatabase.getDataBase(binding.root.context).taskDao
             val employeeSubTaskProjects = teamSubTaskDao.getListTeamSubTask(
                 project1.idProject!!,
                 onClickSubTask.idSubTask!!
             )
 
-            for (employeeSubTaskProject in employeeSubTaskProjects) {
-                val efficiencyEmployee =
-                    efficiencyEmployeeDao.getEfficiencyEmployee(employeeSubTaskProject.idEmployee!!)
+            if (employeeSubTaskProjects.isNotEmpty()) {
 
-                val startDate =
-                    DateTime(
-                        today.persianYear,
-                        today.persianMonth,
-                        today.persianDay,
+                for (employeeSubTaskProject in employeeSubTaskProjects) {
+
+                    val onClickTask = taskEmployeeDao.getEmployeeSTaskSProject(
+                        employeeSubTaskProject.idEmployee!!,employeeSubTaskProject.idSubTask)
+
+                    val startDate =
+                        DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
+                    val endDate = DateTime(
+                        onClickSubTask.yearCreation,
+                        onClickSubTask.monthCreation,
+                        onClickSubTask.dayCreation,
                         0,
                         0,
                         0
                     )
-                val endDate = DateTime(
-                    onClickSubTask.yearDeadline,
-                    onClickSubTask.monthDeadline,
-                    onClickSubTask.dayDeadline,
-                    0,
-                    0,
-                    0
-                )
-                val daysBetween = Days.daysBetween(startDate, endDate).days
-                var efficiencyWeekDuties = 0
-                val gradeDuties = onClickSubTask.volumeTask
-                val deadlineTask = onClickSubTask.deadlineTask
+                    val daysBetween = Days.daysBetween(startDate, endDate).days
+                    var efficiencyWeekDuties = 0
+                    val deadlineTask = onClickSubTask.deadlineTask
 
-                if (deadlineTask == 0) {
-                    if (daysBetween == 0)
+                    if (deadlineTask == 0) {
+                        if (daysBetween == 0)
+                            efficiencyWeekDuties += 100
+                        else {
+                            efficiencyWeekDuties = ((deadlineTask * 100) / deadlineTask).toInt()
+                            efficiencyWeekDuties += 100
+                        }
+                    } else if (deadlineTask > 0) {
+                        efficiencyWeekDuties = ((daysBetween * 100) / deadlineTask).toInt()
                         efficiencyWeekDuties += 100
-                    else {
-                        efficiencyWeekDuties = ((deadlineTask * 100) / deadlineTask).toInt()
+                    } else if (deadlineTask < 0) {
+                        efficiencyWeekDuties = ((daysBetween * 100) / -deadlineTask).toInt()
                         efficiencyWeekDuties += 100
                     }
-                } else if (deadlineTask > 0) {
-                    efficiencyWeekDuties = ((daysBetween * 100) / deadlineTask).toInt()
-                    efficiencyWeekDuties += 100
-                } else if (deadlineTask < 0) {
-                    efficiencyWeekDuties = ((daysBetween * 100) / -deadlineTask).toInt()
-                    efficiencyWeekDuties += 100
+
+                    val newTask = TaskEmployee(
+                        idTask = onClickTask!!.idTask,
+                        idEmployee = onClickTask.idEmployee,
+                        idTaskProject = onClickTask.idTaskProject,
+                        nameTask = onClickTask.nameTask,
+                        descriptionTask = onClickTask.descriptionTask,
+                        volumeTask = onClickTask.volumeTask,
+                        doneTask = true,
+                        deadlineTask = onClickTask.deadlineTask,
+                        yearCreation = onClickTask.yearCreation,
+                        monthCreation = onClickTask.monthCreation,
+                        dayCreation = onClickTask.dayCreation,
+                        efficiencyTask = efficiencyWeekDuties,
+                        projectTask = onClickTask.projectTask
+                    )
+                    taskEmployeeDao.update(newTask)
                 }
-
-                val newEfficiencyEmployee = EfficiencyEmployee(
-                    idEfficiency = efficiencyEmployee!!.idEfficiency,
-                    idEmployee = efficiencyEmployee.idEmployee,
-                    mustWeekWatch = efficiencyEmployee.mustWeekWatch,
-                    numberDay = efficiencyEmployee.numberDay,
-                    totalWeekWatch = efficiencyEmployee.totalWeekWatch,
-                    totalWatch = efficiencyEmployee.totalWatch,
-                    efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
-                    efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
-                    totalWeekDuties = efficiencyEmployee.totalWeekDuties!! + gradeDuties,
-                    totalMonthDuties = efficiencyEmployee.totalMonthDuties,
-                    totalDuties = efficiencyEmployee.totalDuties,
-                    efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties!! + efficiencyWeekDuties,
-                    efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
-                    efficiencyTotal = efficiencyEmployee.efficiencyTotal,
-                    totalMonthWatch = efficiencyEmployee.totalMonthWatch
-                )
-                efficiencyEmployeeDao.update(newEfficiencyEmployee)
-
             }
         }
     }
@@ -913,7 +875,6 @@ class ProjectInformationFragment(
     fun deleteItem(subTaskProject: SubTaskProject, position: Int) {
 
         val project1 = projectDao.getProject(project.idProject!!)
-        val today = PersianCalendar()
 
         var numberDonSubTaskProject = project1!!.numberDoneSubTaskProject
         var numberSubTaskProject = project1.numberSubTaskProject
@@ -922,117 +883,89 @@ class ProjectInformationFragment(
             numberSubTaskProject = numberSubTaskProject!! - 1
             numberDonSubTaskProject = numberDonSubTaskProject!! - 1
 
-            val employeeSubTaskProjects = teamSubTaskDao.getListTeamSubTask(
-                project1.idProject!!,
-                subTaskProject.idSubTask!!
+            val newTask = SubTaskProject(
+                idSubTask = subTaskProject.idSubTask,
+                idProject = subTaskProject.idProject,
+                nameSubTask = subTaskProject.nameSubTask,
+                descriptionSubTask = subTaskProject.descriptionSubTask,
+                volumeTask = subTaskProject.volumeTask,
+                doneSubTask = subTaskProject.doneSubTask,
+                yearCreation = subTaskProject.yearCreation,
+                monthCreation = subTaskProject.monthCreation,
+                dayCreation = subTaskProject.dayCreation,
+                deadlineTask = subTaskProject.deadlineTask,
+                valueCalendar = subTaskProject.valueCalendar,
+                dayDeadline = subTaskProject.dayDeadline,
+                yearDeadline = subTaskProject.yearDeadline,
+                monthDeadline = subTaskProject.monthDeadline,
+                dayDone = subTaskProject.dayDone,
+                monthDone = subTaskProject.monthDone,
+                yearDone = subTaskProject.yearDone
             )
-            for (employeeSubTaskProject in employeeSubTaskProjects) {
+            subTaskProjectDao.delete(newTask)
+            subTaskProjectAdapter.deleteSubTask(newTask, position)
 
-                val efficiencyEmployee =
-                    efficiencyEmployeeDao.getEfficiencyEmployee(employeeSubTaskProject.idEmployee!!)
-
-                val startDate =
-                    DateTime(
-                        subTaskProject.yearDone!!,
-                        subTaskProject.monthDone!!,
-                        subTaskProject.dayDone!!,
-                        0, 0, 0)
-                val endDate = DateTime(
-                    subTaskProject.yearDeadline,
-                    subTaskProject.monthDeadline,
-                    subTaskProject.dayDeadline,
-                    0,
-                    0,
-                    0
-                )
-                val daysBetween = Days.daysBetween(startDate, endDate).days
-                var efficiencyWeekDuties = 0
-                var gradeDuties = 0
-                if (subTaskProject.doneSubTask) {
-                    gradeDuties = subTaskProject.volumeTask
-                    val deadlineTask = subTaskProject.deadlineTask
-
-                    if (deadlineTask == 0) {
-                        if (daysBetween == 0)
-                            efficiencyWeekDuties += 100
-                        else {
-                            efficiencyWeekDuties = ((deadlineTask * 100) / deadlineTask).toInt()
-                            efficiencyWeekDuties += 100
-                        }
-                    } else if (deadlineTask > 0) {
-                        efficiencyWeekDuties = ((daysBetween * 100) / deadlineTask).toInt()
-                        efficiencyWeekDuties += 100
-                    } else if (deadlineTask < 0) {
-                        efficiencyWeekDuties = ((daysBetween * 100) / -deadlineTask).toInt()
-                        efficiencyWeekDuties += 100
-                    }
-                }
-
-                val newTask = SubTaskProject(
-                    idSubTask = subTaskProject.idSubTask,
-                    idProject = subTaskProject.idProject,
-                    nameSubTask = subTaskProject.nameSubTask,
-                    descriptionSubTask = subTaskProject.descriptionSubTask,
-                    volumeTask = subTaskProject.volumeTask,
-                    doneSubTask = subTaskProject.doneSubTask,
-                    yearCreation = subTaskProject.yearCreation,
-                    monthCreation = subTaskProject.monthCreation,
-                    dayCreation = subTaskProject.dayCreation,
-                    deadlineTask = subTaskProject.deadlineTask,
-                    valueCalendar = subTaskProject.valueCalendar,
-                    dayDeadline = subTaskProject.dayDeadline,
-                    yearDeadline = subTaskProject.yearDeadline,
-                    monthDeadline = subTaskProject.monthDeadline,
-                    dayDone = subTaskProject.dayDone,
-                    monthDone = subTaskProject.monthDone,
-                    yearDone = subTaskProject.yearDone
-                )
-                subTaskProjectDao.delete(newTask)
-                subTaskProjectAdapter.deleteSubTask(newTask, position)
-
-                val newEfficiencyEmployee = EfficiencyEmployee(
-                    idEfficiency = efficiencyEmployee!!.idEfficiency,
-                    idEmployee = efficiencyEmployee.idEmployee,
-                    mustWeekWatch = efficiencyEmployee.mustWeekWatch,
-                    numberDay = efficiencyEmployee.numberDay,
-                    totalWeekWatch = efficiencyEmployee.totalWeekWatch,
-                    totalWatch = efficiencyEmployee.totalWatch,
-                    efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
-                    efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
-                    totalWeekDuties = efficiencyEmployee.totalWeekDuties!! - gradeDuties,
-                    totalMonthDuties = efficiencyEmployee.totalMonthDuties,
-                    totalDuties = efficiencyEmployee.totalDuties,
-                    efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties!! - efficiencyWeekDuties,
-                    efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
-                    efficiencyTotal = efficiencyEmployee.efficiencyTotal,
-                    totalMonthWatch = efficiencyEmployee.totalMonthWatch
-                )
-                efficiencyEmployeeDao.update(newEfficiencyEmployee)
-            }
         } else
             numberSubTaskProject = numberSubTaskProject!! - 1
 
         subTaskProjectAdapter.deleteSubTask(subTaskProject, position)
         subTaskProjectDao.delete(subTaskProject)
 
+        val taskEmployeeDao = AppDatabase.getDataBase(binding.root.context).taskDao
+        val onClickTask = taskEmployeeDao.getEmployeeTaskProject(subTaskProject.idSubTask!!)
+        if (onClickTask != null) {
+
+            val employeeSubTaskProjects = teamSubTaskDao.getListTeamSubTask(
+                project1.idProject!!,
+                subTaskProject.idSubTask!!
+            )
+            for (employeeSubTaskProject in employeeSubTaskProjects) {
+                val newTaskEmployee = TaskEmployee(
+                    idTask = onClickTask!!.idTask,
+                    idEmployee = onClickTask.idEmployee,
+                    idTaskProject = onClickTask.idTaskProject,
+                    nameTask = onClickTask.nameTask,
+                    descriptionTask = onClickTask.descriptionTask,
+                    volumeTask = onClickTask.volumeTask,
+                    doneTask = onClickTask.doneTask,
+                    yearCreation = onClickTask.yearCreation,
+                    monthCreation = onClickTask.monthCreation,
+                    dayCreation = onClickTask.dayCreation,
+                    deadlineTask = onClickTask.deadlineTask,
+                    efficiencyTask = onClickTask.efficiencyTask,
+                    projectTask = onClickTask.projectTask
+                )
+                taskEmployeeDao.delete(newTaskEmployee)
+            }
+        }
+
+        val totalVolumeProject = project1.totalVolumeProject
+        val doneVolumeProject = project1.doneVolumeProject
+        val subDoneVolumeProject = doneVolumeProject!! - subTaskProject.volumeTask
+        val subTotalVolumeProject = totalVolumeProject!! - subTaskProject.volumeTask
+        var efficiencyProject = 0
+        if (numberSubTaskProject != null)
+            efficiencyProject =
+                ((subDoneVolumeProject.toDouble() / subTotalVolumeProject) * 100).toInt()
+
         val newProject = Project(
             idProject = project1.idProject,
             nameProject = project1.nameProject,
-            dayCreation = project.dayCreation,
-            monthCreation = project.monthCreation,
-            yearCreation = project.yearCreation,
-            valueCalendar = project.valueCalendar,
-            deadlineTask = project.deadlineTask,
+            dayCreation = project1.dayCreation,
+            monthCreation = project1.monthCreation,
+            yearCreation = project1.yearCreation,
+            valueCalendar = project1.valueCalendar,
+            deadlineTask = project1.deadlineTask,
             doneProject = project.doneProject,
             typeProject = project1.typeProject,
             descriptionProject = project1.descriptionProject,
             numberSubTaskProject = numberSubTaskProject,
             numberDoneSubTaskProject = numberDonSubTaskProject,
             noDeadlineProject = project.noDeadlineProject,
-            progressProject = project.progressProject,
+            progressProject = efficiencyProject,
             budgetProject = project.budgetProject,
-            doneVolumeProject = project.doneVolumeProject,
-            totalVolumeProject = project.totalVolumeProject,
+            doneVolumeProject = subDoneVolumeProject,
+            totalVolumeProject = subTotalVolumeProject,
             settled = project.settled
         )
         projectDao.update(newProject)

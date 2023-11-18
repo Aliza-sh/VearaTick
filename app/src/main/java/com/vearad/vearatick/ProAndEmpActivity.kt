@@ -35,6 +35,8 @@ class ProAndEmpActivity : AppCompatActivity() {
         binding.btnBck.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
+
         }
 
         binding.btnProjrct.setOnClickListener() {
@@ -71,6 +73,12 @@ class ProAndEmpActivity : AppCompatActivity() {
             replaceFragment(EmployeeFragment(binding))
         }
 
+    }
+    @Deprecated("Deprecated in Java")
+    override fun onBackPressed() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+        overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
     }
 
     fun replaceFragment(fragment: Fragment) {

@@ -19,7 +19,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.yalantis.ucrop.UCrop
 import com.vearad.vearatick.DataBase.EfficiencyDao
 import com.vearad.vearatick.DataBase.Employee
 import com.vearad.vearatick.DataBase.EmployeeDao
@@ -27,6 +26,7 @@ import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
 import com.vearad.vearatick.databinding.FragmentEmployeeInfoUpdateBinding
 import com.vearad.vearatick.employeeAdapter
+import com.yalantis.ucrop.UCrop
 import java.io.File
 
 private val PICK_IMAGE_REQUEST = 1
@@ -58,9 +58,9 @@ class EmployeeInfoUpdateFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setdata(employee)
         onBackPressed()
         Handler(Looper.getMainLooper()).postDelayed({
-            setdata(employee)
             binding.loading2.visibility = GONE
             binding.layoutForm.visibility = VISIBLE
 
@@ -150,6 +150,7 @@ class EmployeeInfoUpdateFragment(
         intent.type = "image/*"
         startActivityForResult(intent, PICK_IMAGE_REQUEST)
     }
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == AppCompatActivity.RESULT_OK && data != null) {

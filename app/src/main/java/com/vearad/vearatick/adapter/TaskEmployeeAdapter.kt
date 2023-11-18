@@ -38,6 +38,23 @@ class TaskEmployeeAdapter(
         fun bindData(position: Int, clickListener: TaskEvent) {
 
             binding.txtTack.text = data[position].nameTask
+
+            if (data[position].projectTask == true) {
+
+                binding.txtProjectTaskEmployee.text = "پروژه"
+                val shape = GradientDrawable()
+                shape.shape = GradientDrawable.RECTANGLE
+                shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                shape.setStroke(
+                    5,
+                    ContextCompat.getColor(binding.root.context, R.color.blue_dark_rank)
+                )
+                shape.setColor(ContextCompat.getColor(binding.root.context, R.color.blue_light_rank))
+                binding.txtProjectTaskEmployee.setTextColor(android.graphics.Color.parseColor("#215DAD"))
+                binding.txtProjectTaskEmployee.background = shape
+
+            }
+
             binding.txtDescription.text = data[position].descriptionTask
 
             if (data[position].doneTask!!) {

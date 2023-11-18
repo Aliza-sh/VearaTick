@@ -12,6 +12,7 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.vearad.vearatick.CompanyPaymentActivity
 import com.vearad.vearatick.DataBase.EfficiencyDao
 import com.vearad.vearatick.DataBase.EmployeeDao
+import com.vearad.vearatick.R
 import com.vearad.vearatick.adapter.ViewPagerPaymentEmployeesSalaryAdapter
 import com.vearad.vearatick.databinding.FragmentSalaryEmployeesBinding
 
@@ -35,6 +36,7 @@ class SalaryEmployeeSFragment : Fragment(){
         binding.btnBck.setOnClickListener {
             val intent = Intent(requireContext(), CompanyPaymentActivity::class.java)
             startActivity(intent)
+            activity?.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
             val myAdapter = ViewPagerPaymentEmployeesSalaryAdapter(this)
             binding.viewpagerEmp.adapter = myAdapter
@@ -63,6 +65,7 @@ class SalaryEmployeeSFragment : Fragment(){
                 override fun handleOnBackPressed() {
                     val intent = Intent(requireContext(), CompanyPaymentActivity::class.java)
                     startActivity(intent)
+                    activity?.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
                 }
             })
     }

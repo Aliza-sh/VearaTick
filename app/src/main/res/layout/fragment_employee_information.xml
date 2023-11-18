@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layoutDirection="ltr"
+    android:id="@+id/main_layout_info_emp"
     android:layout_height="match_parent"
     android:background="?attr/colorOnPrimary"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -211,7 +212,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cons_lyt"/>
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.viewpager2.widget.ViewPager2
         android:background="?attr/colorOnPrimary"

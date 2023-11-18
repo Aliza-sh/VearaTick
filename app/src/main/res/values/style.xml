@@ -55,6 +55,7 @@
         <item name="persianMaterialCalendarStyle">@style/AppTheme.PersianCalendar.Example</item>
         <!--        Dialog background -->
         <item name="android:windowBackground">@drawable/shape_background_dialog</item>
+        <item name="android:layoutDirection">@id/right_to_left</item>
         <!--        Day text style (textColor, textSize, typeface)-->
         <item name="dayTextAppearance">@style/AppTheme.PersianCalendar.DayTextStyle</item>
         <!--        Positive button style -->

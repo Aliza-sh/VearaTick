@@ -13,6 +13,8 @@ import com.vearad.vearatick.DataBase.Project
 import com.vearad.vearatick.DataBase.ProjectDao
 import com.vearad.vearatick.DataBase.SubTaskProject
 import com.vearad.vearatick.DataBase.SubTaskProjectDao
+import com.vearad.vearatick.DataBase.TaskEmployee
+import com.vearad.vearatick.DataBase.TaskEmployeeDao
 import com.vearad.vearatick.DataBase.TeamProject
 import com.vearad.vearatick.DataBase.TeamSubTask
 import com.vearad.vearatick.R
@@ -31,6 +33,7 @@ class ProjectSubTaskAddNewTeamFromSubTaskFragment(
 
     lateinit var binding: FragmentProjectAddNewTeamBinding
     lateinit var bindingItemAddEmployeeToProject: ItemAddEmployeeToProjectBinding
+    lateinit var taskEmployeeDao: TaskEmployeeDao
 
 
     override fun onCreateView(
@@ -43,6 +46,7 @@ class ProjectSubTaskAddNewTeamFromSubTaskFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         onBackPressed()
+        taskEmployeeDao = AppDatabase.getDataBase(view.context).taskDao
 
         binding.btnBck.setOnClickListener {
             parentFragmentManager.beginTransaction()
@@ -145,6 +149,22 @@ class ProjectSubTaskAddNewTeamFromSubTaskFragment(
                 idEmployee = employee.idEmployee,
             )
             teamSubTaskDao.insert(newTeamProject)
+
+            val newTask = TaskEmployee(
+                idEmployee = employee.idEmployee!!,
+                idTaskProject = subTaskProject.idSubTask,
+                nameTask = subTaskProject.nameSubTask,
+                descriptionTask = subTaskProject.descriptionSubTask,
+                volumeTask = subTaskProject.volumeTask,
+                yearCreation = subTaskProject.yearDeadline,
+                monthCreation = subTaskProject.monthDeadline,
+                dayCreation = subTaskProject.dayDeadline,
+                deadlineTask = subTaskProject.deadlineTask,
+                projectTask = true
+
+            )
+            taskEmployeeDao.insert(newTask)
+
         } else {
             val newTeamProject = TeamSubTask(
                 idTeam = employeeTeamProject?.idTeam,
@@ -152,8 +172,27 @@ class ProjectSubTaskAddNewTeamFromSubTaskFragment(
                 idSubTask = subTaskProject.idSubTask,
                 idEmployee = employee.idEmployee,
 
-            )
+                )
             teamSubTaskDao.delete(newTeamProject)
+
+            val taskProjectEmployee =
+                taskEmployeeDao.getEmployeeTaskProject(subTaskProject.idSubTask)
+            val newTask = TaskEmployee(
+                idTask = taskProjectEmployee!!.idTask,
+                idEmployee = taskProjectEmployee.idEmployee,
+                idTaskProject = taskProjectEmployee.idTaskProject,
+                nameTask = taskProjectEmployee.nameTask,
+                descriptionTask = taskProjectEmployee.descriptionTask,
+                volumeTask = taskProjectEmployee.volumeTask,
+                doneTask = taskProjectEmployee.doneTask,
+                yearCreation = subTaskProject.yearDeadline,
+                monthCreation = subTaskProject.monthDeadline,
+                dayCreation = subTaskProject.dayDeadline,
+                deadlineTask = taskProjectEmployee.deadlineTask,
+                efficiencyTask = taskProjectEmployee.efficiencyTask,
+                projectTask = taskProjectEmployee.projectTask
+            )
+            taskEmployeeDao.delete(newTask)
         }
     }
 

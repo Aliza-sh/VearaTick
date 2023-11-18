@@ -87,11 +87,9 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/dialog_edt_task"
                 android:layout_width="match_parent"
-                android:cursorVisible="false"
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:textSize="12sp"
-
                 android:singleLine="true"
                 android:textColor="?attr/colorOnSecondary" />
 
@@ -114,7 +112,6 @@
                 android:id="@+id/edt_Volume_task"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:cursorVisible="false"
                 android:textSize="12sp"
                 android:backgroundTint="?attr/colorPrimaryVariant"
                 android:inputType="phone"

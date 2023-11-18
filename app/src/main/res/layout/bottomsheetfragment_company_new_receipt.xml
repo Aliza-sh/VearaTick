@@ -74,16 +74,28 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_marginTop="5dp"
+                android:id="@+id/txt_receipt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="10dp"
+                android:letterSpacing="0.1"
+                android:text="0 تومان"
+                android:textColor="#AEAEAE"
+                android:textSize="15sp" />
+
             <com.google.android.material.textfield.TextInputLayout
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginStart="15dp"
                 android:layout_marginEnd="15dp"
                 android:layout_weight="1.1"
                 android:layoutDirection="ltr"
                 android:hint=" مبلغ"
+                app:hintTextColor="@color/firoze"
                 android:textColorHint="?attr/colorOnSecondary"
                 app:boxStrokeColor="@color/firoze">
 
@@ -99,24 +111,13 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:id="@+id/txt_receipt"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
-                android:layout_marginEnd="10dp"
-                android:letterSpacing="0.1"
-                android:text="0 تومان"
-                android:textColor="#AEAEAE"
-                android:textSize="15sp" />
-
         </LinearLayout>
 
         <ImageView
             android:id="@+id/btn_calendar"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_gravity="center"
+            android:layout_gravity="center|bottom"
             android:layout_marginStart="15dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="5dp"
@@ -127,7 +128,7 @@
             android:id="@+id/txt_date_receipt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center|bottom"
             android:layout_marginEnd="25dp"
             android:layout_marginBottom="5dp"
             android:letterSpacing="0.06"

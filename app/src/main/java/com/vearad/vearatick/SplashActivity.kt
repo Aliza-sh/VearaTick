@@ -21,9 +21,9 @@ class SplashActivity : AppCompatActivity() {
         val anim = AlphaAnimation(
             1f, 0f
         )
-        anim.duration = 1000
+        anim.duration = 500
         anim.fillAfter = true
-        anim.repeatCount = 5
+        anim.repeatCount = 2
         anim.repeatMode = Animation.REVERSE
 
         binding.splashAnimation.startAnimation(anim)
@@ -33,7 +33,7 @@ class SplashActivity : AppCompatActivity() {
             val intent = Intent(this@SplashActivity, MainActivity::class.java)
             startActivity(intent)
             finish()
-        }, 2000)
+        }, 1000)
 
     }
 }

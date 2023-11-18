@@ -35,13 +35,15 @@ class CompanyIncomeActivity : AppCompatActivity(), CompanyReceiptAdapter.Company
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCompanyReceiptBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
         bindingDialogDeleteCompanyReceipt =
             FragmentDialogDeleteCompanyReceiptBinding.inflate(layoutInflater)
-        setContentView(binding.root)
         btnOnScroll()
         binding.btnBck.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
+            overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
 
         companyReceiptDao = AppDatabase.getDataBase(applicationContext).companyReceiptDao
@@ -61,9 +63,11 @@ class CompanyIncomeActivity : AppCompatActivity(), CompanyReceiptAdapter.Company
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
     }
     override fun onConfirmButtonClicked() {
         companyReceiptDao = AppDatabase.getDataBase(applicationContext).companyReceiptDao

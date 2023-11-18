@@ -95,7 +95,7 @@ class EmployeeTaskBottomsheetFragment(
                 yearCreation = selectedDate.persianYear,
                 monthCreation = selectedDate.persianMonth,
                 dayCreation = selectedDate.persianDay,
-                deadlineTask = daysBetween
+                deadlineTask = daysBetween,
             )
             taskEmployeeDao.insert(newTask)
             onTaskToEmployee()

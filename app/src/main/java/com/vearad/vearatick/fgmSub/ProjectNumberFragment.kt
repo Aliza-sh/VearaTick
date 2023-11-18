@@ -1,5 +1,6 @@
 package com.vearad.vearatick.fgmSub
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -7,6 +8,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import com.vearad.vearatick.DataBase.ProjectDao
+import com.vearad.vearatick.MainActivity
 import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.FragmentNumberProjectBinding
 import com.vearad.vearatick.fgmMain.CompanyFragment
@@ -54,12 +56,9 @@ class ProjectNumberFragment(val projectDao: ProjectDao) : Fragment() {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    parentFragmentManager.beginTransaction()
-                        .detach(this@ProjectNumberFragment)
-                        .replace(
-                            R.id.frame_layout_main,
-                            CompanyFragment()
-                        ).commit()
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    startActivity(intent)
+                    activity?.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
                 }
             })
     }

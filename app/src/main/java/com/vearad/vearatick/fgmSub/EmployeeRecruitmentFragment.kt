@@ -15,7 +15,6 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.yalantis.ucrop.UCrop
 import com.vearad.vearatick.DataBase.EfficiencyDao
 import com.vearad.vearatick.DataBase.EfficiencyEmployee
 import com.vearad.vearatick.DataBase.Employee
@@ -24,6 +23,7 @@ import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
 import com.vearad.vearatick.databinding.FragmentEmployeeRecruitmentBinding
 import com.vearad.vearatick.employeeAdapter
 import com.vearad.vearatick.employeeDao
+import com.yalantis.ucrop.UCrop
 import java.io.File
 
 private val PICK_IMAGE_REQUEST = 1
@@ -111,6 +111,7 @@ class EmployeeRecruitmentFragment(
         startActivityForResult(intent, PICK_IMAGE_REQUEST)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == AppCompatActivity.RESULT_OK && data != null) {
@@ -214,7 +215,22 @@ class EmployeeRecruitmentFragment(
 
             val newEfficiencyEmployee = EfficiencyEmployee(
                 idEmployee = employee?.idEmployee!!,
+                mustWeekWatch = 0,
+                numberDay = 0,
+                totalWeekWatch = 0,
+                totalWatch = 0,
+                efficiencyWeekPresence = 0,
+                efficiencyTotalPresence = 0,
+                totalWeekDuties = 0,
+                totalMonthDuties = 0,
+                totalDuties = 0,
+                efficiencyWeekDuties = 0,
+                efficiencyTotalDuties = 0,
+                efficiencyTotal = 0,
+                totalMonthWatch = 0,
+                efficiencyMonthDuties = 0,
             )
+
             efficiencyEmployeeDao.insert(newEfficiencyEmployee)
             onRecruitment()
 

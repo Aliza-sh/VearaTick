@@ -87,8 +87,8 @@ class EntryAndExitDialogFragment(
                     efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
                     efficiencyTotal = efficiencyEmployee.efficiencyTotal,
                     numberDay = efficiencyEmployee.numberDay,
-                    efficiencyMonthDuties = efficiencyEmployee.totalMonthDuties
-
+                    efficiencyMonthDuties = efficiencyEmployee.totalMonthDuties,
+                    totalMonthWatch = efficiencyEmployee.totalMonthWatch
                 )
                 efficiencyEmployeeDao.update(newEfficiencyEmployee)
 
@@ -149,8 +149,8 @@ class EntryAndExitDialogFragment(
             efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
             efficiencyTotal = efficiencyEmployee.efficiencyTotal,
             numberDay = efficiencyEmployee.numberDay,
-            efficiencyMonthDuties = efficiencyEmployee.totalMonthDuties
-
+            efficiencyMonthDuties = efficiencyEmployee.totalMonthDuties,
+            totalMonthWatch = efficiencyEmployee.totalMonthWatch
         )
         efficiencyEmployeeDao.update(newEfficiencyEmployee)
 

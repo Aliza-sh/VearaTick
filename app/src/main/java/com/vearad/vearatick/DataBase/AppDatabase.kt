@@ -17,7 +17,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract val employeeDao: EmployeeDao
     abstract val dayDao: DayDao
     abstract val efficiencyDao: EfficiencyDao
-    abstract val TaskDao: TaskEmployeeDao
+    abstract val taskDao: TaskEmployeeDao
     abstract val timeDao: TimeDao
     abstract val teamSubTaskDao: TeamSubTaskDao
     abstract val subTaskProjectDao: SubTaskProjectDao

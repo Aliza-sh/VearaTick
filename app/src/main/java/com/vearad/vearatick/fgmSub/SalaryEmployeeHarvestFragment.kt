@@ -2,7 +2,6 @@ package com.vearad.vearatick.fgmSub
 
 import android.animation.ObjectAnimator
 import android.app.AlertDialog
-import android.content.Intent
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -55,8 +54,14 @@ class SalaryEmployeeHarvestFragment(
         onBackPressed()
         btnOnScroll()
         binding.btnBck.setOnClickListener {
-            val intent = Intent(requireContext(), CompanyPaymentActivity::class.java)
-            startActivity(intent)
+            val transaction =
+                (activity as CompanyPaymentActivity).supportFragmentManager.beginTransaction()
+            transaction.replace(
+                R.id.layout_company_payment,
+                SalaryEmployeeSFragment()
+            )
+                .addToBackStack(null)
+                .commit()
         }
         val employeeHarvestData = employeeHarvestDao.getEmployeeHarvest(employee.idEmployee!!)
         employeeHarvestAdapter =
@@ -89,8 +94,14 @@ class SalaryEmployeeHarvestFragment(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    val intent = Intent(requireContext(), CompanyPaymentActivity::class.java)
-                    startActivity(intent)
+                    val transaction =
+                        (activity as CompanyPaymentActivity).supportFragmentManager.beginTransaction()
+                    transaction.replace(
+                        R.id.layout_company_payment,
+                        SalaryEmployeeSFragment()
+                    )
+                        .addToBackStack(null)
+                        .commit()
                 }
             })
     }

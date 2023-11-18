@@ -39,9 +39,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        val sharedPreferences = getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
-        sharedPreferences.getBoolean(CHEKBUY, true)
+        val sharedPreferences =
+            getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
+        sharedPreferences.edit().putBoolean(CHEKBUY, true).apply()
 
         employeeDao = AppDatabase.getDataBase(this).employeeDao
 
@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.menu_pro_emp -> {
                     val intent = Intent(this, ProAndEmpActivity::class.java)
                     startActivity(intent)
+                    overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
                 }
 
                 R.id.menu_settings -> {
@@ -76,6 +77,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
         finishAffinity()

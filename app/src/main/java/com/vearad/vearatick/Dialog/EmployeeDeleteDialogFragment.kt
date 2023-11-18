@@ -73,7 +73,9 @@ class EmployeeDeleteDialogFragment(
             efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties,
             efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
             efficiencyTotal = efficiencyEmployee.efficiencyTotal,
-            numberDay = efficiencyEmployee.numberDay
+            numberDay = efficiencyEmployee.numberDay,
+            totalMonthWatch = efficiencyEmployee.totalMonthWatch,
+            efficiencyMonthDuties = efficiencyEmployee.efficiencyMonthDuties
         )
         efficiencyDao.delete(deleteDfficiencyEmployee)
         employeeAdapter.removeEmployee(employee, position)

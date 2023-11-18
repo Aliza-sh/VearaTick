@@ -11,15 +11,16 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.animation.LinearInterpolator
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.kizitonwose.calendarview.utils.persian.PersianCalendar
 import com.vearad.vearatick.DataBase.EfficiencyDao
-import com.vearad.vearatick.DataBase.EfficiencyEmployee
 import com.vearad.vearatick.DataBase.Employee
 import com.vearad.vearatick.DataBase.EmployeeDao
 import com.vearad.vearatick.DataBase.TaskEmployee
@@ -53,6 +54,7 @@ class EmployeeTaskInDayFragment(
     lateinit var taskEmployeeAdapter: TaskEmployeeAdapter
     private var isScrollingUp = false
     private var buttonAnimator: ObjectAnimator? = null
+    private var snackbar: Snackbar? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -232,62 +234,74 @@ class EmployeeTaskInDayFragment(
 
     override fun onTaskLongClicked(task: TaskEmployee, position: Int) {}
 
-    override fun onMenuItemClick(subTask: TaskEmployee, position: Int) {
+    override fun onMenuItemClick(
+        subTask: TaskEmployee,
+        position: Int,
+    ) {
 
         val onClickSubTask = taskEmployeeDao.getOnClickTaskEmployee(subTask.idTask!!)
 
-        val viewHolder =
-            binding.recyclerView.findViewHolderForAdapterPosition(position) as TaskEmployeeAdapter.TaskEmployeeViewHolder
-        viewHolder.let { holder ->
-            val btnMenuSubTaskProject = holder.btnMenuTask
-            val popupMenu = PopupMenu(context, btnMenuSubTaskProject)
-            popupMenu.inflate(R.menu.menu_task_employee)
-            popupMenu.show()
+        if (onClickSubTask!!.projectTask != true) {
+            val viewHolder =
+                binding.recyclerView.findViewHolderForAdapterPosition(position) as TaskEmployeeAdapter.TaskEmployeeViewHolder
+            viewHolder.let { holder ->
+                val btnMenuSubTaskProject = holder.btnMenuTask
+                val popupMenu = PopupMenu(context, btnMenuSubTaskProject)
+                popupMenu.inflate(R.menu.menu_task_employee)
+                popupMenu.show()
 
-            val doneMenuItem = popupMenu.menu.findItem(R.id.menu_task_emoloyee_done)
-            if (onClickSubTask!!.doneTask!!) {
-                doneMenuItem.title = "تکمیل نشد"
-            } else {
-                doneMenuItem.title = "تکمیل شد"
-            }
+                val doneMenuItem = popupMenu.menu.findItem(R.id.menu_task_emoloyee_done)
+                if (onClickSubTask!!.doneTask!!) {
+                    doneMenuItem.title = "تکمیل نشد"
+                } else {
+                    doneMenuItem.title = "تکمیل شد"
+                }
 
-            popupMenu.setOnMenuItemClickListener { item ->
+                popupMenu.setOnMenuItemClickListener { item ->
 
-                when (item.itemId) {
+                    when (item.itemId) {
 
-                    R.id.menu_task_emoloyee_edit -> {
-                        val bottomsheet = EmployeeUpdateTaskBottomsheetFragment(
-                            employee,
-                            employeeDao,
-                            efficiencyEmployeeDao,
-                            position,
-                            taskEmployeeDao,
-                            selectedDate, today,
-                            bindingActivityProAndEmpBinding,
-                            onClickSubTask
-                        )
-                        bottomsheet.setStyle(
-                            R.style.BottomSheetStyle,
-                            R.style.BottomSheetDialogTheme
-                        )
-                        bottomsheet.show(parentFragmentManager, null)
-                        true
+                        R.id.menu_task_emoloyee_edit -> {
+                            val bottomsheet = EmployeeUpdateTaskBottomsheetFragment(
+                                employee,
+                                employeeDao,
+                                efficiencyEmployeeDao,
+                                position,
+                                taskEmployeeDao,
+                                selectedDate, today,
+                                bindingActivityProAndEmpBinding,
+                                onClickSubTask
+                            )
+                            bottomsheet.setStyle(
+                                R.style.BottomSheetStyle,
+                                R.style.BottomSheetDialogTheme
+                            )
+                            bottomsheet.show(parentFragmentManager, null)
+                            true
+                        }
+
+                        R.id.menu_task_emoloyee_done -> {
+                            doneTask(onClickSubTask, doneMenuItem)
+                            setData()
+                            true
+                        }
+
+                        R.id.menu_task_emoloyee_delete -> {
+                            showDeleteDialog(onClickSubTask)
+                            true
+                        }
+
+                        else -> false
                     }
-
-                    R.id.menu_task_emoloyee_done -> {
-                        doneTask(onClickSubTask, doneMenuItem)
-                        setData()
-                        true
-                    }
-
-                    R.id.menu_task_emoloyee_delete -> {
-                        showDeleteDialog(onClickSubTask)
-                        true
-                    }
-
-                    else -> false
                 }
             }
+        }else{
+            snackbar = Snackbar.make(binding.root, "عدم اتصال به اینترنت!", Snackbar.LENGTH_SHORT)
+                .setAction("اتصال") {
+                    snackbar?.dismiss()
+                }
+            snackbar?.show()
+            Toast.makeText(context, "برای این کار باید به پروژه مربوطه مراجعه کنید.", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -299,9 +313,6 @@ class EmployeeTaskInDayFragment(
             bindingItemSubTask.txtDedlineSubTask.visibility = View.VISIBLE
             bindingItemSubTask.imgDone.visibility = View.GONE
 
-            val efficiencyEmployee =
-                efficiencyEmployeeDao.getEfficiencyEmployee(onClickSubTask.idEmployee)
-
             val startDate =
                 DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
             val endDate = DateTime(
@@ -314,7 +325,6 @@ class EmployeeTaskInDayFragment(
             )
             val daysBetween = Days.daysBetween(startDate, endDate).days
             var efficiencyWeekDuties = 0
-            val gradeDuties = onClickSubTask.volumeTask
             val deadlineTask = onClickSubTask.deadlineTask
 
             if (deadlineTask == 0) {
@@ -335,6 +345,7 @@ class EmployeeTaskInDayFragment(
             val newTask = TaskEmployee(
                 idTask = onClickSubTask.idTask,
                 idEmployee = onClickSubTask.idEmployee,
+                idTaskProject = onClickSubTask.idTaskProject,
                 nameTask = onClickSubTask.nameTask,
                 descriptionTask = onClickSubTask.descriptionTask,
                 volumeTask = onClickSubTask.volumeTask,
@@ -343,27 +354,9 @@ class EmployeeTaskInDayFragment(
                 monthCreation = onClickSubTask.monthCreation,
                 dayCreation = onClickSubTask.dayCreation,
                 deadlineTask = onClickSubTask.deadlineTask,
+                efficiencyTask = 0
             )
             taskEmployeeDao.update(newTask)
-
-            val newEfficiencyEmployee = EfficiencyEmployee(
-                idEfficiency = efficiencyEmployee!!.idEfficiency,
-                idEmployee = efficiencyEmployee.idEmployee,
-                mustWeekWatch = efficiencyEmployee.mustWeekWatch,
-                numberDay = efficiencyEmployee.numberDay,
-                totalWeekWatch = efficiencyEmployee.totalWeekWatch,
-                totalWatch = efficiencyEmployee.totalWatch,
-                efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
-                efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
-                totalWeekDuties = efficiencyEmployee.totalWeekDuties!! - gradeDuties,
-                totalMonthDuties = efficiencyEmployee.totalMonthDuties,
-                totalDuties = efficiencyEmployee.totalDuties,
-                efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties!! - efficiencyWeekDuties,
-                efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
-                efficiencyTotal = efficiencyEmployee.efficiencyTotal,
-                totalMonthWatch = efficiencyEmployee.totalMonthWatch
-            )
-            efficiencyEmployeeDao.update(newEfficiencyEmployee)
 
         } else {
 
@@ -372,22 +365,6 @@ class EmployeeTaskInDayFragment(
             bindingItemSubTask.txtDedlineSubTask.visibility = View.GONE
             bindingItemSubTask.imgDone.visibility = View.VISIBLE
 
-            val efficiencyEmployee =
-                efficiencyEmployeeDao.getEfficiencyEmployee(onClickSubTask.idEmployee)
-
-            val newTask = TaskEmployee(
-                idTask = onClickSubTask.idTask,
-                idEmployee = onClickSubTask.idEmployee,
-                nameTask = onClickSubTask.nameTask,
-                descriptionTask = onClickSubTask.descriptionTask,
-                volumeTask = onClickSubTask.volumeTask,
-                doneTask = true,
-                deadlineTask = onClickSubTask.deadlineTask,
-                yearCreation = onClickSubTask.yearCreation,
-                monthCreation = onClickSubTask.monthCreation,
-                dayCreation = onClickSubTask.dayCreation,
-            )
-            taskEmployeeDao.update(newTask)
 
             val startDate =
                 DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
@@ -401,7 +378,6 @@ class EmployeeTaskInDayFragment(
             )
             val daysBetween = Days.daysBetween(startDate, endDate).days
             var efficiencyWeekDuties = 0
-            val gradeDuties = onClickSubTask.volumeTask
             val deadlineTask = onClickSubTask.deadlineTask
 
             if (deadlineTask == 0) {
@@ -419,24 +395,22 @@ class EmployeeTaskInDayFragment(
                 efficiencyWeekDuties += 100
             }
 
-            val newEfficiencyEmployee = EfficiencyEmployee(
-                idEfficiency = efficiencyEmployee!!.idEfficiency,
-                idEmployee = efficiencyEmployee.idEmployee,
-                mustWeekWatch = efficiencyEmployee.mustWeekWatch,
-                numberDay = efficiencyEmployee.numberDay,
-                totalWeekWatch = efficiencyEmployee.totalWeekWatch,
-                totalWatch = efficiencyEmployee.totalWatch,
-                efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
-                efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
-                totalWeekDuties = efficiencyEmployee.totalWeekDuties!! + gradeDuties,
-                totalMonthDuties = efficiencyEmployee.totalMonthDuties,
-                totalDuties = efficiencyEmployee.totalDuties,
-                efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties!! + efficiencyWeekDuties,
-                efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
-                efficiencyTotal = efficiencyEmployee.efficiencyTotal,
-                totalMonthWatch = efficiencyEmployee.totalMonthWatch
+            val newTask = TaskEmployee(
+                idTask = onClickSubTask.idTask,
+                idEmployee = onClickSubTask.idEmployee,
+                idTaskProject = onClickSubTask.idTaskProject,
+                nameTask = onClickSubTask.nameTask,
+                descriptionTask = onClickSubTask.descriptionTask,
+                volumeTask = onClickSubTask.volumeTask,
+                doneTask = true,
+                deadlineTask = onClickSubTask.deadlineTask,
+                yearCreation = onClickSubTask.yearCreation,
+                monthCreation = onClickSubTask.monthCreation,
+                dayCreation = onClickSubTask.dayCreation,
+                efficiencyTask = efficiencyWeekDuties
             )
-            efficiencyEmployeeDao.update(newEfficiencyEmployee)
+            taskEmployeeDao.update(newTask)
+
         }
     }
 
@@ -465,45 +439,10 @@ class EmployeeTaskInDayFragment(
 
     fun deleteItem(onClickSubTask: TaskEmployee, position: Int) {
 
-        val efficiencyEmployee =
-            efficiencyEmployeeDao.getEfficiencyEmployee(onClickSubTask.idEmployee)
-
-        val startDate =
-            DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
-        val endDate = DateTime(
-            onClickSubTask.yearCreation,
-            onClickSubTask.monthCreation,
-            onClickSubTask.dayCreation,
-            0,
-            0,
-            0
-        )
-        val daysBetween = Days.daysBetween(startDate, endDate).days
-        var efficiencyWeekDuties = 0
-        var gradeDuties = 0
-        if (onClickSubTask.doneTask!!) {
-            gradeDuties = onClickSubTask.volumeTask
-            val deadlineTask = onClickSubTask.deadlineTask
-
-            if (deadlineTask == 0) {
-                if (daysBetween == 0)
-                    efficiencyWeekDuties += 100
-                else {
-                    efficiencyWeekDuties = ((deadlineTask * 100) / deadlineTask).toInt()
-                    efficiencyWeekDuties += 100
-                }
-            } else if (deadlineTask > 0) {
-                efficiencyWeekDuties = ((daysBetween * 100) / deadlineTask).toInt()
-                efficiencyWeekDuties += 100
-            } else if (deadlineTask < 0) {
-                efficiencyWeekDuties = ((daysBetween * 100) / -deadlineTask).toInt()
-                efficiencyWeekDuties += 100
-            }
-        }
-
         val newTask = TaskEmployee(
             idTask = onClickSubTask.idTask,
             idEmployee = onClickSubTask.idEmployee,
+            idTaskProject = onClickSubTask.idTaskProject,
             nameTask = onClickSubTask.nameTask,
             descriptionTask = onClickSubTask.descriptionTask,
             volumeTask = onClickSubTask.volumeTask,
@@ -512,27 +451,11 @@ class EmployeeTaskInDayFragment(
             monthCreation = onClickSubTask.monthCreation,
             dayCreation = onClickSubTask.dayCreation,
             deadlineTask = onClickSubTask.deadlineTask,
+            efficiencyTask = onClickSubTask.efficiencyTask
         )
         taskEmployeeDao.delete(newTask)
         taskEmployeeAdapter.removeEmployee(newTask, position)
 
-        val newEfficiencyEmployee = EfficiencyEmployee(
-            idEfficiency = efficiencyEmployee!!.idEfficiency,
-            idEmployee = efficiencyEmployee.idEmployee,
-            mustWeekWatch = efficiencyEmployee.mustWeekWatch,
-            numberDay = efficiencyEmployee.numberDay,
-            totalWeekWatch = efficiencyEmployee.totalWeekWatch,
-            totalWatch = efficiencyEmployee.totalWatch,
-            efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
-            efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
-            totalWeekDuties = efficiencyEmployee.totalWeekDuties!! - gradeDuties,
-            totalMonthDuties = efficiencyEmployee.totalMonthDuties,
-            totalDuties = efficiencyEmployee.totalDuties,
-            efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties!! - efficiencyWeekDuties,
-            efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
-            efficiencyTotal = efficiencyEmployee.efficiencyTotal,
-            totalMonthWatch = efficiencyEmployee.totalMonthWatch
-        )
-        efficiencyEmployeeDao.update(newEfficiencyEmployee)
+
     }
 }

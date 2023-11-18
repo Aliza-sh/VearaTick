@@ -20,6 +20,9 @@
             android:name=".CompanyFinancialReportActivity"
             android:exported="false" />
         <activity
+            android:name=".ShareholdersInvestmentActivity"
+            android:exported="false" />
+        <activity
             android:name=".CompanyPaymentActivity"
             android:exported="false" />
         <activity
