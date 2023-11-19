@@ -19,8 +19,7 @@ data class Employee(
     val specialty: String,
     val rank: String,
     val skill: String? = "",
-    val imgEmployee: ByteArray? = null,
-
+    val imagePath: String? = ""
     )
 
 @Entity(tableName = "day_table")

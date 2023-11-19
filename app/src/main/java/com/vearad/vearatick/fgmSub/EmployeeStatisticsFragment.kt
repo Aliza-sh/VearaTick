@@ -1,12 +1,10 @@
 package com.vearad.vearatick.fgmSub
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.kizitonwose.calendarview.utils.persian.PersianCalendar
 import com.vearad.vearatick.DataBase.AppDatabase
@@ -63,7 +61,6 @@ class EmployeeStatisticsFragment(
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -81,31 +78,37 @@ class EmployeeStatisticsFragment(
         // یافتن روز اول هفته
         val firstDayOfWeek =
             currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SATURDAY)).dayOfMonth - 1
-        val endDayOfWeek = firstDayOfWeek + 6
+        var endDayOfWeek = firstDayOfWeek + 6
+        if (endDayOfWeek > 31)
+            if (day.persianMonth < 7)
+                endDayOfWeek = 31
+            else
+                endDayOfWeek = 30
 
         for (presenceEmployee in presencesEmployee) {
             allPresenceEmployee += presenceEmployee.differenceTime!!
             counterAll++
             if (day.persianMonthName == presenceEmployee.month) {
                 monthPresenceEmployee += presenceEmployee.differenceTime
-                counterMonth++
-
-                if (firstDayOfWeek <= presenceEmployee.day.toInt() && presenceEmployee.day.toInt() >= endDayOfWeek) {
+//                counterMonth++
+                if (presenceEmployee.day.toInt() in firstDayOfWeek..endDayOfWeek) {
                     weekPresenceEmployee += presenceEmployee.differenceTime
                     counterWeek++
-
                 }
             }
         }
 
         if (presencesEmployee.isNotEmpty()) {
 
-            efficiencyWeekPresenceEmployee = weekPresenceEmployee / counterWeek
-            efficiencyMonthPresenceEmployee = monthPresenceEmployee / counterMonth
-            efficiencyAllPresenceEmployee = allPresenceEmployee / counterAll
+
+            efficiencyWeekPresenceEmployee = ((weekPresenceEmployee.toDouble() / efficiencyEmployee!!.mustWeekWatch.toDouble()) * 100).toInt()
+
+            efficiencyAllPresenceEmployee = efficiencyEmployee.efficiencyTotalPresence
+            if (efficiencyEmployee.totalWeekWatch != weekPresenceEmployee)
+                efficiencyAllPresenceEmployee += efficiencyWeekPresenceEmployee
 
             val newEfficiencyEmployee = EfficiencyEmployee(
-                idEfficiency = efficiencyEmployee!!.idEfficiency,
+                idEfficiency = efficiencyEmployee.idEfficiency,
                 idEmployee = efficiencyEmployee.idEmployee,
                 mustWeekWatch = efficiencyEmployee.mustWeekWatch,
                 numberDay = efficiencyEmployee.numberDay,
@@ -134,16 +137,16 @@ class EmployeeStatisticsFragment(
         }
 
         for (taskEmployee in tasksEmployee) {
-            allVolumeTaskEmployee += taskEmployee.volumeTask
-            allEfficiencyTaskEmployee += taskEmployee.efficiencyTask!!
-            if (day.persianMonthName == taskEmployee.monthCreation.toString()) {
-                monthVolumeTaskEmployee += taskEmployee.volumeTask
-                monthEfficiencyTaskEmployee += taskEmployee.efficiencyTask
-
-                if (firstDayOfWeek <= taskEmployee.dayCreation && taskEmployee.dayCreation >= endDayOfWeek) {
-                    weekVolumeTaskEmployee += taskEmployee.volumeTask
-                    weekEfficiencyTaskEmployee += taskEmployee.efficiencyTask
-
+            if (taskEmployee.doneTask == true) {
+                allVolumeTaskEmployee += taskEmployee.volumeTask
+                allEfficiencyTaskEmployee += taskEmployee.efficiencyTask!!
+                if (day.persianMonth == taskEmployee.monthCreation) {
+                    monthVolumeTaskEmployee += taskEmployee.volumeTask
+                    monthEfficiencyTaskEmployee += taskEmployee.efficiencyTask
+                    if (firstDayOfWeek <= taskEmployee.dayCreation && taskEmployee.dayCreation <= endDayOfWeek) {
+                        weekVolumeTaskEmployee += taskEmployee.volumeTask
+                        weekEfficiencyTaskEmployee += taskEmployee.efficiencyTask
+                    }
                 }
             }
         }
@@ -181,11 +184,35 @@ class EmployeeStatisticsFragment(
             binding.progressWeekDuties.setPercent(efficiencyEmployee.efficiencyWeekDuties.toInt())
             binding.txtWeekDuties.text = efficiencyEmployee.efficiencyWeekDuties.toString() + " %"
             binding.progressMonthDuties.setPercent(efficiencyEmployee.efficiencyMonthDuties.toInt())
-            binding.txtMonthDuties.text =
-                efficiencyEmployee.efficiencyMonthDuties.toString() + " %"
+            binding.txtMonthDuties.text = efficiencyEmployee.efficiencyMonthDuties.toString() + " %"
             binding.progressTotalDuties.setPercent(efficiencyEmployee.efficiencyTotalDuties.toInt())
-            binding.txtTotalDuties.text =
-                efficiencyEmployee.efficiencyTotalDuties.toString() + " %"
+            binding.txtTotalDuties.text = efficiencyEmployee.efficiencyTotalDuties.toString() + " %"
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        presencesEmployee = presenceEmployeeDao.getEmployeeAllTime(employee.idEmployee!!)
+        tasksEmployee = taskEmployeeDao.getEmployeeAllTask(employee.idEmployee)
+        val efficiencyEmployee = efficiencyEmployeeDao.getEfficiencyEmployee(employee.idEmployee)
+
+        binding.txtWatchWeek.text = efficiencyEmployee!!.totalWeekWatch.toString() + " ساعت"
+        binding.txtWatchMonth.text = efficiencyEmployee.totalMonthWatch.toString() + " ساعت"
+        binding.txtWatchTotal.text = efficiencyEmployee.totalWatch.toString() + " ساعت"
+
+        binding.progressTotalPresence.setPercent(efficiencyEmployee.efficiencyTotalPresence.toInt())
+        binding.txtTotalPresence.text =
+            efficiencyEmployee.efficiencyTotalPresence.toString() + " %"
+
+        binding.txtTackWeek.text = efficiencyEmployee.totalWeekDuties.toString() + " تا"
+        binding.txtTackMonth.text = efficiencyEmployee.totalMonthDuties.toString() + " تا"
+        binding.txtTackTotal.text = efficiencyEmployee.totalDuties.toString() + " تا"
+
+        binding.progressWeekDuties.setPercent(efficiencyEmployee.efficiencyWeekDuties.toInt())
+        binding.txtWeekDuties.text = efficiencyEmployee.efficiencyWeekDuties.toString() + " %"
+        binding.progressMonthDuties.setPercent(efficiencyEmployee.efficiencyMonthDuties.toInt())
+        binding.txtMonthDuties.text = efficiencyEmployee.efficiencyMonthDuties.toString() + " %"
+        binding.progressTotalDuties.setPercent(efficiencyEmployee.efficiencyTotalDuties.toInt())
+        binding.txtTotalDuties.text = efficiencyEmployee.efficiencyTotalDuties.toString() + " %"
     }
 }

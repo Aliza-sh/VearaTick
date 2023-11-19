@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.vearad.vearatick.DataBase.EfficiencyDao
 import com.vearad.vearatick.DataBase.EfficiencyEmployee
 import com.vearad.vearatick.DataBase.Employee
@@ -83,12 +85,9 @@ class EmployeeAdapter(
                 val efficiencyEmployee =
                     efficiencyEmployeeDao.getEfficiencyEmployee(data[position].idEmployee!!)
 
-                val progress =
-                    efficiencyEmployeeDao.getEfficiencyEmployee(data[position].idEmployee!!)
-                val efficiencyTotalPresence =
-                    progress!!.efficiencyWeekPresence!! + progress.efficiencyTotalPresence!!
-                val efficiencyTotalDuties =
-                    progress.efficiencyWeekDuties!! + progress.efficiencyMonthDuties!! + progress.efficiencyTotalDuties!!
+                val progress = efficiencyEmployeeDao.getEfficiencyEmployee(data[position].idEmployee!!)
+                val efficiencyTotalPresence = progress!!.efficiencyTotalPresence
+                val efficiencyTotalDuties = progress.efficiencyTotalDuties
                 val efficiencyTotal =
                     (efficiencyTotalPresence + efficiencyTotalDuties) / 2
                 binding.progressCircular.progress = efficiencyTotal.toFloat()
@@ -132,9 +131,15 @@ class EmployeeAdapter(
 
             binding.txtnameprn.text = data[position].name + " " + data[position].family
             binding.txttkhprn.text = data[position].specialty
-            if (data[position].gender == "زن") {
-                binding.imgprn.setImageResource(R.drawable.img_matter);
-            }
+            if (data[position].imagePath != "") {
+                Glide.with(itemView)
+                    .load(data[position].imagePath)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(binding.imgprn)
+            } else
+                if (data[position].gender == "زن") {
+                    binding.imgprn.setImageResource(R.drawable.img_matter)
+                }
             itemView.setOnClickListener {
                 employeeEvents.onEmployeeClicked(data[position], position)
             }

@@ -13,6 +13,8 @@ import android.widget.PopupMenu
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import com.vearad.vearatick.DataBase.EfficiencyDao
@@ -207,17 +209,19 @@ class EmployeeInformationFragment(
         }
 
         val progress = efficiencyEmployeeDao.getEfficiencyEmployee(employee.idEmployee!!)
-        val efficiencyTotalPresence =
-            progress!!.efficiencyWeekPresence!! + progress.efficiencyTotalPresence!!
-        val efficiencyTotalDuties =
-            progress.efficiencyWeekDuties!! + progress.efficiencyMonthDuties!! + progress.efficiencyTotalDuties!!
-        val efficiencyTotal =
-            (efficiencyTotalPresence + efficiencyTotalDuties) / 2
+        val efficiencyTotalPresence = progress!!.efficiencyTotalPresence
+        val efficiencyTotalDuties = progress.efficiencyTotalDuties
+        val efficiencyTotal = (efficiencyTotalPresence + efficiencyTotalDuties) / 2
         binding.prgTotalEmp.progress = efficiencyTotal.toFloat()
-
-        if (employee.gender == "زن") {
-            binding.btnInfoPrn.setImageResource(R.drawable.img_matter)
-        }
+        if (employee.imagePath != "") {
+            Glide.with(this)
+                .load(employee.imagePath)
+                .apply(RequestOptions.circleCropTransform())
+                .into(binding.btnInfoPrn)
+        } else
+            if (employee.gender == "زن") {
+                binding.btnInfoPrn.setImageResource(R.drawable.img_matter)
+            }
     }
 
 }

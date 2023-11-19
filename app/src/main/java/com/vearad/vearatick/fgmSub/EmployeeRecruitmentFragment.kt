@@ -11,7 +11,6 @@ import android.widget.AutoCompleteTextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -23,8 +22,6 @@ import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
 import com.vearad.vearatick.databinding.FragmentEmployeeRecruitmentBinding
 import com.vearad.vearatick.employeeAdapter
 import com.vearad.vearatick.employeeDao
-import com.yalantis.ucrop.UCrop
-import java.io.File
 
 private val PICK_IMAGE_REQUEST = 1
 
@@ -35,7 +32,7 @@ class EmployeeRecruitmentFragment(
 
     lateinit var binding: FragmentEmployeeRecruitmentBinding
     var imageUri: Uri? = null
-    lateinit var imageBytes: ByteArray
+    var imagePath: Uri? = null
     lateinit var newEmployee: Employee
 
     override fun onCreateView(
@@ -116,40 +113,13 @@ class EmployeeRecruitmentFragment(
 
         if (requestCode == PICK_IMAGE_REQUEST && resultCode == AppCompatActivity.RESULT_OK && data != null) {
             val selectedImageUri: Uri = data.data!!
-            val options = UCrop.Options()
-            options.setCircleDimmedLayer(true)
-            options.setShowCropGrid(false)
-            options.setCompressionQuality(100)
-            options.setToolbarTitle("Crop Image")
-            options.setStatusBarColor(
-                ContextCompat.getColor(
-                    requireActivity(),
-                    R.color.black_light
-                )
-            )
-            options.setToolbarColor(ContextCompat.getColor(requireActivity(), R.color.black_light))
-            options.setActiveControlsWidgetColor(
-                ContextCompat.getColor(
-                    requireActivity(),
-                    R.color.firoze
-                )
-            )
-            options.setToolbarWidgetColor(ContextCompat.getColor(requireActivity(), R.color.white))
-            options.setDimmedLayerColor(ContextCompat.getColor(requireActivity(), R.color.blacke))
-            options.setToolbarCropDrawable(R.drawable.ic_crop)
-            options.setFreeStyleCropEnabled(true)
-            val destinationUri = Uri.fromFile(File(requireActivity().cacheDir, "avatar"))
-            UCrop.of(selectedImageUri, destinationUri)
-                .withAspectRatio(1f, 1f)
-                .withOptions(options)
-                .start(requireActivity(), 2)
+            imagePath = selectedImageUri
+            imageUri = selectedImageUri
+            Glide.with(this)
+                .load(selectedImageUri)
+                .apply(RequestOptions.circleCropTransform())
+                .into(binding.imgprn2)
         }
-        imageUri = UCrop.getOutput(data!!)
-        Toast.makeText(context, "$imageUri", Toast.LENGTH_SHORT).show()
-        Glide.with(this)
-            .load(UCrop.getOutput(data))
-            .apply(RequestOptions.circleCropTransform())
-            .into(binding.imgprn2)
     }
 
     private fun addNewEmployee() {
@@ -190,8 +160,6 @@ class EmployeeRecruitmentFragment(
             )
 
             if (imageUri != null) {
-                val inputStream = context?.contentResolver?.openInputStream(imageUri!!)
-                imageBytes = inputStream?.readBytes()!!
 
                 newEmployee = Employee(
                     name = txtname,
@@ -203,7 +171,7 @@ class EmployeeRecruitmentFragment(
                     address = txtAddress,
                     specialty = txtSpecialty,
                     skill = txtMaharat,
-                    imgEmployee = imageBytes,
+                    imagePath = imagePath.toString(),
                     rank = txtRank
                 )
             }

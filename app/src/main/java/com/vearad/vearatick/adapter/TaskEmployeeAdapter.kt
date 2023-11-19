@@ -4,6 +4,7 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Build
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
@@ -53,6 +54,8 @@ class TaskEmployeeAdapter(
                 binding.txtProjectTaskEmployee.setTextColor(android.graphics.Color.parseColor("#215DAD"))
                 binding.txtProjectTaskEmployee.background = shape
 
+            }else{
+                binding.txtProjectTaskEmployee.visibility = GONE
             }
 
             binding.txtDescription.text = data[position].descriptionTask
