@@ -11,7 +11,6 @@ class CompanyResumeFragment : Fragment() {
 
 
     lateinit var binding: FragmentCompanyResumeBinding
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -20,10 +19,8 @@ class CompanyResumeFragment : Fragment() {
         binding = FragmentCompanyResumeBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
     }
-
 }

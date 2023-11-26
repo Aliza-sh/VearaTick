@@ -3,6 +3,7 @@ package com.vearad.vearatick
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.EfficiencyDao
 import com.vearad.vearatick.DataBase.Employee
@@ -34,12 +35,14 @@ class ShareholdersInvestmentActivity : AppCompatActivity(), ShareholdersInvestme
         employeeInvestmentDao = AppDatabase.getDataBase(applicationContext).employeeInvestmentDao
         employeeHarvestDao = AppDatabase.getDataBase(applicationContext).employeeHarvestDao
         val shareholdersData = employeeDao.rankEmployee("سهام دار")
-        binding.rcvShareholder.adapter = ShareholdersInvestmentAdapter(
+        val  shareholdersInvestmentAdapter = ShareholdersInvestmentAdapter(
             ArrayList(shareholdersData),
             employeeHarvestDao,
             employeeInvestmentDao,
             this
         )
+        binding.rcvShareholder.adapter = shareholdersInvestmentAdapter
+        binding.rcvShareholder.layoutManager = LinearLayoutManager(applicationContext)
     }
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {

@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.vearad.vearatick.DataBase.Employee
 import com.vearad.vearatick.DataBase.EmployeeHarvestDao
 import com.vearad.vearatick.DataBase.EmployeeInvestmentDao
@@ -26,7 +28,6 @@ class ShareholdersInvestmentAdapter(
     inner class PaymentShareholdersViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindData(position: Int, clickListener: ShareholdersInvestmentEvents) {
-
             binding.txtRank.text = "سهام دار"
             val shape = GradientDrawable()
             shape.shape = GradientDrawable.RECTANGLE
@@ -47,9 +48,16 @@ class ShareholdersInvestmentAdapter(
             binding.txtNameEmp.text =
                 dataEmployee[position].name + " " + dataEmployee[position].family
             binding.txtSpecialtyEmp.text = dataEmployee[position].specialty
-            if (dataEmployee[position].gender == "زن") {
-                binding.btnInfoPrn.setImageResource(R.drawable.img_matter);
-            }
+
+            if (dataEmployee[position].imagePath != "") {
+                Glide.with(itemView)
+                    .load(dataEmployee[position].imagePath)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(binding.imgDone)
+            } else
+                if (dataEmployee[position].gender == "زن") {
+                    binding.imgDone.setImageResource(R.drawable.img_matter)
+                }
 
             val sumEmployeeInvestment =
                 employeeInvestmentDao.getEmployeeInvestmentSum(dataEmployee[position].idEmployee!!)

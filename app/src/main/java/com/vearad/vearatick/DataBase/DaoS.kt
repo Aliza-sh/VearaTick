@@ -82,7 +82,8 @@ interface TaskEmployeeDao : BaceDao<TaskEmployee> {
     fun getAllTaskInInDay(idEmployee: Int, year: Int, month: Int, day: Int): List<TaskEmployee>
     @Query("SELECT * FROM taskEmployee_table WHERE idTask = :idTaskEmployee")
     fun getOnClickTaskEmployee(idTaskEmployee: Int,): TaskEmployee?
-    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee")
+    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee" +
+            "")
     fun getEmployeeAllTask(idEmployee: Int): List<TaskEmployee>
     @Query("SELECT * FROM taskEmployee_table WHERE idTaskProject = :idTaskProject")
     fun getEmployeeTaskProject(idTaskProject: Int,): TaskEmployee?
