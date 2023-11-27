@@ -18,7 +18,7 @@ import com.vearad.vearatick.adapter.ProjectNearAdapter
 import com.vearad.vearatick.adapter.TaskEmployeeAdapter
 import com.vearad.vearatick.databinding.ActivityMainBinding
 import com.vearad.vearatick.fgmMain.CompanyFragment
-import com.vearad.vearatick.fgmMain.CompanyResumeFragment
+import com.vearad.vearatick.fgmMain.CompanyInformationFragment
 
 lateinit var employeeDao: EmployeeDao
 lateinit var dayDao: DayDao
@@ -61,7 +61,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.menu_settings -> {
-                    replaceFragment(CompanyResumeFragment())
+                    replaceFragment(CompanyInformationFragment())
 
                     val anim = AlphaAnimation(
                         1f, 0f

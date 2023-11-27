@@ -1,26 +1,27 @@
-package com.vearad.vearatick.fgmMain
+package com.vearad.vearatick.fgmSub
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.vearad.vearatick.databinding.FragmentCompanyResumeBinding
+import com.vearad.vearatick.databinding.FragmentCompanySkillBinding
 
-class CompanyResumeFragment : Fragment() {
+class CompanySkillFragment : Fragment() {
 
-
-    lateinit var binding: FragmentCompanyResumeBinding
+    lateinit var binding: FragmentCompanySkillBinding
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentCompanyResumeBinding.inflate(layoutInflater, container, false)
+        binding = FragmentCompanySkillBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
 
     }
 }
