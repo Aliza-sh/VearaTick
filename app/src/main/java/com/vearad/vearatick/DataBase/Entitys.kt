@@ -267,6 +267,16 @@ data class FinancialReport(
     val profit: Long? = 0,
 
     )
+@Entity(tableName = "companySkill_table")
+data class CompanySkill(
+
+    @PrimaryKey(autoGenerate = true)
+    val idCompanySkill: Int? = null,
+
+    val nameCompanySkill: String,
+    val volumeSkill: Int,
+
+    )
 
 //@Entity(tableName = "employeeSalary_table")
 //data class EmployeeSalary(

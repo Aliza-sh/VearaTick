@@ -243,6 +243,17 @@ interface FinancialReportDao : BaceDao<FinancialReport> {
     fun getDistinctData(): List<Int>
 
 }
+@Dao
+interface CompanySkillDao : BaceDao<CompanySkill> {
+
+    @Query("SELECT * FROM companySkill_table")
+    fun getAllListCompanySkillDao(): List<CompanySkill>
+    @Query("SELECT * FROM companySkill_table")
+    fun getAllCompanySkillDao(): CompanySkill?
+    @Query("SELECT * FROM companySkill_table WHERE idCompanySkill = :idCompanySkill")
+    fun getOnClickEmployeeHarvest(idCompanySkill: Int): CompanySkill?
+
+}
 //@Dao
 //interface EmployeePaymentDao : BaceDao<EmployeePayment> {
 //    @Query("SELECT * FROM employeePayment_table")

@@ -3,11 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="?attr/colorOnPrimary"
+    android:layoutDirection="ltr"
     android:layout_height="match_parent"
     tools:context=".fgmSub.CompanyResumeFragment">
 
     <FrameLayout
-        android:id="@+id/btn_company_skill"
+        android:id="@+id/btn_add_company_skill"
         android:layout_width="60dp"
         android:layout_height="50dp"
         android:layout_marginStart="28dp"
@@ -15,7 +17,7 @@
         android:backgroundTint="?attr/colorPrimary"
         android:elevation="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/background_icon_company">
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:id="@+id/txt_company_skill"
@@ -38,5 +40,15 @@
             app:srcCompat="@drawable/ic_add"
             app:tint="@color/white" />
     </FrameLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcv_skill"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:listitem="@layout/item_skill"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
