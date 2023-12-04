@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_goto_pro"
+        android:title="رفتن به پروژه" />
+
+    <item
+        android:id="@+id/menu_edit_link"
+        android:title="ویرایش لینک" />
+
+</menu>

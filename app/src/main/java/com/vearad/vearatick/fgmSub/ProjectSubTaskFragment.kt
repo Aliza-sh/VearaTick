@@ -83,7 +83,7 @@ class ProjectSubTaskFragment(
                         subTaskProjectDao,
                         projectDao,
                         position,
-                        bindingActivityProAndEmp
+                        bindingActivityProAndEmp,false
                     )
                 ).commit()
         }
@@ -189,7 +189,7 @@ class ProjectSubTaskFragment(
                                 subTaskProjectDao,
                                 projectDao,
                                 position,
-                                bindingActivityProAndEmp
+                                bindingActivityProAndEmp,false
                             )
                         )
                         .commit()
@@ -341,7 +341,8 @@ class ProjectSubTaskFragment(
                 budgetProject = project.budgetProject,
                 totalVolumeProject = project1.totalVolumeProject,
                 doneVolumeProject = project1.doneVolumeProject,
-                settled = project.settled
+                settled = project.settled,
+                urlProject = project1.urlProject
             )
             projectDao.update(newProject)
 
@@ -428,7 +429,8 @@ class ProjectSubTaskFragment(
                 budgetProject = project.budgetProject,
                 totalVolumeProject = project1.totalVolumeProject,
                 doneVolumeProject = project1.doneVolumeProject,
-                settled = project.settled
+                settled = project.settled,
+                urlProject = project1.urlProject
             )
             projectDao.update(newProject)
 
@@ -620,7 +622,8 @@ class ProjectSubTaskFragment(
             budgetProject = project.budgetProject,
             doneVolumeProject = subDoneVolumeProject,
             totalVolumeProject = subTotalVolumeProject,
-            settled = project.settled
+            settled = project.settled,
+            urlProject = project1.urlProject
         )
         projectDao.update(newProject)
     }

@@ -11,7 +11,6 @@ import com.vearad.vearatick.DataBase.ProjectDao
 import com.vearad.vearatick.MainActivity
 import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.FragmentNumberProjectBinding
-import com.vearad.vearatick.fgmMain.CompanyFragment
 
 class ProjectNumberFragment(val projectDao: ProjectDao) : Fragment() {
 
@@ -30,11 +29,9 @@ class ProjectNumberFragment(val projectDao: ProjectDao) : Fragment() {
         onBackPressed()
 
         binding.btnBck.setOnClickListener {
-            parentFragmentManager.beginTransaction().detach(this@ProjectNumberFragment)
-                .replace(
-                    R.id.frame_layout_main,
-                    CompanyFragment()
-                ).commit()
+            val intent = Intent(requireContext(), MainActivity::class.java)
+            startActivity(intent)
+            activity?.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
 
         val numAndroid = projectDao.getNumberProject("اندروید",true).size

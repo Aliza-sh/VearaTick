@@ -7,12 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints
-import com.xdev.arch.persiancalendar.datepicker.DateValidatorPointForward
-import com.xdev.arch.persiancalendar.datepicker.MaterialDatePicker
-import com.xdev.arch.persiancalendar.datepicker.MaterialPickerOnPositiveButtonClickListener
-import com.xdev.arch.persiancalendar.datepicker.Month
-import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import com.vearad.vearatick.DataBase.Project
 import com.vearad.vearatick.DataBase.ProjectDao
 import com.vearad.vearatick.DataBase.SubTaskProject
@@ -23,6 +17,12 @@ import com.vearad.vearatick.adapter.SubTaskProjectAdapter
 import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
 import com.vearad.vearatick.databinding.BottomsheetfragmentSubtaskProjectBinding
 import com.vearad.vearatick.fgmSub.ProjectSubTaskFragment
+import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints
+import com.xdev.arch.persiancalendar.datepicker.DateValidatorPointForward
+import com.xdev.arch.persiancalendar.datepicker.MaterialDatePicker
+import com.xdev.arch.persiancalendar.datepicker.MaterialPickerOnPositiveButtonClickListener
+import com.xdev.arch.persiancalendar.datepicker.Month
+import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import org.joda.time.DateTime
 import org.joda.time.Days
 
@@ -178,7 +178,8 @@ class ProjectAddNewSubTaskBottomsheetFragment(
                 budgetProject = project.budgetProject,
                 totalVolumeProject = sumVolumeProject.toInt(),
                 doneVolumeProject = project1.doneVolumeProject,
-                settled = project1.settled
+                settled = project1.settled,
+                urlProject = project1.urlProject
             )
             projectDao.update(newProject)
 

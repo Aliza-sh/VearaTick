@@ -17,12 +17,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.Fragment
-import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints
-import com.xdev.arch.persiancalendar.datepicker.DateValidatorPointForward
-import com.xdev.arch.persiancalendar.datepicker.MaterialDatePicker
-import com.xdev.arch.persiancalendar.datepicker.MaterialPickerOnPositiveButtonClickListener
-import com.xdev.arch.persiancalendar.datepicker.Month
-import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import com.vearad.vearatick.DataBase.Project
 import com.vearad.vearatick.DataBase.ProjectDao
 import com.vearad.vearatick.DataBase.SubTaskProjectDao
@@ -32,6 +26,12 @@ import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
 import com.vearad.vearatick.databinding.FragmentDialogDeadlineBinding
 import com.vearad.vearatick.databinding.FragmentProjectUpdateInfoBinding
 import com.vearad.vearatick.projectAdapter
+import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints
+import com.xdev.arch.persiancalendar.datepicker.DateValidatorPointForward
+import com.xdev.arch.persiancalendar.datepicker.MaterialDatePicker
+import com.xdev.arch.persiancalendar.datepicker.MaterialPickerOnPositiveButtonClickListener
+import com.xdev.arch.persiancalendar.datepicker.Month
+import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import java.text.DecimalFormat
 
 class ProjectUpdateInfoFragment(
@@ -175,7 +175,7 @@ class ProjectUpdateInfoFragment(
                                 subTaskProjectDao,
                                 projectDao,
                                 position,
-                                bindingActivityProAndEmp
+                                bindingActivityProAndEmp,false
                             )
                         ).commit()
                 }
@@ -281,7 +281,7 @@ class ProjectUpdateInfoFragment(
                     subTaskProjectDao,
                     projectDao,
                     position,
-                    bindingActivityProAndEmp
+                    bindingActivityProAndEmp,false
                 )
             ).commit()
     }
@@ -357,7 +357,8 @@ class ProjectUpdateInfoFragment(
                 budgetProject = txtBudget,
                 totalVolumeProject = project.totalVolumeProject,
                 doneVolumeProject = project.doneVolumeProject,
-                settled = project.settled
+                settled = project.settled,
+                urlProject = project.urlProject
             )
 
             projectAdapter.updateProject(newProject, position)

@@ -42,6 +42,7 @@ import com.vearad.vearatick.databinding.FragmentDialogCheckoutProjectBinding
 import com.vearad.vearatick.databinding.FragmentDialogDeleteSubtaskProjectBinding
 import com.vearad.vearatick.databinding.FragmentProjectInformationBinding
 import com.vearad.vearatick.databinding.ItemSubTaskBinding
+import com.vearad.vearatick.fgmMain.CompanyInformationFragment
 import org.joda.time.DateTime
 import org.joda.time.Days
 import org.threeten.bp.LocalDate
@@ -51,8 +52,10 @@ class ProjectInformationFragment(
     val subTaskProjectDao: SubTaskProjectDao,
     val projectDao: ProjectDao,
     val position: Int,
-    val bindingActivityProAndEmp: ActivityProAndEmpBinding
-) : Fragment(), SubTaskProjectAdapter.SubTaskEvent {
+    val bindingActivityProAndEmp: ActivityProAndEmpBinding,
+    val goTo: Boolean,
+
+    ) : Fragment(), SubTaskProjectAdapter.SubTaskEvent {
 
     lateinit var binding: FragmentProjectInformationBinding
     lateinit var bindingDialogDeleteSubtaskProject: FragmentDialogDeleteSubtaskProjectBinding
@@ -81,7 +84,10 @@ class ProjectInformationFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         AndroidThreeTen.init(view.context)
-        onBackPressed()
+        if (goTo)
+            onBackCompanyResumePressed()
+        else
+            onBackPressed()
         taskEmployeeDao = AppDatabase.getDataBase(view.context).taskDao
         project = projectDao.getProject(project.idProject!!)!!
         efficiencyEmployeeDao =
@@ -90,10 +96,17 @@ class ProjectInformationFragment(
 
         setData()
 
-        binding.btnBck.setOnClickListener {
-            parentFragmentManager.beginTransaction().detach(this@ProjectInformationFragment)
-                .replace(R.id.frame_layout_sub, ProjectFragment(bindingActivityProAndEmp)).commit()
-        }
+        if (goTo)
+            binding.btnBck.setOnClickListener {
+                parentFragmentManager.beginTransaction().detach(this@ProjectInformationFragment)
+                    .replace(R.id.frame_layout_main, CompanyInformationFragment()).commit()
+            }
+        else
+            binding.btnBck.setOnClickListener {
+                parentFragmentManager.beginTransaction().detach(this@ProjectInformationFragment)
+                    .replace(R.id.frame_layout_sub, ProjectFragment(bindingActivityProAndEmp))
+                    .commit()
+            }
 
         binding.btnGoToSettlement.setOnClickListener {
             showCheckoutDialog()
@@ -136,6 +149,18 @@ class ProjectInformationFragment(
         val popupMenu = PopupMenu(this.context, binding.btnMenuProject)
         onMenuClicked(popupMenu)
 
+    }
+
+    private fun onBackCompanyResumePressed() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    parentFragmentManager.beginTransaction().detach(this@ProjectInformationFragment)
+                        .replace(R.id.frame_layout_main, CompanyInformationFragment())
+                        .commit()
+                }
+            })
     }
 
     @SuppressLint("SetTextI18n")
@@ -442,7 +467,8 @@ class ProjectInformationFragment(
                 budgetProject = project.budgetProject,
                 doneVolumeProject = project.doneVolumeProject,
                 totalVolumeProject = project.totalVolumeProject,
-                settled = project.settled
+                settled = project.settled,
+                urlProject = project.urlProject
             )
             projectDao.update(newProject)
 
@@ -468,7 +494,8 @@ class ProjectInformationFragment(
                 budgetProject = project.budgetProject,
                 doneVolumeProject = project.doneVolumeProject,
                 totalVolumeProject = project.totalVolumeProject,
-                settled = project.settled
+                settled = project.settled,
+                urlProject = project.urlProject
             )
             projectDao.update(newProject)
             Toast.makeText(context, " پروژه ${project.nameProject} تکمیل شد. ", Toast.LENGTH_SHORT)
@@ -599,7 +626,8 @@ class ProjectInformationFragment(
             budgetProject = project.budgetProject,
             doneVolumeProject = project.doneVolumeProject,
             totalVolumeProject = project.totalVolumeProject,
-            settled = true
+            settled = true,
+            urlProject = project.urlProject
         )
         projectDao.update(newProject)
 
@@ -696,7 +724,8 @@ class ProjectInformationFragment(
                 budgetProject = project.budgetProject,
                 totalVolumeProject = project1.totalVolumeProject,
                 doneVolumeProject = project1.doneVolumeProject,
-                settled = project.settled
+                settled = project.settled,
+                urlProject = project.urlProject
             )
             projectDao.update(newProject)
 
@@ -782,7 +811,8 @@ class ProjectInformationFragment(
                 budgetProject = project.budgetProject,
                 totalVolumeProject = project1.totalVolumeProject,
                 doneVolumeProject = project1.doneVolumeProject,
-                settled = project.settled
+                settled = project.settled,
+                urlProject = project1.urlProject
             )
             projectDao.update(newProject)
 
@@ -966,7 +996,8 @@ class ProjectInformationFragment(
             budgetProject = project.budgetProject,
             doneVolumeProject = subDoneVolumeProject,
             totalVolumeProject = subTotalVolumeProject,
-            settled = project.settled
+            settled = project.settled,
+            urlProject = project1.urlProject
         )
         projectDao.update(newProject)
     }

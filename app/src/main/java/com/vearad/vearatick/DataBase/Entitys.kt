@@ -118,6 +118,7 @@ data class Project(
     val deadlineTask: Int? = 0,
     val typeProject: String,
     val budgetProject: String? = "0",
+    val urlProject: String? = "",
 
     val progressProject: Int? = 0,
     val doneProject: Boolean? = false,
@@ -127,6 +128,7 @@ data class Project(
     val numberDoneSubTaskProject: Int? = 0,
     val doneVolumeProject: Int? = 0,
     val totalVolumeProject: Int? = 0,
+
     )
 
 @Entity(tableName = "teamProject_table")
