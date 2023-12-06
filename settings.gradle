@@ -14,5 +14,5 @@ dependencyResolutionManagement {
         maven { url "https://jcenter.bintray.com" }
     }
 }
-rootProject.name = "Sherkat Manage"
+rootProject.name = "VearaTick"
 include ':app'

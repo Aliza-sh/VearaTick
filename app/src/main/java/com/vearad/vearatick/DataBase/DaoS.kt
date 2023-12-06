@@ -254,6 +254,12 @@ interface CompanySkillDao : BaceDao<CompanySkill> {
     fun getOnClickEmployeeHarvest(idCompanySkill: Int): CompanySkill?
 
 }
+@Dao
+interface CompanyInfoDao : BaceDao<CompanyInfo> {
+    @Query("SELECT * FROM companyInfo_table")
+    fun getCompanyInfoDao(): CompanyInfo?
+
+}
 //@Dao
 //interface EmployeePaymentDao : BaceDao<EmployeePayment> {
 //    @Query("SELECT * FROM employeePayment_table")

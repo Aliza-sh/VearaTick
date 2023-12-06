@@ -8,6 +8,11 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
+import com.vearad.vearatick.BottomSheetCallback
+import com.vearad.vearatick.DataBase.AppDatabase
+import com.vearad.vearatick.DataBase.CompanyInfo
+import com.vearad.vearatick.DataBase.CompanyInfoDao
+import com.vearad.vearatick.Dialog.CompanyInfoBottomsheetFragment
 import com.vearad.vearatick.MainActivity
 import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.FragmentCompanyInformationBinding
@@ -15,10 +20,12 @@ import com.vearad.vearatick.fgmSub.CompanyEmployeeResumeFragment
 import com.vearad.vearatick.fgmSub.CompanyResumeFragment
 import com.vearad.vearatick.fgmSub.CompanySkillFragment
 
-class CompanyInformationFragment : Fragment() {
+class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
 
     lateinit var binding: FragmentCompanyInformationBinding
+    lateinit var companyInfoDao: CompanyInfoDao
+    var companyInfo: CompanyInfo? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,9 +34,31 @@ class CompanyInformationFragment : Fragment() {
         binding = FragmentCompanyInformationBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         firstRun(view)
+
+        companyInfoDao = AppDatabase.getDataBase(view.context).companyInfoDao
+        companyInfo = companyInfoDao.getCompanyInfoDao()
+
+        if (companyInfo == null) {
+            val bottomsheet = CompanyInfoBottomsheetFragment()
+            bottomsheet.setStyle(
+                R.style.BottomSheetStyle,
+                R.style.BottomSheetDialogTheme
+            )
+            bottomsheet.setCallback(this)
+            bottomsheet.show(parentFragmentManager, null)
+
+        } else {
+            binding.nameCompany.text = companyInfo!!.nameCompany
+            binding.locationCompany.text = companyInfo!!.addressCompany
+            binding.numberCompany.text = companyInfo!!.phoneCompany
+            binding.idGithaub.text = companyInfo!!.githubCompany
+            binding.idLinkedin.text = companyInfo!!.linkedinCompany
+        }
+
 
         binding.btnCompanySkill.setOnClickListener {
             btnCompanySkill(view)
@@ -37,9 +66,20 @@ class CompanyInformationFragment : Fragment() {
         binding.btnCompanyResume.setOnClickListener {
             btnCompanyResume(view)
         }
-        binding.btnEmployeeResume.setOnClickListener {
-            btnEmployeeResume(view)
+
+        binding.btnMenu.setOnClickListener {
+            val bottomsheet = CompanyInfoBottomsheetFragment()
+            bottomsheet.setStyle(
+                R.style.BottomSheetStyle,
+                R.style.BottomSheetDialogTheme
+            )
+            bottomsheet.setCallback(this)
+            bottomsheet.show(parentFragmentManager, null)
         }
+
+//        binding.btnEmployeeResume.setOnClickListener {
+//            btnEmployeeResume(view)
+//        }
 
 
     }
@@ -209,6 +249,14 @@ class CompanyInformationFragment : Fragment() {
         binding.icCompanyResume.layoutParams = layoutParamsCompanyResume
 
         replaceFragment(CompanyEmployeeResumeFragment())
+    }
+
+    override fun onConfirmButtonClicked() {
+        binding.nameCompany.text = companyInfo!!.nameCompany
+        binding.locationCompany.text = companyInfo!!.addressCompany
+        binding.numberCompany.text = companyInfo!!.phoneCompany
+        binding.idGithaub.text = companyInfo!!.githubCompany
+        binding.idLinkedin.text = companyInfo!!.linkedinCompany
     }
 
 }

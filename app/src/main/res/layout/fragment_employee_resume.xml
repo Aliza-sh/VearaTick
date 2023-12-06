@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorOnPrimary"
+    android:layoutDirection="ltr"
+    tools:context=".fgmSub.EmployeeResumeFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout3"
+        android:layout_width="match_parent"
+        android:elevation="10dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_background_bottom_left"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btn_bck"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/shape_circle"
+            android:rotationY="180"
+            android:src="@drawable/ic_back"
+            app:backgroundTint="?attr/colorOnPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
+
+        <ImageView
+            android:id="@+id/imgprn"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/shape_circle"
+            android:backgroundTint="?attr/colorOnPrimary"
+            android:padding="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/btn_bck"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/img_male" />
+
+        <ImageButton
+            android:id="@+id/btn_menu_employee"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="start"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/shape_circle"
+            android:backgroundTint="?attr/colorOnPrimary"
+            android:padding="8dp"
+            android:src="@drawable/ic_menu"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@+id/imgprn"
+            app:layout_constraintEnd_toStartOf="@+id/imgprn"
+            app:layout_constraintTop_toTopOf="@+id/imgprn">
+
+            <TextView
+                android:id="@+id/txt_name_emp"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="اسم کارمند"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_skill_emp"
+                android:layout_width="200dp"
+                android:layout_height="wrap_content"
+                android:text="تخصص کارمند"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/btn_employee_skill"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:background="@drawable/shape_background_bottom_radius"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        android:elevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_employee_resume"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+
+        <TextView
+            android:id="@+id/txt_employee_skill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="5dp"
+            android:text="مهارت ها"
+            android:textColor="@color/firoze"
+            android:textSize="11sp" />
+
+        <ImageView
+            android:id="@+id/ic_employee_skill"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/black_dot"
+            android:backgroundTint="@color/firoze"
+            android:padding="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/img_skill"
+            app:tint="@color/white" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/btn_employee_resume"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:background="@drawable/shape_background_bottom_radius"
+        android:elevation="5dp"
+        app:layout_constraintEnd_toStartOf="@+id/btn_employee_skill"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_employee_character"
+        app:layout_constraintTop_toTopOf="@+id/btn_employee_skill">
+
+        <ImageView
+            android:id="@+id/ic_employee_resume"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/black_dot"
+            android:backgroundTint="?attr/colorOnPrimary"
+            android:padding="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/img_resume_company"
+            app:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/txt_employee_resume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="5dp"
+            android:text="رزومه  کارمند"
+            android:textColor="@color/white"
+            android:textSize="9sp" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/btn_employee_character"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="150dp"
+        android:background="@drawable/shape_background_bottom_radius"
+        android:elevation="5dp"
+        app:layout_constraintEnd_toStartOf="@+id/btn_employee_resume"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_employee_resume">
+
+        <ImageView
+            android:id="@+id/ic_employee_character"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/black_dot"
+            android:backgroundTint="?attr/colorOnPrimary"
+            android:padding="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/img_resume_employee"
+            app:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/txt_employee_character"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="5dp"
+            android:text="شخصیت شناسی"
+            android:textColor="@color/white"
+            android:textSize="8sp" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_emp_info"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout3" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

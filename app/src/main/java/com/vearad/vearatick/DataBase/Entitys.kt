@@ -279,6 +279,20 @@ data class CompanySkill(
     val volumeSkill: Int,
 
     )
+@Entity(tableName = "companyInfo_table")
+data class CompanyInfo(
+
+    @PrimaryKey(autoGenerate = true)
+    val idCompanyInfo: Int? = null,
+
+    val nameCompany: String,
+    val addressCompany: String,
+    val phoneCompany: String,
+    val githubCompany: String,
+    val linkedinCompany: String,
+    val imagePath: String? = ""
+
+    )
 
 //@Entity(tableName = "employeeSalary_table")
 //data class EmployeeSalary(
