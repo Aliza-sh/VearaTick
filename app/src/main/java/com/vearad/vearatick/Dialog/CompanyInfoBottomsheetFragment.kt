@@ -21,6 +21,7 @@ import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.BottomsheetfragmentCompanyInfoBinding
 
 class CompanyInfoBottomsheetFragment : BottomSheetDialogFragment() {
+    private var isDismissable: Boolean = true
 
     lateinit var binding: BottomsheetfragmentCompanyInfoBinding
     lateinit var companyInfoDao: CompanyInfoDao
@@ -58,7 +59,15 @@ class CompanyInfoBottomsheetFragment : BottomSheetDialogFragment() {
 
         }
     }
-
+    override fun onStart() {
+        super.onStart()
+        dialog?.setCancelable(isDismissable)
+        dialog?.setCanceledOnTouchOutside(isDismissable)
+        //dialog?.window?.setDimAmount(if (isDismissable) 0.6f else 0f)
+    }
+    fun setDismissable(dismissable: Boolean) {
+        isDismissable = dismissable
+    }
     private fun setdata() {
         binding.edtNameCom.setText(companyInfo!!.nameCompany)
         binding.edtAddressCom.setText(companyInfo!!.addressCompany)

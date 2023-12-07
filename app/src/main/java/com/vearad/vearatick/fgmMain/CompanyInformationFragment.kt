@@ -50,6 +50,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
             )
             bottomsheet.setCallback(this)
             bottomsheet.show(parentFragmentManager, null)
+            bottomsheet.setDismissable(false)
 
         } else {
             binding.nameCompany.text = companyInfo!!.nameCompany
@@ -75,6 +76,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
             )
             bottomsheet.setCallback(this)
             bottomsheet.show(parentFragmentManager, null)
+            bottomsheet.setDismissable(true)
         }
 
 //        binding.btnEmployeeResume.setOnClickListener {
@@ -252,6 +254,10 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
     }
 
     override fun onConfirmButtonClicked() {
+
+        companyInfoDao = AppDatabase.getDataBase(binding.root.context).companyInfoDao
+        companyInfo = companyInfoDao.getCompanyInfoDao()
+
         binding.nameCompany.text = companyInfo!!.nameCompany
         binding.locationCompany.text = companyInfo!!.addressCompany
         binding.numberCompany.text = companyInfo!!.phoneCompany

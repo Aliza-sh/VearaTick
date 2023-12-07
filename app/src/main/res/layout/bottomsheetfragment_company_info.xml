@@ -173,7 +173,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="text"
-                        android:maxLength="3"
                         android:singleLine="true"
                         android:textColor="?attr/colorOnSecondary"
                         android:textSize="13sp" />

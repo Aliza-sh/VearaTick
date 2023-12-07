@@ -82,7 +82,6 @@
             android:text="گروه نرم افزاری ویراد"
             android:textColor="@color/white"
             android:textSize="17sp"
-            android:gravity="end"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/imageView3"
             app:layout_constraintTop_toTopOf="@+id/imageView3" />
@@ -107,7 +106,6 @@
             android:text="پیروزی 10 پلاک 102"
             android:textColor="@color/white"
             android:textSize="11sp"
-            android:gravity="end"
             app:layout_constraintBottom_toBottomOf="@+id/imageView2"
             app:layout_constraintEnd_toStartOf="@+id/imageView2"
             app:layout_constraintTop_toTopOf="@+id/imageView2" />
