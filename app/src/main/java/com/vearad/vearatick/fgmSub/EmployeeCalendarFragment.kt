@@ -53,7 +53,9 @@ import org.threeten.bp.YearMonth
 
 @Suppress("NAME_SHADOWING")
 class EmployeeCalendarFragment(
-    val employee: Employee, val efficiencyEmployeeDao: EfficiencyDao, val position: Int
+    val employee: Employee,
+    val efficiencyEmployeeDao: EfficiencyDao,
+    val position: Int,
 ) : Fragment(),
     EntryExitEmployeeAdapter.EntryExitEmployeeEvent {
 

@@ -123,33 +123,100 @@
 
         </LinearLayout>
 
-        <com.google.android.material.tabs.TabLayout
+        <LinearLayout
             android:id="@+id/tablayoutEmp"
-            style="@style/Widget.Material3.TabLayout.OnSurface"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="24dp"
             android:background="@drawable/shape_background_navi"
             android:backgroundTint="?attr/colorOnPrimary"
-            android:layoutDirection="rtl"
+            android:orientation="horizontal"
+            android:weightSum="3"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:tabMode="scrollable">
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout8"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView12">
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="آمار" />
+            <LinearLayout
+                android:id="@+id/btn_task"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|bottom"
+                android:orientation="vertical">
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="تقویم" />
+                <TextView
+                    android:id="@+id/txt_task"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="وظایف"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="وظایف" />
-        </com.google.android.material.tabs.TabLayout>
+                <View
+                    android:id="@+id/view_task"
+                    android:layout_width="20dp"
+                    android:layout_height="5dp"
+                    android:background="@drawable/shape_background_navi"
+                    android:backgroundTint="?attr/colorPrimary" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_calendar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|bottom"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_calendar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="تقویم"
+                    android:textColor="@color/white"
+                    android:textSize="12sp" />
+
+                <View
+                    android:id="@+id/view_calendar"
+                    android:layout_width="20dp"
+                    android:layout_height="5dp"
+                    android:background="@drawable/shape_background_navi"
+                    android:backgroundTint="?attr/colorPrimary" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/btn_statistics"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|bottom"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_statistics"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:text="آمار"
+                    android:textColor="@color/firoze"
+                    android:textSize="12sp" />
+
+                <View
+                    android:id="@+id/view_statistics"
+                    android:layout_width="20dp"
+                    android:layout_height="5dp"
+                    android:background="@drawable/shape_background_navi"
+                    android:backgroundTint="?attr/colorPrimary" />
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textView12"
@@ -204,19 +271,9 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <ProgressBar
-        android:id="@+id/loading"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:elevation="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <androidx.viewpager2.widget.ViewPager2
+    <FrameLayout
         android:background="?attr/colorOnPrimary"
-        android:id="@+id/viewpagerEmp"
+        android:id="@+id/frame_layout_emp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layoutDirection="rtl"
@@ -224,6 +281,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cons_lyt" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

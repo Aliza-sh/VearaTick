@@ -23,7 +23,7 @@ import java.time.temporal.TemporalAdjusters
 class EmployeeStatisticsFragment(
     val employee: Employee,
     val efficiencyEmployeeDao: EfficiencyDao,
-    val position: Int
+    val position: Int,
 ) :
     Fragment() {
 

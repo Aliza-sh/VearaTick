@@ -1,13 +1,15 @@
 package com.vearad.vearatick.fgmSub
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.activity.OnBackPressedCallback
@@ -15,15 +17,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayoutMediator
 import com.vearad.vearatick.DataBase.EfficiencyDao
 import com.vearad.vearatick.DataBase.Employee
 import com.vearad.vearatick.DataBase.EmployeeDao
 import com.vearad.vearatick.Dialog.EmployeeDeleteDialogFragment
 import com.vearad.vearatick.ProAndEmpActivity
 import com.vearad.vearatick.R
-import com.vearad.vearatick.adapter.ViewPagerEmployeeAdapter
 import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
 import com.vearad.vearatick.databinding.FragmentEmployeeInformationBinding
 import koleton.api.hideSkeleton
@@ -51,40 +50,19 @@ class EmployeeInformationFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         onBackPressed()
+        firstRun(view)
         setData(employee)
 
-        binding.consLyt.loadSkeleton()
-        Handler(Looper.getMainLooper()).postDelayed({
-            // اینجا می‌توانید ViewPager خود را پر کنید
-            // مثال:
-            val myAdapter = ViewPagerEmployeeAdapter(
-                employee,
-                this,
-                efficiencyEmployeeDao,
-                position,
-                employeeDao,
-                bindingActivityProAndEmpBinding
-            )
-            binding.viewpagerEmp.adapter = myAdapter
+        binding.btnStatistics.setOnClickListener {
+            btnStatistics(view)
+        }
+        binding.btnCalendar.setOnClickListener {
+            btnCalendar(view)
+        }
+        binding.btnTask.setOnClickListener {
+            btnTask(view)
+        }
 
-            binding.viewpagerEmp.offscreenPageLimit = 2
-            val mediator = TabLayoutMediator(
-                binding.tablayoutEmp,
-                binding.viewpagerEmp,
-                object : TabLayoutMediator.TabConfigurationStrategy {
-                    override fun onConfigureTab(tab: TabLayout.Tab, position: Int) {
-                        when (position) {
-                            0 -> tab.text = "آمار"
-                            1 -> tab.text = "تقویم"
-                            2 -> tab.text = "وظایف"
-                        }
-                    }
-                })
-            mediator.attach()
-            binding.consLyt.hideSkeleton()
-            binding.loading.visibility = GONE
-            // پس از لود داده‌ها، Skeleton Loading را مخفی کنید
-        }, 1) // 2 ثانیه
 
         val popupMenu = PopupMenu(this.context, binding.btnMenuEmployee)
         onMenuClicked(popupMenu)
@@ -94,6 +72,83 @@ class EmployeeInformationFragment(
                 .replace(R.id.frame_layout_sub, EmployeeFragment(bindingActivityProAndEmpBinding))
                 .commit()
         }
+    }
+
+    private fun btnStatistics(view: View) {
+        binding.txtStatistics.setTextColor(Color.parseColor("#E600ADB5"))
+        binding.viewStatistics.visibility = VISIBLE
+
+        binding.txtCalendar.setTextColor(Color.parseColor("#FFFFFF"))
+        binding.viewCalendar.visibility = INVISIBLE
+
+        binding.txtTask.setTextColor(Color.parseColor("#FFFFFF"))
+        binding.viewTask.visibility = INVISIBLE
+
+        replaceFragment(EmployeeStatisticsFragment(employee, efficiencyEmployeeDao, position))
+    }
+
+    private fun btnCalendar(view: View) {
+        binding.txtCalendar.setTextColor(Color.parseColor("#E600ADB5"))
+        binding.viewCalendar.visibility = VISIBLE
+
+        binding.txtStatistics.setTextColor(Color.parseColor("#FFFFFF"))
+        binding.viewStatistics.visibility = INVISIBLE
+
+        binding.txtTask.setTextColor(Color.parseColor("#FFFFFF"))
+        binding.viewTask.visibility = INVISIBLE
+
+        replaceFragment(EmployeeCalendarFragment(employee, efficiencyEmployeeDao, position))
+    }
+
+    private fun btnTask(view: View) {
+        binding.txtTask.setTextColor(Color.parseColor("#E600ADB5"))
+        binding.viewTask.visibility = VISIBLE
+
+        binding.txtStatistics.setTextColor(Color.parseColor("#FFFFFF"))
+        binding.viewStatistics.visibility = INVISIBLE
+
+        binding.txtCalendar.setTextColor(Color.parseColor("#FFFFFF"))
+        binding.viewCalendar.visibility = INVISIBLE
+
+        replaceFragment(
+            EmployeeTaskFragment(
+                employee,
+                employeeDao,
+                efficiencyEmployeeDao,
+                position,
+                bindingActivityProAndEmpBinding
+            )
+        )
+    }
+
+    private fun replaceFragment(fragment: Fragment) {
+        var elapsedTime:Long = 0
+        binding.tablayoutEmp.loadSkeleton()
+       val thread = Thread{
+            val startTime = System.currentTimeMillis()
+            val transaction =
+                (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.frame_layout_emp, fragment)
+                .commit()
+            val endTime = System.currentTimeMillis()
+            elapsedTime = endTime - startTime
+        }.start()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            binding.tablayoutEmp.hideSkeleton()
+        }, elapsedTime)
+
+    }
+
+    private fun firstRun(view: View) {
+        btnStatistics(view)
+        replaceFragment(
+            EmployeeStatisticsFragment(
+                employee,
+                efficiencyEmployeeDao,
+                position,
+            )
+        )
     }
 
     private fun onBackPressed() {
