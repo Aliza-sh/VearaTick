@@ -9,12 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints
-import com.xdev.arch.persiancalendar.datepicker.DateValidatorPointForward
-import com.xdev.arch.persiancalendar.datepicker.MaterialDatePicker
-import com.xdev.arch.persiancalendar.datepicker.MaterialPickerOnPositiveButtonClickListener
-import com.xdev.arch.persiancalendar.datepicker.Month
-import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import com.vearad.vearatick.BottomSheetCallback
 import com.vearad.vearatick.CompanyPaymentActivity
 import com.vearad.vearatick.DataBase.AppDatabase
@@ -24,6 +18,12 @@ import com.vearad.vearatick.DataBase.FinancialReport
 import com.vearad.vearatick.R
 import com.vearad.vearatick.adapter.CompanyExpensesAdapter
 import com.vearad.vearatick.databinding.BottomsheetfragmentCompanyNewExpensesBinding
+import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints
+import com.xdev.arch.persiancalendar.datepicker.DateValidatorPointForward
+import com.xdev.arch.persiancalendar.datepicker.MaterialDatePicker
+import com.xdev.arch.persiancalendar.datepicker.MaterialPickerOnPositiveButtonClickListener
+import com.xdev.arch.persiancalendar.datepicker.Month
+import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import java.text.DecimalFormat
 
 
@@ -48,7 +48,8 @@ class CompanyNewExpensesBottomsheetFragment(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        valueCalendar = PersianCalendar()
+        binding.txtDateReceipt.text = "${valueCalendar!!.year}/${valueCalendar!!.month + 1}/${valueCalendar!!.day - 1}"
         binding.btnCalendar.setOnClickListener {
             onCreateCalendar()
         }

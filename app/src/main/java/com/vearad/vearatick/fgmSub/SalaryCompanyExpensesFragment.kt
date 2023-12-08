@@ -22,6 +22,7 @@ import com.vearad.vearatick.CompanyPaymentActivity
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.CompanyExpenses
 import com.vearad.vearatick.DataBase.CompanyExpensesDao
+import com.vearad.vearatick.DataBase.FinancialReport
 import com.vearad.vearatick.Dialog.CompanyNewExpensesBottomsheetFragment
 import com.vearad.vearatick.Dialog.CompanyUpdateExpensesBottomsheetFragment
 import com.vearad.vearatick.R
@@ -233,6 +234,22 @@ class SalaryCompanyExpensesFragment : Fragment(), CompanyExpensesAdapter.Company
             monthCompanyExpenses = onClickCompanyExpenses.monthCompanyExpenses,
             yearCompanyExpenses = onClickCompanyExpenses.yearCompanyExpenses
         )
+
+        val financialReportDao = AppDatabase.getDataBase(binding.root.context).financialReportDao
+        val financialReportYearAndMonth =
+            financialReportDao.getFinancialReportYearAndMonthDao(onClickCompanyExpenses.yearCompanyExpenses, onClickCompanyExpenses.monthCompanyExpenses )
+
+        val agoExpense = financialReportYearAndMonth!!.expense
+        val newExpense = (agoExpense!!.toLong() - onClickCompanyExpenses.companyExpenses!!.toLong())
+        val newCompanyFinancialReport = FinancialReport(
+            idFinancialReport = financialReportYearAndMonth.idFinancialReport,
+            year = financialReportYearAndMonth.year,
+            month = financialReportYearAndMonth.month,
+            expense = newExpense,
+            income = financialReportYearAndMonth.income,
+            profit = financialReportYearAndMonth.profit
+        )
+        financialReportDao.update(newCompanyFinancialReport)
         companyExpensesDao.delete(newCompanyExpenses)
     }
 }

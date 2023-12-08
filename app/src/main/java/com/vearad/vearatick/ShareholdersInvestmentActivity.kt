@@ -63,7 +63,7 @@ class ShareholdersInvestmentActivity : AppCompatActivity(), ShareholdersInvestme
         val transaction =
             supportFragmentManager.beginTransaction()
         transaction.replace(
-            R.id.frame_layout_main2,
+            R.id.frame_layout_shareholder,
             SalaryShareholdersInvestmentFragment(
                 employee,
                 employeeInvestmentDao

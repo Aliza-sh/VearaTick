@@ -41,6 +41,8 @@ class ProjectNearAdapter(
                 binding.recyclerView.adapter = teamProjectAdapter
             }
 
+            if (data[position].typeProject == "سایت")
+                binding.imgProject.setImageResource(R.drawable.img_site)
             if (data[position].typeProject == "بک اند")
                 binding.imgProject.setImageResource(R.drawable.img_backend)
             else if (data[position].typeProject == "فرانت اند")

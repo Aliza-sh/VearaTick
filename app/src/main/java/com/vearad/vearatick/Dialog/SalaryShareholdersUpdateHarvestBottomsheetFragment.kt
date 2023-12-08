@@ -9,12 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints
-import com.xdev.arch.persiancalendar.datepicker.DateValidatorPointForward
-import com.xdev.arch.persiancalendar.datepicker.MaterialDatePicker
-import com.xdev.arch.persiancalendar.datepicker.MaterialPickerOnPositiveButtonClickListener
-import com.xdev.arch.persiancalendar.datepicker.Month
-import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import com.vearad.vearatick.BottomSheetCallback
 import com.vearad.vearatick.CompanyIncomeActivity
 import com.vearad.vearatick.DataBase.AppDatabase
@@ -24,6 +18,12 @@ import com.vearad.vearatick.DataBase.EmployeeHarvestDao
 import com.vearad.vearatick.DataBase.FinancialReport
 import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.BottomsheetfragmentCompanyNewReceiptBinding
+import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints
+import com.xdev.arch.persiancalendar.datepicker.DateValidatorPointForward
+import com.xdev.arch.persiancalendar.datepicker.MaterialDatePicker
+import com.xdev.arch.persiancalendar.datepicker.MaterialPickerOnPositiveButtonClickListener
+import com.xdev.arch.persiancalendar.datepicker.Month
+import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import java.text.DecimalFormat
 
 
@@ -167,8 +167,8 @@ class SalaryShareholdersUpdateHarvestBottomsheetFragment(
                 harvest = txtReceipt.toLong(),
                 harvestDescription = txtDescription,
                 harvestDate = txtDate.toString(),
-                yearHarvest =  month,
-                monthHarvest =year
+                yearHarvest =  year,
+                monthHarvest =month
             )
             onCompanyFinancialReport(txtReceipt,onClickEmployeeHarvest.harvest!!)
             employeeHarvestDao.update(newEmployeeHarvest)

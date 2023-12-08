@@ -166,8 +166,8 @@ class SalaryEmployeeUpdateHarvestBottomsheetFragment(
                 harvest = txtReceipt.toLong(),
                 harvestDescription = txtDescription,
                 harvestDate = txtDate.toString(),
-                yearHarvest =  month,
-                monthHarvest =year
+                yearHarvest =  year,
+                monthHarvest =month
             )
             onCompanyFinancialReport(txtReceipt,onClickEmployeeHarvest.harvest!!)
             employeeHarvestDao.update(newEmployeeHarvest)

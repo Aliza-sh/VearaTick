@@ -144,7 +144,7 @@ class EmployeeInfoUpdateFragment(
         binding.edtNumEmp.setText(employee.cellularPhone.toString())
         binding.edtTakhasosEmp.setText(employee.specialty)
         binding.edtNumbhomeEmp.setText(employee.homePhone.toString())
-        if (employee.imagePath != null) {
+        if (employee.imagePath != "") {
             imagePath = employee.imagePath
             Glide.with(this)
                 .load(employee.imagePath)

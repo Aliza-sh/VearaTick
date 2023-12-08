@@ -18,14 +18,13 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vearad.vearatick.BottomSheetCallback
-import com.vearad.vearatick.CompanyPaymentActivity
 import com.vearad.vearatick.DataBase.Employee
 import com.vearad.vearatick.DataBase.EmployeeInvestment
 import com.vearad.vearatick.DataBase.EmployeeInvestmentDao
 import com.vearad.vearatick.Dialog.SalaryShareholdersNewInvestmentBottomsheetFragment
 import com.vearad.vearatick.Dialog.SalaryShareholdersUpdateInvestmentBottomsheetFragment
-import com.vearad.vearatick.MainActivity
 import com.vearad.vearatick.R
+import com.vearad.vearatick.ShareholdersInvestmentActivity
 import com.vearad.vearatick.adapter.SalaryShareholdersInvestmentAdapter
 import com.vearad.vearatick.databinding.FragmentDialogDeleteCompanyReceiptBinding
 import com.vearad.vearatick.databinding.FragmentSalaryShareholdersInvestmentBinding
@@ -55,15 +54,9 @@ class SalaryShareholdersInvestmentFragment(
         onBackPressed()
         btnOnScroll()
         binding.btnBck.setOnClickListener {
-            val transaction =
-                (activity as MainActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(
-                R.id.frame_layout_main2,
-                SalaryShareholdersInvestmentFragment(
-                    employee,
-                    employeeInvestmentDao
-                )
-            )
+            val intent = Intent(requireContext(), ShareholdersInvestmentActivity::class.java)
+            startActivity(intent)
+            activity?.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
         val employeeInvestmentData = employeeInvestmentDao.getEmployeeInvestment(employee.idEmployee!!)
         shareholdersInvestmentAdapter = SalaryShareholdersInvestmentAdapter(ArrayList(employeeInvestmentData), this)
@@ -92,8 +85,9 @@ class SalaryShareholdersInvestmentFragment(
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    val intent = Intent(requireContext(), CompanyPaymentActivity::class.java)
+                    val intent = Intent(requireContext(), ShareholdersInvestmentActivity::class.java)
                     startActivity(intent)
+                    activity?.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
                 }
             })
     }

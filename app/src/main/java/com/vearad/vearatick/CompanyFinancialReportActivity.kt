@@ -7,13 +7,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.kizitonwose.calendarview.utils.persian.PersianCalendar
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.FinancialReport
 import com.vearad.vearatick.DataBase.FinancialReportDao
 import com.vearad.vearatick.adapter.AnnualReportAdapter
 import com.vearad.vearatick.databinding.ActivityCompanyFinancialReportBinding
-import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import koleton.api.hideSkeleton
 import koleton.api.loadSkeleton
 
@@ -33,22 +34,24 @@ class CompanyFinancialReportActivity : AppCompatActivity() {
             startActivity(intent)
             overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
+
         financialReportDao = AppDatabase.getDataBase(applicationContext).financialReportDao
-        //Log.v("logActivity", " onCreate")
-//        val sharedPreferences = getSharedPreferences("Aliza", Context.MODE_PRIVATE)
-//        if (sharedPreferences.getBoolean("firstRun", true)) {
-//            firstRun()
-//            sharedPreferences.edit().putBoolean("firstRun", false).apply()
-//        }
         if (financialReportDao.getAllListFinancialReportDao().isEmpty()) {
             firstRun()
         }
-        //Log.v("logActivity", currentYearIndex.toString())
         val listYear = financialReportDao.getDistinctData()
+
+        val index = listYear.indexOf(PersianCalendar().persianYear)
+        if (index != 0) {
+            currentYearIndex = index
+        } else {
+           currentYearIndex = index
+        }
+
         financialReportData =
             financialReportDao.getAllFinancialYearReportDao(listYear[currentYearIndex])
-        //Log.v("logActivity","firstRun: "+ listYear[currentYearIndex].toString())
-        //Log.v("logActivity", financialReportData.toString())
+
+        colorBtn(listYear)
 
         val adapter = AnnualReportAdapter(
             ArrayList(financialReportData),
@@ -69,7 +72,7 @@ class CompanyFinancialReportActivity : AppCompatActivity() {
         if (financialReportData.isNotEmpty())
             binding.txtYear.text = listYear[currentYearIndex].toString()
         else
-            binding.txtYear.text = PersianCalendar().year.toString()
+            binding.txtYear.text = PersianCalendar().persianYear.toString()
 
         binding.btnPrevious.setOnClickListener {
             if (currentYearIndex > 0) {
@@ -78,6 +81,7 @@ class CompanyFinancialReportActivity : AppCompatActivity() {
                 adapter.updateData(listYear[currentYearIndex], financialReportDao)
                 //Log.v("logActivity","btnPrevious: "+ currentYearIndex.toString())
                 //Log.v("logActivity","btnPrevious: "+ listYear[currentYearIndex].toString())
+                colorBtn(listYear)
 
             }
         }
@@ -89,12 +93,31 @@ class CompanyFinancialReportActivity : AppCompatActivity() {
                 adapter.updateData(listYear[currentYearIndex], financialReportDao)
                 //Log.v("logActivity","btnNext: "+ currentYearIndex.toString())
                 //Log.v("logActivity", "btnNext: "+listYear[currentYearIndex].toString())
+                colorBtn(listYear)
 
             }
 
         }
 
     }
+
+    private fun colorBtn(listYear: List<Int>) {
+        if (currentYearIndex > 0 && listYear[currentYearIndex] > listYear[currentYearIndex - 1])
+            binding.btnPrevious.backgroundTintList =
+                ContextCompat.getColorStateList(applicationContext, R.color.firoze)
+        else
+            binding.btnPrevious.backgroundTintList =
+                ContextCompat.getColorStateList(applicationContext, R.color.gray)
+
+
+        if (currentYearIndex < listYear.size - 1 && listYear[currentYearIndex] < listYear[currentYearIndex + 1])
+            binding.btnNext.backgroundTintList =
+                ContextCompat.getColorStateList(applicationContext, R.color.firoze)
+        else
+            binding.btnNext.backgroundTintList =
+                ContextCompat.getColorStateList(applicationContext, R.color.gray)
+    }
+
     @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         val intent = Intent(this, MainActivity::class.java)
@@ -105,8 +128,8 @@ class CompanyFinancialReportActivity : AppCompatActivity() {
     private fun firstRun() {
 
         val newCompanyFinancialReport = FinancialReport(
-            year = PersianCalendar().year,
-            month = PersianCalendar().month + 1,
+            year = PersianCalendar().persianYear,
+            month = PersianCalendar().persianMonth + 1,
         )
         financialReportDao.insert(newCompanyFinancialReport)
 

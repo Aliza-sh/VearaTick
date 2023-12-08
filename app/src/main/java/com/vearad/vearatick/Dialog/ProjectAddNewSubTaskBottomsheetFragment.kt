@@ -50,7 +50,8 @@ class ProjectAddNewSubTaskBottomsheetFragment(
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        valueCalendar = PersianCalendar()
+        binding.txtDedlineDateTime.text = "${valueCalendar!!.year}/${valueCalendar!!.month + 1}/${valueCalendar!!.day - 1}"
         binding.sheetBtnDone.setOnClickListener {
             addNewTask()
         }

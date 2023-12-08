@@ -17,8 +17,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.Fragment
-import com.xdev.arch.persiancalendar.datepicker.*
-import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import com.vearad.vearatick.DataBase.Project
 import com.vearad.vearatick.DataBase.ProjectDao
 import com.vearad.vearatick.ProAndEmpActivity
@@ -27,6 +25,8 @@ import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
 import com.vearad.vearatick.databinding.FragmentDialogDeadlineBinding
 import com.vearad.vearatick.databinding.FragmentNewProjectBinding
 import com.vearad.vearatick.projectAdapter
+import com.xdev.arch.persiancalendar.datepicker.*
+import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
 import java.util.Locale
@@ -65,6 +65,7 @@ class ProjectNewFragment(
 
         val typeProject = listOf(
             "اندروید",
+            "سایت",
             "بک اند",
             "فرانت اند",
             "رباتیک",

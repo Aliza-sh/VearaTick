@@ -33,6 +33,10 @@ class AnnualReportAdapter(
         fun bind(position: Int) {
 
             financialReportDao = AppDatabase.getDataBase(itemView.context).financialReportDao
+            val companyExpensesDao = AppDatabase.getDataBase(itemView.context).companyExpensesDao
+            val companyReceiptDao = AppDatabase.getDataBase(itemView.context).companyReceiptDao
+            val employeeHarvestDao = AppDatabase.getDataBase(itemView.context).employeeHarvestDao
+
 
             val item = dataAnnualReport[position]
 

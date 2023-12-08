@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.CompanyReceipt
 import com.vearad.vearatick.DataBase.CompanyReceiptDao
+import com.vearad.vearatick.DataBase.FinancialReport
 import com.vearad.vearatick.Dialog.CompanyNewIncomeBottomsheetFragment
 import com.vearad.vearatick.Dialog.CompanyUpdateIncomeBottomsheetFragment
 import com.vearad.vearatick.adapter.CompanyReceiptAdapter
@@ -215,6 +216,22 @@ class CompanyIncomeActivity : AppCompatActivity(), CompanyReceiptAdapter.Company
             monthCompanyReceipt = onClickCompanyReceipt.monthCompanyReceipt,
             yearCompanyReceipt = onClickCompanyReceipt.yearCompanyReceipt
         )
+
+        val financialReportDao = AppDatabase.getDataBase(binding.root.context).financialReportDao
+        val financialReportYearAndMonth =
+            financialReportDao.getFinancialReportYearAndMonthDao(onClickCompanyReceipt.yearCompanyReceipt, onClickCompanyReceipt.monthCompanyReceipt )
+
+        val agoExpense = financialReportYearAndMonth!!.income
+        val newExpense = (agoExpense!!.toLong() - onClickCompanyReceipt.companyReceipt!!.toLong())
+        val newCompanyFinancialReport = FinancialReport(
+            idFinancialReport = financialReportYearAndMonth.idFinancialReport,
+            year = financialReportYearAndMonth.year,
+            month = financialReportYearAndMonth.month,
+            expense = financialReportYearAndMonth.expense,
+            income =  newExpense,
+            profit = financialReportYearAndMonth.profit
+        )
+        financialReportDao.update(newCompanyFinancialReport)
         companyReceiptDao.delete(newCompanyReceipt)
     }
 

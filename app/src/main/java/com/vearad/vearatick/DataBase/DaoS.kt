@@ -183,6 +183,9 @@ interface CompanyReceiptDao : BaceDao<CompanyReceipt> {
     fun getCompanyReceipt(idReceipt: Int): CompanyReceipt?
     @Query("SELECT SUM(companyReceipt) FROM companyReceipt_table")
     fun getReceiptSum(): Long
+
+    @Query("SELECT SUM(companyReceipt) FROM companyReceipt_table WHERE yearCompanyReceipt = :year AND monthCompanyReceipt = :month")
+    fun getReceiptSumYearAndMonth(year: Int,month: Int): Long
 }
 @Dao
 interface CompanyExpensesDao : BaceDao<CompanyExpenses> {
@@ -192,6 +195,8 @@ interface CompanyExpensesDao : BaceDao<CompanyExpenses> {
     fun getCompanyExpenses(idExpenses: Int): CompanyExpenses?
     @Query("SELECT SUM(companyExpenses) FROM companyExpenses_table")
     fun getExpensesSum(): Long
+    @Query("SELECT SUM(companyExpenses) FROM companyExpenses_table WHERE yearCompanyExpenses = :year AND monthCompanyExpenses = :month")
+    fun getExpensesSumYearAndMonth(year: Int,month: Int): Long
 }
 //@Dao
 //interface EmployeeSalaryDao : BaceDao<EmployeeSalary> {
@@ -225,6 +230,9 @@ interface EmployeeHarvestDao : BaceDao<EmployeeHarvest> {
     fun getEmployeeHarvestSum(idEmployee: Int): Long
     @Query("SELECT SUM(harvest) FROM employeeHarvest_table")
     fun getHarvestSum(): Long
+
+    @Query("SELECT SUM(harvest) FROM employeeHarvest_table WHERE yearHarvest = :year AND monthHarvest = :month")
+    fun getHarvestSumYearAndMonth(year: Int,month: Int): Long
 }
 @Dao
 interface FinancialReportDao : BaceDao<FinancialReport> {

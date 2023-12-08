@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.TeamSubTask
 import com.vearad.vearatick.R
@@ -21,9 +23,15 @@ class AvatarTeamSubTaskAdapter(private val data: ArrayList<TeamSubTask>) :
             val employee = employeeDao.getEmployee(data[position].idEmployee!!)
 
             binding.txtNameEmployee.text = employee!!.name + " " + employee.family
-            if (employee.gender == "زن"){
-                binding.imgEmployee.setImageResource(R.drawable.img_matter);
-            }
+            if (employee.imagePath != "") {
+                Glide.with(itemView)
+                    .load(employee.imagePath)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(binding.imgEmployee)
+            } else
+                if (employee.gender == "زن") {
+                    binding.imgEmployee.setImageResource(R.drawable.img_matter)
+                }
         }
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AvatarNearViewHolder {

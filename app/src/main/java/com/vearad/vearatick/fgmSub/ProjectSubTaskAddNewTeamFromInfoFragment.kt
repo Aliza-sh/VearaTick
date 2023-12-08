@@ -8,6 +8,8 @@ import android.widget.CompoundButton
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.Project
 import com.vearad.vearatick.DataBase.ProjectDao
@@ -96,9 +98,15 @@ class ProjectSubTaskAddNewTeamFromInfoFragment(
                         subTaskProject.idSubTask
                     )
 
-                    if (employee!!.gender == "زن") {
-                        bindingItemAddEmployeeToProject.imgprn2.setImageResource(R.drawable.img_matter)
-                    }
+                    if (employee!!.imagePath != "") {
+                        Glide.with(holder.itemView)
+                            .load(employee.imagePath)
+                            .apply(RequestOptions.circleCropTransform())
+                            .into(bindingItemAddEmployeeToProject.imgprn2)
+                    } else
+                        if (employee.gender == "زن") {
+                            bindingItemAddEmployeeToProject.imgprn2.setImageResource(R.drawable.img_matter)
+                        }
 
                     bindingItemAddEmployeeToProject.txtNameEmployee.text =
                         employee.name + " " + employee.family

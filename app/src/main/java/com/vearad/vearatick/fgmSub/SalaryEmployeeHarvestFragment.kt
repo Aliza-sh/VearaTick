@@ -18,9 +18,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.vearad.vearatick.BottomSheetCallback
 import com.vearad.vearatick.CompanyPaymentActivity
+import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.Employee
 import com.vearad.vearatick.DataBase.EmployeeHarvest
 import com.vearad.vearatick.DataBase.EmployeeHarvestDao
+import com.vearad.vearatick.DataBase.FinancialReport
 import com.vearad.vearatick.Dialog.SalaryEmployeeNewHarvestBottomsheetFragment
 import com.vearad.vearatick.Dialog.SalaryEmployeeUpdateHarvestBottomsheetFragment
 import com.vearad.vearatick.R
@@ -251,6 +253,22 @@ class SalaryEmployeeHarvestFragment(
             monthHarvest = onClickEmployeeHarvest.monthHarvest,
             yearHarvest = onClickEmployeeHarvest.yearHarvest
         )
+
+        val financialReportDao = AppDatabase.getDataBase(binding.root.context).financialReportDao
+        val financialReportYearAndMonth =
+            financialReportDao.getFinancialReportYearAndMonthDao(onClickEmployeeHarvest.yearHarvest, onClickEmployeeHarvest.monthHarvest )
+
+        val agoExpense = financialReportYearAndMonth!!.expense
+        val newExpense = (agoExpense!!.toLong() - onClickEmployeeHarvest.harvest!!.toLong())
+        val newCompanyFinancialReport = FinancialReport(
+            idFinancialReport = financialReportYearAndMonth.idFinancialReport,
+            year = financialReportYearAndMonth.year,
+            month = financialReportYearAndMonth.month,
+            expense = newExpense,
+            income = financialReportYearAndMonth.income,
+            profit = financialReportYearAndMonth.profit
+        )
+        financialReportDao.update(newCompanyFinancialReport)
         employeeHarvestDao.delete(newEmployeeHarvest)
     }
 }

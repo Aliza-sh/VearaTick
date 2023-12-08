@@ -74,6 +74,7 @@ class ProjectUpdateInfoFragment(
 
         val typeProject = listOf(
             "اندروید",
+            "سایت",
             "بک اند",
             "فرانت اند",
             "رباتیک",

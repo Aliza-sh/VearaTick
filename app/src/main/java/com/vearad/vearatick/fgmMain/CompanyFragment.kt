@@ -204,6 +204,7 @@ class CompanyFragment : Fragment() {
     private fun progressNumProject(graph: Graph) {
 
         val numAndroid = projectDao.getNumberProject("اندروید", true).size
+        val numSite = projectDao.getNumberProject("سایت",true).size
         val numFrontEnd = projectDao.getNumberProject("فرانت اند", true).size
         val numBackEnd = projectDao.getNumberProject("بک اند", true).size
         val numRobotic = projectDao.getNumberProject("رباتیک", true).size
@@ -222,6 +223,8 @@ class CompanyFragment : Fragment() {
         val data: MutableCollection<GraphData> = ArrayList()
         //اندروید
         data.add(GraphData(numAndroid.toFloat(), Color.parseColor("#97DAE4")))
+        //سایت
+        data.add(GraphData(numSite.toFloat(), Color.parseColor("#FE7D8B")))
         //بک اند
         data.add(GraphData(numBackEnd.toFloat(), Color.parseColor("#4D7E68")))
         //فرانت اند
