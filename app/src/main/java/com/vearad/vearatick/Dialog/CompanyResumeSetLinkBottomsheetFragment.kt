@@ -55,9 +55,9 @@ class CompanyResumeSetLinkBottomsheetFragment(
         if (
             binding.edtUrlPro.length() > 0
         ) {
+            if (binding.edtUrlPro.text.toString().contains("https://") || binding.edtUrlPro.text.toString().contains("http://")) {
+
             val txtUrlPro = binding.edtUrlPro.text.toString()
-
-
             val newProject = Project(
                 idProject = onClickCompanyResume!!.idProject,
                 nameProject = onClickCompanyResume.nameProject,
@@ -82,6 +82,9 @@ class CompanyResumeSetLinkBottomsheetFragment(
             companyResumeDao.update(newProject)
             onCompanyNewSkill()
             dismiss()
+            } else {
+                Toast.makeText(context, "لینک معتبر نیست.", Toast.LENGTH_SHORT).show()
+            }
         } else {
             Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()
         }

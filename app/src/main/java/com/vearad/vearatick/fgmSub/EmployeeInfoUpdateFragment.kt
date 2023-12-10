@@ -84,6 +84,36 @@ class EmployeeInfoUpdateFragment(
             myAdapterRank
         )
 
+//        binding.edtGenEmp.addTextChangedListener(object : TextWatcher {
+//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+//                // عملیات قبل از تغییر متن
+//            }
+//
+//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+//                // عملیات هنگام تغییر متن
+//                val updatedText = s.toString()
+//
+//                if (imagePath != null) {
+//                    Glide.with(this@EmployeeInfoUpdateFragment)
+//                        .load(imagePath)
+//                        .apply(RequestOptions.circleCropTransform())
+//                        .into(binding.imgprn2)
+//                    binding.imgprn2.setPadding(20, 20, 20, 20)
+//                } else
+//                    if (updatedText == "زن") {
+//                        binding.imgprn2.setImageResource(R.drawable.img_matter)
+//                        binding.imgprn2.setPadding(20, 20, 20, 20)
+//                    } else {
+//                        binding.imgprn2.setImageResource(R.drawable.img_male)
+//                        binding.imgprn2.setPadding(20, 20, 20, 20)
+//                    }
+//            }
+//
+//            override fun afterTextChanged(s: Editable?) {
+//                // عملیات پس از تغییر متن
+//            }
+//        })
+
         binding.sheetBtnDone.setOnClickListener {
             addNewEmployee()
         }
@@ -149,10 +179,7 @@ class EmployeeInfoUpdateFragment(
                 .apply(RequestOptions.circleCropTransform())
                 .into(binding.imgprn2)
             binding.imgprn2.setPadding(20, 20, 20, 20)
-        } else
-            if (employee.gender == "زن") {
-                binding.imgprn2.setImageResource(R.drawable.img_matter)
-            }
+        }
     }
 
     private fun onPhotoClicked(popupMenu: PopupMenu) {

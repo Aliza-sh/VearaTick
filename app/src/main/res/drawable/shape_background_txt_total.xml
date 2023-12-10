@@ -4,6 +4,7 @@
 
     <corners
         android:bottomLeftRadius="15dp"
+        android:topRightRadius="8dp"
         android:bottomRightRadius="15dp" />
 
     <solid android:color="?attr/colorPrimaryVariant"/>
