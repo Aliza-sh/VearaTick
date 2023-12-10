@@ -127,9 +127,12 @@
                 android:layout_marginBottom="12dp">
 
                 <ImageView
+                    android:background="@drawable/shape_circle"
                     android:id="@+id/btn_info_prn"
-                    android:layout_width="45dp"
-                    android:layout_height="45dp"
+                    android:layout_width="60dp"
+                    android:padding="5dp"
+                    android:backgroundTint="?attr/colorPrimaryVariant"
+                    android:layout_height="60dp"
                     android:layout_gravity="center|top"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

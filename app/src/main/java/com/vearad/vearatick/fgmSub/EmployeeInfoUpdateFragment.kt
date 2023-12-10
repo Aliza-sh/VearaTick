@@ -12,6 +12,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -60,7 +61,6 @@ class EmployeeInfoUpdateFragment(
         Handler(Looper.getMainLooper()).postDelayed({
             binding.loading2.visibility = GONE
             binding.layoutForm.visibility = VISIBLE
-
         }, 1000)
 
         val gender = listOf(
@@ -88,9 +88,8 @@ class EmployeeInfoUpdateFragment(
             addNewEmployee()
         }
 
-        binding.imgprn2.setOnClickListener {
-            pickImage()
-        }
+        val popupMenu = PopupMenu(this.context, binding.imgprn2)
+        onPhotoClicked(popupMenu)
 
         binding.btnBck.setOnClickListener {
             if (parentFragmentManager.backStackEntryCount > 0) {
@@ -140,20 +139,39 @@ class EmployeeInfoUpdateFragment(
         binding.edtAddressEmp.setText(employee.address)
         binding.edtGenEmp.setText(employee.gender)
         binding.edtRankEmp.setText(employee.rank)
-        binding.edtMaharatEmp.setText(employee.skill)
         binding.edtNumEmp.setText(employee.cellularPhone.toString())
         binding.edtTakhasosEmp.setText(employee.specialty)
         binding.edtNumbhomeEmp.setText(employee.homePhone.toString())
-        if (employee.imagePath != "") {
+        if (employee.imagePath != null) {
             imagePath = employee.imagePath
             Glide.with(this)
                 .load(employee.imagePath)
                 .apply(RequestOptions.circleCropTransform())
                 .into(binding.imgprn2)
+            binding.imgprn2.setPadding(20, 20, 20, 20)
         } else
             if (employee.gender == "زن") {
                 binding.imgprn2.setImageResource(R.drawable.img_matter)
             }
+    }
+
+    private fun onPhotoClicked(popupMenu: PopupMenu) {
+        popupMenu.menuInflater.inflate(R.menu.menu_add_photo, popupMenu.menu)
+        binding.imgprn2.setOnClickListener {
+            popupMenu.show()
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.menu_add_photo -> {
+                        pickImage()
+                    }
+
+                    R.id.menu_delete_photo -> {
+                        deletePhoto()
+                    }
+                }
+                true
+            }
+        }
     }
 
     fun pickImage() {
@@ -173,7 +191,17 @@ class EmployeeInfoUpdateFragment(
                 .load(selectedImageUri)
                 .apply(RequestOptions.circleCropTransform())
                 .into(binding.imgprn2)
+            binding.imgprn2.setPadding(20, 20, 20, 20)
         }
+    }
+    private fun deletePhoto() {
+        imageUri = null
+        imagePath = null
+        Glide.with(this)
+            .load(R.drawable.img_add_photo)
+            .into(binding.imgprn2)
+        binding.imgprn2.setPadding(50, 50, 50, 50)
+
     }
 
     private fun addNewEmployee() {
@@ -195,7 +223,6 @@ class EmployeeInfoUpdateFragment(
             val txtNumber = binding.edtNumEmp.text.toString()
             var txtNumberHome = binding.edtNumbhomeEmp.text.toString()
             val txtAddress = binding.edtAddressEmp.text.toString()
-            val txtMaharat = binding.edtMaharatEmp.text.toString()
 
             if (txtNumberHome == "")
                 txtNumberHome = "0"
@@ -210,11 +237,12 @@ class EmployeeInfoUpdateFragment(
                 homePhone = txtNumberHome.toLong(),
                 address = txtAddress,
                 specialty = txtSpecialty,
-                skill = txtMaharat,
-                rank = txtRank
+                skill = "",
+                rank = txtRank,
+                imagePath = null
             )
 
-            if (imagePath != "") {
+            if (imagePath != null) {
 
                 newEmployee = Employee(
                     idEmployee = employee.idEmployee,
@@ -226,7 +254,7 @@ class EmployeeInfoUpdateFragment(
                     homePhone = txtNumberHome.toLong(),
                     address = txtAddress,
                     specialty = txtSpecialty,
-                    skill = txtMaharat,
+                    skill = "",
                     imagePath = imagePath.toString(),
                     rank = txtRank
                 )

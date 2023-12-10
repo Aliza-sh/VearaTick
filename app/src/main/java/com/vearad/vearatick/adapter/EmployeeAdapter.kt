@@ -131,7 +131,8 @@ class EmployeeAdapter(
 
             binding.txtnameprn.text = data[position].name + " " + data[position].family
             binding.txttkhprn.text = data[position].specialty
-            if (data[position].imagePath != "") {
+
+            if (data[position].imagePath != null) {
                 Glide.with(itemView)
                     .load(data[position].imagePath)
                     .apply(RequestOptions.circleCropTransform())
@@ -140,6 +141,7 @@ class EmployeeAdapter(
                 if (data[position].gender == "زن") {
                     binding.imgprn.setImageResource(R.drawable.img_matter)
                 }
+
             itemView.setOnClickListener {
                 employeeEvents.onEmployeeClicked(data[position], position)
             }

@@ -1,13 +1,19 @@
 package com.vearad.vearatick.fgmMain
 
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.vearad.vearatick.BottomSheetCallback
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.CompanyInfo
@@ -26,6 +32,9 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
     lateinit var binding: FragmentCompanyInformationBinding
     lateinit var companyInfoDao: CompanyInfoDao
     var companyInfo: CompanyInfo? = null
+    private val PICK_IMAGE_REQUEST = 1
+    var imageUri: Uri? = null
+    var imagePath: String? = null
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -58,8 +67,20 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
             binding.numberCompany.text = companyInfo!!.phoneCompany
             binding.idGithaub.text = companyInfo!!.githubCompany
             binding.idLinkedin.text = companyInfo!!.linkedinCompany
+            if (companyInfo!!.imagePath != null) {
+                binding
+                Glide.with(this)
+                    .load(companyInfo!!.imagePath)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(binding.imgCom)
+                binding.imgCom.setPadding(20, 20, 20, 20)
+            } else
+                binding.imgCom.setImageResource(R.drawable.img_add_photo)
+
         }
 
+        val popupMenu = PopupMenu(this.context, binding.imgCom)
+        onPhotoClicked(popupMenu)
 
         binding.btnCompanySkill.setOnClickListener {
             btnCompanySkill(view)
@@ -85,15 +106,73 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
 
     }
-    private fun replaceFragment(fragment: Fragment) {
-        val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.fragment_com_info, fragment)
-            .commit()
-    }
 
-    private fun firstRun(view: View) {
-        btnCompanySkill(view)
-        replaceFragment(CompanySkillFragment())
+    private fun onPhotoClicked(popupMenu: PopupMenu) {
+        popupMenu.menuInflater.inflate(R.menu.menu_add_photo, popupMenu.menu)
+        binding.imgCom.setOnClickListener {
+            popupMenu.show()
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.menu_add_photo -> {
+                        pickImage()
+                    }
+
+                    R.id.menu_delete_photo -> {
+                        deletePhoto()
+                    }
+                }
+                true
+            }
+        }
+    }
+    fun pickImage() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
+    }
+    @Deprecated("Deprecated in Java")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == AppCompatActivity.RESULT_OK && data != null) {
+            val selectedImageUri: Uri = data.data!!
+            imagePath = selectedImageUri.toString()
+            imageUri = selectedImageUri
+            Glide.with(this)
+                .load(selectedImageUri)
+                .apply(RequestOptions.circleCropTransform())
+                .into(binding.imgCom)
+            binding.imgCom.setPadding(20, 20, 20, 20)
+
+            addPhoto()
+        }
+    }
+    private fun addPhoto() {
+        val newInfo = CompanyInfo(
+            idCompanyInfo = companyInfo!!.idCompanyInfo,
+            nameCompany = companyInfo!!.nameCompany,
+            addressCompany = companyInfo!!.addressCompany,
+            phoneCompany = companyInfo!!.phoneCompany,
+            githubCompany = companyInfo!!.githubCompany,
+            linkedinCompany = companyInfo!!.linkedinCompany,
+            imagePath = imagePath
+        )
+
+        companyInfoDao.update(newInfo)
+        onConfirmButtonClicked()
+    }
+    private fun deletePhoto() {
+        val newInfo = CompanyInfo(
+            idCompanyInfo = companyInfo!!.idCompanyInfo,
+            nameCompany = companyInfo!!.nameCompany,
+            addressCompany = companyInfo!!.addressCompany,
+            phoneCompany = companyInfo!!.phoneCompany,
+            githubCompany = companyInfo!!.githubCompany,
+            linkedinCompany = companyInfo!!.linkedinCompany,
+            imagePath = null
+        )
+
+        companyInfoDao.update(newInfo)
+        onConfirmButtonClicked()
     }
 
     private fun btnCompanySkill(view: View) {
@@ -148,7 +227,6 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
         replaceFragment(CompanySkillFragment())
     }
-
     private fun btnCompanyResume(view: View) {
         binding.icCompanyResume.backgroundTintList =
             ContextCompat.getColorStateList(view.context, R.color.firoze)
@@ -200,7 +278,6 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
         replaceFragment(CompanyResumeFragment())
     }
-
     private fun btnEmployeeResume(view: View) {
         binding.icEmployeeResume.backgroundTintList =
             ContextCompat.getColorStateList(view.context, R.color.firoze)
@@ -252,7 +329,15 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
         replaceFragment(CompanyEmployeeResumeFragment())
     }
-
+    private fun replaceFragment(fragment: Fragment) {
+        val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.fragment_com_info, fragment)
+            .commit()
+    }
+    private fun firstRun(view: View) {
+        btnCompanySkill(view)
+        replaceFragment(CompanySkillFragment())
+    }
     override fun onConfirmButtonClicked() {
 
         companyInfoDao = AppDatabase.getDataBase(binding.root.context).companyInfoDao
@@ -263,6 +348,18 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
         binding.numberCompany.text = companyInfo!!.phoneCompany
         binding.idGithaub.text = companyInfo!!.githubCompany
         binding.idLinkedin.text = companyInfo!!.linkedinCompany
+
+        if (companyInfo!!.imagePath != null) {
+            binding
+            Glide.with(this)
+                .load(companyInfo!!.imagePath)
+                .apply(RequestOptions.circleCropTransform())
+                .into(binding.imgCom)
+            binding.imgCom.setPadding(20, 20, 20, 20)
+        } else {
+            binding.imgCom.setImageResource(R.drawable.img_add_photo)
+            binding.imgCom.setPadding(40, 40, 40, 40)
+        }
     }
 
 }

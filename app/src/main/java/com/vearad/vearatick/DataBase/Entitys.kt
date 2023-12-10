@@ -286,10 +286,10 @@ data class CompanyInfo(
     val idCompanyInfo: Int? = null,
 
     val nameCompany: String,
-    val addressCompany: String,
-    val phoneCompany: String,
-    val githubCompany: String,
-    val linkedinCompany: String,
+    val addressCompany: String? = "",
+    val phoneCompany: String? = "",
+    val githubCompany: String? = "",
+    val linkedinCompany: String? = "",
     val imagePath: String? = ""
 
     )

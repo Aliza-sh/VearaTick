@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -50,6 +51,9 @@ class CompanyInfoBottomsheetFragment : BottomSheetDialogFragment() {
         if (companyInfo != null)
             setdata()
 
+        val popupMenu = PopupMenu(this.context, binding.imgCom)
+        onPhotoClicked(popupMenu)
+
         binding.sheetBtnDone.setOnClickListener {
             if (companyInfo == null)
                 addNewInfo()
@@ -80,6 +84,25 @@ class CompanyInfoBottomsheetFragment : BottomSheetDialogFragment() {
                 .load(companyInfo!!.imagePath)
                 .apply(RequestOptions.circleCropTransform())
                 .into(binding.imgCom)
+            binding.imgCom.setPadding(20, 20, 20, 20)
+        }
+    }
+    private fun onPhotoClicked(popupMenu: PopupMenu) {
+        popupMenu.menuInflater.inflate(R.menu.menu_add_photo, popupMenu.menu)
+        binding.imgCom.setOnClickListener {
+            popupMenu.show()
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.menu_add_photo -> {
+                        pickImage()
+                    }
+
+                    R.id.menu_delete_photo -> {
+                        deletePhoto()
+                    }
+                }
+                true
+            }
         }
     }
 
@@ -100,16 +123,23 @@ class CompanyInfoBottomsheetFragment : BottomSheetDialogFragment() {
                 .load(selectedImageUri)
                 .apply(RequestOptions.circleCropTransform())
                 .into(binding.imgCom)
+            binding.imgCom.setPadding(20, 20, 20, 20)
         }
     }
+    private fun deletePhoto() {
+        imageUri = null
+        imagePath = null
+        Glide.with(this)
+            .load(R.drawable.img_add_photo)
+            .into(binding.imgCom)
+        binding.imgCom.setPadding(50, 50, 50, 50)
+
+    }
+
 
     private fun updateInfo() {
         if (
-            binding.edtNameCom.length() > 0 &&
-            binding.edtAddressCom.length() > 0 &&
-            binding.edtNumCom.length() > 0 &&
-            binding.edtGithubCom.length() > 0 &&
-            binding.edtLinkdinCom.length() > 0
+            binding.edtNameCom.length() > 0
         ) {
             val txtName = binding.edtNameCom.text.toString()
             val txtAddress = binding.edtAddressCom.text.toString()
@@ -123,7 +153,8 @@ class CompanyInfoBottomsheetFragment : BottomSheetDialogFragment() {
                 addressCompany = txtAddress,
                 phoneCompany = txtNumber,
                 githubCompany = txtGithub,
-                linkedinCompany = txtLinkedin
+                linkedinCompany = txtLinkedin,
+                imagePath = imagePath
             )
 
             if (imageUri != null) {
@@ -149,11 +180,7 @@ class CompanyInfoBottomsheetFragment : BottomSheetDialogFragment() {
 
     private fun addNewInfo() {
         if (
-            binding.edtNameCom.length() > 0 &&
-            binding.edtAddressCom.length() > 0 &&
-            binding.edtNumCom.length() > 0 &&
-            binding.edtGithubCom.length() > 0 &&
-            binding.edtLinkdinCom.length() > 0
+            binding.edtNameCom.length() > 0
         ) {
             val txtName = binding.edtNameCom.text.toString()
             val txtAddress = binding.edtAddressCom.text.toString()
@@ -166,7 +193,8 @@ class CompanyInfoBottomsheetFragment : BottomSheetDialogFragment() {
                 addressCompany = txtAddress,
                 phoneCompany = txtNumber,
                 githubCompany = txtGithub,
-                linkedinCompany = txtLinkedin
+                linkedinCompany = txtLinkedin,
+                imagePath = null
             )
 
             if (imageUri != null) {

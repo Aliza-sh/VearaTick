@@ -69,15 +69,16 @@
 
         <ImageView
             android:id="@+id/img_com"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/shape_circle"
             android:backgroundTint="?attr/colorOnPrimary"
-            android:padding="10dp"
+            android:padding="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/img_logo_3d_no_name" />
+            app:srcCompat="@drawable/img_add_photo" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
@@ -118,7 +119,7 @@
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="نام شرکت"
+                    android:hint="* نام شرکت"
                     app:hintTextColor="@color/firoze"
                     android:textColorHint="?attr/colorOnSecondary"
                     app:boxStrokeColor="@color/firoze">

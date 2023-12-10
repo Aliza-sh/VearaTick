@@ -268,7 +268,7 @@ class EmployeeInformationFragment(
         val efficiencyTotalDuties = progress.efficiencyTotalDuties
         val efficiencyTotal = (efficiencyTotalPresence + efficiencyTotalDuties) / 2
         binding.prgTotalEmp.progress = efficiencyTotal.toFloat()
-        if (employee.imagePath != "") {
+        if (employee.imagePath != null) {
             Glide.with(this)
                 .load(employee.imagePath)
                 .apply(RequestOptions.circleCropTransform())
@@ -276,7 +276,9 @@ class EmployeeInformationFragment(
         } else
             if (employee.gender == "زن") {
                 binding.btnInfoPrn.setImageResource(R.drawable.img_matter)
-            }
+            }else
+                binding.btnInfoPrn.setImageResource(R.drawable.img_male)
+
     }
 
 }

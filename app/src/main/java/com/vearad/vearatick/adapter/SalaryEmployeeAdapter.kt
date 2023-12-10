@@ -46,14 +46,15 @@ class SalaryEmployeeAdapter(
 
             binding.txtNameEmp.text = dataEmployee[position].name + " " + dataEmployee[position].family
             binding.txtSpecialtyEmp.text = dataEmployee[position].specialty
-            if (dataEmployee[position].imagePath != "") {
+
+            if (dataEmployee[position].imagePath != null) {
                 Glide.with(itemView)
                     .load(dataEmployee[position].imagePath)
                     .apply(RequestOptions.circleCropTransform())
-                    .into(binding.imgDone)
+                    .into(binding.btnInfoPrn)
             } else
                 if (dataEmployee[position].gender == "زن") {
-                    binding.imgDone.setImageResource(R.drawable.img_matter)
+                    binding.btnInfoPrn.setImageResource(R.drawable.img_matter)
                 }
 
             val sumEmployeeHarvest =

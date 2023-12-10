@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.AutoCompleteTextView
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -74,9 +75,8 @@ class EmployeeRecruitmentFragment(
             addNewEmployee()
         }
 
-        binding.imgprn2.setOnClickListener {
-            pickImage()
-        }
+        val popupMenu = PopupMenu(this.context, binding.imgprn2)
+        onPhotoClicked(popupMenu)
 
         binding.btnBck.setOnClickListener {
             if (parentFragmentManager.backStackEntryCount > 0) {
@@ -102,6 +102,25 @@ class EmployeeRecruitmentFragment(
             ?.commit()
     }
 
+    private fun onPhotoClicked(popupMenu: PopupMenu) {
+        popupMenu.menuInflater.inflate(R.menu.menu_add_photo, popupMenu.menu)
+        binding.imgprn2.setOnClickListener {
+            popupMenu.show()
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.menu_add_photo -> {
+                        pickImage()
+                    }
+
+                    R.id.menu_delete_photo -> {
+                        deletePhoto()
+                    }
+                }
+                true
+            }
+        }
+    }
+
     fun pickImage() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
@@ -119,7 +138,17 @@ class EmployeeRecruitmentFragment(
                 .load(selectedImageUri)
                 .apply(RequestOptions.circleCropTransform())
                 .into(binding.imgprn2)
+            binding.imgprn2.setPadding(20, 20, 20, 20)
         }
+    }
+    private fun deletePhoto() {
+        imageUri = null
+        imagePath = null
+        Glide.with(this)
+            .load(R.drawable.img_add_photo)
+            .into(binding.imgprn2)
+        binding.imgprn2.setPadding(50, 50, 50, 50)
+
     }
 
     private fun addNewEmployee() {
@@ -141,7 +170,7 @@ class EmployeeRecruitmentFragment(
             val txtNumber = binding.edtNumEmp.text.toString()
             var txtNumberHome = binding.edtNumbhomeEmp.text.toString()
             val txtAddress = binding.edtAddressEmp.text.toString()
-            val txtMaharat = binding.edtMaharatEmp.text.toString()
+            val txtMaharat = ""
 
             if (txtNumberHome == "")
                 txtNumberHome = "0"
@@ -156,7 +185,8 @@ class EmployeeRecruitmentFragment(
                 address = txtAddress,
                 specialty = txtSpecialty,
                 skill = txtMaharat,
-                rank = txtRank
+                rank = txtRank,
+                imagePath = null
             )
 
             if (imageUri != null) {

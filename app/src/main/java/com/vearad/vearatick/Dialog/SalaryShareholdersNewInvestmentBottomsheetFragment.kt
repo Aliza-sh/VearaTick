@@ -13,8 +13,8 @@ import com.vearad.vearatick.BottomSheetCallback
 import com.vearad.vearatick.DataBase.Employee
 import com.vearad.vearatick.DataBase.EmployeeInvestment
 import com.vearad.vearatick.DataBase.EmployeeInvestmentDao
-import com.vearad.vearatick.MainActivity
 import com.vearad.vearatick.R
+import com.vearad.vearatick.ShareholdersInvestmentActivity
 import com.vearad.vearatick.adapter.SalaryShareholdersInvestmentAdapter
 import com.vearad.vearatick.databinding.BottomsheetfragmentCompanyNewExpensesBinding
 import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints
@@ -111,7 +111,7 @@ class SalaryShareholdersNewInvestmentBottomsheetFragment(
             .setTitleText("تاریخ را انتخاب کنید.")
             .setTheme(R.style.AppTheme_PersianCalendar)
             .setCalendarConstraints(constraints).build()
-        datePicker.show((activity as MainActivity).supportFragmentManager, "aTag")
+        datePicker.show((activity as ShareholdersInvestmentActivity).supportFragmentManager, "aTag")
         datePicker.isCancelable
 
         datePicker.addOnPositiveButtonClickListener(
