@@ -2,7 +2,9 @@ package com.vearad.vearatick
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +21,11 @@ import com.vearad.vearatick.adapter.TaskEmployeeAdapter
 import com.vearad.vearatick.databinding.ActivityMainBinding
 import com.vearad.vearatick.fgmMain.CompanyFragment
 import com.vearad.vearatick.fgmMain.CompanyInformationFragment
+import org.json.JSONException
+import org.json.JSONObject
+
+
+
 
 lateinit var employeeDao: EmployeeDao
 lateinit var dayDao: DayDao
@@ -28,8 +35,10 @@ lateinit var projectAdapter: ProjectNearAdapter
 lateinit var taskAdapter: TaskEmployeeAdapter
 lateinit var inOutAdapter: EntryExitEmployeeAdapter
 lateinit var employeeAdapter: EmployeeAdapter
-const val CHEKBUY = "chekBuy"
 const val SHAREDVEARATICK = "sharedVearatick"
+const val CHEKBUY = "chekBuy"
+const val SHAREDLOGINSTEP24 = "SharedLoginStep24"
+const val LOGINSTEP24 = "loginStep24"
 
 class MainActivity : AppCompatActivity() {
 
@@ -39,13 +48,36 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        val sharedPreferences =
-            getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
+        firstRun()
+
+        val sharedPreferences = getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
         sharedPreferences.edit().putBoolean(CHEKBUY, true).apply()
 
-        employeeDao = AppDatabase.getDataBase(this).employeeDao
+        val intent = intent
+        val data: Uri? = intent.data
+        if (data != null) {
+            val jsonData = data.getQueryParameter("jsonData")
+            if (jsonData != null) {
+                // Parse the JSON data and handle it accordingly
+                try {
+                    val jsonObject = JSONObject(jsonData)
+                    val accessToken = jsonObject.getString("access_token")
+                    val username = jsonObject.getString("username")
+                    Log.v("weekPresenceEmployee", "accessToken: ${accessToken}")
+                    Log.v("weekPresenceEmployee", "username: ${username}")
+                    val sharedPreferencesLoginStep24 = getSharedPreferences(SHAREDLOGINSTEP24, Context.MODE_PRIVATE)
+                    sharedPreferencesLoginStep24.edit().putString(LOGINSTEP24, username).apply()
+                    // Handle the retrieved data
+                } catch (e: JSONException) {
+                    // Handle JSON parsing error
+                }
+            }
+        }
 
-        firstRun()
+
+
+
+        employeeDao = AppDatabase.getDataBase(this).employeeDao
 
         binding.bottomNavigationMain.setOnItemSelectedListener {
 

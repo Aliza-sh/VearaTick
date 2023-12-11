@@ -1,9 +1,12 @@
 package com.vearad.vearatick.fgmMain
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,17 +17,25 @@ import androidx.core.view.ViewCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.vearad.vearatick.BottomSheetCallback
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.CompanyInfo
 import com.vearad.vearatick.DataBase.CompanyInfoDao
 import com.vearad.vearatick.Dialog.CompanyInfoBottomsheetFragment
+import com.vearad.vearatick.LOGINSTEP24
 import com.vearad.vearatick.MainActivity
 import com.vearad.vearatick.R
+import com.vearad.vearatick.SHAREDLOGINSTEP24
 import com.vearad.vearatick.databinding.FragmentCompanyInformationBinding
-import com.vearad.vearatick.fgmSub.CompanyEmployeeResumeFragment
+import com.vearad.vearatick.fgmSub.CompanyEventFragment
 import com.vearad.vearatick.fgmSub.CompanyResumeFragment
 import com.vearad.vearatick.fgmSub.CompanySkillFragment
+import java.io.IOException
+import java.net.HttpURLConnection
+import java.net.MalformedURLException
+import java.net.URL
 
 class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
@@ -47,6 +58,27 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         firstRun(view)
+        setData(view)
+
+        val popupMenuInfoCompany = PopupMenu(this.context, binding.btnMenuCompany)
+        onInfoCompanyClicked(popupMenuInfoCompany)
+
+        val popupMenuPhoto = PopupMenu(this.context, binding.imgCom)
+        onPhotoClicked(popupMenuPhoto)
+
+        binding.btnCompanySkill.setOnClickListener {
+            btnCompanySkill(view)
+        }
+        binding.btnCompanyResume.setOnClickListener {
+            btnCompanyResume(view)
+        }
+        binding.btnEvent.setOnClickListener {
+            btnEvent(view)
+        }
+
+    }
+
+    private fun setData(view: View) {
 
         companyInfoDao = AppDatabase.getDataBase(view.context).companyInfoDao
         companyInfo = companyInfoDao.getCompanyInfoDao()
@@ -78,35 +110,98 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
                 binding.imgCom.setImageResource(R.drawable.img_add_photo)
 
         }
-
-        val popupMenu = PopupMenu(this.context, binding.imgCom)
-        onPhotoClicked(popupMenu)
-
-        binding.btnCompanySkill.setOnClickListener {
-            btnCompanySkill(view)
-        }
-        binding.btnCompanyResume.setOnClickListener {
-            btnCompanyResume(view)
-        }
-
-        binding.btnMenu.setOnClickListener {
-            val bottomsheet = CompanyInfoBottomsheetFragment()
-            bottomsheet.setStyle(
-                R.style.BottomSheetStyle,
-                R.style.BottomSheetDialogTheme
-            )
-            bottomsheet.setCallback(this)
-            bottomsheet.show(parentFragmentManager, null)
-            bottomsheet.setDismissable(true)
-        }
-
-//        binding.btnEmployeeResume.setOnClickListener {
-//            btnEmployeeResume(view)
-//        }
-
-
     }
 
+    private fun onInfoCompanyClicked(popupMenu: PopupMenu) {
+        popupMenu.menuInflater.inflate(
+            R.menu.menu_edit_info_company_and_login_minisite,
+            popupMenu.menu
+        )
+        binding.btnMenuCompany.setOnClickListener {
+            popupMenu.show()
+
+            val sharedPreferencesLoginStep24 =
+                requireActivity().getSharedPreferences(SHAREDLOGINSTEP24, Context.MODE_PRIVATE)
+            val user = sharedPreferencesLoginStep24.getString(LOGINSTEP24, null)
+
+            if (user == "" || user == null)
+                TapTargetSequence(requireActivity())
+                    .targets(
+                        TapTarget.forView(
+                            binding.btnMenuCompany,
+                            "\n\nثبت نام در مینی سایت",
+                            "شما تا کنون در سایت step24 ثبت نام نکرده اید ابتدا در این سایت ثبت نام نموده سپس مینی سایت خود را بسازید."
+                        )
+                            .cancelable(true)
+                            .textTypeface(Typeface.SERIF)
+                            .titleTextSize(20)
+                            .descriptionTextColor(R.color.blacke)
+                            .transparentTarget(true)
+                            .targetCircleColor(R.color.firoze)
+                            .titleTextColor(R.color.white)
+                            .targetRadius(60)
+                            .id(1)
+                    )
+                    .listener(object : TapTargetSequence.Listener {
+                        override fun onSequenceFinish() {
+                            // دنباله Tap Target ها به پایان رسید
+                        }
+
+                        override fun onSequenceStep(
+                            lastTarget: TapTarget?,
+                            targetClicked: Boolean
+                        ) {
+                            // مرحله جدید Tap Target در دنباله
+                        }
+
+                        override fun onSequenceCanceled(lastTarget: TapTarget?) {
+                            // دنباله Tap Target ها لغو شد
+                        }
+                    })
+                    .start()
+
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.menu_edit_company -> {
+                        val bottomsheet = CompanyInfoBottomsheetFragment()
+                        bottomsheet.setStyle(
+                            R.style.BottomSheetStyle,
+                            R.style.BottomSheetDialogTheme
+                        )
+                        bottomsheet.setCallback(this)
+                        bottomsheet.show(parentFragmentManager, null)
+                        bottomsheet.setDismissable(true)
+                    }
+
+                    R.id.menu_login_minisite -> {
+
+                        Log.v("weekPresenceEmployee", "Here: ${user}")
+
+                        var createEventUrl = "https://step24.ir/login"
+                        if (user != "" || user != null) {
+                            createEventUrl =
+                                "https://step24.ir/${user}/admin/minisite-panel"
+                        }
+
+                        try {
+                            val urlObj = URL(createEventUrl)
+                            val connection: HttpURLConnection =
+                                urlObj.openConnection() as HttpURLConnection
+                            connection.setRequestProperty("app-origin", "android")
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(createEventUrl))
+                            startActivity(intent)
+                        } catch (e: MalformedURLException) {
+                            // Handle URL exception
+                        } catch (e: IOException) {
+                            // Handle connection exception
+                        }
+                    }
+
+                }
+                true
+            }
+        }
+    }
     private fun onPhotoClicked(popupMenu: PopupMenu) {
         popupMenu.menuInflater.inflate(R.menu.menu_add_photo, popupMenu.menu)
         binding.imgCom.setOnClickListener {
@@ -174,7 +269,6 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
         companyInfoDao.update(newInfo)
         onConfirmButtonClicked()
     }
-
     private fun btnCompanySkill(view: View) {
 
         binding.icCompanySkill.backgroundTintList =
@@ -209,21 +303,21 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
         layoutParamsCompanyResume.height = resources.getDimensionPixelSize(R.dimen.size_35)
         binding.icCompanyResume.layoutParams = layoutParamsCompanyResume
 
-        binding.icEmployeeResume.backgroundTintList =
+        binding.icEvent.backgroundTintList =
             ContextCompat.getColorStateList(view.context, R.color.blacke)
-        binding.txtEmployeeResume.setTextColor(Color.parseColor("#FFFFFF"))
-        binding.txtEmployeeResume.textSize = 9f
-        var layoutParamsEmployeeResume = binding.btnEmployeeResume.layoutParams
+        binding.txtEvent.setTextColor(Color.parseColor("#FFFFFF"))
+        binding.txtEvent.textSize = 9f
+        var layoutParamsEmployeeResume = binding.btnEvent.layoutParams
         layoutParamsEmployeeResume.height = resources.getDimensionPixelSize(R.dimen.size_60)
-        binding.btnEmployeeResume.layoutParams = layoutParamsEmployeeResume
+        binding.btnEvent.layoutParams = layoutParamsEmployeeResume
         ViewCompat.setElevation(
-            binding.btnEmployeeResume,
+            binding.btnEvent,
             resources.getDimension(R.dimen.elevation_5)
         )
-        layoutParamsEmployeeResume = binding.icEmployeeResume.layoutParams
+        layoutParamsEmployeeResume = binding.icEvent.layoutParams
         layoutParamsEmployeeResume.width = resources.getDimensionPixelSize(R.dimen.size_35)
         layoutParamsEmployeeResume.height = resources.getDimensionPixelSize(R.dimen.size_35)
-        binding.icEmployeeResume.layoutParams = layoutParamsEmployeeResume
+        binding.icEvent.layoutParams = layoutParamsEmployeeResume
 
         replaceFragment(CompanySkillFragment())
     }
@@ -260,40 +354,40 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
         layoutParamsCompanySkill.height = resources.getDimensionPixelSize(R.dimen.size_35)
         binding.icCompanySkill.layoutParams = layoutParamsCompanySkill
 
-        binding.icEmployeeResume.backgroundTintList =
+        binding.icEvent.backgroundTintList =
             ContextCompat.getColorStateList(view.context, R.color.blacke)
-        binding.txtEmployeeResume.setTextColor(Color.parseColor("#FFFFFF"))
-        binding.txtEmployeeResume.textSize = 9f
-        var layoutParamsEmployeeResume = binding.btnEmployeeResume.layoutParams
+        binding.txtEvent.setTextColor(Color.parseColor("#FFFFFF"))
+        binding.txtEvent.textSize = 9f
+        var layoutParamsEmployeeResume = binding.btnEvent.layoutParams
         layoutParamsEmployeeResume.height = resources.getDimensionPixelSize(R.dimen.size_60)
-        binding.btnEmployeeResume.layoutParams = layoutParamsEmployeeResume
+        binding.btnEvent.layoutParams = layoutParamsEmployeeResume
         ViewCompat.setElevation(
-            binding.btnEmployeeResume,
+            binding.btnEvent,
             resources.getDimension(R.dimen.elevation_5)
         )
-        layoutParamsEmployeeResume = binding.icEmployeeResume.layoutParams
+        layoutParamsEmployeeResume = binding.icEvent.layoutParams
         layoutParamsEmployeeResume.width = resources.getDimensionPixelSize(R.dimen.size_35)
         layoutParamsEmployeeResume.height = resources.getDimensionPixelSize(R.dimen.size_35)
-        binding.icEmployeeResume.layoutParams = layoutParamsEmployeeResume
+        binding.icEvent.layoutParams = layoutParamsEmployeeResume
 
         replaceFragment(CompanyResumeFragment())
     }
-    private fun btnEmployeeResume(view: View) {
-        binding.icEmployeeResume.backgroundTintList =
+    private fun btnEvent(view: View) {
+        binding.icEvent.backgroundTintList =
             ContextCompat.getColorStateList(view.context, R.color.firoze)
-        binding.txtEmployeeResume.setTextColor(Color.parseColor("#E600ADB5"))
-        binding.txtEmployeeResume.textSize = 11f
-        var layoutParamsEmployeeResume = binding.btnEmployeeResume.layoutParams
+        binding.txtEvent.setTextColor(Color.parseColor("#E600ADB5"))
+        binding.txtEvent.textSize = 11f
+        var layoutParamsEmployeeResume = binding.btnEvent.layoutParams
         layoutParamsEmployeeResume.height = resources.getDimensionPixelSize(R.dimen.size_70)
-        binding.btnEmployeeResume.layoutParams = layoutParamsEmployeeResume
+        binding.btnEvent.layoutParams = layoutParamsEmployeeResume
         ViewCompat.setElevation(
-            binding.btnEmployeeResume,
+            binding.btnEvent,
             resources.getDimension(R.dimen.elevation_10)
         )
-        layoutParamsEmployeeResume = binding.icEmployeeResume.layoutParams
+        layoutParamsEmployeeResume = binding.icEvent.layoutParams
         layoutParamsEmployeeResume.width = resources.getDimensionPixelSize(R.dimen.size_40)
         layoutParamsEmployeeResume.height = resources.getDimensionPixelSize(R.dimen.size_40)
-        binding.icEmployeeResume.layoutParams = layoutParamsEmployeeResume
+        binding.icEvent.layoutParams = layoutParamsEmployeeResume
 
         binding.icCompanySkill.backgroundTintList =
             ContextCompat.getColorStateList(view.context, R.color.blacke)
@@ -327,7 +421,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
         layoutParamsCompanyResume.height = resources.getDimensionPixelSize(R.dimen.size_35)
         binding.icCompanyResume.layoutParams = layoutParamsCompanyResume
 
-        replaceFragment(CompanyEmployeeResumeFragment())
+        replaceFragment(CompanyEventFragment())
     }
     private fun replaceFragment(fragment: Fragment) {
         val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()

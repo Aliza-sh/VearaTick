@@ -112,8 +112,7 @@ class PoolakeyActivity : AppCompatActivity() {
 //                    ...
                     Log.d(TAG, "msg: purchaseSucceed")
 
-                    val sharedPreferences =
-                        getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
+                    val sharedPreferences = getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
                     sharedPreferences.edit().putBoolean(CHEKBUY, true).apply()
 
                     Log.d(TAG, "msg: " + purchaseEntity)
