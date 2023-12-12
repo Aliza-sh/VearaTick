@@ -13,6 +13,7 @@
         android:layout_width="60dp"
         android:layout_height="50dp"
         android:layout_marginStart="28dp"
+        android:layout_marginTop="30dp"
         android:background="@drawable/shape_background_bottom_radius"
         android:backgroundTint="?attr/colorPrimary"
         android:elevation="10dp"

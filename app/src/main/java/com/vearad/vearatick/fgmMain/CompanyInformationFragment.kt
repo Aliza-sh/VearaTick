@@ -133,7 +133,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
                             "شما تا کنون در سایت step24 ثبت نام نکرده اید ابتدا در این سایت ثبت نام نموده سپس مینی سایت خود را بسازید."
                         )
                             .cancelable(true)
-                            .textTypeface(Typeface.SERIF)
+                            .textTypeface(Typeface.DEFAULT_BOLD)
                             .titleTextSize(20)
                             .descriptionTextColor(R.color.blacke)
                             .transparentTarget(true)

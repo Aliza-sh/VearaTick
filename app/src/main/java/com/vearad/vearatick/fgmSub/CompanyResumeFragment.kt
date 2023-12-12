@@ -60,7 +60,7 @@ class CompanyResumeFragment : Fragment(), CompanyResumeAdapter.CompanyResumeEven
     }
 
     private fun topMargin() {
-        val topMargin = 190 // اندازه مارجین بالا را از منابع دریافت کن
+        val topMargin = 270 // اندازه مارجین بالا را از منابع دریافت کن
         val itemDecoratio = TopMarginItemDecoration(topMargin)
         binding.rcvResume.addItemDecoration(itemDecoratio)
     }

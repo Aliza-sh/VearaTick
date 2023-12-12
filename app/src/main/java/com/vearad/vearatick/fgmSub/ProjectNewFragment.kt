@@ -62,6 +62,18 @@ class ProjectNewFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onBackPressed()
+        binding.btnBck.setOnClickListener {
+            if (parentFragmentManager.backStackEntryCount > 0) {
+                parentFragmentManager.popBackStack()
+            }
+        }
+
+        val today = PersianCalendar()
+        valueDay = today.day -1
+        valueMonth = today.month + 1
+        valueYear = today.year
+        valueCalendar = "$valueYear/$valueMonth/$valueDay"
+        binding.txtDedlineDateTime.text = valueCalendar
 
         val typeProject = listOf(
             "اندروید",
@@ -78,12 +90,6 @@ class ProjectNewFragment(
             myAdapteredt
         )
 
-        binding.btnBck.setOnClickListener {
-            if (parentFragmentManager.backStackEntryCount > 0) {
-                parentFragmentManager.popBackStack()
-            }
-        }
-
         binding.btnCalendar.setOnClickListener {
             showDeadlineDialog()
         }
@@ -93,7 +99,7 @@ class ProjectNewFragment(
             when (checkedId) {
 
                 R.id.btn_no_settlement -> {
-                    binding.budget.visibility = View.GONE
+                    binding.budget.visibility = View.INVISIBLE
                 }
 
                 R.id.btn_settlement -> {
@@ -194,9 +200,10 @@ class ProjectNewFragment(
         }
         bindingDialogView.dialogBtnSure.setOnClickListener {
 
-            if (valueBtnNoDate)
-                binding.txtDedlineDateTime.text = "پروژه ددلاین \n ندارد "
-            else
+            if (valueBtnNoDate) {
+                binding.txtDedlineDateTime.text = "پروژه ددلاین ندارد."
+                binding.txtDedlineDateTime.textSize = 16f
+            } else
                 binding.txtDedlineDateTime.text = valueCalendar.toString()
 
             alertDialog.dismiss()

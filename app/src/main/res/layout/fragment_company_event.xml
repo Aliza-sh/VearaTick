@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="?attr/colorOnPrimary"
-    android:layoutDirection="ltr"
+    android:layoutDirection="rtl"
     android:layout_height="match_parent"
     tools:context=".fgmSub.CompanyEventFragment">
 
@@ -12,11 +12,12 @@
         android:id="@+id/btn_add_new_event"
         android:layout_width="60dp"
         android:layout_height="50dp"
-        android:layout_marginStart="28dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="28dp"
         android:background="@drawable/shape_background_bottom_radius"
         android:backgroundTint="?attr/colorPrimary"
         android:elevation="10dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
@@ -25,7 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center|bottom"
             android:layout_marginBottom="5dp"
-            android:text="مهارت جدید"
+            android:text="رویداد جدید"
             android:textColor="@color/white"
             android:textSize="9sp" />
 
