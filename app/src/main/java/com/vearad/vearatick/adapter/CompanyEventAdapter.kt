@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.vearad.vearatick.DataBase.Employee
 import com.vearad.vearatick.databinding.ItemEventBinding
+import com.vearad.vearatick.model.Events
 
 class CompanyEventAdapter(
-    val data: ArrayList<Employee>,
+    val data: List<Events.Event>,
     val companyEvent: CompanyEventEvent,
 ) :
     RecyclerView.Adapter<CompanyEventAdapter.CompanyEventViewHolder>() {
@@ -21,9 +21,9 @@ class CompanyEventAdapter(
         @SuppressLint("SetTextI18n")
         fun bindData(position: Int, clickListener: CompanyEventEvent) {
 
-            binding.txtDateEvent.text = "1402/5/6"
-            binding.txtNameEvent.text = "دورهمی ویراد"
-            binding.txtNumPerson.text = "20 نفر"
+            binding.txtDateEvent.text = data[position].start_date
+            binding.txtNameEvent.text = data[position].name
+            binding.txtNumPerson.text = data[position].attendanceCount.toString()
 
             itemView.setOnClickListener {
                 companyEvent.onEventClicked(data[position], position)
@@ -63,14 +63,9 @@ class CompanyEventAdapter(
         return data.size
     }
 
-    fun removeEmployee(oldCompanyEmployeeResume: Employee, oldPosition: Int) {
-        data.remove(oldCompanyEmployeeResume)
-        notifyItemRemoved(oldPosition)
-    }
-
     interface CompanyEventEvent {
         fun onEventClicked(
-            companyEmployeeResume: Employee,
+            companyEvent: Events.Event,
             position: Int,
         )
 //        fun onMenuItemClick(

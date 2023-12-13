@@ -385,7 +385,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:inputType="phone"
-                                        android:maxLength="11"
+                                        android:maxLength="15"
                                         android:singleLine="true"
                                         android:textSize="13sp"
                                         android:textColor="?attr/colorOnSecondary" />
@@ -405,7 +405,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:inputType="phone"
-                                        android:maxLength="11"
+                                        android:maxLength="15"
                                         android:singleLine="true"
                                         android:textSize="13sp"
                                         android:textColor="?attr/colorOnSecondary" />

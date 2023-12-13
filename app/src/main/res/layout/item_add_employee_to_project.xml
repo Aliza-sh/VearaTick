@@ -15,10 +15,13 @@
 
         <ImageView
             android:id="@+id/imgprn2"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_gravity="center|top"
             android:layout_marginTop="16dp"
+            android:background="@drawable/shape_circle"
+            android:backgroundTint="?attr/colorOnPrimary"
+            android:padding="5dp"
             android:layout_marginEnd="12dp"
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -34,7 +37,7 @@
             android:layout_marginBottom="20dp"
             android:text="name employee"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="18sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/imgprn2"
             app:layout_constraintEnd_toStartOf="@+id/imgprn2"
@@ -47,7 +50,7 @@
             android:layout_height="wrap_content"
             android:text="job employee"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="@+id/txt_name_employee"
             app:layout_constraintStart_toStartOf="@+id/txt_name_employee"
             app:layout_constraintTop_toBottomOf="@+id/txt_name_employee" />

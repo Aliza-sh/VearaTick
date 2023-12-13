@@ -98,15 +98,14 @@ class ProjectSubTaskAddNewTeamFromInfoFragment(
                         subTaskProject.idSubTask
                     )
 
-                    if (employee!!.imagePath != "") {
+                    if (employee!!.imagePath != null) {
                         Glide.with(holder.itemView)
                             .load(employee.imagePath)
                             .apply(RequestOptions.circleCropTransform())
                             .into(bindingItemAddEmployeeToProject.imgprn2)
                     } else
-                        if (employee.gender == "زن") {
+                        if (employee.gender == "زن")
                             bindingItemAddEmployeeToProject.imgprn2.setImageResource(R.drawable.img_matter)
-                        }
 
                     bindingItemAddEmployeeToProject.txtNameEmployee.text =
                         employee.name + " " + employee.family

@@ -33,9 +33,7 @@ import com.vearad.vearatick.fgmSub.CompanyEventFragment
 import com.vearad.vearatick.fgmSub.CompanyResumeFragment
 import com.vearad.vearatick.fgmSub.CompanySkillFragment
 import java.io.IOException
-import java.net.HttpURLConnection
 import java.net.MalformedURLException
-import java.net.URL
 
 class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
@@ -124,45 +122,15 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
                 requireActivity().getSharedPreferences(SHAREDLOGINSTEP24, Context.MODE_PRIVATE)
             val user = sharedPreferencesLoginStep24.getString(LOGINSTEP24, null)
 
+            val tapTargetSequence = tapTargetSequence()
+
             if (user == "" || user == null)
-                TapTargetSequence(requireActivity())
-                    .targets(
-                        TapTarget.forView(
-                            binding.btnMenuCompany,
-                            "\n\nثبت نام در مینی سایت",
-                            "شما تا کنون در سایت step24 ثبت نام نکرده اید ابتدا در این سایت ثبت نام نموده سپس مینی سایت خود را بسازید."
-                        )
-                            .cancelable(true)
-                            .textTypeface(Typeface.DEFAULT_BOLD)
-                            .titleTextSize(20)
-                            .descriptionTextColor(R.color.blacke)
-                            .transparentTarget(true)
-                            .targetCircleColor(R.color.firoze)
-                            .titleTextColor(R.color.white)
-                            .targetRadius(60)
-                            .id(1)
-                    )
-                    .listener(object : TapTargetSequence.Listener {
-                        override fun onSequenceFinish() {
-                            // دنباله Tap Target ها به پایان رسید
-                        }
-
-                        override fun onSequenceStep(
-                            lastTarget: TapTarget?,
-                            targetClicked: Boolean
-                        ) {
-                            // مرحله جدید Tap Target در دنباله
-                        }
-
-                        override fun onSequenceCanceled(lastTarget: TapTarget?) {
-                            // دنباله Tap Target ها لغو شد
-                        }
-                    })
-                    .start()
+                tapTargetSequence?.start()
 
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.menu_edit_company -> {
+                        tapTargetSequence?.cancel()
                         val bottomsheet = CompanyInfoBottomsheetFragment()
                         bottomsheet.setStyle(
                             R.style.BottomSheetStyle,
@@ -175,20 +143,21 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
                     R.id.menu_login_minisite -> {
 
-                        Log.v("weekPresenceEmployee", "Here: ${user}")
+                        Log.v("loginapp", "Here: ${user}")
 
-                        var createEventUrl = "https://step24.ir/login"
-                        if (user != "" || user != null) {
+                        var createEventUrl = "http://192.168.1.105:8081/login"
+                        if (user != null) {
                             createEventUrl =
-                                "https://step24.ir/${user}/admin/minisite-panel"
+                                "http://192.168.1.105:8081/${user}/admin/minisite-panel"
                         }
 
                         try {
-                            val urlObj = URL(createEventUrl)
-                            val connection: HttpURLConnection =
-                                urlObj.openConnection() as HttpURLConnection
-                            connection.setRequestProperty("app-origin", "android")
-                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(createEventUrl))
+                            val modifiedUrl = Uri.parse(createEventUrl)
+                                .buildUpon()
+                                .appendQueryParameter("appOrigin", "android")
+                                .build()
+
+                            val intent = Intent(Intent.ACTION_VIEW, modifiedUrl)
                             startActivity(intent)
                         } catch (e: MalformedURLException) {
                             // Handle URL exception
@@ -202,6 +171,45 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
             }
         }
     }
+
+    private fun tapTargetSequence(): TapTargetSequence? {
+        val tapTargetSequence = TapTargetSequence(requireActivity())
+            .targets(
+                TapTarget.forView(
+                    binding.btnMenuCompany,
+                    "\n\nثبت نام در مینی سایت",
+                    "شما تا کنون در سایت step24 ثبت نام نکرده اید ابتدا در این سایت ثبت نام نموده سپس مینی سایت خود را بسازید."
+                )
+                    .cancelable(true)
+                    .textTypeface(Typeface.DEFAULT_BOLD)
+                    .titleTextSize(20)
+                    .descriptionTextColor(R.color.blacke)
+                    .transparentTarget(true)
+                    .targetCircleColor(R.color.firoze)
+                    .titleTextColor(R.color.white)
+                    .targetRadius(60)
+                    .id(1)
+            ).listener(object : TapTargetSequence.Listener {
+                override fun onSequenceFinish() {
+                    // دنباله Tap Target ها به پایان رسید
+                }
+
+                override fun onSequenceStep(
+                    lastTarget: TapTarget?,
+                    targetClicked: Boolean
+                ) {
+                    // مرحله جدید Tap Target در دنباله
+                }
+
+                override fun onSequenceCanceled(lastTarget: TapTarget?) {
+                    // دنباله Tap Target ها لغو شد
+                }
+            })
+
+        return tapTargetSequence
+
+    }
+
     private fun onPhotoClicked(popupMenu: PopupMenu) {
         popupMenu.menuInflater.inflate(R.menu.menu_add_photo, popupMenu.menu)
         binding.imgCom.setOnClickListener {

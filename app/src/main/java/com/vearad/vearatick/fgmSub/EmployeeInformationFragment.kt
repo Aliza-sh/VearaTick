@@ -17,6 +17,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.kizitonwose.calendarview.utils.persian.PersianCalendar
+import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.EfficiencyDao
 import com.vearad.vearatick.DataBase.Employee
 import com.vearad.vearatick.DataBase.EmployeeDao
@@ -52,6 +54,7 @@ class EmployeeInformationFragment(
         onBackPressed()
         firstRun(view)
         setData(employee)
+        setTitleEmployee(view)
 
         binding.btnStatistics.setOnClickListener {
             btnStatistics(view)
@@ -71,6 +74,70 @@ class EmployeeInformationFragment(
             parentFragmentManager.beginTransaction().detach(this@EmployeeInformationFragment)
                 .replace(R.id.frame_layout_sub, EmployeeFragment(bindingActivityProAndEmpBinding))
                 .commit()
+        }
+    }
+
+    private fun setTitleEmployee(view: View) {
+
+        val taskDao = AppDatabase.getDataBase(view.context).taskDao
+        val timeDao = AppDatabase.getDataBase(view.context).timeDao
+        val dayDao = AppDatabase.getDataBase(view.context).dayDao
+        val today = PersianCalendar()
+
+        val taskInWeekEmployee = taskDao.getTaskInWeek(employee.idEmployee!!, today.persianDay)
+        val taskTodayEmployee = taskDao.getTaskToday(employee.idEmployee!!, today.persianDay)
+        val taskTomorrowEmployee = taskDao.getTaskTomorrow(employee.idEmployee!!, today.persianDay)
+        val taskPastEmployee = taskDao.getTaskPast(employee.idEmployee!!, today.persianDay)
+        val taskDoneEmployee = taskDao.getDoneTask(employee.idEmployee!!)
+        val timeEmployee = timeDao.getAllArrivalDay(
+            employee.idEmployee!!,
+            today.persianYear.toString(),
+            today.persianMonthName,
+            today.persianDay.toString()
+        )
+        val dayEmployee = dayDao.getAllNameDay(
+            employee.idEmployee!!,
+            today.persianYear.toString(),
+            today.persianMonthName,
+            today.persianWeekDayName.toString()
+        )
+        val efficiencyEmployee = efficiencyEmployeeDao.getEfficiencyEmployee(employee.idEmployee!!)
+        val employeeNew = employeeDao.useEmployee(
+            employee.idEmployee!!,
+            today.persianDay,
+            today.persianMonth,
+            today.persianYear
+        )
+        val efficiencyNewEmployee = efficiencyEmployeeDao.isAllColumnsNonZero()
+
+
+        if (employeeNew && efficiencyNewEmployee) {
+            binding.txtTitle.text = "این کارمند تازه استخدام شده"
+        } else {
+            if (dayEmployee!= null && timeEmployee == null )
+                binding.txtTitle.text = "دیر شد نیومده یه خبر بگیر ازش"
+            else {
+                if (taskPastEmployee)
+                    binding.txtTitle.text = "از موعد تحویل تسکش گذشته"
+                else if (taskTodayEmployee)
+                    binding.txtTitle.text = "امروز موعد تحویل تسک شه"
+                else if (taskTomorrowEmployee)
+                    binding.txtTitle.text = "فردا باید تسکش رو تحویل بده"
+                else if (taskInWeekEmployee)
+                    binding.txtTitle.text = "این هفته باید تسک تحویل بده"
+                else {
+                    val totalWeekWatch = efficiencyEmployee!!.totalWeekWatch
+                    val mustWeekWatch = efficiencyEmployee!!.mustWeekWatch
+                    val efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties
+
+                    if ((mustWeekWatch - totalWeekWatch) < (mustWeekWatch/4))
+                        binding.txtTitle.text = "حضور درست حسابی تو شرکت نداشته"
+                    else if (taskDoneEmployee && efficiencyTotalDuties < 50)
+                        binding.txtTitle.text = "تسک هاش رو درست حسابی انجام نداده"
+                    else
+                        binding.txtTitle.text = "این کارمند کارش درسته"
+                }
+            }
         }
     }
 
@@ -226,7 +293,7 @@ class EmployeeInformationFragment(
             binding.txtRank.text = "سهام دار"
             val shape = GradientDrawable()
             shape.shape = GradientDrawable.RECTANGLE
-            shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+            shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 0f, 0f, 40f, 40f, 40f)
             shape.setStroke(
                 5,
                 ContextCompat.getColor(binding.root.context, R.color.green_dark_rank)
@@ -240,26 +307,26 @@ class EmployeeInformationFragment(
             binding.txtRank.text = "کارمند"
             val shape = GradientDrawable()
             shape.shape = GradientDrawable.RECTANGLE
-            shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+            shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 0f, 0f, 40f, 40f, 40f)
             shape.setStroke(
                 5,
                 ContextCompat.getColor(binding.root.context, R.color.blue_dark_rank)
             )
             shape.setColor(ContextCompat.getColor(binding.root.context, R.color.blue_light_rank))
-            binding.txtRank.setTextColor(android.graphics.Color.parseColor("#215DAD"))
+            binding.txtRank.setTextColor(Color.parseColor("#215DAD"))
             binding.txtRank.background = shape
 
         } else if (employee.rank == "کارآموز") {
             binding.txtRank.text = "کارآموز"
             val shape = GradientDrawable()
             shape.shape = GradientDrawable.RECTANGLE
-            shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+            shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 0f, 0f, 40f, 40f, 40f)
             shape.setStroke(
                 5,
                 ContextCompat.getColor(binding.root.context, R.color.red_dark_rank)
             )
             shape.setColor(ContextCompat.getColor(binding.root.context, R.color.red_light_rank))
-            binding.txtRank.setTextColor(android.graphics.Color.parseColor("#AF694C"))
+            binding.txtRank.setTextColor(Color.parseColor("#AF694C"))
             binding.txtRank.background = shape
         }
 

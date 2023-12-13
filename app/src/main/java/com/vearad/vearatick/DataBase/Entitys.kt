@@ -19,7 +19,11 @@ data class Employee(
     val specialty: String,
     val rank: String,
     val skill: String? = "",
-    val imagePath: String? = ""
+    val imagePath: String? = "",
+
+    val dayUse: Int,
+    val monthUse: Int,
+    val yearUse: Int,
     )
 
 @Entity(tableName = "day_table")

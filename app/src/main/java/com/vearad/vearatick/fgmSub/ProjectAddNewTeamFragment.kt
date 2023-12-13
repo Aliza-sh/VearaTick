@@ -88,15 +88,15 @@ class ProjectAddNewTeamFragment(
                     project.idProject
                 )
 
-                if (employee!!.imagePath != "") {
+                if (employee!!.imagePath != null) {
                     Glide.with(holder.itemView)
                         .load(employee.imagePath)
                         .apply(RequestOptions.circleCropTransform())
                         .into(bindingItemAddEmployeeToProject.imgprn2)
                 } else
-                    if (employee.gender == "زن") {
+                    if (employee.gender == "زن")
                         bindingItemAddEmployeeToProject.imgprn2.setImageResource(R.drawable.img_matter)
-                    }
+
 
                 bindingItemAddEmployeeToProject.txtNameEmployee.text = data[position].name + " " + data[position].family
                 bindingItemAddEmployeeToProject.txtJobEmployee.text = data[position].specialty

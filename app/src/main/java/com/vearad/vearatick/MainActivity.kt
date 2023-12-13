@@ -24,9 +24,6 @@ import com.vearad.vearatick.fgmMain.CompanyInformationFragment
 import org.json.JSONException
 import org.json.JSONObject
 
-
-
-
 lateinit var employeeDao: EmployeeDao
 lateinit var dayDao: DayDao
 lateinit var timeDao: TimeDao
@@ -39,6 +36,9 @@ const val SHAREDVEARATICK = "sharedVearatick"
 const val CHEKBUY = "chekBuy"
 const val SHAREDLOGINSTEP24 = "SharedLoginStep24"
 const val LOGINSTEP24 = "loginStep24"
+
+const val ACCESSTOKEN = "sharedAccessToken"
+const val KEYACCESSTOKEN = "keyAccessToken"
 
 class MainActivity : AppCompatActivity() {
 
@@ -63,19 +63,19 @@ class MainActivity : AppCompatActivity() {
                     val jsonObject = JSONObject(jsonData)
                     val accessToken = jsonObject.getString("access_token")
                     val username = jsonObject.getString("username")
-                    Log.v("weekPresenceEmployee", "accessToken: ${accessToken}")
-                    Log.v("weekPresenceEmployee", "username: ${username}")
+                    Log.v("loginapp", "accessToken: ${accessToken}")
+                    Log.v("loginapp", "username: ${username}")
                     val sharedPreferencesLoginStep24 = getSharedPreferences(SHAREDLOGINSTEP24, Context.MODE_PRIVATE)
                     sharedPreferencesLoginStep24.edit().putString(LOGINSTEP24, username).apply()
+
+                    val sharedPreferencesAccessToken = getSharedPreferences(ACCESSTOKEN, Context.MODE_PRIVATE)
+                    sharedPreferencesAccessToken.edit().putString(KEYACCESSTOKEN, accessToken).apply()
                     // Handle the retrieved data
                 } catch (e: JSONException) {
                     // Handle JSON parsing error
                 }
             }
         }
-
-
-
 
         employeeDao = AppDatabase.getDataBase(this).employeeDao
 

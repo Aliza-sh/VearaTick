@@ -544,7 +544,7 @@ class EmployeeCalendarFragment(
         }
         bindingDialogEmployeeEntryExit.dialogBtnSure.setOnClickListener {
 
-            if (valueAllEntry == "" && valueAllExit == "")
+            if (valueHourExit == "" || valueHourEntry == "")
                 Toast.makeText(context, " لطفا همه مقادیر را وارد کنید.", Toast.LENGTH_SHORT).show()
             else if (valueHourExit.toInt() < valueHourEntry.toInt())
                 Toast.makeText(

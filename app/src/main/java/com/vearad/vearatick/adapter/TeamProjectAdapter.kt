@@ -24,16 +24,15 @@ class TeamProjectAdapter(private val data: ArrayList<TeamProject>) :
             val employeeDao  = AppDatabase.getDataBase(itemView.context).employeeDao
             val employee = employeeDao.getEmployee(data[position].idEmployee!!)
             binding.txtNameEmployee.text = employee!!.name + " " + employee.family
-            if (employee.imagePath != "") {
+            if (employee.imagePath != null) {
                 Glide.with(itemView)
                     .load(employee.imagePath)
                     .apply(RequestOptions.circleCropTransform())
                     .into(binding.imgEmployee)
-            } else
-                if (employee.gender == "زن") {
+            } else {
+                if (employee.gender == "زن")
                     binding.imgEmployee.setImageResource(R.drawable.img_matter)
-                }
-
+            }
         }
 
     }

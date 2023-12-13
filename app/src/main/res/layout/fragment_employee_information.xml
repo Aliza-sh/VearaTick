@@ -41,7 +41,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="8dp"
-            android:background="@drawable/shape_background_rcv"
+            android:background="@drawable/shape_background_employee"
             android:backgroundTint="?attr/colorOnPrimary"
             android:gravity="center"
             android:orientation="vertical"
@@ -126,7 +126,7 @@
         <LinearLayout
             android:id="@+id/tablayoutEmp"
             android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_height="40dp"
             android:layout_marginTop="24dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/shape_background_navi"
@@ -135,8 +135,7 @@
             android:weightSum="3"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/linearLayout8"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView12">
+            app:layout_constraintStart_toStartOf="parent">
 
             <LinearLayout
                 android:id="@+id/btn_task"
@@ -219,11 +218,12 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textView12"
+            android:id="@+id/txt_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="4dp"
+            android:maxWidth="220dp"
+            android:layout_marginEnd="12dp"
             android:background="@drawable/shape_background_rcv"
             android:backgroundTint="?attr/colorOnPrimary"
             android:paddingStart="10dp"
@@ -232,11 +232,10 @@
             android:paddingBottom="10dp"
             android:text="این کارمند کارش درسته"
             android:textColor="?attr/colorPrimary"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/linearLayout8"
             app:layout_constraintEnd_toStartOf="@+id/linearLayout8"
-            app:layout_constraintTop_toTopOf="@+id/linearLayout8" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_menu_employee" />
 
         <ImageButton
             android:layout_marginStart="8dp"
@@ -256,8 +255,6 @@
             android:id="@+id/txt_rank"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
             android:background="#C6EAD0"
             android:paddingStart="10dp"
             android:paddingTop="2dp"
@@ -265,9 +262,9 @@
             android:paddingBottom="2dp"
             android:text="کار آموز"
             android:textColor="#227158"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@+id/textView12"
-            app:layout_constraintEnd_toEndOf="@+id/textView12" />
+            android:textSize="14sp"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout8"
+            app:layout_constraintTop_toTopOf="@+id/linearLayout8" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

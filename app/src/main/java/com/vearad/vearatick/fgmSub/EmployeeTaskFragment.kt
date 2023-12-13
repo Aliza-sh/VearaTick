@@ -46,7 +46,7 @@ class EmployeeTaskFragment(
     ) :
     Fragment() {
 
-    var selectedDate = LocalDate.now()
+    private var selectedDate: LocalDate? = null
     lateinit var binding: FragmentEmployeeTaskBinding
     var oldLayout: LinearLayout? = null
 
@@ -124,7 +124,7 @@ class EmployeeTaskFragment(
                                     efficiencyEmployeeDao,
                                     employee.idEmployee!!,
                                     taskEmployeeDao,
-                                    selectedDate.toPersianCalendar(),
+                                    selectedDate!!.toPersianCalendar(),
                                     today
                                     ,bindingActivityProAndEmpBinding
                                 )

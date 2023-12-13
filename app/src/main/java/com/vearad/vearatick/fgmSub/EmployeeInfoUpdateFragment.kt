@@ -266,7 +266,10 @@ class EmployeeInfoUpdateFragment(
                 specialty = txtSpecialty,
                 skill = "",
                 rank = txtRank,
-                imagePath = null
+                imagePath = null,
+                dayUse = employee.dayUse,
+                monthUse = employee.monthUse,
+                yearUse = employee.yearUse
             )
 
             if (imagePath != null) {
@@ -283,7 +286,10 @@ class EmployeeInfoUpdateFragment(
                     specialty = txtSpecialty,
                     skill = "",
                     imagePath = imagePath.toString(),
-                    rank = txtRank
+                    rank = txtRank,
+                    dayUse = employee.dayUse,
+                    monthUse = employee.monthUse,
+                    yearUse = employee.yearUse
                 )
             }
             employeeAdapter.updateEmployee(newEmployee, position)

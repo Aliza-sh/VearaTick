@@ -1,8 +1,16 @@
 package com.vearad.vearatick.fgmSub
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
+import android.provider.ContactsContract
+import android.provider.ContactsContract.CommonDataKinds
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,10 +19,12 @@ import android.widget.AutoCompleteTextView
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.kizitonwose.calendarview.utils.persian.PersianCalendar
 import com.vearad.vearatick.DataBase.EfficiencyDao
 import com.vearad.vearatick.DataBase.EfficiencyEmployee
 import com.vearad.vearatick.DataBase.Employee
@@ -24,8 +34,9 @@ import com.vearad.vearatick.databinding.FragmentEmployeeRecruitmentBinding
 import com.vearad.vearatick.employeeAdapter
 import com.vearad.vearatick.employeeDao
 
-private val PICK_IMAGE_REQUEST = 1
 
+private val PICK_IMAGE_REQUEST = 1
+private val PICK_CONTACT_REQUEST = 2
 class EmployeeRecruitmentFragment(
     val bindingActivityProAndEmpBinding: ActivityProAndEmpBinding,
     val efficiencyEmployeeDao: EfficiencyDao
@@ -78,6 +89,8 @@ class EmployeeRecruitmentFragment(
         val popupMenu = PopupMenu(this.context, binding.imgprn2)
         onPhotoClicked(popupMenu)
 
+        binding.btnNumberPhone.setOnClickListener {selectContact()  }
+
         binding.btnBck.setOnClickListener {
             if (parentFragmentManager.backStackEntryCount > 0) {
                 parentFragmentManager.popBackStack()
@@ -127,20 +140,73 @@ class EmployeeRecruitmentFragment(
         startActivityForResult(intent, PICK_IMAGE_REQUEST)
     }
 
+    private fun selectContact() {
+        val activity = activity ?: return
+
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                activity,
+                arrayOf(Manifest.permission.READ_CONTACTS),
+                PICK_CONTACT_REQUEST
+            )
+        } else {
+            val intent = Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
+            startActivityForResult(intent, PICK_CONTACT_REQUEST)        }
+    }
+
+    @SuppressLint("Range")
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == AppCompatActivity.RESULT_OK && data != null) {
-            val selectedImageUri: Uri = data.data!!
-            imagePath = selectedImageUri
-            imageUri = selectedImageUri
-            Glide.with(this)
-                .load(selectedImageUri)
-                .apply(RequestOptions.circleCropTransform())
-                .into(binding.imgprn2)
-            binding.imgprn2.setPadding(20, 20, 20, 20)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                PICK_IMAGE_REQUEST -> {
+                    val selectedImageUri: Uri = data!!.data!!
+                    imagePath = selectedImageUri
+                    imageUri = selectedImageUri
+                    Glide.with(this)
+                        .load(selectedImageUri)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(binding.imgprn2)
+                    binding.imgprn2.setPadding(20, 20, 20, 20)
+                }
+                PICK_CONTACT_REQUEST -> {
+
+                    val contactData: Uri = data!!.data!!
+                    val cur: Cursor =
+                        requireActivity().getContentResolver().query(contactData, null, null, null, null)!!
+                    if (cur.count > 0) { // thats mean some resutl has been found
+                        if (cur.moveToNext()) {
+                            val id =
+                                cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID))
+                            val name =
+                                cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                            Log.e("Names", name)
+                            if (cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))
+                                    .toInt() > 0
+                            ) {
+                                val phones: Cursor = requireActivity().getContentResolver().query(
+                                    CommonDataKinds.Phone.CONTENT_URI,
+                                    null,
+                                    CommonDataKinds.Phone.CONTACT_ID + " = " + id,
+                                    null,
+                                    null
+                                )!!
+                                while (phones.moveToNext()) {
+                                    val phoneNumber = phones.getString(phones.getColumnIndex(CommonDataKinds.Phone.NUMBER))
+                                    binding.edtNumEmp.setText(phoneNumber)
+                                }
+                                phones.close()
+                            }
+                        }
+                    }
+                    cur.close()
+
+                }
+            }
         }
     }
+
     private fun deletePhoto() {
         imageUri = null
         imagePath = null
@@ -171,6 +237,7 @@ class EmployeeRecruitmentFragment(
             var txtNumberHome = binding.edtNumbhomeEmp.text.toString()
             val txtAddress = binding.edtAddressEmp.text.toString()
             val txtMaharat = ""
+            val today = PersianCalendar()
 
             if (txtNumberHome == "")
                 txtNumberHome = "0"
@@ -186,7 +253,10 @@ class EmployeeRecruitmentFragment(
                 specialty = txtSpecialty,
                 skill = txtMaharat,
                 rank = txtRank,
-                imagePath = null
+                imagePath = null,
+                dayUse = today.persianDay,
+                monthUse = today.persianMonth,
+                yearUse = today.persianYear
             )
 
             if (imageUri != null) {
@@ -202,7 +272,10 @@ class EmployeeRecruitmentFragment(
                     specialty = txtSpecialty,
                     skill = txtMaharat,
                     imagePath = imagePath.toString(),
-                    rank = txtRank
+                    rank = txtRank,
+                    dayUse = today.persianDay,
+                    monthUse = today.persianMonth,
+                    yearUse = today.persianYear
                 )
             }
 

@@ -358,45 +358,88 @@
                                 android:layoutDirection="rtl"
                                 android:orientation="vertical">
 
-                                <com.google.android.material.textfield.TextInputLayout
-                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                <LinearLayout
+                                    android:orientation="horizontal"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:hint="* شماره همراه"
-                                    android:textColorHint="?attr/colorOnSecondary"
-                                    app:boxStrokeColor="@color/firoze">
+                                    android:layout_height="wrap_content">
 
-                                    <com.google.android.material.textfield.TextInputEditText
-                                        android:id="@+id/edt_num_emp"
-                                        android:layout_width="match_parent"
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                        android:layout_width="0dp"
+                                        android:layout_weight="0.9"
                                         android:layout_height="wrap_content"
-                                        android:inputType="phone"
-                                        android:maxLength="11"
-                                        android:singleLine="true"
-                                        android:textSize="13sp"
-                                        android:textColor="?attr/colorOnSecondary" />
+                                        android:hint="* شماره همراه"
+                                        android:textColorHint="?attr/colorOnSecondary"
+                                        app:boxStrokeColor="@color/firoze">
 
-                                </com.google.android.material.textfield.TextInputLayout>
+                                        <com.google.android.material.textfield.TextInputEditText
+                                            android:id="@+id/edt_num_emp"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:inputType="phone"
+                                            android:maxLength="15"
+                                            android:singleLine="true"
+                                            android:textColor="?attr/colorOnSecondary"
+                                            android:textSize="13sp" />
 
-                                <com.google.android.material.textfield.TextInputLayout
-                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                    <ImageView
+                                        android:id="@+id/btn_number_phone"
+                                        android:layout_marginStart="10dp"
+                                        android:layout_width="40dp"
+                                        android:src="@drawable/img_contacts"
+                                        android:layout_height="40dp"
+                                        app:tint="@color/white"
+                                        android:padding="4dp"
+                                        android:layout_gravity="center"
+                                        android:background="@drawable/shape_circle"
+                                        android:backgroundTint="?attr/colorOnPrimary"
+                                        android:textColor="@color/white" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:orientation="horizontal"
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:hint="شماره منزل"
-                                    android:textColorHint="?attr/colorOnSecondary"
-                                    app:boxStrokeColor="@color/firoze">
+                                    android:layout_height="wrap_content">
 
-                                    <com.google.android.material.textfield.TextInputEditText
-                                        android:id="@+id/edt_numbhome_emp"
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                         android:layout_width="match_parent"
+                                        android:layout_weight="0.9"
                                         android:layout_height="wrap_content"
-                                        android:inputType="phone"
-                                        android:maxLength="11"
-                                        android:singleLine="true"
-                                        android:textSize="13sp"
-                                        android:textColor="?attr/colorOnSecondary" />
+                                        android:hint="شماره منزل"
+                                        android:textColorHint="?attr/colorOnSecondary"
+                                        app:boxStrokeColor="@color/firoze">
 
-                                </com.google.android.material.textfield.TextInputLayout>
+                                        <com.google.android.material.textfield.TextInputEditText
+                                            android:id="@+id/edt_numbhome_emp"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:inputType="phone"
+                                            android:maxLength="15"
+                                            android:singleLine="true"
+                                            android:textColor="?attr/colorOnSecondary"
+                                            android:textSize="13sp" />
+
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                    <ImageView
+                                        android:visibility="gone"
+                                        android:id="@+id/btn_number_home"
+                                        android:layout_marginStart="10dp"
+                                        android:layout_width="40dp"
+                                        android:src="@drawable/img_contacts"
+                                        android:layout_height="40dp"
+                                        app:tint="@color/white"
+                                        android:padding="4dp"
+                                        android:layout_gravity="center"
+                                        android:background="@drawable/shape_circle"
+                                        android:backgroundTint="?attr/colorOnPrimary"
+                                        android:textColor="@color/white" />
+
+                                </LinearLayout>
 
                             </LinearLayout>
 
