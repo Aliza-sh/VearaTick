@@ -14,20 +14,23 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:theme="@style/Theme.SherkatManage"
         tools:targetApi="33">
-
+        <activity
+            android:name=".LoginStep24Activity"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterStep24Activity"
+            android:exported="false" />
         <activity
             android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -38,14 +41,14 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="com.vearad.vearatick" />
                 <data android:host="callback" />
             </intent-filter>
-
         </activity>
-
         <activity
             android:name=".ProAndEmpActivity"
             android:exported="true"
@@ -54,8 +57,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
-
         <activity
             android:name=".CompanyFinancialReportActivity"
             android:exported="false" />
@@ -75,7 +76,6 @@
             android:name="com.yalantis.ucrop.UCropActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
-
     </application>
 
 </manifest>

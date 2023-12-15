@@ -32,10 +32,15 @@ lateinit var projectAdapter: ProjectNearAdapter
 lateinit var taskAdapter: TaskEmployeeAdapter
 lateinit var inOutAdapter: EntryExitEmployeeAdapter
 lateinit var employeeAdapter: EmployeeAdapter
+
 const val SHAREDVEARATICK = "sharedVearatick"
 const val CHEKBUY = "chekBuy"
+
 const val SHAREDLOGINSTEP24 = "SharedLoginStep24"
 const val LOGINSTEP24 = "loginStep24"
+
+const val SHAREDMINISITE = "SharedMiniSite"
+const val LOGINMINISITE = "loginMiniSite"
 
 const val ACCESSTOKEN = "sharedAccessToken"
 const val KEYACCESSTOKEN = "keyAccessToken"

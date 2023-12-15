@@ -5,6 +5,8 @@ import BottomMarginItemDecoration
 import CustomBottomMarginItemDecoration
 import CustomTopMarginItemDecoration
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -27,6 +29,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
+import java.net.MalformedURLException
 
 
 class CompanyEventFragment : Fragment(), CompanyEventAdapter.CompanyEventEvent {
@@ -47,6 +51,37 @@ class CompanyEventFragment : Fragment(), CompanyEventAdapter.CompanyEventEvent {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.btnAddNewEvent.setOnClickListener {
+            var createEventUrl = "https://step24.ir/events/create"
+            try {
+                val modifiedUrl = Uri.parse(createEventUrl)
+                    .buildUpon()
+                    .appendQueryParameter("appOrigin", "android")
+                    .build()
+
+                val intent = Intent(Intent.ACTION_VIEW, modifiedUrl)
+                startActivity(intent)
+            } catch (e: MalformedURLException) {
+                // Handle URL exception
+            } catch (e: IOException) {
+                // Handle connection exception
+            }
+        }
+
+        val sharedPreferencesAccessToken = requireActivity().getSharedPreferences(ACCESSTOKEN, Context.MODE_PRIVATE)
+        val accessToken = sharedPreferencesAccessToken.getString(KEYACCESSTOKEN, null)
+
+        val sharedPreferencesLoginStep24 =
+            requireActivity().getSharedPreferences(SHAREDLOGINSTEP24, Context.MODE_PRIVATE)
+        val user = sharedPreferencesLoginStep24.getString(LOGINSTEP24, null)
+
+        val apiService = createApiService()
+        getEvent(user,accessToken,apiService)
+
+    }
+
+    private fun createApiService(): ApiService {
+
         val interceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
@@ -59,14 +94,11 @@ class CompanyEventFragment : Fragment(), CompanyEventAdapter.CompanyEventEvent {
             .client(client)
             .build()
 
-        val apiService = retrofit.create(ApiService::class.java)
 
-        val sharedPreferencesAccessToken = requireActivity().getSharedPreferences(ACCESSTOKEN, Context.MODE_PRIVATE)
-        val accessToken = sharedPreferencesAccessToken.getString(KEYACCESSTOKEN, null)
+        return retrofit.create(ApiService::class.java)
+    }
 
-        val sharedPreferencesLoginStep24 =
-            requireActivity().getSharedPreferences(SHAREDLOGINSTEP24, Context.MODE_PRIVATE)
-        val user = sharedPreferencesLoginStep24.getString(LOGINSTEP24, null)
+    private fun getEvent(user: String?, accessToken: String?, apiService: ApiService) {
 
         if (user != null && accessToken != null) {
             val call = apiService.getData("${user}/events", "Bearer $accessToken")
@@ -109,86 +141,10 @@ class CompanyEventFragment : Fragment(), CompanyEventAdapter.CompanyEventEvent {
                 override fun onEventClicked(companyEvent: Events.Event, position: Int) {
                     TODO("Not yet implemented")
                 }
+
             })
         }
     }
-
-//    private fun POSTInfoUrl() {
-//
-//
-////        Log.d(TAG, "POSTInfoUrl type: " + type);
-//
-////        pg_register.setVisibility(View.VISIBLE);
-//        val jsonObject = JSONObject()
-//        try {
-//            Log.d(TAG, "name: " + name)
-//            //            jsonObject.put("csrf", "code_here");
-//            jsonObject.put("name", name)
-//            //            jsonObject.put("number", number);
-//        } catch (e: JSONException) {
-//            // handle exception
-//        }
-//        val requestQueue = Volley.newRequestQueue(context)
-//        val postRequest: StringRequest = object : StringRequest(
-//            Request.Method.GET,
-//            get_folders_question_url + "?type=" + name,
-//            object : com.android.volley.Response.Listener<String?> {
-//                fun onResponse(`object`: String?) {
-//
-////                        Log.d(TAG, "object: " + object);
-////                        tx_level.setText(level+"");
-////                        Log.d(TAG, "Success "+object);
-//                    try {
-//                        val jsonArr = JSONArray(`object`)
-//                        for (i in 0 until jsonArr.length()) {
-//                            val jsonObj = jsonArr.getJSONObject(i)
-//                            val name_en = jsonObj.getString("name_en")
-//                            val name_fa = jsonObj.getString("name_fa")
-//                            val status = jsonObj.getString("status")
-//
-////                                Log.d(TAG, "name_en: " + name_en);
-//                            itemFolderQuestions.add(
-//                                ItemFolderQuestion(
-//                                    "",
-//                                    status,
-//                                    name_en,
-//                                    name_fa
-//                                )
-//                            )
-//                            if (i == 0) {
-//                                SSSP.getInstance(this@ActivityFolderQus).putBoolean(name_en, true)
-//                            }
-//                        }
-//                        adapter = AdapterFolderQuestion(this@ActivityFolderQus, itemFolderQuestions)
-//                        // Attach the adapter to the recyclerview to populate items
-//                        recyclerView.setAdapter(adapter)
-//                        val mLayoutManager: RecyclerView.LayoutManager =
-//                            GridLayoutManager(this@ActivityFolderQus, 1)
-//                        // Set layout manager to position the items
-//                        recyclerView.setLayoutManager(mLayoutManager)
-//                        ll_pb.setVisibility(View.GONE)
-//                    } catch (e: JSONException) {
-//                        e.printStackTrace()
-//                    }
-//                }
-//            },
-//            object : ErrorListener() {
-//                fun onErrorResponse(error: VolleyError) {
-//                    Log.d(TAG, "Error response $error")
-//                    //                        pg_register.setVisibility(View.GONE);
-//                }
-//            }) {
-//            //This is for Headers If You Needed
-//            @Throws(AuthFailureError::class)
-//            override fun getHeaders(): Map<String, String> {
-//                val params: MutableMap<String, String> = HashMap()
-//                params["Accept"] = "application/json"
-//                return params
-//            }
-//        }
-//        requestQueue.add(postRequest)
-////        MySingleton.getInstance(this).addToRequestQueue(requestQueue);
-//    }
 
     private fun topMargin() {
         val topMargin = 270 // اندازه مارجین بالا را از منابع دریافت کنید

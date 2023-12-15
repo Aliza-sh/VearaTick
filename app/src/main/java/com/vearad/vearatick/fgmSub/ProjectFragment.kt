@@ -74,13 +74,9 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
             override fun handleOnBackPressed() {
                 val intent = Intent(requireContext(), MainActivity::class.java)
                 startActivity(intent)
+                requireActivity().overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
             }
         })
-    }
-
-    override fun onResume() {
-        super.onResume()
-        updateYourData()
     }
 
     private fun updateYourData() {

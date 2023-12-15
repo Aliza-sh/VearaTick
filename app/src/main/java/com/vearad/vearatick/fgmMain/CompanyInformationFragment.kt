@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,13 +26,12 @@ import com.vearad.vearatick.Dialog.CompanyInfoBottomsheetFragment
 import com.vearad.vearatick.LOGINSTEP24
 import com.vearad.vearatick.MainActivity
 import com.vearad.vearatick.R
+import com.vearad.vearatick.RegisterStep24Activity
 import com.vearad.vearatick.SHAREDLOGINSTEP24
 import com.vearad.vearatick.databinding.FragmentCompanyInformationBinding
 import com.vearad.vearatick.fgmSub.CompanyEventFragment
 import com.vearad.vearatick.fgmSub.CompanyResumeFragment
 import com.vearad.vearatick.fgmSub.CompanySkillFragment
-import java.io.IOException
-import java.net.MalformedURLException
 
 class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
@@ -109,7 +107,6 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
         }
     }
-
     private fun onInfoCompanyClicked(popupMenu: PopupMenu) {
         popupMenu.menuInflater.inflate(
             R.menu.menu_edit_info_company_and_login_minisite,
@@ -143,27 +140,36 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
                     R.id.menu_login_minisite -> {
 
-                        Log.v("loginapp", "Here: ${user}")
+                        val intent = Intent(requireActivity(), RegisterStep24Activity::class.java)
+                        startActivity(intent)
+                        requireActivity().overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
 
-                        var createEventUrl = "http://192.168.1.105:8081/login"
-                        if (user != null) {
-                            createEventUrl =
-                                "http://192.168.1.105:8081/${user}/admin/minisite-panel"
-                        }
-
-                        try {
-                            val modifiedUrl = Uri.parse(createEventUrl)
-                                .buildUpon()
-                                .appendQueryParameter("appOrigin", "android")
-                                .build()
-
-                            val intent = Intent(Intent.ACTION_VIEW, modifiedUrl)
-                            startActivity(intent)
-                        } catch (e: MalformedURLException) {
-                            // Handle URL exception
-                        } catch (e: IOException) {
-                            // Handle connection exception
-                        }
+//                        Log.v("loginapp", "Here: ${user}")
+//
+////                        var createEventUrl = "http://192.168.1.105:8081/login"
+////                        if (user != null) {
+////                            createEventUrl =
+////                                "http://192.168.1.105:8081/${user}/admin/minisite-panel"
+////                        }
+//                        var createEventUrl = "https://step24.ir/login"
+//                        if (user != null) {
+//                            createEventUrl =
+//                                "https://step24.ir/${user}/admin/minisite-panel"
+//                        }
+//
+//                        try {
+//                            val modifiedUrl = Uri.parse(createEventUrl)
+//                                .buildUpon()
+//                                .appendQueryParameter("appOrigin", "android")
+//                                .build()
+//
+//                            val intent = Intent(Intent.ACTION_VIEW, modifiedUrl)
+//                            startActivity(intent)
+//                        } catch (e: MalformedURLException) {
+//                            // Handle URL exception
+//                        } catch (e: IOException) {
+//                            // Handle connection exception
+//                        }
                     }
 
                 }

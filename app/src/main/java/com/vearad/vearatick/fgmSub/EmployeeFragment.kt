@@ -74,13 +74,11 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
                 override fun handleOnBackPressed() {
                     val intent = Intent(requireContext(), MainActivity::class.java)
                     startActivity(intent)
+                    requireActivity().overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
                 }
             })
     }
-    override fun onResume() {
-        super.onResume()
-        updateYourData()
-    }
+
     private fun updateYourData() {
         employeeData = employeeDao.getAllEmployee()
         employeeAdapter = EmployeeAdapter(ArrayList(employeeData), this, efficiencyEmployeeDao)
@@ -112,6 +110,7 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
     }
     override fun onEmployeeClicked(employee: Employee, position: Int) {
         val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
+        transaction.detach(this@EmployeeFragment)
         transaction.replace(
             R.id.layout_pro_and_emp,
             EmployeeInformationFragment(
