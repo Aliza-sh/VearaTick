@@ -89,11 +89,10 @@ class CompanyEventFragment : Fragment(), CompanyEventAdapter.CompanyEventEvent {
             .addInterceptor(interceptor)
             .build()
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.105:8081/api/")
+            .baseUrl("http://192.168.1.107:8080/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
-
 
         return retrofit.create(ApiService::class.java)
     }
@@ -113,17 +112,18 @@ class CompanyEventFragment : Fragment(), CompanyEventAdapter.CompanyEventEvent {
                         Log.v("loginapp", "eventData: ${eventData}")
 
                         if (eventData != null) {
-                            val events: List<Events.Event> = eventData.events
-                            Log.v("loginapp", "events: ${events}")
+                            //val events: List<Events.Event> = eventData.events
+                            companyEventData = eventData.events
+                            Log.v("loginapp", "events: ${companyEventData}")
                             companyEventAdapter =
                                 CompanyEventAdapter(
-                                    events,
+                                    companyEventData,
                                     this,
                                 )
                             binding.rcvEvent.layoutManager = GridLayoutManager(context, 2)
                             binding.rcvEvent.adapter = companyEventAdapter
                             topMargin()
-                            bottomMargin(events)
+                            bottomMargin(companyEventData)
                             // Process the events data as needed
                         } else {
                             // Handle the case where the response body is null
@@ -144,6 +144,7 @@ class CompanyEventFragment : Fragment(), CompanyEventAdapter.CompanyEventEvent {
 
             })
         }
+
     }
 
     private fun topMargin() {

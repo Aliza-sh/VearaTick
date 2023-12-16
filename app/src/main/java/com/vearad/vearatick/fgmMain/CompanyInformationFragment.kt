@@ -107,6 +107,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
         }
     }
+
     private fun onInfoCompanyClicked(popupMenu: PopupMenu) {
         popupMenu.menuInflater.inflate(
             R.menu.menu_edit_info_company_and_login_minisite,
@@ -170,6 +171,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 //                        } catch (e: IOException) {
 //                            // Handle connection exception
 //                        }
+
                     }
 
                 }
