@@ -1,5 +1,7 @@
 
 import com.vearad.vearatick.model.Events
+import com.vearad.vearatick.model.LoginData
+import com.vearad.vearatick.model.LoginResponse
 import com.vearad.vearatick.model.RegisterData
 import com.vearad.vearatick.model.RegisterResponse
 import retrofit2.Call
@@ -15,4 +17,6 @@ interface ApiService {
 
     @POST("register") // آدرس API endpoint برای ثبت نام
     fun registerUser(@Body registerData: RegisterData): Call<RegisterResponse>
+    @POST("login") // آدرس API endpoint برای ثبت نام
+    fun loginUser(@Body loginData: LoginData): Call<LoginResponse>
 }

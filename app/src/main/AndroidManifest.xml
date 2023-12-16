@@ -19,9 +19,11 @@
         tools:targetApi="33">
         <activity
             android:name=".LoginStep24Activity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".RegisterStep24Activity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name=".SplashActivity"
