@@ -143,7 +143,7 @@ class ProjectUpdateInfoFragment(
             }
         })
 
-        binding.sheetBtnDone.setOnClickListener {
+        binding.btnDone.setOnClickListener {
             if (binding.btnSettlement.isChecked) {
 
                 if (binding.edtBudget.length() > 0) {
@@ -215,7 +215,7 @@ class ProjectUpdateInfoFragment(
         }
 
         binding.edtTypeProject.setText(project.typeProject)
-        binding.edtDescriptionPro.setText(project.descriptionProject)
+        binding.edtInfoPro.setText(project.descriptionProject)
 
     }
 
@@ -332,13 +332,13 @@ class ProjectUpdateInfoFragment(
             binding.edtNamePro.length() > 0 &&
             binding.txtDedlineDateTime.length() > 0 &&
             binding.edtTypeProject.length() > 0 &&
-            binding.edtDescriptionPro.length() > 0
+            binding.edtInfoPro.length() > 0
         ) {
             val txtNamePro = binding.edtNamePro.text.toString()
             val noDeadline = valueBtnNoDate
             val txtDate = valueCalendar
             val txtTypeProject = binding.edtTypeProject.text.toString()
-            val txtDescriptionPro = binding.edtDescriptionPro.text.toString()
+            val txtDescriptionPro = binding.edtInfoPro.text.toString()
             val txtBudget = formattedValue
 
             val newProject = Project(

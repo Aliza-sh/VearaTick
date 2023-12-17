@@ -15,30 +15,31 @@
         android:layout_height="match_parent"
         android:background="?attr/colorPrimaryVariant">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/btn_menu_entry_exit"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_gravity="start"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:background="#313131"
-            android:elevation="50dp"
+            android:background="@drawable/shape_circle"
+            android:backgroundTint="?attr/colorOnPrimary"
+            android:padding="8dp"
+            android:src="@drawable/ic_menu"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_menu" />
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <TextView
             android:id="@+id/txt_name_skill"
-            android:layout_width="60dp"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="16dp"
             android:text="اندروید"
             android:textColor="@color/white"
             android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="@+id/btn_menu_entry_exit"
             app:layout_constraintEnd_toStartOf="@+id/btn_menu_entry_exit"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/btn_menu_entry_exit" />
 
         <ProgressBar
@@ -47,7 +48,7 @@
             android:layout_width="0dp"
             android:layout_height="10dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="12dp"
             android:layout_marginBottom="16dp"
             android:indeterminate="false"
             android:max="100"

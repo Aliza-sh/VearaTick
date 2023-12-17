@@ -147,7 +147,6 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1.1"
                                 android:hint="پروژه چی هست ؟"
-                                android:textColorHint="?attr/colorOnSecondary"
                                 app:boxStrokeColor="@color/firoze">
 
                                 <com.google.android.material.textfield.TextInputEditText
@@ -157,6 +156,7 @@
                                     android:backgroundTint="?attr/colorPrimaryVariant"
                                     android:inputType="text"
                                     android:singleLine="true"
+                                    android:maxLength="70"
                                     android:textColor="?attr/colorOnSecondary"
                                     android:textSize="13sp" />
 
@@ -169,7 +169,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:hint="نوع پروژه"
-                                android:textColorHint="?attr/colorOnSecondary"
+                                android:layout_marginTop="4dp"
                                 app:boxStrokeColor="@color/firoze">
 
                                 <AutoCompleteTextView
@@ -212,22 +212,6 @@
                             app:layout_constraintTop_toBottomOf="@+id/imageView4"
                             app:tint="@color/firoze" />
 
-                        <TextView
-                            android:id="@+id/txt_dedline_date_time"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:letterSpacing="0.06"
-                            android:text=""
-                            android:backgroundTint="?attr/colorOnPrimary"
-                            android:paddingStart="20dp"
-                            android:paddingEnd="20dp"
-                            android:paddingBottom="8dp"
-                            android:paddingTop="8dp"
-                            android:background="@drawable/shape_background_rcv"
-                            android:textAlignment="center"
-                            android:textColor="@color/white"
-                            android:textSize="20sp" />
-
                         <LinearLayout
                             android:id="@+id/btn_calendar"
                             android:layout_width="wrap_content"
@@ -235,7 +219,6 @@
                             android:gravity="center|start"
                             android:backgroundTint="?attr/colorOnPrimary"
                             android:background="@drawable/shape_background_rcv"
-                            android:layout_marginStart="15dp"
                             android:src="@drawable/img_calendar"
                             app:tint="@color/white" >
 
@@ -250,13 +233,24 @@
                                 app:tint="@color/white" />
 
                             <TextView
-                                android:textColor="@color/white"
+                                android:textColor="@color/gray"
                                 android:layout_width="wrap_content"
                                 android:text="انتخاب تاریخ"
                                 android:layout_marginEnd="10sp"
                                 android:layout_height="wrap_content"/>
 
                         </LinearLayout>
+
+                        <TextView
+                            android:layout_marginStart="15dp"
+                            android:id="@+id/txt_dedline_date_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:letterSpacing="0.06"
+                            android:text=""
+                            android:textAlignment="center"
+                            android:textColor="@color/white"
+                            android:textSize="20sp" />
 
                     </LinearLayout>
 
@@ -310,7 +304,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="بودجه ندارد "
-                                    android:textColor="?attr/colorOnSecondary"
+                                    android:textColor="@color/gray"
                                     android:textSize="14dp" />
 
                                 <RadioButton
@@ -319,7 +313,7 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="بودجه دارد"
-                                    android:textColor="?attr/colorOnSecondary"
+                                    android:textColor="@color/gray"
                                     android:textSize="14dp" />
 
                             </RadioGroup>
@@ -350,7 +344,6 @@
                                 android:layout_weight="1.1"
                                 android:hint=" بودجه چقدره ؟"
                                 android:layoutDirection="ltr"
-                                android:textColorHint="?attr/colorOnSecondary"
                                 app:boxStrokeColor="@color/firoze">
 
                                 <com.google.android.material.textfield.TextInputEditText
@@ -360,6 +353,7 @@
                                     android:backgroundTint="?attr/colorPrimaryVariant"
                                     android:inputType="number"
                                     android:singleLine="true"
+                                    android:maxLength="15"
                                     android:textColor="?attr/colorOnSecondary"
                                     android:textSize="13sp" />
 
@@ -400,7 +394,6 @@
                             android:layout_height="wrap_content"
                             android:layout_weight="1.1"
                             android:hint="توضیحات"
-                            android:textColorHint="?attr/colorOnSecondary"
                             app:boxStrokeColor="@color/firoze">
 
                             <com.google.android.material.textfield.TextInputEditText

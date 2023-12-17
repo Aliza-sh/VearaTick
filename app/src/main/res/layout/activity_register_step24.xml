@@ -36,7 +36,7 @@
                 android:paddingBottom="5dp"
                 android:text="ثبت نام"
                 android:textColor="@color/white"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -146,7 +146,6 @@
                                     android:layout_height="wrap_content"
                                     app:errorEnabled="true"
                                     android:hint="نام و نام خانوادگی"
-                                    android:textColorHint="?attr/colorOnSecondary"
                                     app:boxStrokeColor="@color/firoze">
 
                                     <com.google.android.material.textfield.TextInputEditText
@@ -167,8 +166,7 @@
                                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:hint="نام کاربردی"
-                                    android:textColorHint="?attr/colorOnSecondary"
+                                    android:hint="نام کاربری"
                                     app:boxStrokeColor="@color/firoze">
 
                                     <com.google.android.material.textfield.TextInputEditText
@@ -220,8 +218,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="0.9"
-                                android:hint="ایمیل (نام کاربردی)"
-                                android:textColorHint="?attr/colorOnSecondary"
+                                android:hint="ایمیل (نام کاربری)"
                                 app:boxStrokeColor="@color/firoze">
 
                                 <com.google.android.material.textfield.TextInputEditText
@@ -271,7 +268,6 @@
                                 android:layout_weight="0.9"
                                 app:errorEnabled="true"
                                 android:hint="شماره همراه"
-                                android:textColorHint="?attr/colorOnSecondary"
                                 app:boxStrokeColor="@color/firoze">
 
                                 <com.google.android.material.textfield.TextInputEditText
@@ -324,7 +320,6 @@
                                     android:layout_height="wrap_content"
                                     app:errorEnabled="true"
                                     android:hint="رمز عبور"
-                                    android:textColorHint="?attr/colorOnSecondary"
                                     app:boxStrokeColor="@color/firoze"
                                     app:passwordToggleEnabled="true"
                                     app:passwordToggleTint="@color/firoze">
@@ -347,7 +342,6 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="تایید رمز عبور"
-                                    android:textColorHint="?attr/colorOnSecondary"
                                     app:boxStrokeColor="@color/firoze">
 
                                     <com.google.android.material.textfield.TextInputEditText
@@ -372,7 +366,7 @@
                         android:id="@+id/linearLayout12"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="24dp"
                         android:layout_marginBottom="35dp"
                         android:layoutDirection="rtl"
                         app:layout_constraintEnd_toEndOf="@+id/linearLayout"

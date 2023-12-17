@@ -51,7 +51,7 @@
                 android:paddingBottom="5dp"
                 android:text="گزارش مالی"
                 android:textColor="@color/white"
-                android:textSize="21sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -60,7 +60,7 @@
         android:id="@+id/txt1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="28dp"
         android:background="@drawable/shape_background_light"
         android:backgroundTint="?attr/colorPrimaryVariant"
         android:elevation="10dp"
@@ -70,7 +70,7 @@
         android:paddingBottom="5dp"
         android:text="خرج"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/txt2"
         app:layout_constraintEnd_toStartOf="@+id/txt2"
         app:layout_constraintTop_toTopOf="@+id/txt3"
@@ -80,7 +80,7 @@
         android:id="@+id/txt2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
+        android:layout_marginEnd="8dp"
         android:background="@drawable/shape_background_light"
         android:backgroundTint="?attr/colorPrimaryVariant"
         android:elevation="10dp"
@@ -90,7 +90,7 @@
         android:paddingBottom="5dp"
         android:text="سود"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/txt3" />
 
@@ -98,7 +98,7 @@
         android:id="@+id/txt3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
+        android:layout_marginEnd="32dp"
         android:background="@drawable/shape_background_light"
         android:backgroundTint="?attr/colorPrimaryVariant"
         android:elevation="10dp"
@@ -108,7 +108,7 @@
         android:paddingBottom="5dp"
         android:text="درآمد"
         android:textColor="@color/white"
-        android:textSize="18sp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toStartOf="@+id/txt1"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout9" />
 

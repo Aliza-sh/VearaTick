@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.vearad.vearatick.BottomSheetCallback
 import com.vearad.vearatick.DataBase.CompanySkill
@@ -32,7 +33,14 @@ class CompanyUpdateSkillBottomsheetFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setdata()
+        binding.tilVolumeSkill.editText?.addTextChangedListener {
+            if (it.toString() != "")
+                if (it.toString().toInt() > 100) {
+                    binding.tilVolumeSkill.error = "بالاتر از صد نداریم ها !!!."
+                } else
+                    binding.tilVolumeSkill.error = null
 
+        }
         binding.sheetBtnDone.setOnClickListener {
             addNewSkill()
         }
@@ -55,7 +63,8 @@ class CompanyUpdateSkillBottomsheetFragment(
     private fun addNewSkill() {
         if (
             binding.edtNameSkill.length() > 0 &&
-            binding.edtVolumeSkill.length() > 0
+            binding.edtVolumeSkill.length() > 0 &&
+            binding.edtVolumeSkill.text.toString().toInt() > 100
         ) {
             val txtName = binding.edtNameSkill.text.toString()
             val txtVolune = binding.edtVolumeSkill.text.toString()

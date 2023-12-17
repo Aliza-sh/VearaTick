@@ -2,16 +2,21 @@ package com.vearad.vearatick
 
 import ApiService
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.vearad.vearatick.adapter.CompanyEventAdapter
 import com.vearad.vearatick.databinding.ActivityLoginStep24Binding
+import com.vearad.vearatick.model.Events
 import com.vearad.vearatick.model.LoginData
 import com.vearad.vearatick.model.LoginResponse
+import com.vearad.vearatick.model.UserResponse
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
@@ -19,11 +24,14 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
+import java.net.MalformedURLException
 
 class LoginStep24Activity : AppCompatActivity() {
 
     lateinit var binding:ActivityLoginStep24Binding
     var emailError: String? = null
+    private var snackbar: Snackbar? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,6 +66,8 @@ class LoginStep24Activity : AppCompatActivity() {
                 binding.tilPassword.error = "رمز عبور باید حداقل 8 حرف باشد."
             } else
                 binding.tilPassword.error = null
+
+            snackbar?.dismiss()
         }
 
         binding.tilEmail.editText?.addTextChangedListener {
@@ -71,6 +81,9 @@ class LoginStep24Activity : AppCompatActivity() {
             else {
                 binding.tilEmail.error = null
             }
+
+            snackbar?.dismiss()
+
         }
 
 
@@ -101,7 +114,8 @@ class LoginStep24Activity : AppCompatActivity() {
         email: String,
         password: String,
     ) {
-        // 3. ایجاد شیء OkHttpClient با استفاده از HttpLoggingInterceptor برای نمایش لاگ‌ها
+
+        // ایجاد شیء OkHttpClient با استفاده از HttpLoggingInterceptor برای نمایش لاگ‌ها
         val interceptor = HttpLoggingInterceptor().apply {
             level = HttpLoggingInterceptor.Level.BODY
         }
@@ -110,14 +124,14 @@ class LoginStep24Activity : AppCompatActivity() {
             .build()
 
         val gson = GsonBuilder().setLenient().create()
-        // 4. ایجاد شیء Retrofit با تنظیمات مورد نیاز
+        //  ایجاد شیء Retrofit با تنظیمات مورد نیاز
         val retrofit = Retrofit.Builder()
             .baseUrl("https://step24.ir/api/") // آدرس پایه سرویس API
             .addConverterFactory(GsonConverterFactory.create(gson)) // تبدیل پاسخ‌ها به شیء با استفاده از Gson
             .client(client) // استفاده از OkHttpClient برای درخواست‌ها
             .build()
 
-        // 5. ایجاد شیء ApiService با استفاده از شیء Retrofit
+        //  ایجاد شیء ApiService با استفاده از شیء Retrofit
         val apiService = retrofit.create(ApiService::class.java)
 
         // 6. ساختن شیء SignupRequest با اطلاعات ورودی
@@ -125,7 +139,7 @@ class LoginStep24Activity : AppCompatActivity() {
             email,
             password,
         )
-        // 7. ارسال درخواست ثبت نام با استفاده از شیء ApiService
+        //  ارسال درخواست ثبت نام با استفاده از شیء ApiService
         val call = apiService.loginUser(loginData)
         call.enqueue(object : Callback<LoginResponse> {
             override fun onResponse(
@@ -140,16 +154,13 @@ class LoginStep24Activity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val accessToken = response.body()?.data?.access_token
                     val refreshToken = response.body()?.data?.refresh_token
-                    val username = response.body()?.user?.username
-                    val userId = response.body()?.user?.id
-                    val erorr = response.body()?.user?.id
 
                     Log.v("loginapp", "______________________________________")
                     Log.v("loginapp", "accessToken: ${accessToken}")
                     Log.v("loginapp", "refreshToken: ${refreshToken}")
-                    Log.v("loginapp", "username: ${username}")
-                    Log.v("loginapp", "userId: ${userId}")
                     Log.v("loginapp", "______________________________________")
+
+                    getUser(accessToken)
 
                 } else if (response.code() == 422) {
 
@@ -158,6 +169,7 @@ class LoginStep24Activity : AppCompatActivity() {
                     val registerResponse = gson.fromJson(errorBody, LoginResponse::class.java)
 
                     val errors = registerResponse?.errors
+                    val authFailed = registerResponse?.authFailed
 
                     Log.v("loginapp", "______________________________________")
                     Log.v("loginapp", "success: ${response.body()?.success}")
@@ -165,29 +177,31 @@ class LoginStep24Activity : AppCompatActivity() {
                     Log.v("loginapp", "registerResponse: ${registerResponse.toString()}")
                     Log.v("loginapp", "registerResponse.success: ${registerResponse.success}")
                     Log.v("loginapp", "errors: ${errors.toString()}")
+                    Log.v("loginapp", "authFailed: ${authFailed.toString()}")
                     Log.v("loginapp", "______________________________________")
 
-                    if (errors != null) {
+                    if (errors != null || authFailed != null) {
                         // Access the error messages
 
                         //val nameErrors = errors.name
                         //val usernameErrors = errors.username
-                        val emailErrors = errors.email
-                        val passwordErrors = errors.password
-                        //val phoneErrors = errors.phone
+                        val emailErrors = errors?.email
+                        val passwordErrors = errors?.password
+                        val authFailedErrors = authFailed?.message
 
                         Log.v("loginapp", "______________________________________")
                         //Log.v("loginapp", "nameErrors: ${nameErrors}")
-                       // Log.v("loginapp", "usernameErrors: ${usernameErrors}")
+                        // Log.v("loginapp", "usernameErrors: ${usernameErrors}")
                         Log.v("loginapp", "emailErrors: ${emailErrors}")
                         Log.v("loginapp", "passwordErrors: ${passwordErrors}")
-                       // Log.v("loginapp", "phoneErrors: ${phoneErrors}")
+                        Log.v("loginapp", "authFailedErrors: ${authFailedErrors}")
                         Log.v("loginapp", "______________________________________")
 
                         setError(
                             emailErrors,
                             email,
                             passwordErrors,
+                            authFailedErrors,
                         )
 
                         // Log or handle the error messages as needed
@@ -209,12 +223,106 @@ class LoginStep24Activity : AppCompatActivity() {
                 Log.e("loginapp", "brar: ${t.message}")
                 Log.e("loginapp", "t: ${t}")
                 Log.v("loginapp", "______________________________________")
-                Toast.makeText(applicationContext, "اتصال اینترنت خود را بررسی کنید.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    applicationContext,
+                    "اتصال اینترنت خود را بررسی کنید.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         })
     }
 
-    private fun setError(emailErrors: List<String>?, email: String, passwordErrors: List<String>?) {
+    private fun getUser(accessToken: String?) {
+
+        val interceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+        val client = OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .build()
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://step24.ir/api/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+
+        val apiService = retrofit.create(ApiService::class.java)
+
+        val call = apiService.getUser("user/", "Bearer $accessToken")
+        call.enqueue(object : Callback<UserResponse>, CompanyEventAdapter.CompanyEventEvent {
+            override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+                if (response.isSuccessful) {
+                    //companyEventData = response.body()!!.event
+                    Log.v("loginapp", "response: ${response}")
+                    Log.v("loginapp", "call: ${call}")
+
+                    val userData: UserResponse? = response.body()
+
+                    if (userData != null) {
+                        // Process the events data as needed
+                        Log.v("loginapp", "username: ${userData?.user?.username}")
+                        val user = userData?.user?.username
+                        goToMiniSite(user)
+
+                    } else {
+                        // Handle the case where the response body is null
+                    }
+                    // Process the data and update the UI
+                } else {
+                    // Handle unsuccessful response
+                }
+            }
+
+            override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                Log.e("RequestError", "Error: ${t.message}")
+                // Handle the error
+            }
+
+            override fun onEventClicked(companyEvent: Events.Event, position: Int) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+
+    }
+
+    private fun goToMiniSite(user: String?) {
+        Log.v("loginapp", "Here: ${user}")
+
+       /* var createEventUrl = "http://192.168.1.105:8081/login"
+        if (user != null) {
+            createEventUrl =
+                "http://192.168.1.105:8081/${user}/admin/minisite-panel"
+        }*/
+
+        var createEventUrl = "https://step24.ir/login"
+        if (user != null) {
+            createEventUrl =
+                "https://step24.ir/${user}/admin/minisite-panel"
+        }
+
+        try {
+            val modifiedUrl = Uri.parse(createEventUrl)
+                .buildUpon()
+                .appendQueryParameter("appOrigin", "android")
+                .build()
+
+            val intent = Intent(Intent.ACTION_VIEW, modifiedUrl)
+            startActivity(intent)
+        } catch (e: MalformedURLException) {
+            // Handle URL exception
+        } catch (e: IOException) {
+            // Handle connection exception
+        }
+    }
+
+    private fun setError(
+        emailErrors: List<String>?,
+        email: String,
+        passwordErrors: List<String>?,
+        authFailedErrors: String?
+    ) {
 
         if (emailErrors != null) {
             emailError = email
@@ -222,6 +330,12 @@ class LoginStep24Activity : AppCompatActivity() {
                 emailErrors.toString().replace("[", "").replace("]", "") + "."
         } else {
             binding.tilEmail.error = null
+        }
+
+        if (authFailedErrors != null) {
+            snackbar = Snackbar.make(binding.root, "$authFailedErrors", Snackbar.LENGTH_INDEFINITE)
+
+            snackbar!!.show()
         }
 
         if (passwordErrors != null) {

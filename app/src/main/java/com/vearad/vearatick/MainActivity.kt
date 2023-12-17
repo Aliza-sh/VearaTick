@@ -1,10 +1,7 @@
 package com.vearad.vearatick
 
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import androidx.appcompat.app.AppCompatActivity
@@ -21,8 +18,6 @@ import com.vearad.vearatick.adapter.TaskEmployeeAdapter
 import com.vearad.vearatick.databinding.ActivityMainBinding
 import com.vearad.vearatick.fgmMain.CompanyFragment
 import com.vearad.vearatick.fgmMain.CompanyInformationFragment
-import org.json.JSONException
-import org.json.JSONObject
 
 lateinit var employeeDao: EmployeeDao
 lateinit var dayDao: DayDao
@@ -55,7 +50,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         firstRun()
 
-        val sharedPreferences = getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
+        /*val sharedPreferences = getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
         sharedPreferences.edit().putBoolean(CHEKBUY, true).apply()
 
         val intent = intent
@@ -80,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                     // Handle JSON parsing error
                 }
             }
-        }
+        }*/
 
         employeeDao = AppDatabase.getDataBase(this).employeeDao
 

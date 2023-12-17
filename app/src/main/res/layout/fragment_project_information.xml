@@ -55,7 +55,7 @@
                 android:layoutDirection="ltr"
                 android:text="پروژه طراحی اپلیکیشن"
                 android:textColor="?attr/colorPrimary"
-                android:textSize="22sp"
+                android:textSize="20sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/btn_menu_project"
@@ -115,7 +115,7 @@
                     android:layout_marginEnd="8dp"
                     android:text=" مهلت پروژه"
                     android:textColor="?attr/colorOnSurface"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -127,7 +127,7 @@
                     android:layout_marginTop="12dp"
                     android:text=""
                     android:textColor="@color/firoze"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="@+id/textView28"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView28" />
@@ -141,7 +141,7 @@
                     android:gravity="center"
                     android:letterSpacing="0.1"
                     android:textColor="?attr/colorOnSurfaceVariant"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -204,7 +204,7 @@
                     android:gravity="center"
                     android:letterSpacing="0.1"
                     android:textColor="?attr/colorOnSurfaceVariant"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -218,21 +218,21 @@
                     android:layout_marginEnd="8dp"
                     android:text=" بودجه پروژه"
                     android:textColor="?attr/colorOnSecondary"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
                     android:id="@+id/txt_budget"
-                    android:layout_width="wrap_content"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
-                    android:layout_marginEnd="8dp"
                     android:text="0 تومان"
                     android:textColor="@color/firoze"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="@+id/textView160"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView160" />
 
                 <TextView
@@ -241,7 +241,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="-35dp"
                     android:elevation="50dp"
-                    android:text=" تصویه"
+                    android:text=" تسویه"
                     android:textColor="@color/whity"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="@+id/btn_go_to_settlement"
@@ -310,7 +310,7 @@
                     android:layout_marginEnd="8dp"
                     android:text=" وضعیت پروژه"
                     android:textColor="?attr/colorOnSurface"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -413,7 +413,7 @@
                     android:layout_marginEnd="8dp"
                     android:text=" تیم پروژه"
                     android:textColor="?attr/colorOnSurface"
-                    android:textSize="18sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />

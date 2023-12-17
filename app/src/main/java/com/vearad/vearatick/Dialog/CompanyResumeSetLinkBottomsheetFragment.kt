@@ -1,10 +1,12 @@
 package com.vearad.vearatick.Dialog
 
 import android.os.Bundle
+import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.vearad.vearatick.BottomSheetCallback
 import com.vearad.vearatick.DataBase.Project
@@ -32,6 +34,16 @@ class CompanyResumeSetLinkBottomsheetFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         setdata()
+
+        binding.tilUrlPro.editText?.addTextChangedListener {
+            val isValidLink = Patterns.WEB_URL.matcher(it).matches()
+
+            if (isValidLink) {
+                binding.tilUrlPro.error = null
+            } else {
+                binding.tilUrlPro.error = "لطفا لینک را با پسوند https:// یا http:// وارد کنید."
+            }
+        }
 
         binding.sheetBtnDone.setOnClickListener {
             addNewSkill()

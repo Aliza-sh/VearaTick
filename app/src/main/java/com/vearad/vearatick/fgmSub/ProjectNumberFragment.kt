@@ -37,7 +37,7 @@ class ProjectNumberFragment(val projectDao: ProjectDao) : Fragment() {
         val numAndroid = projectDao.getNumberProject("اندروید",true).size
         binding.txtNumProAndroid.text = " $numAndroid"
         val numSite = projectDao.getNumberProject("سایت",true).size
-        binding.txtNumProAndroid.text = " $numSite"
+        binding.txtNumProSite.text = " $numSite"
         val numFrontEnd = projectDao.getNumberProject("فرانت اند",true).size
         binding.txtNumProFrontEnd.text = " $numFrontEnd"
         val numBackEnd = projectDao.getNumberProject("بک اند",true).size

@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/shape_back_bottomsheet"
     android:orientation="vertical"
+    android:layoutDirection="ltr"
     tools:context=".Dialog.EmployeeTaskBottomsheetFragment">
 
     <ImageView
@@ -121,7 +122,6 @@
                     android:layout_height="wrap_content"
                     android:hint="* نام شرکت"
                     app:hintTextColor="@color/firoze"
-                    android:textColorHint="?attr/colorOnSecondary"
                     app:boxStrokeColor="@color/firoze">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -130,6 +130,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="text"
                         android:singleLine="true"
+                        android:maxLength="50"
                         android:textColor="?attr/colorOnSecondary"
                         android:textSize="13sp" />
 
@@ -166,7 +167,6 @@
                     android:layout_height="wrap_content"
                     android:hint="آدرس"
                     app:hintTextColor="@color/firoze"
-                    android:textColorHint="?attr/colorOnSecondary"
                     app:boxStrokeColor="@color/firoze">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -175,6 +175,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="text"
                         android:singleLine="true"
+                        android:maxLength="100"
                         android:textColor="?attr/colorOnSecondary"
                         android:textSize="13sp" />
 
@@ -212,7 +213,6 @@
                     android:layout_height="wrap_content"
                     android:hint="تلفن"
                     app:hintTextColor="@color/firoze"
-                    android:textColorHint="?attr/colorOnSecondary"
                     app:boxStrokeColor="@color/firoze">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -220,7 +220,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="phone"
-                        android:maxLength="20"
+                        android:maxLength="13"
                         android:singleLine="true"
                         android:textColor="?attr/colorOnSecondary"
                         android:textSize="13sp" />
@@ -258,7 +258,6 @@
                     android:layout_height="wrap_content"
                     android:hint="گیت هاب"
                     app:hintTextColor="@color/firoze"
-                    android:textColorHint="?attr/colorOnSecondary"
                     app:boxStrokeColor="@color/firoze">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -267,6 +266,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="text"
                         android:singleLine="true"
+                        android:maxLength="100"
                         android:textColor="?attr/colorOnSecondary"
                         android:textSize="13sp" />
 
@@ -303,7 +303,6 @@
                     android:layout_height="wrap_content"
                     android:hint="لینکدین"
                     app:hintTextColor="@color/firoze"
-                    android:textColorHint="?attr/colorOnSecondary"
                     app:boxStrokeColor="@color/firoze">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -312,6 +311,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="text"
                         android:singleLine="true"
+                        android:maxLength="100"
                         android:textColor="?attr/colorOnSecondary"
                         android:textSize="13sp" />
 

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layoutDirection="ltr"
     app:cardBackgroundColor="?attr/colorPrimaryVariant"
     app:cardCornerRadius="25dp">
 
@@ -59,7 +60,7 @@
                 android:text="تقویم"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -68,13 +69,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:layout_marginEnd="8dp"
             android:background="@drawable/shape_background_deadline_blacke"
             android:gravity="center"
             android:layoutDirection="rtl"
             android:orientation="horizontal"
             app:layout_constraintEnd_toStartOf="@+id/btn_calendar"
-            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView">
 
@@ -97,7 +96,7 @@
                 android:text="پروژه ددلاین ندارد"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="15sp" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 

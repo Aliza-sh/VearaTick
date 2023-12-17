@@ -15,22 +15,22 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimaryVariant">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/btn_menu_entry_exit"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_gravity="start"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:background="#313131"
-            android:elevation="50dp"
+            android:background="@drawable/shape_circle"
+            android:backgroundTint="?attr/colorOnPrimary"
+            android:padding="8dp"
+            android:src="@drawable/ic_menu"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_menu" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"
-            android:layout_width="60dp"
+            android:layout_width="70dp"
             android:layout_height="30dp"
             android:layout_marginEnd="8dp"
             android:backgroundTint="?attr/colorOnPrimary"
@@ -40,8 +40,8 @@
 
             <ImageView
                 android:id="@+id/img_project"
-                android:layout_width="25dp"
-                android:layout_height="22dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:backgroundTint="?attr/colorOnPrimary"
                 app:srcCompat="@drawable/ic_android"
@@ -52,17 +52,17 @@
 
         <TextView
             android:id="@+id/txt_name_pro"
-            android:layout_width="200dp"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="24dp"
-            android:layout_marginBottom="24dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             android:text="پروژه"
             android:textColor="@color/white"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/cardView2"
-            app:layout_constraintTop_toTopOf="@+id/cardView2" />
+            app:layout_constraintEnd_toEndOf="@+id/cardView2"
+            app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
         <View
             android:id="@+id/view8"
@@ -79,9 +79,9 @@
             android:layout_height="0dp"
             android:background="?attr/colorPrimaryVariant"
             android:gravity="center"
-            android:padding="10dp"
+            android:padding="6dp"
             android:src="@drawable/img_github"
-            android:tint="@color/white"
+            app:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"

@@ -532,8 +532,8 @@
 
                         <TextView
                             android:id="@+id/txt_num_pro_site"
-                            android:layout_width="9dp"
-                            android:layout_height="23dp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginEnd="16dp"
                             android:layout_marginBottom="8dp"
                             android:text=" 0"

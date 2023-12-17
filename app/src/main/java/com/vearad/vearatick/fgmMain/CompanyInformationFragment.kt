@@ -2,6 +2,7 @@ package com.vearad.vearatick.fgmMain
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.Typeface
 import android.net.Uri
@@ -23,11 +24,9 @@ import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.CompanyInfo
 import com.vearad.vearatick.DataBase.CompanyInfoDao
 import com.vearad.vearatick.Dialog.CompanyInfoBottomsheetFragment
-import com.vearad.vearatick.LOGINSTEP24
+import com.vearad.vearatick.LoginStep24Activity
 import com.vearad.vearatick.MainActivity
 import com.vearad.vearatick.R
-import com.vearad.vearatick.RegisterStep24Activity
-import com.vearad.vearatick.SHAREDLOGINSTEP24
 import com.vearad.vearatick.databinding.FragmentCompanyInformationBinding
 import com.vearad.vearatick.fgmSub.CompanyEventFragment
 import com.vearad.vearatick.fgmSub.CompanyResumeFragment
@@ -42,6 +41,9 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
     private val PICK_IMAGE_REQUEST = 1
     var imageUri: Uri? = null
     var imagePath: String? = null
+
+    val SHAREDLOGINSTEP24 = "SharedLoginStep24"
+    val LOGINSTEP24 = "loginStep24"
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -118,17 +120,17 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
             val sharedPreferencesLoginStep24 =
                 requireActivity().getSharedPreferences(SHAREDLOGINSTEP24, Context.MODE_PRIVATE)
-            val user = sharedPreferencesLoginStep24.getString(LOGINSTEP24, null)
+            val login = sharedPreferencesLoginStep24.getBoolean(LOGINSTEP24, false)
 
-            val tapTargetSequence = tapTargetSequence()
+            val tapTargetSequence = tapTargetSequence(sharedPreferencesLoginStep24)
 
-            if (user == "" || user == null)
+            if (login == false)
                 tapTargetSequence?.start()
 
             popupMenu.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.menu_edit_company -> {
-                        tapTargetSequence?.cancel()
+                        //tapTargetSequence?.cancel()
                         val bottomsheet = CompanyInfoBottomsheetFragment()
                         bottomsheet.setStyle(
                             R.style.BottomSheetStyle,
@@ -141,36 +143,9 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
                     R.id.menu_login_minisite -> {
 
-                        val intent = Intent(requireActivity(), RegisterStep24Activity::class.java)
+                        val intent = Intent(requireActivity(), LoginStep24Activity::class.java)
                         startActivity(intent)
                         requireActivity().overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
-
-//                        Log.v("loginapp", "Here: ${user}")
-//
-////                        var createEventUrl = "http://192.168.1.105:8081/login"
-////                        if (user != null) {
-////                            createEventUrl =
-////                                "http://192.168.1.105:8081/${user}/admin/minisite-panel"
-////                        }
-//                        var createEventUrl = "https://step24.ir/login"
-//                        if (user != null) {
-//                            createEventUrl =
-//                                "https://step24.ir/${user}/admin/minisite-panel"
-//                        }
-//
-//                        try {
-//                            val modifiedUrl = Uri.parse(createEventUrl)
-//                                .buildUpon()
-//                                .appendQueryParameter("appOrigin", "android")
-//                                .build()
-//
-//                            val intent = Intent(Intent.ACTION_VIEW, modifiedUrl)
-//                            startActivity(intent)
-//                        } catch (e: MalformedURLException) {
-//                            // Handle URL exception
-//                        } catch (e: IOException) {
-//                            // Handle connection exception
-//                        }
 
                     }
 
@@ -180,13 +155,13 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
         }
     }
 
-    private fun tapTargetSequence(): TapTargetSequence? {
+    private fun tapTargetSequence(sharedPreferencesLoginStep24: SharedPreferences): TapTargetSequence? {
         val tapTargetSequence = TapTargetSequence(requireActivity())
             .targets(
                 TapTarget.forView(
                     binding.btnMenuCompany,
                     "\n\nثبت نام در مینی سایت",
-                    "شما تا کنون در سایت step24 ثبت نام نکرده اید ابتدا در این سایت ثبت نام نموده سپس مینی سایت خود را بسازید."
+                    "شما تا کنون در step24 ثبت نام نکرده اید ابتدا ثبت نام نموده سپس مینی سایت خود را بسازید."
                 )
                     .cancelable(true)
                     .textTypeface(Typeface.DEFAULT_BOLD)
@@ -213,6 +188,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
                     // دنباله Tap Target ها لغو شد
                 }
             })
+        sharedPreferencesLoginStep24.edit().putBoolean(LOGINSTEP24, true).apply()
 
         return tapTargetSequence
 

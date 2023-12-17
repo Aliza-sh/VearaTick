@@ -254,15 +254,16 @@
 
                             <TextView
                                 android:id="@+id/txt_receipt"
-                                android:layout_width="wrap_content"
+                                android:layout_width="130dp"
+                                android:gravity="end"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:layout_marginEnd="16dp"
                                 android:text="0 تومان"
                                 android:textColor="@color/firoze"
                                 android:textSize="18sp"
                                 android:textStyle="bold"
                                 app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/textView7" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -274,6 +275,7 @@
                         android:layout_height="wrap_content"
                         app:cardBackgroundColor="?attr/colorOnPrimary"
                         app:cardCornerRadius="16dp"
+                        app:layout_constraintBottom_toBottomOf="@+id/btn_income"
                         app:layout_constraintEnd_toStartOf="@+id/btn_income"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
@@ -311,15 +313,16 @@
 
                             <TextView
                                 android:id="@+id/txt_payment"
-                                android:layout_width="wrap_content"
+                                android:layout_width="130dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
-                                android:layout_marginEnd="16dp"
+                                android:gravity="end"
                                 android:text="0 تومان"
                                 android:textColor="@color/firoze"
                                 android:textSize="18sp"
                                 android:textStyle="bold"
                                 app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
                                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
                         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -688,7 +691,7 @@
                                 android:layout_marginStart="8dp"
                                 android:text=" اندروید"
                                 android:textColor="@color/white"
-                                android:textSize="18sp" />
+                                android:textSize="16sp" />
 
                         </LinearLayout>
 
@@ -710,7 +713,7 @@
                                 android:layout_marginStart="8dp"
                                 android:text=" سایت"
                                 android:textColor="@color/white"
-                                android:textSize="18sp" />
+                                android:textSize="16sp" />
 
                         </LinearLayout>
 
@@ -733,7 +736,7 @@
                                 android:layout_marginStart="8dp"
                                 android:text=" بک اند"
                                 android:textColor="@color/white"
-                                android:textSize="18sp" />
+                                android:textSize="16sp" />
 
                         </LinearLayout>
 
@@ -755,7 +758,7 @@
                                 android:layout_marginStart="8dp"
                                 android:text=" فرانت اند"
                                 android:textColor="@color/white"
-                                android:textSize="18sp" />
+                                android:textSize="16sp" />
 
                         </LinearLayout>
 
@@ -777,7 +780,7 @@
                                 android:layout_marginStart="8dp"
                                 android:text=" رباتیک"
                                 android:textColor="@color/white"
-                                android:textSize="18sp" />
+                                android:textSize="16sp" />
 
                         </LinearLayout>
 
@@ -799,7 +802,7 @@
                                 android:layout_marginStart="8dp"
                                 android:text=" طراحی"
                                 android:textColor="@color/white"
-                                android:textSize="18sp" />
+                                android:textSize="16sp" />
 
                         </LinearLayout>
 
@@ -821,7 +824,7 @@
                                 android:layout_marginStart="8dp"
                                 android:text=" سئو"
                                 android:textColor="@color/white"
-                                android:textSize="18sp" />
+                                android:textSize="16sp" />
 
                         </LinearLayout>
 
@@ -835,7 +838,7 @@
                         android:layout_marginTop="-10dp"
                         android:text="0"
                         android:textColor="@color/white"
-                        android:textSize="30sp"
+                        android:textSize="24sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="@+id/progress_num_project"
                         app:layout_constraintEnd_toEndOf="@+id/progress_num_project"
@@ -848,7 +851,7 @@
                         android:layout_height="wrap_content"
                         android:text="در کل"
                         android:textColor="@color/white"
-                        android:textSize="28sp"
+                        android:textSize="22sp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toEndOf="@+id/progress_num_project"
                         app:layout_constraintStart_toStartOf="@+id/progress_num_project"

@@ -45,7 +45,7 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="18sp"
             android:textStyle="bold" />
 
         <ImageButton
@@ -111,15 +111,15 @@
 
             <TextView
                 android:id="@+id/txt_expenses"
-                android:layout_width="wrap_content"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:gravity="end"
                 android:text="0 تومان"
                 android:textColor="?attr/colorPrimary"
                 android:textSize="19sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView8" />
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -173,15 +173,15 @@
 
             <TextView
                 android:id="@+id/txt_receipt"
-                android:layout_width="wrap_content"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:gravity="end"
                 android:text="0 تومان"
                 android:textColor="@color/black"
                 android:textSize="19sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView80" />
         </androidx.constraintlayout.widget.ConstraintLayout>

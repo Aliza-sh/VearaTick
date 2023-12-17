@@ -37,7 +37,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="30dp"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:layout_marginStart="16dp"
             android:text="سرمایه گذاری ها"
             android:background="@drawable/shape_background_rcv"

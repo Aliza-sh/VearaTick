@@ -170,6 +170,7 @@
                                         android:layout_height="wrap_content"
                                         android:inputType="text"
                                         android:textSize="13sp"
+                                        android:maxLength="20"
                                         android:singleLine="true"
                                         android:textColor="?attr/colorOnSecondary" />
 
@@ -181,6 +182,7 @@
                                     android:layout_height="wrap_content"
                                     android:layout_weight="0.9"
                                     android:hint="* فامیل"
+                                    android:layout_marginTop="4dp"
                                     android:textColorHint="?attr/colorOnSecondary"
                                     app:boxStrokeColor="@color/firoze">
 
@@ -191,6 +193,7 @@
                                         android:inputType="text"
                                         android:singleLine="true"
                                         android:textSize="13sp"
+                                        android:maxLength="20"
                                         android:textColor="?attr/colorOnSecondary" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
@@ -208,6 +211,7 @@
                                         android:layout_marginEnd="10dp"
                                         android:layout_weight="0.9"
                                         android:hint="* جنسیت"
+                                        android:layout_marginTop="4dp"
                                         android:textColorHint="?attr/colorOnSecondary"
                                         app:boxStrokeColor="@color/firoze">
 
@@ -229,6 +233,7 @@
                                         android:layout_marginStart="10dp"
                                         android:layout_weight="1.1"
                                         android:hint="* سن"
+                                        android:layout_marginTop="4dp"
                                         android:textColorHint="?attr/colorOnSecondary"
                                         app:boxStrokeColor="@color/firoze">
 
@@ -300,6 +305,7 @@
                                         android:inputType="text"
                                         android:singleLine="true"
                                         android:textSize="13sp"
+                                        android:maxLength="20"
                                         android:textColor="?attr/colorOnSecondary" />
 
                                 </com.google.android.material.textfield.TextInputLayout>
@@ -310,6 +316,7 @@
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:hint="* رتبه"
+                                    android:layout_marginTop="4dp"
                                     android:textColorHint="?attr/colorOnSecondary"
                                     app:boxStrokeColor="@color/firoze">
 
@@ -377,7 +384,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:inputType="phone"
-                                            android:maxLength="15"
+                                            android:maxLength="13"
                                             android:singleLine="true"
                                             android:textColor="?attr/colorOnSecondary"
                                             android:textSize="13sp" />
@@ -410,6 +417,7 @@
                                         android:layout_weight="0.9"
                                         android:layout_height="wrap_content"
                                         android:hint="شماره منزل"
+                                        android:layout_marginTop="4dp"
                                         android:textColorHint="?attr/colorOnSecondary"
                                         app:boxStrokeColor="@color/firoze">
 
@@ -418,7 +426,7 @@
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:inputType="phone"
-                                            android:maxLength="15"
+                                            android:maxLength="11"
                                             android:singleLine="true"
                                             android:textColor="?attr/colorOnSecondary"
                                             android:textSize="13sp" />
@@ -482,6 +490,7 @@
                                     android:layout_height="wrap_content"
                                     android:inputType="text"
                                     android:singleLine="true"
+                                    android:maxLength="150"
                                     android:textSize="13sp"
                                     android:textColor="?attr/colorOnSecondary" />
 

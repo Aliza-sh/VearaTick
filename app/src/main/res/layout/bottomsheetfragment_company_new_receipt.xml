@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layoutDirection="ltr"
     android:background="@drawable/shape_back_bottomsheet"
     android:orientation="vertical">
 
@@ -96,7 +97,6 @@
                 android:layoutDirection="ltr"
                 android:hint=" مبلغ"
                 app:hintTextColor="@color/firoze"
-                android:textColorHint="?attr/colorOnSecondary"
                 app:boxStrokeColor="@color/firoze">
 
                 <com.google.android.material.textfield.TextInputEditText
@@ -106,6 +106,7 @@
                     android:backgroundTint="?attr/colorPrimaryVariant"
                     android:inputType="number"
                     android:textSize="13sp"
+                    android:maxLength="15"
                     android:singleLine="true"
                     android:textColor="?attr/colorOnSecondary" />
 
@@ -150,7 +151,6 @@
         android:layout_marginBottom="24dp"
         android:layout_marginTop="8dp"
         android:hint="توضیحات"
-        android:textColorHint="?attr/colorOnSecondary"
         app:boxStrokeColor="@color/firoze"
         app:hintTextColor="@color/firoze"
         app:layout_constraintBottom_toBottomOf="parent"

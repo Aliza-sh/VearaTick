@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layoutDirection="ltr"
     app:cardBackgroundColor="?attr/colorPrimaryVariant"
     app:cardCornerRadius="25dp">
 
@@ -17,9 +18,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="میخوای این آیتم رو حذف کنی ؟"
+            android:text="میخواهید این آیتم رو حذف کنید؟"
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="22sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -42,7 +43,7 @@
             android:id="@+id/dialog_btn_deleteCansel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="64dp"
+            android:layout_marginTop="50dp"
             android:layout_marginBottom="16dp"
             android:backgroundTint="?attr/colorPrimaryVariant"
             android:paddingStart="40dp"

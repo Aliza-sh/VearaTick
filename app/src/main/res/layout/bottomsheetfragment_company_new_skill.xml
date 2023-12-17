@@ -4,9 +4,9 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+    android:layoutDirection="ltr"
     android:background="@drawable/shape_back_bottomsheet"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Dialog.EmployeeTaskBottomsheetFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
         android:layout_marginTop="-20dp"
@@ -82,7 +82,6 @@
             android:layout_weight="0.8"
             android:hint="مهارت"
             app:hintTextColor="@color/firoze"
-            android:textColorHint="?attr/colorOnSecondary"
             app:boxStrokeColor="@color/firoze">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -91,6 +90,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="text"
                 android:textSize="12sp"
+                android:maxLength="50"
                 android:singleLine="true"
                 android:textColor="?attr/colorOnSecondary" />
 
@@ -99,6 +99,7 @@
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
+            android:id="@+id/til_Volume_skill"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="15dp"
@@ -106,7 +107,6 @@
             android:layout_weight="1.6"
             android:hint="درجه توانایی"
             app:hintTextColor="@color/firoze"
-            android:textColorHint="?attr/colorOnSecondary"
             app:boxStrokeColor="@color/firoze">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -114,7 +114,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:backgroundTint="?attr/colorPrimaryVariant"
-                android:inputType="phone"
+                android:inputType="number"
                 android:maxLength="3"
                 android:singleLine="true"
                 android:textColor="?attr/colorOnSecondary"

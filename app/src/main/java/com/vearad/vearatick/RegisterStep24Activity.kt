@@ -32,12 +32,12 @@ class RegisterStep24Activity : AppCompatActivity() {
         binding = ActivityRegisterStep24Binding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.edtNameAndFamily.setText("غللم")
+        /*binding.edtNameAndFamily.setText("غللم")
         binding.edtUser.setText("golam")
         binding.edtEmail.setText("nkkjhin@hi2.in")
         binding.edtNumberPhone.setText("09366227895")
         binding.edtPassword.setText("alialiali")
-        binding.edtPasswordConfirmation.setText("alialiali")
+        binding.edtPasswordConfirmation.setText("alialiali")*/
 
         binding.btnBck.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)

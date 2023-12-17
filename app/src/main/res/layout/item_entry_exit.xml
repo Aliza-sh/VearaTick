@@ -182,18 +182,19 @@
             app:layout_constraintEnd_toEndOf="@id/itemFlightDepartureLayout"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/btn_menu_entry_exit"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="start"
-            android:layout_marginTop="12dp"
-            android:layout_marginEnd="10dp"
-            android:background="#313131"
-            android:elevation="50dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:padding="3dp"
+            android:background="@drawable/shape_circle"
+            android:backgroundTint="?attr/colorOnPrimary"
+            android:src="@drawable/ic_menu"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_menu" />
+            app:layout_constraintTop_toTopOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

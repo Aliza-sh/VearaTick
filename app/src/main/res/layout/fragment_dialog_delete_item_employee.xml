@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layoutDirection="ltr"
     app:cardBackgroundColor="?attr/colorPrimaryVariant"
     app:cardCornerRadius="25dp">
 
@@ -18,9 +19,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="میخوای این کارمند رو اخراج کنی ؟"
+            android:text="میخواهید این کارمند رو اخراج کنید؟"
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="22sp"
+            android:textSize="20sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +45,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="40dp"
             android:layout_marginBottom="16dp"
             android:backgroundTint="?attr/colorPrimaryVariant"
             android:paddingStart="40dp"

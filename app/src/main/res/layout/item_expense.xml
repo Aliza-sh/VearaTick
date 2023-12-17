@@ -21,12 +21,13 @@
 
         <ImageButton
             android:id="@+id/btn_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="start"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:background="?attr/colorPrimaryVariant"
+            android:background="@drawable/shape_circle"
+            android:backgroundTint="?attr/colorOnPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_menu" />
@@ -63,10 +64,10 @@
 
         <FrameLayout
             android:id="@+id/linearLayout5"
+            android:layout_marginTop="16dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="60dp"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="24dp"
             android:background="@drawable/shape_background_top_expense"
             android:backgroundTint="?attr/colorOnPrimary"
@@ -74,16 +75,16 @@
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_date">
+            app:layout_constraintTop_toBottomOf="@+id/btn_menu">
 
             <TextView
                 android:id="@+id/txt_expense"
-                android:layout_width="wrap_content"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="35dp"
+                android:layout_marginTop="40dp"
                 android:layout_marginBottom="16dp"
+                android:gravity="end"
                 android:text="240,000 تومان"
                 android:textColor="@color/white_light"
                 android:textSize="19sp" />
@@ -120,7 +121,7 @@
 
             <TextView
                 android:id="@+id/txt_description"
-                android:layout_width="wrap_content"
+                android:layout_width="330dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginStart="16dp"
