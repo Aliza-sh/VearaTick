@@ -14,11 +14,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.google.android.material.snackbar.Snackbar
 import com.vearad.vearatick.ACCESSTOKEN
 import com.vearad.vearatick.DataBase.EmployeeDao
 import com.vearad.vearatick.KEYACCESSTOKEN
-import com.vearad.vearatick.LOGINSTEP24
-import com.vearad.vearatick.SHAREDLOGINSTEP24
+import com.vearad.vearatick.KEYUSER
+import com.vearad.vearatick.LoginStep24Activity
+import com.vearad.vearatick.R
+import com.vearad.vearatick.USER
 import com.vearad.vearatick.adapter.CompanyEventAdapter
 import com.vearad.vearatick.databinding.FragmentCompanyEventBinding
 import com.vearad.vearatick.model.Events
@@ -33,7 +36,7 @@ import java.io.IOException
 import java.net.MalformedURLException
 
 
-class CompanyEventFragment : Fragment(), CompanyEventAdapter.CompanyEventEvent {
+class CompanyEventFragment : Fragment() {
 
     lateinit var binding: FragmentCompanyEventBinding
     lateinit var companyEventAdapter: CompanyEventAdapter
@@ -68,15 +71,16 @@ class CompanyEventFragment : Fragment(), CompanyEventAdapter.CompanyEventEvent {
             }
         }
 
-        val sharedPreferencesAccessToken = requireActivity().getSharedPreferences(ACCESSTOKEN, Context.MODE_PRIVATE)
+        val sharedPreferencesUser =
+            requireActivity().getSharedPreferences(USER, Context.MODE_PRIVATE)
+        val user = sharedPreferencesUser.getString(KEYUSER, null)
+
+        val sharedPreferencesAccessToken =
+            requireActivity().getSharedPreferences(ACCESSTOKEN, Context.MODE_PRIVATE)
         val accessToken = sharedPreferencesAccessToken.getString(KEYACCESSTOKEN, null)
 
-        val sharedPreferencesLoginStep24 =
-            requireActivity().getSharedPreferences(SHAREDLOGINSTEP24, Context.MODE_PRIVATE)
-        val user = sharedPreferencesLoginStep24.getString(LOGINSTEP24, null)
-
         val apiService = createApiService()
-        getEvent(user,accessToken,apiService)
+        getEvent(user, accessToken, apiService)
 
     }
 
@@ -89,7 +93,7 @@ class CompanyEventFragment : Fragment(), CompanyEventAdapter.CompanyEventEvent {
             .addInterceptor(interceptor)
             .build()
         val retrofit = Retrofit.Builder()
-            .baseUrl("http://192.168.1.107:8080/api/")
+            .baseUrl("https://step24.ir/api/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
@@ -127,24 +131,46 @@ class CompanyEventFragment : Fragment(), CompanyEventAdapter.CompanyEventEvent {
                             // Process the events data as needed
                         } else {
                             // Handle the case where the response body is null
+                            goToLogin()
                         }
                         // Process the data and update the UI
                     } else {
                         // Handle unsuccessful response
+                        goToLogin()
                     }
                 }
                 override fun onFailure(call: Call<Events>, t: Throwable) {
                     Log.e("RequestError", "Error: ${t.message}")
                     // Handle the error
+                    goToLogin()
                 }
 
                 override fun onEventClicked(companyEvent: Events.Event, position: Int) {
-                    TODO("Not yet implemented")
+                    var createEventUrl = "https://step24.ir/events/${companyEvent.name}"
+                    val modifiedUrl = Uri.parse(createEventUrl)
+                    val intent = Intent(Intent.ACTION_VIEW, modifiedUrl)
+                    startActivity(intent)
                 }
 
             })
-        }
+        } else
+            goToLogin()
 
+    }
+
+    fun goToLogin() {
+        Snackbar.make(binding.root, "نیاز به ورود به سایت است!", Snackbar.LENGTH_INDEFINITE)
+            .setAction("ورود") {
+                val goFromEvent = true
+                val intent = Intent(requireActivity(), LoginStep24Activity::class.java)
+                intent.putExtra("GOFROMEVENT", goFromEvent);
+                startActivity(intent)
+                requireActivity().overridePendingTransition(
+                    R.anim.slide_from_left,
+                    R.anim.slide_to_right
+                )
+            }
+            .show()
     }
 
     private fun topMargin() {
@@ -164,9 +190,5 @@ class CompanyEventFragment : Fragment(), CompanyEventAdapter.CompanyEventEvent {
             val itemDecoration = BottomMarginItemDecoration(bottomMargin)
             binding.rcvEvent.addItemDecoration(itemDecoration)
         }
-    }
-
-    override fun onEventClicked(companyEvent: Events.Event, position: Int) {
-        TODO("Not yet implemented")
     }
 }

@@ -89,10 +89,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="text"
-                android:maxLength="50"
-                android:textSize="12sp"
+                android:maxLength="30"
                 android:singleLine="true"
-                android:textColor="?attr/colorOnSecondary" />
+                android:textColor="?attr/colorOnSecondary"
+                android:textSize="12sp" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

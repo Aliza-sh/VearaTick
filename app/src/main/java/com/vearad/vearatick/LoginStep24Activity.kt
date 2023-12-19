@@ -1,6 +1,7 @@
 package com.vearad.vearatick
 
 import ApiService
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -29,14 +30,16 @@ import java.net.MalformedURLException
 
 class LoginStep24Activity : AppCompatActivity() {
 
-    lateinit var binding:ActivityLoginStep24Binding
+    lateinit var binding: ActivityLoginStep24Binding
     var emailError: String? = null
     private var snackbar: Snackbar? = null
+    var goFromEvent: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginStep24Binding.inflate(layoutInflater)
         setContentView(binding.root)
+        goFromEvent = intent.getBooleanExtra("GOFROMEVENT", false)
 
         binding.btnBck.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
@@ -50,9 +53,6 @@ class LoginStep24Activity : AppCompatActivity() {
             startActivity(intent)
             overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
-
-        binding.edtEmail.setText("nkkjhin@hi2.in")
-        binding.edtPassword.setText("alialiali")
 
         binding.btnBck.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
@@ -262,7 +262,23 @@ class LoginStep24Activity : AppCompatActivity() {
                         // Process the events data as needed
                         Log.v("loginapp", "username: ${userData?.user?.username}")
                         val user = userData?.user?.username
-                        goToMiniSite(user)
+
+                        val sharedPreferencesUser = getSharedPreferences(USER, Context.MODE_PRIVATE)
+                        sharedPreferencesUser.edit().putString(KEYUSER, user).apply()
+
+                        val sharedPreferencesAccessToken =
+                            getSharedPreferences(ACCESSTOKEN, Context.MODE_PRIVATE)
+                        sharedPreferencesAccessToken.edit().putString(KEYACCESSTOKEN, accessToken)
+                            .apply()
+
+                        if (goFromEvent) {
+                            val intent = Intent(applicationContext, MainActivity::class.java)
+                            startActivity(intent)
+                            overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
+                        } else {
+                            goFromEvent = false
+                            goToMiniSite(user)
+                        }
 
                     } else {
                         // Handle the case where the response body is null

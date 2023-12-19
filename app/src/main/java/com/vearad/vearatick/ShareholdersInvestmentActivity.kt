@@ -2,6 +2,7 @@ package com.vearad.vearatick
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vearad.vearatick.DataBase.AppDatabase
@@ -23,6 +24,7 @@ class ShareholdersInvestmentActivity : AppCompatActivity(), ShareholdersInvestme
     lateinit var employeeHarvestDao: EmployeeHarvestDao
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        onBack()
         binding = ActivityShareholdersInvestmentBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.btnBck.setOnClickListener {
@@ -44,11 +46,16 @@ class ShareholdersInvestmentActivity : AppCompatActivity(), ShareholdersInvestme
         binding.rcvShareholder.adapter = shareholdersInvestmentAdapter
         binding.rcvShareholder.layoutManager = LinearLayoutManager(applicationContext)
     }
-    @Deprecated("Deprecated in Java")
-    override fun onBackPressed() {
-        val intent = Intent(this, MainActivity::class.java)
-        startActivity(intent)
-        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
+    fun onBack() {
+        onBackPressedDispatcher.addCallback(
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    val intent = Intent(applicationContext, MainActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
+
+                }
+            })
     }
 
     override fun onPaymentShareholdersClicked(employee: Employee, position: Int) {}

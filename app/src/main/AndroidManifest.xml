@@ -12,21 +12,13 @@
         android:fullBackupContent="@xml/backup_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.SherkatManage"
         tools:targetApi="33">
         <activity
-            android:name=".LoginStep24Activity"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="false" />
-        <activity
-            android:name=".RegisterStep24Activity"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="false" />
-        <activity
             android:name=".SplashActivity"
+            android:screenOrientation="portrait"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -37,6 +29,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
             <meta-data
                 android:name="android.app.lib_name"
@@ -55,6 +48,7 @@
         <activity
             android:name=".ProAndEmpActivity"
             android:exported="true"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.app.lib_name"
@@ -74,6 +68,14 @@
             android:exported="false" />
         <activity
             android:name=".CompanyIncomeActivity"
+            android:exported="false" />
+        <activity
+            android:name=".LoginStep24Activity"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterStep24Activity"
+            android:windowSoftInputMode="adjustResize"
             android:exported="false" />
         <activity
             android:name="com.yalantis.ucrop.UCropActivity"

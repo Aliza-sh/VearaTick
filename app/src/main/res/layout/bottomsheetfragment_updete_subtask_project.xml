@@ -84,7 +84,7 @@
             android:layout_height="wrap_content"
             android:gravity="start|center"
             android:inputType="text"
-            android:maxLength="50"
+            android:maxLength="30"
             android:singleLine="true"
             android:textColor="?attr/colorOnSecondary"
             android:textSize="13sp" />
@@ -120,6 +120,7 @@
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:singleLine="true"
+                android:maxLength="3"
                 android:textColor="?attr/colorOnSecondary"
                 android:textSize="13sp" />
 

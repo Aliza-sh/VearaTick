@@ -1,5 +1,6 @@
 package com.vearad.vearatick
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.animation.AlphaAnimation
@@ -40,6 +41,9 @@ const val LOGINMINISITE = "loginMiniSite"
 const val ACCESSTOKEN = "sharedAccessToken"
 const val KEYACCESSTOKEN = "keyAccessToken"
 
+const val USER = "sharedUser"
+const val KEYUSER = "keyUser"
+
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
@@ -50,10 +54,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         firstRun()
 
-        /*val sharedPreferences = getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
         sharedPreferences.edit().putBoolean(CHEKBUY, true).apply()
 
-        val intent = intent
+        /*val intent = intent
         val data: Uri? = intent.data
         if (data != null) {
             val jsonData = data.getQueryParameter("jsonData")

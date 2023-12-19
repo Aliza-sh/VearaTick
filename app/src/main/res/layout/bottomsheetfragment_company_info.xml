@@ -130,7 +130,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="text"
                         android:singleLine="true"
-                        android:maxLength="50"
+                        android:maxLength="30"
                         android:textColor="?attr/colorOnSecondary"
                         android:textSize="13sp" />
 

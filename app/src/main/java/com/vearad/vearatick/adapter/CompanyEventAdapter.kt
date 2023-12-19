@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.vearad.vearatick.databinding.ItemEventBinding
 import com.vearad.vearatick.model.Events
+import java.time.LocalDate
 
 class CompanyEventAdapter(
     val data: List<Events.Event>,
@@ -21,7 +22,12 @@ class CompanyEventAdapter(
         @SuppressLint("SetTextI18n")
         fun bindData(position: Int, clickListener: CompanyEventEvent) {
 
-            binding.txtDateEvent.text = data[position].start_date
+            val dateGregorian = LocalDate.parse(data[position].start_date)
+            var year: Int = dateGregorian.year
+            var month: Int = dateGregorian.monthValue
+            var day: Int = dateGregorian.dayOfMonth
+
+            binding.txtDateEvent.text = "$year/$month/$day"
             binding.txtNameEvent.text = data[position].name
             binding.txtNumPerson.text = data[position].attendanceCount.toString()
 

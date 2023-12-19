@@ -215,8 +215,10 @@
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
                         app:cardBackgroundColor="?attr/colorOnPrimary"
                         app:cardCornerRadius="16dp"
+                        app:layout_constraintBottom_toTopOf="@+id/btn_financial_report"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toEndOf="@+id/btn_expense"
@@ -255,9 +257,9 @@
                             <TextView
                                 android:id="@+id/txt_receipt"
                                 android:layout_width="130dp"
-                                android:gravity="end"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
+                                android:gravity="end"
                                 android:text="0 تومان"
                                 android:textColor="@color/firoze"
                                 android:textSize="18sp"
@@ -273,13 +275,15 @@
                         android:id="@+id/btn_expense"
                         android:layout_width="150dp"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginBottom="16dp"
                         app:cardBackgroundColor="?attr/colorOnPrimary"
                         app:cardCornerRadius="16dp"
-                        app:layout_constraintBottom_toBottomOf="@+id/btn_income"
+                        app:layout_constraintBottom_toTopOf="@+id/btn_financial_report"
                         app:layout_constraintEnd_toStartOf="@+id/btn_income"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="@+id/btn_income">
+                        app:layout_constraintTop_toBottomOf="@+id/btn_investment">
 
                         <androidx.constraintlayout.widget.ConstraintLayout
                             android:layout_width="match_parent"
@@ -346,7 +350,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="24dp"
-                        android:layout_marginTop="24dp"
                         android:layout_marginEnd="24dp"
                         android:layout_marginBottom="16dp"
                         android:background="@drawable/shape_background_rcv"
@@ -357,8 +360,7 @@
                         android:paddingBottom="45dp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/btn_expense">
+                        app:layout_constraintStart_toStartOf="parent">
 
                         <TextView
                             android:id="@+id/txt_tax"
