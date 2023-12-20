@@ -71,6 +71,7 @@ dependencies {
     implementation files('libs/datepicker-0.3.2.aar')
     implementation 'com.afollestad.material-dialogs:datetime:3.3.0'
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
+    implementation 'joda-time:joda-time:2.10.12'
 
     // Wheel
     implementation 'com.github.gzu-liyujiang.AndroidPicker:WheelView:4.1.11'

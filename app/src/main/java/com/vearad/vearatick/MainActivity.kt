@@ -41,6 +41,9 @@ const val LOGINMINISITE = "loginMiniSite"
 const val ACCESSTOKEN = "sharedAccessToken"
 const val KEYACCESSTOKEN = "keyAccessToken"
 
+const val EXPIRATIONACCESSTOKEN = "sharedExpirationAccessToken"
+const val KEYEXPIRATIONACCESSTOKEN = "keyExpirationAccessToken"
+
 const val USER = "sharedUser"
 const val KEYUSER = "keyUser"
 

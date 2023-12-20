@@ -27,6 +27,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.net.MalformedURLException
+import java.time.LocalDate
 
 class LoginStep24Activity : AppCompatActivity() {
 
@@ -263,13 +264,7 @@ class LoginStep24Activity : AppCompatActivity() {
                         Log.v("loginapp", "username: ${userData?.user?.username}")
                         val user = userData?.user?.username
 
-                        val sharedPreferencesUser = getSharedPreferences(USER, Context.MODE_PRIVATE)
-                        sharedPreferencesUser.edit().putString(KEYUSER, user).apply()
-
-                        val sharedPreferencesAccessToken =
-                            getSharedPreferences(ACCESSTOKEN, Context.MODE_PRIVATE)
-                        sharedPreferencesAccessToken.edit().putString(KEYACCESSTOKEN, accessToken)
-                            .apply()
+                        setSharedPreferences(user,accessToken)
 
                         if (goFromEvent) {
                             val intent = Intent(applicationContext, MainActivity::class.java)
@@ -302,6 +297,25 @@ class LoginStep24Activity : AppCompatActivity() {
 
 
     }
+
+    private fun setSharedPreferences(user: String?, accessToken: String?) {
+        val sharedPreferencesUser = getSharedPreferences(USER, Context.MODE_PRIVATE)
+        sharedPreferencesUser.edit().putString(KEYUSER, user).apply()
+
+        val sharedPreferencesAccessToken = getSharedPreferences(ACCESSTOKEN, Context.MODE_PRIVATE)
+        sharedPreferencesAccessToken.edit().putString(KEYACCESSTOKEN, accessToken).apply()
+
+        // دریافت تاریخ کنونی
+        val today = LocalDate.now()
+        // اضافه کردن چهار روز به تاریخ کنونی
+        val futureDate = today.plusDays(4)
+        Log.v("loginapp", "Here: ${today}")
+        Log.v("loginapp", "Here: ${futureDate}")
+
+        val sharedPreferencesExpirationAccessToken = getSharedPreferences(EXPIRATIONACCESSTOKEN, Context.MODE_PRIVATE)
+        sharedPreferencesExpirationAccessToken.edit().putInt(KEYEXPIRATIONACCESSTOKEN,
+            futureDate.dayOfMonth
+        ).apply()    }
 
     private fun goToMiniSite(user: String?) {
         Log.v("loginapp", "Here: ${user}")

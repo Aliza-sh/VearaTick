@@ -146,7 +146,7 @@ class CompanyEventFragment : Fragment() {
                 }
 
                 override fun onEventClicked(companyEvent: Events.Event, position: Int) {
-                    var createEventUrl = "https://step24.ir/events/${companyEvent.name}"
+                    var createEventUrl = "https://step24.ir/events/${companyEvent.slug}"
                     val modifiedUrl = Uri.parse(createEventUrl)
                     val intent = Intent(Intent.ACTION_VIEW, modifiedUrl)
                     startActivity(intent)
@@ -159,7 +159,7 @@ class CompanyEventFragment : Fragment() {
     }
 
     fun goToLogin() {
-        Snackbar.make(binding.root, "نیاز به ورود به سایت است!", Snackbar.LENGTH_INDEFINITE)
+        Snackbar.make(binding.root, "نیاز به ورود به سایت است!", Snackbar.ANIMATION_MODE_SLIDE)
             .setAction("ورود") {
                 val goFromEvent = true
                 val intent = Intent(requireActivity(), LoginStep24Activity::class.java)

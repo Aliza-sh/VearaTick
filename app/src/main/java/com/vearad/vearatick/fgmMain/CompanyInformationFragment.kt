@@ -1,5 +1,6 @@
 package com.vearad.vearatick.fgmMain
 
+import ApiService
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -7,6 +8,7 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,18 +21,36 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
+import com.google.android.material.snackbar.Snackbar
+import com.vearad.vearatick.ACCESSTOKEN
 import com.vearad.vearatick.BottomSheetCallback
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.CompanyInfo
 import com.vearad.vearatick.DataBase.CompanyInfoDao
 import com.vearad.vearatick.Dialog.CompanyInfoBottomsheetFragment
+import com.vearad.vearatick.EXPIRATIONACCESSTOKEN
+import com.vearad.vearatick.KEYACCESSTOKEN
+import com.vearad.vearatick.KEYEXPIRATIONACCESSTOKEN
+import com.vearad.vearatick.KEYUSER
 import com.vearad.vearatick.LoginStep24Activity
 import com.vearad.vearatick.MainActivity
 import com.vearad.vearatick.R
+import com.vearad.vearatick.USER
 import com.vearad.vearatick.databinding.FragmentCompanyInformationBinding
 import com.vearad.vearatick.fgmSub.CompanyEventFragment
 import com.vearad.vearatick.fgmSub.CompanyResumeFragment
 import com.vearad.vearatick.fgmSub.CompanySkillFragment
+import com.vearad.vearatick.model.MiniSiteData
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
+import java.net.MalformedURLException
+import java.time.LocalDate
 
 class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
@@ -41,6 +61,11 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
     private val PICK_IMAGE_REQUEST = 1
     var imageUri: Uri? = null
     var imagePath: String? = null
+
+    var login = false
+    var expirationAccessToken = 0
+    var user = ""
+    var accessToken = ""
 
     val SHAREDLOGINSTEP24 = "SharedLoginStep24"
     val LOGINSTEP24 = "loginStep24"
@@ -57,6 +82,19 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
         super.onViewCreated(view, savedInstanceState)
         firstRun(view)
         setData(view)
+        val sharedPreferencesExpirationAccessToken =
+            requireActivity().getSharedPreferences(EXPIRATIONACCESSTOKEN, Context.MODE_PRIVATE)
+         expirationAccessToken = sharedPreferencesExpirationAccessToken.getInt(KEYEXPIRATIONACCESSTOKEN, 0)
+
+        val sharedPreferencesUser =
+            requireActivity().getSharedPreferences(USER, Context.MODE_PRIVATE)
+         user = sharedPreferencesUser.getString(KEYUSER, "").toString()
+
+        val sharedPreferencesAccessToken =
+            requireActivity().getSharedPreferences(ACCESSTOKEN, Context.MODE_PRIVATE)
+        accessToken = sharedPreferencesAccessToken.getString(KEYACCESSTOKEN, "").toString()
+
+        createApiService()
 
         val popupMenuInfoCompany = PopupMenu(this.context, binding.btnMenuCompany)
         onInfoCompanyClicked(popupMenuInfoCompany)
@@ -110,6 +148,85 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
         }
     }
 
+    private fun createApiService() {
+
+        val interceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+        val client = OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .build()
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://step24.ir/api/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(client)
+            .build()
+
+        val apiService =  retrofit.create(ApiService::class.java)
+        getMiniSite(user, accessToken,apiService )
+    }
+
+    private fun getMiniSite(user: String?, accessToken: String?, apiService: ApiService) {
+        Log.v("loginapp", "user: ${user}")
+        Log.v("loginapp", "accessToken: ${accessToken}")
+
+        if (user != null && accessToken != null) {
+            val call = apiService.getMiniSite("admin/minisite/users/${user}/business", "Bearer $accessToken")
+            call.enqueue(object : Callback<MiniSiteData>{
+                override fun onResponse(call: Call<MiniSiteData>, response: Response<MiniSiteData>) {
+                    if (response.isSuccessful) {
+                        //companyEventData = response.body()!!.event
+                        Log.v("loginapp", "response: ${response}")
+                        Log.v("loginapp", "call: ${call}")
+
+                        val miniSiteDataData: MiniSiteData? = response.body()
+                        Log.v("loginapp", "eventData: ${miniSiteDataData}")
+
+                        if (miniSiteDataData?.miniSite != null) {
+                            // Process the events data as needed
+                            binding.idMiniSite.text = miniSiteDataData.miniSite.namePer
+                        } else {
+                            // Handle the case where the response body is null
+                            Snackbar.make(binding.root, "مینی سایت نداری!", Snackbar.ANIMATION_MODE_SLIDE)
+                                .setAction("ساخت مینی سایت") {
+                                    goToMiniSite(user)
+                                }
+                                .show()
+                        }
+                        // Process the data and update the UI
+                    } else {
+                        // Handle unsuccessful response
+                        goToLogin()
+                    }
+                }
+                override fun onFailure(call: Call<MiniSiteData>, t: Throwable) {
+                    Log.e("RequestError", "Error: ${t.message}")
+                    // Handle the error
+                    goToLogin()
+                }
+
+            })
+        } else
+            goToLogin()
+
+    }
+
+    fun goToLogin() {
+        Snackbar.make(binding.root, "نیاز به ورود به سایت است!", Snackbar.ANIMATION_MODE_SLIDE)
+            .setAction("ورود") {
+                val goFromEvent = true
+                val intent = Intent(requireActivity(), LoginStep24Activity::class.java)
+                intent.putExtra("GOFROMEVENT", goFromEvent);
+                startActivity(intent)
+                requireActivity().overridePendingTransition(
+                    R.anim.slide_from_left,
+                    R.anim.slide_to_right
+                )
+            }
+            .show()
+    }
+
+
     private fun onInfoCompanyClicked(popupMenu: PopupMenu) {
         popupMenu.menuInflater.inflate(
             R.menu.menu_edit_info_company_and_login_minisite,
@@ -120,7 +237,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
             val sharedPreferencesLoginStep24 =
                 requireActivity().getSharedPreferences(SHAREDLOGINSTEP24, Context.MODE_PRIVATE)
-            val login = sharedPreferencesLoginStep24.getBoolean(LOGINSTEP24, false)
+            login = sharedPreferencesLoginStep24.getBoolean(LOGINSTEP24, false)
 
             val tapTargetSequence = tapTargetSequence(sharedPreferencesLoginStep24)
 
@@ -143,9 +260,20 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
                     R.id.menu_login_minisite -> {
 
-                        val intent = Intent(requireActivity(), LoginStep24Activity::class.java)
-                        startActivity(intent)
-                        requireActivity().overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
+                        val today = LocalDate.now()
+                        Log.v("loginapp", "today: ${today.dayOfMonth}")
+                        Log.v("loginapp", "expirationAccessToken: ${expirationAccessToken}")
+                        Log.v("loginapp", "user: ${user}")
+
+                        if (expirationAccessToken == today.dayOfMonth || user == "" || expirationAccessToken == 0) {
+                            val intent = Intent(requireActivity(), LoginStep24Activity::class.java)
+                            startActivity(intent)
+                            requireActivity().overridePendingTransition(
+                                R.anim.slide_from_left,
+                                R.anim.slide_to_right
+                            )
+                        } else
+                            goToMiniSite(user)
 
                     }
 
@@ -154,6 +282,27 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
             }
         }
     }
+
+    private fun goToMiniSite(user: String?) {
+
+        val createEventUrl =
+            "https://step24.ir/${user}/admin/minisite-panel"
+
+        try {
+            val modifiedUrl = Uri.parse(createEventUrl)
+                .buildUpon()
+                .appendQueryParameter("appOrigin", "android")
+                .build()
+
+            val intent = Intent(Intent.ACTION_VIEW, modifiedUrl)
+            startActivity(intent)
+        } catch (e: MalformedURLException) {
+            // Handle URL exception
+        } catch (e: IOException) {
+            // Handle connection exception
+        }
+    }
+
 
     private fun tapTargetSequence(sharedPreferencesLoginStep24: SharedPreferences): TapTargetSequence? {
         val tapTargetSequence = TapTargetSequence(requireActivity())
