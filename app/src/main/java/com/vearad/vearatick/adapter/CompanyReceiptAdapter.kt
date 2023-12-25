@@ -1,10 +1,13 @@
 package com.vearad.vearatick.adapter
 
+import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.vearad.vearatick.DataBase.CompanyReceipt
+import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.ItemExpenseBinding
 import java.text.DecimalFormat
 
@@ -21,6 +24,23 @@ class CompanyReceiptAdapter(
         val btnMenu = binding.btnMenu
         fun bindData(position: Int, clickListener: CompanyReceiptEvents) {
 
+            if (data[position].idProject != null) {
+                binding.txtProjectTaskEmployee.visibility = View.VISIBLE
+
+                binding.txtProjectTaskEmployee.text = "درآمد پروژه"
+                val shape = GradientDrawable()
+                shape.shape = GradientDrawable.RECTANGLE
+                shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                shape.setStroke(
+                    5,
+                    ContextCompat.getColor(binding.root.context, R.color.blue_dark_rank)
+                )
+                shape.setColor(ContextCompat.getColor(binding.root.context, R.color.blue_light_rank))
+                binding.txtProjectTaskEmployee.setTextColor(android.graphics.Color.parseColor("#215DAD"))
+                binding.txtProjectTaskEmployee.background = shape
+
+            }
+
             binding.txtExpense.text = formatCurrency(data[position].companyReceipt)
             binding.txtDate.text = data[position].companyReceiptDate.toString()
             binding.txtDescription.text = data[position].companyReceiptDescription.toString()
@@ -28,6 +48,7 @@ class CompanyReceiptAdapter(
             binding.btnMenu.setOnClickListener {
                 clickListener.onMenuItemClick(data[position], position)
             }
+
 
             itemView.setOnClickListener {}
             itemView.setOnLongClickListener {true}

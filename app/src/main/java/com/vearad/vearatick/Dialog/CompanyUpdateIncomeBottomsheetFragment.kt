@@ -16,7 +16,7 @@ import com.xdev.arch.persiancalendar.datepicker.MaterialPickerOnPositiveButtonCl
 import com.xdev.arch.persiancalendar.datepicker.Month
 import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import com.vearad.vearatick.BottomSheetCallback
-import com.vearad.vearatick.CompanyIncomeActivity
+import com.vearad.vearatick.CompanyReceiptActivity
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.CompanyReceipt
 import com.vearad.vearatick.DataBase.CompanyReceiptDao
@@ -123,7 +123,7 @@ class CompanyUpdateIncomeBottomsheetFragment(
             .setTitleText("تاریخ را انتخاب کنید.")
             .setTheme(R.style.AppTheme_PersianCalendar)
             .setCalendarConstraints(constraints).build()
-        datePicker.show((activity as CompanyIncomeActivity).supportFragmentManager, "aTag")
+        datePicker.show((activity as CompanyReceiptActivity).supportFragmentManager, "aTag")
         datePicker.isCancelable
 
         datePicker.addOnPositiveButtonClickListener(

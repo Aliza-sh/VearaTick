@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.animation.LinearInterpolator
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -89,7 +90,10 @@ class ProjectSubTaskFragment(
         }
 
         binding.btnFabTack.setOnClickListener {
+            if (project.doneProject!=true)
             addNewTask()
+            else
+                Toast.makeText(view.context, "پروژه تکمیل شده است.", Toast.LENGTH_SHORT).show()
         }
 
     }

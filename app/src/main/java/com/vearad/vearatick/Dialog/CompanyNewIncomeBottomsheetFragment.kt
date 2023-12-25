@@ -10,7 +10,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.vearad.vearatick.BottomSheetCallback
-import com.vearad.vearatick.CompanyIncomeActivity
+import com.vearad.vearatick.CompanyReceiptActivity
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.CompanyReceipt
 import com.vearad.vearatick.DataBase.CompanyReceiptDao
@@ -110,7 +110,7 @@ class CompanyNewIncomeBottomsheetFragment(
             .setTitleText("تاریخ را انتخاب کنید.")
             .setTheme(R.style.AppTheme_PersianCalendar)
             .setCalendarConstraints(constraints).build()
-        datePicker.show((activity as CompanyIncomeActivity).supportFragmentManager, "aTag")
+        datePicker.show((activity as CompanyReceiptActivity).supportFragmentManager, "aTag")
         datePicker.isCancelable
 
         datePicker.addOnPositiveButtonClickListener(

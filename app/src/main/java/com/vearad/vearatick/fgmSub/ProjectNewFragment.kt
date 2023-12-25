@@ -59,6 +59,7 @@ class ProjectNewFragment(
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onBackPressed()
@@ -69,11 +70,11 @@ class ProjectNewFragment(
         }
 
         val today = PersianCalendar()
-        valueDay = today.day -1
-        valueMonth = today.month + 1
+        valueDay = today.day - 1
+        valueMonth = today.month
         valueYear = today.year
         valueCalendar = "$valueYear/$valueMonth/$valueDay"
-        binding.txtDedlineDateTime.text = valueCalendar
+        binding.txtDedlineDateTime.text = "$valueYear/${today.month + 1}/$valueDay"
 
         val typeProject = listOf(
             "اندروید",
@@ -270,8 +271,7 @@ class ProjectNewFragment(
         if (
             binding.edtNamePro.length() > 0 &&
             binding.txtDedlineDateTime.length() > 0 &&
-            binding.edtTypeProject.length() > 0 &&
-            binding.edtInfoPro.length() > 0
+            binding.edtTypeProject.length() > 0 
         ) {
             val txtname = binding.edtNamePro.text.toString()
             val noDeadline = valueBtnNoDate
