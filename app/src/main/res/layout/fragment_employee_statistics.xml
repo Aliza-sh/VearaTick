@@ -1,132 +1,388 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/custom"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layoutDirection="ltr"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fgmSub.EmployeeStatisticsFragment">
+    android:layoutDirection="ltr"
+    android:scrollbars="none">
 
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cons_lyt"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_background_light"
-        android:elevation="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:orientation="vertical"
+        tools:context=".fgmSub.EmployeeStatisticsFragment">
 
-
-        <com.mikhaellopez.circularprogressbar.CircularProgressBar
-            android:id="@+id/progress_circular"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
-            android:layout_marginStart="16dp"
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            app:cpb_background_progressbar_color="@color/white"
-            app:cpb_background_progressbar_width="5dp"
-            app:cpb_progress_max="100"
-            app:cpb_progressbar_color="@color/firoze"
-            app:cpb_progressbar_width="5dp"
-            app:cpb_round_border="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/btn_info_prn"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_gravity="center|top"
-            app:layout_constraintBottom_toBottomOf="@+id/progress_circular"
-            app:layout_constraintEnd_toEndOf="@+id/progress_circular"
-            app:layout_constraintStart_toStartOf="@+id/progress_circular"
-            app:layout_constraintTop_toTopOf="@+id/progress_circular"
-            app:srcCompat="@drawable/img_male" />
-
-        <TextView
-            android:id="@+id/txt_name_emp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="2dp"
-            android:text="علیرضا شهسواری"
-            android:textColor="?attr/colorOnSecondary"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="@+id/progress_circular"
-            app:layout_constraintStart_toStartOf="@+id/progress_circular"
-            app:layout_constraintTop_toBottomOf="@+id/progress_circular" />
-
-        <TextView
-            android:id="@+id/txt_Specialty_emp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="8dp"
-            android:text="اندروید کار"
-            android:textColor="?attr/colorOnSecondary"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/txt_name_emp"
-            app:layout_constraintStart_toStartOf="@+id/txt_name_emp"
-            app:layout_constraintTop_toBottomOf="@+id/txt_name_emp" />
-
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tablayoutEmp"
-            style="@style/Widget.Material3.TabLayout.OnSurface"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:backgroundTint="?attr/colorPrimaryVariant"
-            android:layoutDirection="rtl"
-            android:background="@drawable/shape_background_light"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:tabMode="scrollable">
+            app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="آمار" />
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical">
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="تقویم" />
+                <TextView
+                    android:id="@+id/textView17"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="آمار کلی حضور "
+                    android:textAlignment="textEnd"
+                    android:textColor="?attr/colorOnSecondary"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <com.google.android.material.tabs.TabItem
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="وظایف" />
-        </com.google.android.material.tabs.TabLayout>
+                <TextView
+                    android:id="@+id/textView101"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="هفته"
+                    android:textColor="@color/fi_light"
+                    android:textSize="22sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView102"
+                    app:layout_constraintTop_toBottomOf="@+id/textView17" />
 
-        <TextView
-            android:id="@+id/textView12"
-            android:layout_width="wrap_content"
+                <TextView
+                    android:id="@+id/txt_watch_week"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 ساعت"
+                    android:textColor="@color/fi_light"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@+id/textView101"
+                    app:layout_constraintStart_toStartOf="@+id/textView101"
+                    app:layout_constraintTop_toBottomOf="@+id/textView101" />
+
+                <View
+                    android:id="@+id/view6"
+                    android:layout_width="2dp"
+                    android:layout_height="65dp"
+                    android:layout_marginTop="6dp"
+                    android:background="?attr/colorOnPrimary"
+                    app:layout_constraintBottom_toBottomOf="@+id/txt_watch_week"
+                    app:layout_constraintEnd_toStartOf="@+id/txt_watch_week"
+                    app:layout_constraintStart_toEndOf="@+id/txt_watch_month"
+                    app:layout_constraintTop_toTopOf="@+id/textView101" />
+
+                <TextView
+                    android:id="@+id/textView102"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ماه"
+                    android:textColor="@color/fi_light"
+                    android:textSize="22sp"
+                    app:layout_constraintEnd_toStartOf="@+id/textView101"
+                    app:layout_constraintStart_toEndOf="@+id/textView103"
+                    app:layout_constraintTop_toTopOf="@+id/textView101" />
+
+                <TextView
+                    android:id="@+id/txt_watch_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 ساعت"
+                    android:textColor="@color/fi_light"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/txt_watch_week"
+                    app:layout_constraintEnd_toEndOf="@+id/textView102"
+                    app:layout_constraintStart_toStartOf="@+id/textView102"
+                    app:layout_constraintTop_toBottomOf="@+id/textView102" />
+
+                <View
+                    android:layout_width="2dp"
+                    android:layout_height="65dp"
+                    android:background="?attr/colorOnPrimary"
+                    app:layout_constraintEnd_toStartOf="@+id/txt_watch_month"
+                    app:layout_constraintStart_toEndOf="@+id/txt_watch_total"
+                    app:layout_constraintTop_toTopOf="@+id/view6" />
+
+                <TextView
+                    android:id="@+id/textView103"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:text="کل"
+                    android:textColor="@color/fi_light"
+                    android:textSize="22sp"
+                    app:layout_constraintEnd_toStartOf="@+id/textView102"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textView102" />
+
+                <TextView
+                    android:id="@+id/txt_watch_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 ساعت"
+                    android:textColor="@color/fi_light"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/txt_watch_month"
+                    app:layout_constraintEnd_toEndOf="@+id/textView103"
+                    app:layout_constraintStart_toStartOf="@+id/textView103"
+                    app:layout_constraintTop_toBottomOf="@+id/textView103" />
+
+                <me.bastanfar.semicirclearcprogressbar.SemiCircleArcProgressBar
+                    android:id="@+id/progress_total_Presence"
+                    android:layout_width="170dp"
+                    android:layout_height="90dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    app:percent="0"
+                    app:progressBarColor="?attr/colorPrimary"
+                    app:progressBarWidth="30"
+                    app:progressPlaceHolderColor="?attr/colorOnPrimary"
+                    app:progressPlaceHolderWidth="30"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/txt_watch_week"
+                    app:layout_constraintStart_toStartOf="@+id/txt_watch_total"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_watch_month" />
+
+                <TextView
+                    android:id="@+id/txt_total_Presence"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0%"
+                    android:textColor="@color/firoze"
+                    android:textSize="20sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/progress_total_Presence"
+                    app:layout_constraintEnd_toEndOf="@+id/progress_total_Presence"
+                    app:layout_constraintStart_toStartOf="@+id/progress_total_Presence" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="این کارمند کارش درسته"
-            android:textColor="?attr/colorPrimary"
-            android:textSize="26sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/tablayoutEmp"
-            app:layout_constraintEnd_toEndOf="parent" />
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="?attr/colorPrimaryVariant"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/textView170"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="آمار کلی تعداد وظایف انجام شده"
+                    android:textColor="?attr/colorOnSecondary"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView1010"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="هفته"
+                    android:textColor="@color/fi_light"
+                    android:textSize="22sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/textView1020"
+                    app:layout_constraintTop_toBottomOf="@+id/textView170" />
+
+                <TextView
+                    android:id="@+id/txt_tack_week"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 تا"
+                    android:textColor="@color/fi_light"
+                    android:textSize="18sp"
+                    app:layout_constraintEnd_toEndOf="@+id/textView1010"
+                    app:layout_constraintStart_toStartOf="@+id/textView1010"
+                    app:layout_constraintTop_toBottomOf="@+id/textView1010" />
+
+                <me.bastanfar.semicirclearcprogressbar.SemiCircleArcProgressBar
+                    android:id="@+id/progress_week_duties"
+                    android:layout_width="110dp"
+                    android:layout_height="60dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    app:percent="0"
+                    app:progressBarColor="?attr/colorPrimary"
+                    app:progressBarWidth="25"
+                    app:progressPlaceHolderColor="?attr/colorOnPrimary"
+                    app:progressPlaceHolderWidth="25"
+                    app:arc_unfinished_color="?attr/colorOnPrimary"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/progress_month_duties"
+                    app:layout_constraintTop_toBottomOf="@+id/txt_tack_week"/>
+
+                <TextView
+                    android:id="@+id/txt_week_duties"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="-8dp"
+                    android:text="0%"
+                    android:textColor="@color/firoze"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/progress_week_duties"
+                    app:layout_constraintEnd_toEndOf="@+id/progress_week_duties"
+                    app:layout_constraintStart_toStartOf="@+id/progress_week_duties" />
+
+                <View
+                    android:id="@+id/view60"
+                    android:layout_width="2dp"
+                    android:layout_height="65dp"
+                    android:layout_marginTop="6dp"
+                    android:background="?attr/colorOnPrimary"
+                    app:layout_constraintBottom_toBottomOf="@+id/txt_tack_week"
+                    app:layout_constraintEnd_toStartOf="@+id/txt_tack_week"
+                    app:layout_constraintStart_toEndOf="@+id/txt_tack_month"
+                    app:layout_constraintTop_toTopOf="@+id/textView1010" />
+
+                <TextView
+                    android:id="@+id/textView1020"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ماه"
+                    android:textColor="@color/fi_light"
+                    android:textSize="22sp"
+                    app:layout_constraintEnd_toStartOf="@+id/textView1010"
+                    app:layout_constraintStart_toEndOf="@+id/textView1030"
+                    app:layout_constraintTop_toTopOf="@+id/textView1010" />
+
+                <TextView
+                    android:id="@+id/txt_tack_month"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 تا"
+                    android:textColor="@color/fi_light"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/txt_tack_week"
+                    app:layout_constraintEnd_toEndOf="@+id/textView1020"
+                    app:layout_constraintStart_toStartOf="@+id/textView1020"
+                    app:layout_constraintTop_toBottomOf="@+id/textView1020" />
+
+                <me.bastanfar.semicirclearcprogressbar.SemiCircleArcProgressBar
+                    android:id="@+id/progress_month_duties"
+                    android:layout_width="110dp"
+                    android:layout_height="60dp"
+                    app:arc_unfinished_color="?attr/colorOnPrimary"
+                    app:layout_constraintEnd_toStartOf="@+id/progress_week_duties"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/progress_total_duties"
+                    app:layout_constraintTop_toTopOf="@+id/progress_week_duties"
+                    app:percent="0"
+                    app:progressBarColor="?attr/colorPrimary"
+                    app:progressBarWidth="25"
+                    app:progressPlaceHolderColor="?attr/colorOnPrimary"
+                    app:progressPlaceHolderWidth="25" />
+
+                <TextView
+                    android:id="@+id/txt_month_duties"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="-8dp"
+                    android:text="0%"
+                    android:textColor="@color/firoze"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/progress_month_duties"
+                    app:layout_constraintEnd_toEndOf="@+id/progress_month_duties"
+                    app:layout_constraintStart_toStartOf="@+id/progress_month_duties" />
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="2dp"
+                    android:layout_height="65dp"
+                    android:background="?attr/colorOnPrimary"
+                    app:layout_constraintEnd_toStartOf="@+id/txt_tack_month"
+                    app:layout_constraintStart_toEndOf="@+id/txt_tack_total"
+                    app:layout_constraintTop_toTopOf="@+id/view60" />
+
+                <TextView
+                    android:id="@+id/textView1030"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:text="کل"
+                    android:textColor="@color/fi_light"
+                    android:textSize="22sp"
+                    app:layout_constraintEnd_toStartOf="@+id/textView1020"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/textView1020" />
+
+                <TextView
+                    android:id="@+id/txt_tack_total"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0 تا"
+                    android:textColor="@color/fi_light"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/txt_tack_month"
+                    app:layout_constraintEnd_toEndOf="@+id/textView1030"
+                    app:layout_constraintStart_toStartOf="@+id/textView1030"
+                    app:layout_constraintTop_toBottomOf="@+id/textView1030" />
+
+                <me.bastanfar.semicirclearcprogressbar.SemiCircleArcProgressBar
+                    android:id="@+id/progress_total_duties"
+                    android:layout_width="110dp"
+                    android:layout_height="60dp"
+                    app:layout_constraintEnd_toStartOf="@+id/progress_month_duties"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="@+id/progress_month_duties"
+                    app:percent="0"
+                    app:progressBarColor="@color/firoze"
+                    android:background="@drawable/progress_limit"
+                    app:progressBarWidth="25"
+                    app:progressPlaceHolderColor="?attr/colorOnPrimary"
+                    app:progressPlaceHolderWidth="25" />
+
+                <TextView
+                    android:id="@+id/txt_total_duties"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="-8dp"
+                    android:text="0%"
+                    android:textColor="@color/firoze"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="@+id/progress_total_duties"
+                    app:layout_constraintEnd_toEndOf="@+id/progress_total_duties"
+                    app:layout_constraintStart_toStartOf="@+id/progress_total_duties" />
 
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewpagerEmp"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layoutDirection="rtl"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cons_lyt" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.cardview.widget.CardView>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+</ScrollView>
+

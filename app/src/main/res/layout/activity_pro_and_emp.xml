@@ -1,48 +1,135 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorOnPrimary"
-    android:layoutDirection="ltr"
-    tools:context=".MainActivity">
+    android:layoutDirection="ltr">
 
-    <FrameLayout
-        android:id="@+id/frame_layout_main"
+    <LinearLayout
+        android:gravity="center|end"
+        android:elevation="10dp"
+        android:background="@drawable/shape_background_top_pro_emp_act"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginBottom="60dp" />
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/txt_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:text="پروژه ها"
+            android:background="@drawable/shape_background_rcv"
+            android:backgroundTint="@color/blacke"
+            android:paddingEnd="15dp"
+            android:paddingStart="15dp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btn_bck"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/shape_circle"
+            android:rotationY="180"
+            android:src="@drawable/ic_back"
+            app:backgroundTint="?attr/colorOnPrimary"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_menu_project"
+            app:tint="@color/white" />
+
+    </LinearLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:layout_marginTop="40dp"
+        android:id="@+id/frame_layout_sub"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/BottomAppBar"
+        android:id="@+id/bottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:backgroundTint="?attr/colorPrimaryVariant"
         android:layoutDirection="rtl"
-        app:fabCradleMargin="20dp"
-        app:fabCradleRoundedCornerRadius="50dp">
+        app:backgroundTint="?attr/colorPrimaryVariant"
+        app:fabAlignmentMode="center"
+        app:fabCradleMargin="15dp"
+        app:fabCradleRoundedCornerRadius="130dp">
 
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
+        <LinearLayout
+            android:id="@+id/btn_projrct"
+            style="@style/Widget.Material3.Button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginStart="20dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/ic_project"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_tack" />
+
+            <TextView
+                android:id="@+id/txt_project"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="پروژه ها"
+                android:textColor="@color/firoze"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_employee"
+            style="@style/Widget.Material3.Button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
             android:layout_marginEnd="20dp"
-            android:background="@android:color/transparent"
-            app:labelVisibilityMode="labeled"
-            app:menu="@menu/menu_bottombar" />
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/ic_employee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_employee"
+                app:tint="@color/gray" />
+
+            <TextView
+                android:id="@+id/txt_employee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="کارکنان"
+                android:textColor="@color/gray" />
+
+        </LinearLayout>
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/btn_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:backgroundTint="@color/firoze"
         android:src="@drawable/ic_add_round"
-        android:tint="?attr/colorPrimary"
-        app:layout_anchor="@id/BottomAppBar"
+        app:layout_anchor="@id/bottomAppBar"
         app:maxImageSize="40dp" />
+
+    <FrameLayout
+        android:id="@+id/layout_pro_and_emp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="100dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

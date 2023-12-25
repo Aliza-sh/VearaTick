@@ -1,0 +1,38 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="7"
+    android:gravity="center"
+    android:orientation="horizontal">
+
+    <include
+        android:id="@+id/btn_jo"
+        layout="@layout/calendar_day_legend_text_employee_task"
+        tools:ignore="InvalidId" />
+
+    <include android:id="@+id/btn_pn"
+        layout="@layout/calendar_day_legend_text_employee_task"
+        tools:ignore="InvalidId" />
+
+    <include android:id="@+id/btn_ch"
+        layout="@layout/calendar_day_legend_text_employee_task"
+        tools:ignore="InvalidId" />
+
+    <include android:id="@+id/btn_se"
+        layout="@layout/calendar_day_legend_text_employee_task"
+        tools:ignore="InvalidId" />
+
+    <include android:id="@+id/btn_do"
+        layout="@layout/calendar_day_legend_text_employee_task"
+        tools:ignore="InvalidId" />
+
+    <include android:id="@+id/btn_ye"
+        layout="@layout/calendar_day_legend_text_employee_task"
+        tools:ignore="InvalidId" />
+
+    <include android:id="@+id/btn_sha"
+        layout="@layout/calendar_day_legend_text_employee_task"
+        tools:ignore="InvalidId" />
+
+</LinearLayout>

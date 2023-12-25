@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_task_project_edit"
+        android:title="ویرایش " />
+    <item
+        android:id="@+id/menu_task_project_done"
+        android:title="تکمیل شد " />
+    <item
+        android:id="@+id/menu_task_project_delete"
+        android:title="حذف " />
+</menu>

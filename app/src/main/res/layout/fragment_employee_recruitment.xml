@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorOnPrimary"
+    android:layoutDirection="ltr"
+    android:orientation="vertical">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_background_light"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        android:layoutDirection="rtl"
+        app:layout_anchorGravity="top">
+
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/sheet_btn_done"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:layout_gravity="end"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:background="@drawable/shape_dore_button"
+                android:text="استخدام"
+                android:textColor="@color/white"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                app:backgroundTint="@color/firoze"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/txt_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/shape_background_rcv"
+                android:backgroundTint="@color/blacke"
+                android:paddingStart="15dp"
+                android:paddingTop="5dp"
+                android:paddingEnd="15dp"
+                android:paddingBottom="5dp"
+                android:text="استخدام کارمند"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/btn_bck"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@drawable/shape_circle"
+                android:rotationY="180"
+                android:src="@drawable/ic_back"
+                app:backgroundTint="?attr/colorOnPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/white" />
+
+
+        </androidx.appcompat.widget.Toolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_marginTop="100dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorOnPrimary"
+            android:layoutDirection="ltr">
+
+
+            <ScrollView
+                android:id="@+id/scrollView3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:elevation="11dp"
+                android:scrollbars="none"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_background_navi">
+
+                    <ImageView
+                        android:id="@+id/imgprn2"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/shape_circle"
+                        android:backgroundTint="?attr/colorOnPrimary"
+                        android:padding="20dp"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/img_add_photo" />
+
+                    <LinearLayout
+                        android:id="@+id/linearLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="22dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginBottom="35dp"
+                        android:orientation="vertical"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/imgprn2">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:layoutDirection="rtl"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/imageView3"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="top"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="18dp"
+                                android:background="@drawable/shape_circle"
+                                android:backgroundTint="?attr/colorOnPrimary"
+                                android:padding="8dp"
+                                android:src="@drawable/ic_outline_person"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toTopOf="@+id/imgprn"
+                                app:tint="@color/firoze" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layoutDirection="rtl"
+                                android:orientation="vertical">
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="* اسم"
+                                    app:boxStrokeColor="@color/firoze">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edt_name_epm"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:inputType="text"
+                                        android:textSize="13sp"
+                                        android:maxLength="20"
+                                        android:singleLine="true"
+                                        android:textColor="?attr/colorOnSecondary" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_weight="0.9"
+                                    android:hint="* فامیل"
+                                    android:layout_marginTop="4dp"
+                                    app:boxStrokeColor="@color/firoze">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edt_fam_emp"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:inputType="text"
+                                        android:singleLine="true"
+                                        android:textSize="13sp"
+                                        android:maxLength="20"
+                                        android:textColor="?attr/colorOnSecondary" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="horizontal">
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        android:id="@+id/dialog_main_edt_gdrperson"
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginEnd="10dp"
+                                        android:layout_weight="0.9"
+                                        android:hint="* جنسیت"
+                                        android:layout_marginTop="4dp"
+                                        app:boxStrokeColor="@color/firoze">
+
+                                        <AutoCompleteTextView
+                                            android:id="@+id/edt_gen_emp"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:inputType="none"
+                                            android:singleLine="true"
+                                            android:textSize="13sp"
+                                            android:textColor="?attr/colorOnSecondary" />
+
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginStart="10dp"
+                                        android:layout_weight="1.1"
+                                        android:hint="* سن"
+                                        android:layout_marginTop="4dp"
+                                        app:boxStrokeColor="@color/firoze">
+
+                                        <com.google.android.material.textfield.TextInputEditText
+                                            android:id="@+id/edt_age_emp"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:inputType="number"
+                                            android:maxLength="3"
+                                            android:singleLine="true"
+                                            android:textSize="13sp"
+                                            android:textColor="?attr/colorOnSecondary" />
+
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center"
+                            android:layoutDirection="rtl"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:layout_gravity="top"
+                                android:id="@+id/imageView5"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_marginEnd="18dp"
+                                android:layout_marginTop="8dp"
+                                android:background="@drawable/shape_circle"
+                                android:backgroundTint="?attr/colorOnPrimary"
+                                android:padding="5dp"
+                                android:src="@drawable/img_expert"
+                                app:layout_constraintEnd_toEndOf="@+id/imageView4"
+                                app:layout_constraintStart_toStartOf="@+id/imageView4"
+                                app:layout_constraintTop_toBottomOf="@+id/imageView4"
+                                app:tint="@color/firoze" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layoutDirection="rtl"
+                                android:orientation="vertical">
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/textInputLayout"
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="* تخصص"
+                                    app:boxStrokeColor="@color/firoze"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="@+id/textView32">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:id="@+id/edt_Takhasos_emp"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:inputType="text"
+                                        android:singleLine="true"
+                                        android:textSize="13sp"
+                                        android:maxLength="20"
+                                        android:textColor="?attr/colorOnSecondary" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+
+                                <com.google.android.material.textfield.TextInputLayout
+                                    android:id="@+id/dialog_main_edt_rank_person"
+                                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:hint="* رتبه"
+                                    android:layout_marginTop="4dp"
+                                    app:boxStrokeColor="@color/firoze">
+
+                                    <AutoCompleteTextView
+                                        android:id="@+id/edt_rank_emp"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:inputType="none"
+                                        android:singleLine="true"
+                                        android:textSize="13sp"
+                                        android:textColor="?attr/colorOnSecondary" />
+
+                                </com.google.android.material.textfield.TextInputLayout>
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center"
+                            android:layoutDirection="rtl"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/imageView4"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_gravity="top"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="18dp"
+                                android:background="@drawable/shape_circle"
+                                android:backgroundTint="?attr/colorOnPrimary"
+                                android:padding="8dp"
+                                android:src="@drawable/ic_phone"
+                                app:layout_constraintEnd_toEndOf="@+id/imageView2"
+                                app:layout_constraintStart_toStartOf="@+id/imageView2"
+                                app:layout_constraintTop_toBottomOf="@+id/imageView2"
+                                app:tint="@color/firoze" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layoutDirection="rtl"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                        android:layout_width="0dp"
+                                        android:layout_weight="0.9"
+                                        android:layout_height="wrap_content"
+                                        android:hint="* شماره همراه"
+                                        app:boxStrokeColor="@color/firoze">
+
+                                        <com.google.android.material.textfield.TextInputEditText
+                                            android:id="@+id/edt_num_emp"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:inputType="phone"
+                                            android:maxLength="13"
+                                            android:singleLine="true"
+                                            android:textColor="?attr/colorOnSecondary"
+                                            android:textSize="13sp" />
+
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                    <ImageView
+                                        android:id="@+id/btn_number_phone"
+                                        android:layout_marginStart="10dp"
+                                        android:layout_width="40dp"
+                                        android:src="@drawable/img_contacts"
+                                        android:layout_height="40dp"
+                                        app:tint="@color/white"
+                                        android:padding="4dp"
+                                        android:layout_gravity="center"
+                                        android:background="@drawable/shape_circle"
+                                        android:backgroundTint="?attr/colorOnPrimary"
+                                        android:textColor="@color/white" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:orientation="horizontal"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content">
+
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                        android:layout_width="match_parent"
+                                        android:layout_weight="0.9"
+                                        android:layout_height="wrap_content"
+                                        android:hint="شماره منزل"
+                                        android:layout_marginTop="4dp"
+                                        app:boxStrokeColor="@color/firoze">
+
+                                        <com.google.android.material.textfield.TextInputEditText
+                                            android:id="@+id/edt_numbhome_emp"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:inputType="phone"
+                                            android:maxLength="11"
+                                            android:singleLine="true"
+                                            android:textColor="?attr/colorOnSecondary"
+                                            android:textSize="13sp" />
+
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                    <ImageView
+                                        android:visibility="gone"
+                                        android:id="@+id/btn_number_home"
+                                        android:layout_marginStart="10dp"
+                                        android:layout_width="40dp"
+                                        android:src="@drawable/img_contacts"
+                                        android:layout_height="40dp"
+                                        app:tint="@color/white"
+                                        android:padding="4dp"
+                                        android:layout_gravity="center"
+                                        android:background="@drawable/shape_circle"
+                                        android:backgroundTint="?attr/colorOnPrimary"
+                                        android:textColor="@color/white" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:gravity="center"
+                            android:layoutDirection="rtl"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/imageView2"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_marginEnd="18dp"
+                                android:background="@drawable/shape_circle"
+                                android:backgroundTint="?attr/colorOnPrimary"
+                                android:padding="8dp"
+                                android:src="@drawable/ic_location"
+                                app:layout_constraintEnd_toEndOf="@+id/imageView3"
+                                app:layout_constraintStart_toStartOf="@+id/imageView3"
+                                app:layout_constraintTop_toBottomOf="@+id/imageView3"
+                                app:tint="@color/firoze" />
+
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:hint="آدرس"
+                                app:boxStrokeColor="@color/firoze">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/edt_address_emp"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="text"
+                                    android:singleLine="true"
+                                    android:maxLength="150"
+                                    android:textSize="13sp"
+                                    android:textColor="?attr/colorOnSecondary" />
+
+                            </com.google.android.material.textfield.TextInputLayout>
+
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </ScrollView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+

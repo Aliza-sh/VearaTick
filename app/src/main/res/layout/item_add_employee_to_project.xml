@@ -15,10 +15,13 @@
 
         <ImageView
             android:id="@+id/imgprn2"
-            android:layout_width="65dp"
-            android:layout_height="65dp"
+            android:layout_width="55dp"
+            android:layout_height="55dp"
             android:layout_gravity="center|top"
             android:layout_marginTop="16dp"
+            android:background="@drawable/shape_circle"
+            android:backgroundTint="?attr/colorOnPrimary"
+            android:padding="5dp"
             android:layout_marginEnd="12dp"
             android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -28,26 +31,28 @@
 
         <TextView
             android:id="@+id/txt_name_employee"
-            android:layout_width="wrap_content"
+            android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
+            android:gravity="end"
             android:layout_marginBottom="20dp"
             android:text="name employee"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/imgprn2"
             app:layout_constraintEnd_toStartOf="@+id/imgprn2"
+            app:layout_constraintStart_toEndOf="@+id/ckb_employee"
             app:layout_constraintTop_toTopOf="@+id/imgprn2" />
 
         <TextView
             android:id="@+id/txt_job_employee"
-
-            android:layout_width="wrap_content"
+            android:layout_width="230dp"
             android:layout_height="wrap_content"
             android:text="job employee"
+            android:gravity="end"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="16sp"
+            android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="@+id/txt_name_employee"
             app:layout_constraintStart_toStartOf="@+id/txt_name_employee"
             app:layout_constraintTop_toBottomOf="@+id/txt_name_employee" />
@@ -58,7 +63,7 @@
             style="@style/Widget.Material3.CompoundButton.CheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/imgprn2"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/imgprn2" />

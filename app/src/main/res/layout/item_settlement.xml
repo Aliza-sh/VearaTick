@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="10dp"
+    android:layout_weight="1.1"
+    android:hint=" بودجه چقدره ؟"
+    android:textColorHint="?attr/colorOnSecondary"
+    app:boxStrokeColor="@color/firoze">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edt_name_pro"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        android:inputType="text"
+        android:singleLine="true"
+        android:textColor="?attr/colorOnSecondary" />
+
+</com.google.android.material.textfield.TextInputLayout>

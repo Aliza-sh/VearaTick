@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorOnPrimary"
+    android:layoutDirection="ltr"
+    tools:context=".fgmMain.CompanyInformationFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/background_icon_company"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_background_bottom_left"
+        android:elevation="10dp"
+        android:paddingBottom="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:layout_marginStart="8dp"
+            android:background="@drawable/shape_circle"
+            android:id="@+id/btn_menu_company"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="start"
+            android:layout_marginTop="8dp"
+            android:backgroundTint="?attr/colorOnPrimary"
+            android:padding="8dp"
+            android:src="@drawable/ic_menu"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/img_com"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_gravity="start"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="18dp"
+            android:background="@drawable/shape_dor_di"
+            android:backgroundTint="?attr/colorOnPrimary"
+            android:padding="15dp"
+            app:layout_constraintStart_toEndOf="@+id/btn_menu_company"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/img_add_photo" />
+
+        <View
+            android:id="@+id/view13"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="-10dp"
+            android:layout_marginBottom="-10dp"
+            android:background="@drawable/shape_background_top_shareholders"
+            android:backgroundTint="?attr/colorOnPrimary"
+            android:padding="20dp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+            app:layout_constraintEnd_toEndOf="@+id/imageView2"
+            app:layout_constraintStart_toEndOf="@+id/img_com"
+            app:layout_constraintTop_toTopOf="@+id/btn_menu_company" />
+
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="24dp"
+            android:src="@drawable/img_company"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/img_com"
+            app:tint="@color/firoze" />
+
+        <TextView
+            android:id="@+id/name_company"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:maxHeight="25dp"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="8dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/imageView3"
+            app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_location"
+            app:layout_constraintEnd_toEndOf="@+id/imageView3"
+            app:layout_constraintStart_toStartOf="@+id/imageView3"
+            app:layout_constraintTop_toBottomOf="@+id/imageView3"
+            app:tint="@color/firoze" />
+
+        <TextView
+            android:id="@+id/location_company"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/name_company"
+            android:layout_marginEnd="8dp"
+            android:maxHeight="20dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView2"
+            app:layout_constraintEnd_toStartOf="@+id/imageView2"
+            app:layout_constraintTop_toTopOf="@+id/imageView2" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/ic_phone"
+            app:layout_constraintEnd_toEndOf="@+id/imageView2"
+            app:layout_constraintStart_toStartOf="@+id/imageView2"
+            app:layout_constraintTop_toBottomOf="@+id/imageView2"
+            app:tint="@color/firoze" />
+
+        <TextView
+            android:id="@+id/number_company"
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/name_company"
+            android:layout_marginEnd="8dp"
+            android:gravity="end"
+            android:maxHeight="20dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+            app:layout_constraintEnd_toStartOf="@+id/imageView4"
+            app:layout_constraintTop_toTopOf="@+id/imageView4" />
+
+        <View
+            android:id="@+id/view14"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginTop="-8dp"
+            android:layout_marginBottom="-8dp"
+            android:background="@drawable/shape_background_bottom_expense"
+            android:backgroundTint="?attr/colorOnPrimary"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView7"
+            app:layout_constraintEnd_toEndOf="@+id/view13"
+            app:layout_constraintStart_toStartOf="@+id/img_com"
+            app:layout_constraintTop_toBottomOf="@+id/view13" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="10dp"
+            android:src="@drawable/img_github"
+            app:layout_constraintEnd_toEndOf="@+id/imageView4"
+            app:layout_constraintStart_toStartOf="@+id/imageView4"
+            app:layout_constraintTop_toBottomOf="@+id/imageView4"
+            app:tint="@color/firoze" />
+
+        <TextView
+            android:id="@+id/id_githaub"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/name_company"
+            android:layout_marginEnd="8dp"
+            android:gravity="end"
+            android:maxHeight="20dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView5"
+            app:layout_constraintEnd_toStartOf="@+id/imageView5"
+            app:layout_constraintTop_toTopOf="@+id/imageView5" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:padding="2dp"
+            android:layout_marginEnd="12dp"
+            android:src="@drawable/img_linkedin"
+            app:layout_constraintBottom_toBottomOf="@+id/id_githaub"
+            app:layout_constraintEnd_toStartOf="@+id/id_githaub"
+            app:layout_constraintTop_toTopOf="@+id/id_githaub"
+            app:tint="@color/firoze" />
+
+        <TextView
+            android:id="@+id/id_linkedin"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/name_company"
+            android:layout_marginEnd="8dp"
+            android:gravity="end"
+            android:maxHeight="20dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView6"
+            app:layout_constraintEnd_toStartOf="@+id/imageView6"
+            app:layout_constraintTop_toTopOf="@+id/imageView6" />
+
+        <ImageView
+            android:id="@+id/imageView7"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/img_mini_site"
+            app:layout_constraintEnd_toEndOf="@+id/imageView5"
+            app:layout_constraintTop_toBottomOf="@+id/imageView5"
+            app:tint="@color/firoze" />
+
+        <TextView
+            android:id="@+id/id_mini_site"
+            android:layout_width="110dp"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/name_company"
+            android:layout_marginEnd="7dp"
+            android:gravity="end"
+            android:maxHeight="20dp"
+            android:text=""
+            android:textColor="@color/white"
+            android:textSize="11sp"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView7"
+            app:layout_constraintEnd_toStartOf="@+id/imageView7"
+            app:layout_constraintTop_toTopOf="@+id/imageView7" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <FrameLayout
+        android:id="@+id/btn_company_skill"
+        android:layout_width="0dp"
+        android:layout_height="70dp"
+        android:background="@drawable/shape_background_bottom_radius"
+        android:backgroundTint="?attr/colorPrimaryVariant"
+        android:elevation="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_company_resume"
+        app:layout_constraintTop_toBottomOf="@+id/background_icon_company">
+
+        <TextView
+            android:id="@+id/txt_company_skill"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="5dp"
+            android:text="مهارت ها"
+            android:textColor="@color/firoze"
+            android:textSize="11sp" />
+
+        <ImageView
+            android:layout_width="40dp"
+            android:id="@+id/ic_company_skill"
+            android:layout_height="40dp"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/black_dot"
+            android:backgroundTint="@color/firoze"
+            android:padding="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/img_skill"
+            app:tint="@color/white" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/btn_company_resume"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:background="@drawable/shape_background_bottom_radius"
+        android:elevation="5dp"
+        app:layout_constraintEnd_toStartOf="@+id/btn_company_skill"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/btn_event"
+        app:layout_constraintTop_toTopOf="@+id/btn_company_skill">
+
+        <ImageView
+            android:id="@+id/ic_company_resume"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/black_dot"
+            android:backgroundTint="?attr/colorOnPrimary"
+            android:padding="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/img_resume_company"
+            app:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/txt_company_resume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="5dp"
+            android:text="رزومه شرکت"
+            android:textColor="@color/white"
+            android:textSize="9sp" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/btn_event"
+        android:layout_width="0dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="150dp"
+        android:background="@drawable/shape_background_bottom_radius"
+        android:elevation="5dp"
+        app:layout_constraintEnd_toStartOf="@+id/btn_company_resume"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/btn_company_resume">
+
+        <ImageView
+            android:id="@+id/ic_event"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/black_dot"
+            android:backgroundTint="?attr/colorOnPrimary"
+            android:padding="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/img_event"
+            app:tint="@color/white" />
+
+        <TextView
+            android:id="@+id/txt_event"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|bottom"
+            android:layout_marginBottom="5dp"
+            android:text="رویداد ها"
+            android:textColor="@color/white"
+            android:textSize="9sp" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fragment_com_info"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="-30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/background_icon_company" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,3 +1,16 @@
 <resources>
     <dimen name="text_margin">16dp</dimen>
+    <dimen name="text_tax">15dp</dimen>
+    <dimen name="size_14">14dp</dimen>
+    <dimen name="size_56">56dp</dimen>
+    <dimen name="size_24">24dp</dimen>
+    <dimen name="size_4">4dp</dimen>
+    <dimen name="size_10">10sp</dimen>
+    <dimen name="size_8">8sp</dimen>
+    <dimen name="size_70">70dp</dimen>
+    <dimen name="size_60">60dp</dimen>
+    <dimen name="size_40">40dp</dimen>
+    <dimen name="size_35">35dp</dimen>
+    <dimen name="elevation_10">10dp</dimen>
+    <dimen name="elevation_5">5dp</dimen>
 </resources>

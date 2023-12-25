@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="180dp"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
+    android:layout_margin="10dp"
     android:layoutDirection="rtl"
     app:cardBackgroundColor="?attr/colorPrimaryVariant"
     app:cardCornerRadius="16dp"
@@ -14,13 +15,25 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <ImageButton
+            android:id="@+id/img_done2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="16dp"
+            android:background="?attr/colorPrimaryVariant"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_done" />
+
         <ProgressBar
             android:id="@+id/progress_limit4"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_height="10dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="40dp"
             android:layout_marginEnd="8dp"
             android:indeterminate="false"
             android:max="100"
@@ -28,10 +41,9 @@
             android:minHeight="10dip"
             android:progress="0"
             android:progressDrawable="@drawable/progress_limit"
-            app:layout_constraintBottom_toTopOf="@+id/view7"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_name_pro" />
+            app:layout_constraintTop_toBottomOf="@+id/textView24" />
 
         <TextView
             android:id="@+id/textView24"
@@ -39,10 +51,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
             android:text="پیشرفت"
+            android:layout_marginTop="25dp"
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="13sp"
-            app:layout_constraintBottom_toTopOf="@+id/progress_limit4"
-            app:layout_constraintStart_toStartOf="@+id/progress_limit4" />
+            android:textSize="10sp"
+            app:layout_constraintStart_toStartOf="@+id/progress_limit4"
+            app:layout_constraintTop_toBottomOf="@+id/txt_name_pro" />
 
         <TextView
             android:id="@+id/txt_prog"
@@ -51,11 +64,12 @@
             android:layout_marginEnd="4dp"
             android:text="0%"
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="13sp"
+            android:textSize="10sp"
             app:layout_constraintBottom_toTopOf="@+id/progress_limit4"
             app:layout_constraintEnd_toEndOf="@+id/progress_limit4" />
 
         <View
+            android:layout_marginTop="10dp"
             android:id="@+id/view7"
             android:layout_width="0dp"
             android:layout_height="1dp"
@@ -63,36 +77,37 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="10dp"
             android:background="@color/gray"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txt_name_pro" />
+            app:layout_constraintTop_toBottomOf="@+id/progress_limit4"
+            app:layout_constraintVertical_bias="0.477" />
 
         <TextView
-            android:id="@+id/txt_time_pro"
+            android:id="@+id/txt_date_pro"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="10dp"
             android:background="@drawable/shape_dor_di"
+            android:gravity="center"
             android:padding="5dp"
-            android:paddingStart="13dp"
-            android:paddingEnd="13dp"
-            android:text="یک هفته"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:text="1400/2/12"
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="14sp"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/cardView2" />
 
         <TextView
             android:id="@+id/txt_name_pro"
-            android:layout_width="wrap_content"
+            android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
             android:layout_marginTop="28dp"
             android:text="طراحی اپلیکیشن موبایل "
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView2" />
@@ -110,10 +125,11 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/img_tack"
+                android:id="@+id/img_project"
                 android:layout_width="30dp"
-                android:layout_height="35dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center"
+                app:tint="@color/firoze"
                 android:backgroundTint="?attr/colorOnPrimary"
                 app:srcCompat="@drawable/ic_android" />
 
@@ -127,14 +143,15 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="4dp"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view7"
-            tools:listitem="@layout/item_avatar" />
+            tools:listitem="@layout/item_avatar_small" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

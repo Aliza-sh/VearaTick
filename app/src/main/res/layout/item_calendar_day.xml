@@ -10,13 +10,13 @@
     app:cardCornerRadius="2dp">
 
     <LinearLayout
-        android:id="@+id/exFiveDayLayout"
+        android:id="@+id/lyt_day_ent_ext_emp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/exFiveDayText"
+            android:id="@+id/txt_day_ent_ext_emp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="top|start"
@@ -29,17 +29,32 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:text="24" />
 
-        <View
-            android:id="@+id/view_day_sub"
-            android:layout_width="50dp"
-            android:layout_height="4dp"
+        <LinearLayout
+            android:id="@+id/day_no_ent_ext_emp"
             android:layout_gravity="bottom"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view_day_Main" />
+            android:layout_width="50dp"
+            android:layout_height="4dp">
+            <View
+                android:id="@+id/day_ent_emp"
+                android:layout_width="25dp"
+                android:layout_height="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view_day_Main" />
+
+            <View
+                android:id="@+id/day_ext_emp"
+                android:layout_width="25dp"
+                android:layout_height="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/view_day_Main" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

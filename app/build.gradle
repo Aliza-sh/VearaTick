@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace 'ir.aliza.sherkatmanage'
+    namespace 'com.vearad.vearatick'
     compileSdk 33
 
     buildFeatures {
@@ -13,11 +13,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "ir.aliza.sherkatmanage"
-        minSdk 24
+        applicationId "com.vearad.vearatick"
+        minSdk 26
         targetSdk 33
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "1.1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -44,29 +44,53 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.9.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation 'androidx.mediarouter:mediarouter:1.2.6'
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.4'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1'
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
 
-    //circularprogressbar
+    // circularprogressbar
     implementation 'com.github.fornewid:neumorphism:0.3.2'
     implementation 'com.mikhaellopez:circularprogressbar:3.1.0'
     implementation 'com.github.lzyzsd:circleprogress:1.2.1'
     implementation 'com.akexorcist:RoundCornerProgressBar:2.0.3'
+    implementation 'com.github.ghanshyam34:RoundedPieGraph:fcd69a2acb'
+    implementation 'com.github.hadibtf:SemiCircleArcProgressBar:1.1.1'
 
+    // animators for recyclerview
+    implementation("com.ericktijerou.koleton:koleton:1.0.0-beta01")
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
 
     // The view calendar library
     implementation 'com.kizitonwose.calendar:view:2.3.0'
     implementation 'com.github.sma6871:CalendarView:0.3.2'
     implementation 'com.jakewharton.threetenabp:threetenabp:1.0.3'
     implementation 'joda-time:joda-time:2.10.13'
+    implementation files('libs/datepicker-0.3.2.aar')
+    implementation 'com.afollestad.material-dialogs:datetime:3.3.0'
+    implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
+    implementation 'joda-time:joda-time:2.10.12'
 
-    //wheel
+    // Wheel
     implementation 'com.github.gzu-liyujiang.AndroidPicker:WheelView:4.1.11'
 
     def room_version = "2.4.3"
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
+
+    //retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
+    implementation 'com.google.code.gson:gson:2.8.9'
+
+    //volley
+    implementation 'com.android.volley:volley:1.2.1'
+    //taptargetview
+    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.13.3'
 
     // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:2.2.5"
@@ -75,21 +99,16 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9'
 
-    //Slider
-    implementation "androidx.viewpager2:viewpager2:1.0.0"
-    implementation 'me.relex:circleindicator:2.1.6'
-
-    //glide
+    // glide
     implementation 'com.github.bumptech.glide:glide:4.15.1'
 
-    //crop img
+    // crop img
     implementation 'com.github.yalantis:ucrop:2.2.6'
 
-    //splash
+    // splash
     implementation 'com.airbnb.android:lottie:3.4.0'
 
     def nav_version = "2.6.0"
-
     // Java language implementation
     implementation("androidx.navigation:navigation-fragment:$nav_version")
     implementation("androidx.navigation:navigation-ui:$nav_version")
@@ -103,7 +122,7 @@ dependencies {
     // Jetpack Compose Integration
     implementation("androidx.navigation:navigation-compose:$nav_version")
 
-    //bubblenavigation
-    implementation 'com.gauravk.bubblenavigation:bubblenavigation:1.0.7'
+    // polaki
+    implementation "com.github.cafebazaar.Poolakey:poolakey:2.1.0"
 
 }

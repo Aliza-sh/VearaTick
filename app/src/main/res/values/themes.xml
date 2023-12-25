@@ -6,9 +6,10 @@
         <item name="colorPrimaryVariant">@color/black_light</item>
         <item name="colorOnPrimary">@color/blacke</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/Blue_dark</item>
+        <item name="colorSecondary">@color/firoze</item>
         <item name="colorSecondaryVariant">@color/firoze</item>
         <item name="colorOnSecondary">@color/white</item>
+        <item name="android:textColorHint">@color/gray</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
@@ -20,4 +21,5 @@
         <item name="android:progressBackgroundTint">#4D5157</item>
         <item name="colorOnSurface">@color/white_light</item>
     </style>
+
 </resources>
