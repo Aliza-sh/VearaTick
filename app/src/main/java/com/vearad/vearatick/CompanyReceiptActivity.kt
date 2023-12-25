@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.animation.LinearInterpolator
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -24,7 +25,7 @@ import com.vearad.vearatick.adapter.CompanyReceiptAdapter
 import com.vearad.vearatick.databinding.ActivityCompanyReceiptBinding
 import com.vearad.vearatick.databinding.FragmentDialogDeleteCompanyReceiptBinding
 
-class CompanyIncomeActivity : AppCompatActivity(), CompanyReceiptAdapter.CompanyReceiptEvents,
+class CompanyReceiptActivity : AppCompatActivity(), CompanyReceiptAdapter.CompanyReceiptEvents,
     BottomSheetCallback {
 
     lateinit var binding: ActivityCompanyReceiptBinding
@@ -135,16 +136,18 @@ class CompanyIncomeActivity : AppCompatActivity(), CompanyReceiptAdapter.Company
 
     override fun onMenuItemClick(companyReceipt: CompanyReceipt, position: Int) {
 
-        val onClickCompanyReceipt =
-            companyReceiptDao.getCompanyReceipt(companyReceipt.idCompanyReceipt!!)
+        if (companyReceipt.idProject == null) {
 
-        val viewHolder =
-            binding.recyclerView.findViewHolderForAdapterPosition(position) as CompanyReceiptAdapter.CompanyReceiptViewHolder
-        viewHolder.let { holder ->
-            val btnMenuCompanyReceip = holder.btnMenu
-            val popupMenu = PopupMenu(applicationContext, btnMenuCompanyReceip)
-            popupMenu.inflate(R.menu.menu_employee)
-            popupMenu.show()
+            val onClickCompanyReceipt =
+                companyReceiptDao.getCompanyReceipt(companyReceipt.idCompanyReceipt!!)
+
+            val viewHolder =
+                binding.recyclerView.findViewHolderForAdapterPosition(position) as CompanyReceiptAdapter.CompanyReceiptViewHolder
+            viewHolder.let { holder ->
+                val btnMenuCompanyReceip = holder.btnMenu
+                val popupMenu = PopupMenu(applicationContext, btnMenuCompanyReceip)
+                popupMenu.inflate(R.menu.menu_employee)
+                popupMenu.show()
 
             popupMenu.setOnMenuItemClickListener { item ->
 
@@ -174,7 +177,14 @@ class CompanyIncomeActivity : AppCompatActivity(), CompanyReceiptAdapter.Company
                     else -> false
                 }
             }
-        }
+            }
+        } else
+            Toast.makeText(
+                binding.root.context,
+                "برای تغییرات لازم به پروژه مربوطه مراجعه کنید",
+                Toast.LENGTH_SHORT
+            ).show()
+
     }
 
     private fun showDeleteDialog(onClickCompanyReceipt: CompanyReceipt?, position: Int) {

@@ -217,6 +217,7 @@ data class CompanyReceipt(
 
     @PrimaryKey(autoGenerate = true)
     val idCompanyReceipt: Int? = null,
+    val idProject: Int? = null,
     val companyReceipt: Long? = 0,
     val monthCompanyReceipt: Int,
     val yearCompanyReceipt: Int,

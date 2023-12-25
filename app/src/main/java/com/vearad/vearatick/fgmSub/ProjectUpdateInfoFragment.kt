@@ -331,8 +331,7 @@ class ProjectUpdateInfoFragment(
         if (
             binding.edtNamePro.length() > 0 &&
             binding.txtDedlineDateTime.length() > 0 &&
-            binding.edtTypeProject.length() > 0 &&
-            binding.edtInfoPro.length() > 0
+            binding.edtTypeProject.length() > 0
         ) {
             val txtNamePro = binding.edtNamePro.text.toString()
             val noDeadline = valueBtnNoDate
@@ -349,7 +348,7 @@ class ProjectUpdateInfoFragment(
                 yearCreation = valueYear.toInt(),
                 monthCreation = valueMonth.toInt(),
                 dayCreation = valueDay.toInt(),
-                valueCalendar = valueCalendar,
+                valueCalendar = txtDate,
                 typeProject = txtTypeProject,
                 progressProject = project.progressProject,
                 doneProject = project.doneProject,

@@ -67,7 +67,7 @@
             android:name=".PoolakeyActivity"
             android:exported="false" />
         <activity
-            android:name=".CompanyIncomeActivity"
+            android:name=".CompanyReceiptActivity"
             android:exported="false" />
         <activity
             android:name=".LoginStep24Activity"

@@ -19,7 +19,7 @@ import com.ghanshyam.graphlibs.Graph
 import com.ghanshyam.graphlibs.GraphData
 import com.vearad.vearatick.CHEKBUY
 import com.vearad.vearatick.CompanyFinancialReportActivity
-import com.vearad.vearatick.CompanyIncomeActivity
+import com.vearad.vearatick.CompanyReceiptActivity
 import com.vearad.vearatick.CompanyPaymentActivity
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.CompanyExpensesDao
@@ -109,7 +109,7 @@ class CompanyFragment : Fragment() {
             if (sharedPreferences.getBoolean(CHEKBUY, false)== false) {
                 showIncreaseCreditDialog()
             }else {
-                val intent = Intent(requireContext(), CompanyIncomeActivity::class.java)
+                val intent = Intent(requireContext(), CompanyReceiptActivity::class.java)
                 startActivity(intent)
                 activity?.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
             }

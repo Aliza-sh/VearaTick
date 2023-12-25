@@ -32,18 +32,22 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_menu" />
 
-        <ImageButton
-            android:id="@+id/img_done"
+        <TextView
+            android:id="@+id/txt_project_task_employee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:background="?attr/colorPrimaryVariant"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/shape_dor_di"
+            android:gravity="center"
+            android:padding="5dp"
+            android:paddingStart="13dp"
+            android:paddingEnd="13dp"
+            android:text="پروژه"
+            android:textColor="?attr/colorOnSecondary"
+            android:textSize="14sp"
             android:visibility="gone"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_done" />
+            app:layout_constraintEnd_toStartOf="@+id/btn_menu"
+            app:layout_constraintTop_toTopOf="@+id/btn_menu" />
 
         <TextView
             android:id="@+id/txt_date"
@@ -79,9 +83,10 @@
 
             <TextView
                 android:id="@+id/txt_expense"
-                android:layout_width="280dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginBottom="16dp"
                 android:gravity="end"
@@ -121,7 +126,7 @@
 
             <TextView
                 android:id="@+id/txt_description"
-                android:layout_width="330dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end"
                 android:layout_marginStart="16dp"
