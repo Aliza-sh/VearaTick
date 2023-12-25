@@ -1,30 +1,26 @@
 package com.vearad.vearatick
 
-import ApiService
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.vearad.vearatick.adapter.CompanyEventAdapter
 import com.vearad.vearatick.databinding.ActivityLoginStep24Binding
 import com.vearad.vearatick.model.Events
 import com.vearad.vearatick.model.LoginData
 import com.vearad.vearatick.model.LoginResponse
 import com.vearad.vearatick.model.UserResponse
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.net.MalformedURLException
 import java.time.LocalDate
@@ -102,6 +98,7 @@ class LoginStep24Activity : AppCompatActivity() {
             val txtEmail = binding.edtEmail.text.toString()
             val txtPassword = binding.edtPassword.text.toString()
 
+            binding.loading.visibility = VISIBLE
             loginApi(
                 txtEmail,
                 txtPassword,
@@ -115,25 +112,6 @@ class LoginStep24Activity : AppCompatActivity() {
         email: String,
         password: String,
     ) {
-
-        // ایجاد شیء OkHttpClient با استفاده از HttpLoggingInterceptor برای نمایش لاگ‌ها
-        val interceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-        val client = OkHttpClient.Builder()
-            .addInterceptor(interceptor)
-            .build()
-
-        val gson = GsonBuilder().setLenient().create()
-        //  ایجاد شیء Retrofit با تنظیمات مورد نیاز
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://step24.ir/api/") // آدرس پایه سرویس API
-            .addConverterFactory(GsonConverterFactory.create(gson)) // تبدیل پاسخ‌ها به شیء با استفاده از Gson
-            .client(client) // استفاده از OkHttpClient برای درخواست‌ها
-            .build()
-
-        //  ایجاد شیء ApiService با استفاده از شیء Retrofit
-        val apiService = retrofit.create(ApiService::class.java)
 
         // 6. ساختن شیء SignupRequest با اطلاعات ورودی
         val loginData = LoginData(
@@ -161,7 +139,7 @@ class LoginStep24Activity : AppCompatActivity() {
                     Log.v("loginapp", "refreshToken: ${refreshToken}")
                     Log.v("loginapp", "______________________________________")
 
-                    getUser(accessToken)
+                    getUser(response.body())
 
                 } else if (response.code() == 422) {
 
@@ -233,23 +211,12 @@ class LoginStep24Activity : AppCompatActivity() {
         })
     }
 
-    private fun getUser(accessToken: String?) {
+    private fun getUser(loginResponse: LoginResponse?) {
 
-        val interceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-        val client = OkHttpClient.Builder()
-            .addInterceptor(interceptor)
-            .build()
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://step24.ir/api/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .client(client)
-            .build()
+        val accessToken = loginResponse?.data?.access_token
+        val expires = loginResponse?.data?.expires_in
 
-        val apiService = retrofit.create(ApiService::class.java)
-
-        val call = apiService.getUser("user/", "Bearer $accessToken")
+        val call = apiService.getUser("user/", "Bearer ${accessToken}")
         call.enqueue(object : Callback<UserResponse>, CompanyEventAdapter.CompanyEventEvent {
             override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
                 if (response.isSuccessful) {
@@ -263,8 +230,10 @@ class LoginStep24Activity : AppCompatActivity() {
                         // Process the events data as needed
                         Log.v("loginapp", "username: ${userData?.user?.username}")
                         val user = userData?.user?.username
+                        
 
-                        setSharedPreferences(user,accessToken)
+
+                        setSharedPreferences(user,accessToken,expires)
 
                         if (goFromEvent) {
                             val intent = Intent(applicationContext, MainActivity::class.java)
@@ -298,24 +267,29 @@ class LoginStep24Activity : AppCompatActivity() {
 
     }
 
-    private fun setSharedPreferences(user: String?, accessToken: String?) {
+    private fun setSharedPreferences(user: String?, accessToken: String?, expires: Int?) {
         val sharedPreferencesUser = getSharedPreferences(USER, Context.MODE_PRIVATE)
         sharedPreferencesUser.edit().putString(KEYUSER, user).apply()
 
         val sharedPreferencesAccessToken = getSharedPreferences(ACCESSTOKEN, Context.MODE_PRIVATE)
         sharedPreferencesAccessToken.edit().putString(KEYACCESSTOKEN, accessToken).apply()
 
+        val expire = expires?.div((3600*24))
+        Log.v("loginapp", "expires: ${expires}")
+        Log.v("loginapp", "expire: ${expire}")
+
         // دریافت تاریخ کنونی
         val today = LocalDate.now()
         // اضافه کردن چهار روز به تاریخ کنونی
-        val futureDate = today.plusDays(4)
-        Log.v("loginapp", "Here: ${today}")
-        Log.v("loginapp", "Here: ${futureDate}")
+        val futureDate = today.plusDays(expire!!.toLong())
+        Log.v("loginapp", "today: ${today}")
+        Log.v("loginapp", "futureDate: ${futureDate}")
 
         val sharedPreferencesExpirationAccessToken = getSharedPreferences(EXPIRATIONACCESSTOKEN, Context.MODE_PRIVATE)
         sharedPreferencesExpirationAccessToken.edit().putInt(KEYEXPIRATIONACCESSTOKEN,
             futureDate.dayOfMonth
-        ).apply()    }
+        ).apply()
+    }
 
     private fun goToMiniSite(user: String?) {
         Log.v("loginapp", "Here: ${user}")
@@ -338,6 +312,9 @@ class LoginStep24Activity : AppCompatActivity() {
                 .appendQueryParameter("appOrigin", "android")
                 .build()
 
+            val intentMainActivity = Intent(applicationContext, MainActivity::class.java)
+            startActivity(intentMainActivity)
+
             val intent = Intent(Intent.ACTION_VIEW, modifiedUrl)
             startActivity(intent)
         } catch (e: MalformedURLException) {
@@ -353,6 +330,7 @@ class LoginStep24Activity : AppCompatActivity() {
         passwordErrors: List<String>?,
         authFailedErrors: String?
     ) {
+        binding.loading.visibility = GONE
 
         if (emailErrors != null) {
             emailError = email

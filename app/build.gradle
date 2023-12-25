@@ -72,6 +72,7 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:datetime:3.3.0'
     implementation 'com.wdullaer:materialdatetimepicker:4.2.3'
     implementation 'joda-time:joda-time:2.10.12'
+    implementation 'com.github.samanzamani:PersianDate:1.7.1'
 
     // Wheel
     implementation 'com.github.gzu-liyujiang.AndroidPicker:WheelView:4.1.11'

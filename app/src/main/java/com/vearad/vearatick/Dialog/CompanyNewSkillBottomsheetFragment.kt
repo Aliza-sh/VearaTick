@@ -51,7 +51,7 @@ class CompanyNewSkillBottomsheetFragment(
         if (
             binding.edtNameSkill.length() > 0 &&
             binding.edtVolumeSkill.length() > 0 &&
-            binding.edtVolumeSkill.text.toString().toInt() > 100
+            binding.edtVolumeSkill.text.toString().toInt() <= 100
 
         ) {
             val txtName = binding.edtNameSkill.text.toString()

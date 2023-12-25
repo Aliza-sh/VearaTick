@@ -110,9 +110,9 @@ class EmployeeRecruitmentFragment(
     }
 
     fun onRecruitment() {
-        fragmentManager?.beginTransaction()?.detach(this@EmployeeRecruitmentFragment)
-            ?.replace(R.id.frame_layout_sub, EmployeeFragment(bindingActivityProAndEmpBinding))
-            ?.commit()
+        parentFragmentManager.beginTransaction().detach(this@EmployeeRecruitmentFragment)
+            .replace(R.id.frame_layout_sub, EmployeeFragment(bindingActivityProAndEmpBinding))
+            .commit()
     }
 
     private fun onPhotoClicked(popupMenu: PopupMenu) {
@@ -151,7 +151,8 @@ class EmployeeRecruitmentFragment(
             )
         } else {
             val intent = Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
-            startActivityForResult(intent, PICK_CONTACT_REQUEST)        }
+            startActivityForResult(intent, PICK_CONTACT_REQUEST)
+        }
     }
 
     @SuppressLint("Range")

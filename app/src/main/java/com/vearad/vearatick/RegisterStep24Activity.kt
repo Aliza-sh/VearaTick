@@ -1,24 +1,22 @@
 package com.vearad.vearatick
 
-import ApiService
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import com.google.gson.Gson
-import com.google.gson.GsonBuilder
 import com.vearad.vearatick.databinding.ActivityRegisterStep24Binding
 import com.vearad.vearatick.model.RegisterData
 import com.vearad.vearatick.model.RegisterResponse
-import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import java.time.LocalDate
 
 
 class RegisterStep24Activity : AppCompatActivity() {
@@ -107,21 +105,22 @@ class RegisterStep24Activity : AppCompatActivity() {
             binding.edtPassword.length() > 0 &&
             binding.edtPasswordConfirmation.length() > 0
         ) {
-                val txtNameAndFamily = binding.edtNameAndFamily.text.toString()
-                val txtUser = binding.edtUser.text.toString()
-                val txtEmail = binding.edtEmail.text.toString()
-                val txtNumberPhone = binding.edtNumberPhone.text.toString()
-                val txtPassword = binding.edtPassword.text.toString()
-                val txtPasswordConfirmation = binding.edtPasswordConfirmation.text.toString()
+            val txtNameAndFamily = binding.edtNameAndFamily.text.toString()
+            val txtUser = binding.edtUser.text.toString()
+            val txtEmail = binding.edtEmail.text.toString()
+            val txtNumberPhone = binding.edtNumberPhone.text.toString()
+            val txtPassword = binding.edtPassword.text.toString()
+            val txtPasswordConfirmation = binding.edtPasswordConfirmation.text.toString()
 
-                registerApi(
-                    txtNameAndFamily,
-                    txtUser,
-                    txtEmail,
-                    txtNumberPhone,
-                    txtPassword,
-                    txtPasswordConfirmation
-                )
+            binding.loading.visibility = VISIBLE
+            registerApi(
+                txtNameAndFamily,
+                txtUser,
+                txtEmail,
+                txtNumberPhone,
+                txtPassword,
+                txtPasswordConfirmation
+            )
 
         } else
             Toast.makeText(applicationContext, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT)
@@ -136,25 +135,6 @@ class RegisterStep24Activity : AppCompatActivity() {
         password: String,
         passwordConfirmation: String
     ) {
-        // 3. ایجاد شیء OkHttpClient با استفاده از HttpLoggingInterceptor برای نمایش لاگ‌ها
-        val interceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
-        val client = OkHttpClient.Builder()
-            .addInterceptor(interceptor)
-            .build()
-
-        val gson = GsonBuilder().setLenient().create()
-        // 4. ایجاد شیء Retrofit با تنظیمات مورد نیاز
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://step24.ir/api/") // آدرس پایه سرویس API
-            .addConverterFactory(GsonConverterFactory.create(gson)) // تبدیل پاسخ‌ها به شیء با استفاده از Gson
-            .client(client) // استفاده از OkHttpClient برای درخواست‌ها
-            .build()
-
-        // 5. ایجاد شیء ApiService با استفاده از شیء Retrofit
-        val apiService = retrofit.create(ApiService::class.java)
-
         // 6. ساختن شیء SignupRequest با اطلاعات ورودی
         val registrationData = RegisterData(
             nameAndFamily,
@@ -181,7 +161,11 @@ class RegisterStep24Activity : AppCompatActivity() {
                     val refreshToken = response.body()?.data?.refresh_token
                     val username = response.body()?.user?.username
                     val userId = response.body()?.user?.id
-                    val erorr = response.body()?.user?.id
+                    val expires = response.body()?.data?.expires_in
+
+                    val intent = Intent(applicationContext, MainActivity::class.java)
+                    startActivity(intent)
+                    overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
 
                     Log.v("loginapp", "______________________________________")
                     Log.v("loginapp", "accessToken: ${accessToken}")
@@ -189,7 +173,7 @@ class RegisterStep24Activity : AppCompatActivity() {
                     Log.v("loginapp", "username: ${username}")
                     Log.v("loginapp", "userId: ${userId}")
                     Log.v("loginapp", "______________________________________")
-
+                    setSharedPreferences(username,accessToken,expires)
                 } else if (response.code() == 422) {
 
                     val errorBody = response.errorBody()?.string()
@@ -258,6 +242,31 @@ class RegisterStep24Activity : AppCompatActivity() {
         })
     }
 
+    private fun setSharedPreferences(user: String?, accessToken: String?, expires: Int?) {
+        val sharedPreferencesUser = getSharedPreferences(USER, Context.MODE_PRIVATE)
+        sharedPreferencesUser.edit().putString(KEYUSER, user).apply()
+
+        val sharedPreferencesAccessToken = getSharedPreferences(ACCESSTOKEN, Context.MODE_PRIVATE)
+        sharedPreferencesAccessToken.edit().putString(KEYACCESSTOKEN, accessToken).apply()
+
+        val expire = expires?.div((3600*24))
+        Log.v("loginapp", "expires: ${expires}")
+        Log.v("loginapp", "expire: ${expire}")
+
+        // دریافت تاریخ کنونی
+        val today = LocalDate.now()
+        // اضافه کردن چهار روز به تاریخ کنونی
+        val futureDate = today.plusDays(expire!!.toLong())
+        Log.v("loginapp", "today: ${today}")
+        Log.v("loginapp", "futureDate: ${futureDate}")
+
+        val sharedPreferencesExpirationAccessToken = getSharedPreferences(EXPIRATIONACCESSTOKEN, Context.MODE_PRIVATE)
+        sharedPreferencesExpirationAccessToken.edit().putInt(KEYEXPIRATIONACCESSTOKEN,
+            futureDate.dayOfMonth
+        ).apply()
+    }
+
+
     private fun setError(
         nameErrors: List<String>?,
         usernameErrors: List<String>?,
@@ -268,6 +277,9 @@ class RegisterStep24Activity : AppCompatActivity() {
         phoneErrors: List<String>?,
         numberPhone: String
     ) {
+
+        binding.loading.visibility = GONE
+
         if (nameErrors != null) {
             binding.tilNameAndFamily.error =
                 nameErrors.toString().replace("[", "").replace("]", "") + "."

@@ -1,13 +1,15 @@
 package com.vearad.vearatick.adapter
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.vearad.vearatick.databinding.ItemEventBinding
 import com.vearad.vearatick.model.Events
-import java.time.LocalDate
+import saman.zamani.persiandate.PersianDate
+
 
 class CompanyEventAdapter(
     val data: List<Events.Event>,
@@ -22,12 +24,15 @@ class CompanyEventAdapter(
         @SuppressLint("SetTextI18n")
         fun bindData(position: Int, clickListener: CompanyEventEvent) {
 
-            val dateGregorian = LocalDate.parse(data[position].start_date)
-            var year: Int = dateGregorian.year
-            var month: Int = dateGregorian.monthValue
-            var day: Int = dateGregorian.dayOfMonth
+            val persianDate = PersianDate()
+            persianDate.initGrgDate(2023,12,25)
+            val persianYear = persianDate.shYear
+            val persianMonth = persianDate.shMonth
+            val persianDay = persianDate.shDay
 
-            binding.txtDateEvent.text = "$year/$month/$day"
+            Log.v("loginapp", "Here: $persianYear/$persianMonth/$persianDay")
+
+            binding.txtDateEvent.text = "$persianYear/$persianMonth/$persianDay"
             binding.txtNameEvent.text = data[position].name
             binding.txtNumPerson.text = data[position].attendanceCount.toString()
 

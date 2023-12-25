@@ -135,8 +135,7 @@ class CompanyFragment : Fragment() {
             binding.txtProfit.setTextColor(Color.parseColor("#0E7113"))
             binding.txtProfit.text = value + " +"
         } else if (profit < 0) {
-            profit = -profit
-            val value = formatCurrency(profit)
+            val value = formatCurrency(-profit)
             binding.txtProfit.setTextColor(Color.parseColor("#c62828"))
             binding.txtProfit.text = value + " -"
         } else {
@@ -144,7 +143,9 @@ class CompanyFragment : Fragment() {
         }
 
         val sumInvestment = employeeInvestmentDao.getInvestmentSum()
-        val sumTotal = (sumInvestment + profit)
+        var sumTotal = (sumInvestment + profit)
+        if (sumTotal<0)
+            sumTotal = 0
         binding.btnInvestment.text = formatCurrency(sumTotal)
         binding.btnFinancialReport.setOnClickListener {
             if (sharedPreferences.getBoolean(CHEKBUY, false)== false) {
