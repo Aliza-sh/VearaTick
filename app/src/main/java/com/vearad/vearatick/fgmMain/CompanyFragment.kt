@@ -8,6 +8,7 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -19,8 +20,8 @@ import com.ghanshyam.graphlibs.Graph
 import com.ghanshyam.graphlibs.GraphData
 import com.vearad.vearatick.CHEKBUY
 import com.vearad.vearatick.CompanyFinancialReportActivity
-import com.vearad.vearatick.CompanyReceiptActivity
 import com.vearad.vearatick.CompanyPaymentActivity
+import com.vearad.vearatick.CompanyReceiptActivity
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.CompanyExpensesDao
 import com.vearad.vearatick.DataBase.CompanyReceiptDao
@@ -243,9 +244,11 @@ class CompanyFragment : Fragment() {
     private fun efficiencyProject(): Int {
         val numberProject = projectDao.getAllProject().size
         val sumProgressProject = projectDao.getColumnprogressProject()
+        Log.v("loginapp", "numberProject: ${numberProject}")
+        Log.v("loginapp", "sumProgressProject: ${sumProgressProject}")
 
-        var sumAllProgressProject =
-            sumProgressProject.sum()
+        var sumAllProgressProject = sumProgressProject.sum()
+        Log.v("loginapp", "sumAllProgressProject: ${sumAllProgressProject}")
 
         if (sumAllProgressProject != 0)
             sumAllProgressProject /= numberProject
@@ -256,12 +259,9 @@ class CompanyFragment : Fragment() {
     private fun efficiencyEmployeeTack(): Int {
 
         val numberEmployee = efficiencyDao.getAllEfficiency().size
-        val sumEfficiencyWeekDuties = efficiencyDao.getColumnEfficiencyWeekDuties()
-        val sumEfficiencyMonthDuties = efficiencyDao.getColumnEfficiencyMonthDuties()
         val sumEfficiencyTotalDuties = efficiencyDao.getColumnEfficiencyTotalDuties()
 
-        var sumEefficiencyEmployeeTack =
-            sumEfficiencyWeekDuties.sum() + sumEfficiencyMonthDuties.sum() + sumEfficiencyTotalDuties.sum()
+        var sumEefficiencyEmployeeTack = sumEfficiencyTotalDuties.sum()
 
         if (sumEefficiencyEmployeeTack != 0)
             sumEefficiencyEmployeeTack /= numberEmployee
@@ -271,11 +271,9 @@ class CompanyFragment : Fragment() {
 
     private fun efficiencyEmployeePresence(): Int {
         val numberEmployee = efficiencyDao.getAllEfficiency().size
-        val sumEfficiencyWeekPresence = efficiencyDao.getColumnEfficiencyWeekPresence()
         val sumEfficiencyTotalPresence = efficiencyDao.getColumnEfficiencyTotalPresence()
 
-        var sumEefficiencyEmployeePresence =
-            sumEfficiencyWeekPresence.sum() + sumEfficiencyTotalPresence.sum()
+        var sumEefficiencyEmployeePresence = sumEfficiencyTotalPresence.sum()
 
         if (sumEefficiencyEmployeePresence != 0)
             sumEefficiencyEmployeePresence /= numberEmployee

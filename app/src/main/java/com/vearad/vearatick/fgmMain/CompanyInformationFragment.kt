@@ -105,16 +105,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
             requireActivity().getSharedPreferences(ACCESSTOKEN, Context.MODE_PRIVATE)
         accessToken = sharedPreferencesAccessToken?.getString(KEYACCESSTOKEN, "").toString()
 
-        if (nameMiniSite == ""){
-            getMiniSite(user, accessToken, apiService)
-            Log.v("loginapp", "getMiniSite: ${nameMiniSite}")
-
-        }
-        else{
-            binding.idMiniSite.text = nameMiniSite
-            Log.v("loginapp", "binding: ${nameMiniSite}")
-        }
-
+        getMiniSite(user, accessToken, apiService)
 
         val popupMenuInfoCompany = PopupMenu(this.context, binding.btnMenuCompany)
         onInfoCompanyClicked(popupMenuInfoCompany)

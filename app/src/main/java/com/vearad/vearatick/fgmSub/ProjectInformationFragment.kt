@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -389,9 +390,9 @@ class ProjectInformationFragment(
         popupMenu.menuInflater.inflate(R.menu.menu_project, popupMenu.menu)
         binding.btnMenuProject.setOnClickListener {
             popupMenu.show()
-
+            val project = projectDao.getProject(project.idProject!!)
             val doneMenuItem = popupMenu.menu.findItem(R.id.menu_project_done)
-            if (project.doneProject!!) {
+            if (project?.doneProject!!) {
                 doneMenuItem.title = "تکمیل نشد"
             } else {
                 doneMenuItem.title = "تکمیل شد"
@@ -455,7 +456,7 @@ class ProjectInformationFragment(
                 descriptionProject = project.descriptionProject,
                 numberSubTaskProject = project.numberSubTaskProject,
                 numberDoneSubTaskProject = project.numberDoneSubTaskProject,
-                progressProject = project.progressProject,
+                progressProject = 0,
                 budgetProject = project.budgetProject,
                 doneVolumeProject = project.doneVolumeProject,
                 totalVolumeProject = project.totalVolumeProject,
@@ -469,9 +470,24 @@ class ProjectInformationFragment(
 
             if (project.numberDoneSubTaskProject == project.numberSubTaskProject) {
 
-                if (project.budgetProject == "" || project.settled == true) {
+                if (project.budgetProject == "0" || project.settled == true) {
                     doneMenuItem.title = "تکمیل نشد"
                     done = true
+
+                    val totalVolumeProject =
+                        subTaskProjectDao.getTotalVolumeTaskSum(project.idProject!!)
+                    val doneVolumeProject =
+                        subTaskProjectDao.getDoneVolumeTaskSum(project.idProject, true)
+                    var efficiencyProject = 0
+                    if (doneVolumeProject != null)
+                        efficiencyProject =
+                            ((doneVolumeProject.toDouble() / totalVolumeProject) * 100).toInt()
+                    Log.v(
+                        "loginapp",
+                        "doneVolumeProject: ${project.doneVolumeProject!!.toDouble()}"
+                    )
+                    Log.v("loginapp", "totalVolumeProject: ${project.totalVolumeProject!!}")
+
 
                     val newProject = Project(
                         idProject = project.idProject,
@@ -487,7 +503,7 @@ class ProjectInformationFragment(
                         descriptionProject = project.descriptionProject,
                         numberSubTaskProject = project.numberSubTaskProject,
                         numberDoneSubTaskProject = project.numberDoneSubTaskProject,
-                        progressProject = project.progressProject,
+                        progressProject = efficiencyProject,
                         budgetProject = project.budgetProject,
                         doneVolumeProject = project.doneVolumeProject,
                         totalVolumeProject = project.totalVolumeProject,
@@ -860,7 +876,15 @@ class ProjectInformationFragment(
                     }
 
                     R.id.menu_task_project_done -> {
-                        doneSubTask(onClickSubTask, doneMenuItem)
+                        val project = projectDao.getProject(project.idProject!!)
+                        if (project?.doneProject == false)
+                            doneSubTask(onClickSubTask, doneMenuItem)
+                        else
+                            Toast.makeText(
+                                context,
+                                "پروژه تکمیل شده این کار مجاز نیست",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         true
                     }
 
