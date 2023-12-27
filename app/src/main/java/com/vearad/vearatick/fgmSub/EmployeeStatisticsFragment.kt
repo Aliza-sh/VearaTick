@@ -49,6 +49,10 @@ class EmployeeStatisticsFragment(
     var counterMonth = 0
     var counterWeek = 0
 
+    var counterAllTask = 0
+    var counterMonthTask = 0
+    var counterWeekTask = 0
+
     var efficiencyAllPresenceEmployee = 0
     var efficiencyMonthPresenceEmployee = 0
     var efficiencyWeekPresenceEmployee = 0
@@ -79,7 +83,7 @@ class EmployeeStatisticsFragment(
         val currentDate = LocalDate.of(day.persianYear, day.persianMonth + 1, day.persianDay)
         // یافتن روز اول هفته
         val firstDayOfWeek =
-            currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SATURDAY)).dayOfMonth - 1
+            currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SATURDAY)).dayOfMonth
         var endDayOfWeek = firstDayOfWeek + 6
         if (endDayOfWeek > 31)
             if (day.persianMonth < 7)
@@ -146,16 +150,29 @@ class EmployeeStatisticsFragment(
             if (taskEmployee.doneTask == true) {
                 allVolumeTaskEmployee += taskEmployee.volumeTask
                 allEfficiencyTaskEmployee += taskEmployee.efficiencyTask!!
+                counterAllTask ++
                 if (day.persianMonth == taskEmployee.monthCreation) {
                     monthVolumeTaskEmployee += taskEmployee.volumeTask
                     monthEfficiencyTaskEmployee += taskEmployee.efficiencyTask
+                    counterMonthTask ++
                     if (firstDayOfWeek <= taskEmployee.dayCreation && taskEmployee.dayCreation <= endDayOfWeek) {
                         weekVolumeTaskEmployee += taskEmployee.volumeTask
                         weekEfficiencyTaskEmployee += taskEmployee.efficiencyTask
+                        counterWeekTask ++
+                        Log.v("loginapp", "firstDayOfWeek: ${firstDayOfWeek}")
+                        Log.v("loginapp", "endDayOfWeek: ${endDayOfWeek}")
+                        Log.v("loginapp", "firstDayOfWeek: ${taskEmployee.dayCreation}")
                     }
                 }
             }
         }
+
+        if (counterAllTask == 0)
+            counterAllTask ++
+        if (counterMonthTask == 0)
+            counterMonthTask ++
+        if (counterWeekTask == 0)
+            counterWeekTask ++
 
 
 //            efficiencyWeekPresenceEmployee = weekPresenceEmployee / counterWeek
@@ -172,9 +189,9 @@ class EmployeeStatisticsFragment(
                 totalWatch = efficiencyEmployee.totalWatch,
                 efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
                 efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
-                efficiencyWeekDuties = weekEfficiencyTaskEmployee,
-                efficiencyMonthDuties = monthEfficiencyTaskEmployee,
-                efficiencyTotalDuties = allEfficiencyTaskEmployee,
+                efficiencyWeekDuties = weekEfficiencyTaskEmployee/counterWeekTask,
+                efficiencyMonthDuties = monthEfficiencyTaskEmployee/counterMonthTask,
+                efficiencyTotalDuties = allEfficiencyTaskEmployee/counterAllTask,
                 totalWeekDuties = weekVolumeTaskEmployee,
                 totalMonthDuties = monthVolumeTaskEmployee,
                 totalDuties = allVolumeTaskEmployee,

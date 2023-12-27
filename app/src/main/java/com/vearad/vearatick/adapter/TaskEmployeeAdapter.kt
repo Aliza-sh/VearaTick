@@ -67,9 +67,9 @@ class TaskEmployeeAdapter(
                 val startDate =
                     DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
                 val endDate = DateTime(
-                    data[position].yearCreation,
-                    data[position].monthCreation,
-                    data[position].dayCreation,
+                    data[position].yearDeadline,
+                    data[position].monthDeadline,
+                    data[position].dayDeadline,
                     0,
                     0,
                     0

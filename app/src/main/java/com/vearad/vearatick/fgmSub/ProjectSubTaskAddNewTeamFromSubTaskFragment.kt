@@ -163,11 +163,14 @@ class ProjectSubTaskAddNewTeamFromSubTaskFragment(
                 nameTask = subTaskProject.nameSubTask,
                 descriptionTask = subTaskProject.descriptionSubTask,
                 volumeTask = subTaskProject.volumeTask,
-                yearCreation = subTaskProject.yearDeadline,
-                monthCreation = subTaskProject.monthDeadline,
-                dayCreation = subTaskProject.dayDeadline,
+                yearDeadline = subTaskProject.yearDeadline,
+                monthDeadline = subTaskProject.monthDeadline,
+                dayDeadline = subTaskProject.dayDeadline,
                 deadlineTask = subTaskProject.deadlineTask,
-                projectTask = true
+                projectTask = true,
+                dayCreation = subTaskProject.dayCreation,
+                monthCreation = subTaskProject.monthCreation,
+                yearCreation = subTaskProject.yearCreation
 
             )
             taskEmployeeDao.insert(newTask)
@@ -192,12 +195,15 @@ class ProjectSubTaskAddNewTeamFromSubTaskFragment(
                 descriptionTask = taskProjectEmployee.descriptionTask,
                 volumeTask = taskProjectEmployee.volumeTask,
                 doneTask = taskProjectEmployee.doneTask,
-                yearCreation = subTaskProject.yearDeadline,
-                monthCreation = subTaskProject.monthDeadline,
-                dayCreation = subTaskProject.dayDeadline,
+                yearDeadline = subTaskProject.yearDeadline,
+                monthDeadline = subTaskProject.monthDeadline,
+                dayDeadline = subTaskProject.dayDeadline,
                 deadlineTask = taskProjectEmployee.deadlineTask,
                 efficiencyTask = taskProjectEmployee.efficiencyTask,
-                projectTask = taskProjectEmployee.projectTask
+                projectTask = taskProjectEmployee.projectTask,
+                dayCreation = taskProjectEmployee.dayCreation,
+                monthCreation = taskProjectEmployee.monthCreation,
+                yearCreation = taskProjectEmployee.yearCreation
             )
             taskEmployeeDao.delete(newTask)
         }

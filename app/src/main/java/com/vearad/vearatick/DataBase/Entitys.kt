@@ -74,6 +74,9 @@ data class TaskEmployee(
 
     val nameTask: String,
     val descriptionTask: String,
+    val yearDeadline: Int,
+    val monthDeadline: Int,
+    val dayDeadline: Int,
     val yearCreation: Int,
     val monthCreation: Int,
     val dayCreation: Int,

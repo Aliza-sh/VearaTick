@@ -224,11 +224,14 @@ class ProjectUpdateSubTaskFromInfoBottomsheetFragment(
                         volumeTask = txtVolume.toInt(),
                         doneTask = subTaskProject.doneSubTask,
                         deadlineTask = daysBetween,
-                        dayCreation = valueDay.toInt(),
-                        monthCreation = valueMonth.toInt(),
-                        yearCreation = valueYear.toInt(),
+                        dayDeadline = valueDay.toInt(),
+                        monthDeadline = valueMonth.toInt(),
+                        yearDeadline = valueYear.toInt(),
                         efficiencyTask = onClickTask.efficiencyTask,
-                        projectTask = onClickTask.projectTask
+                        projectTask = onClickTask.projectTask,
+                        dayCreation = onClickTask.dayCreation,
+                        monthCreation = onClickTask.monthCreation,
+                        yearCreation = onClickTask.yearCreation
                     )
                     taskEmployeeDao.update(newTask)
                 }

@@ -3,6 +3,7 @@ package com.vearad.vearatick.fgmSub
 import android.annotation.SuppressLint
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -33,7 +34,6 @@ import com.vearad.vearatick.databinding.ItemCalendarDayEmployeeTaskBinding
 import com.vearad.vearatick.dayDao
 import com.vearad.vearatick.taskEmployeeDao
 import com.vearad.vearatick.timeDao
-import org.threeten.bp.DayOfWeek
 import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 
@@ -79,12 +79,11 @@ class EmployeeTaskFragment(
         timeDao = AppDatabase.getDataBase(view.context).timeDao
 
         val currentMonth = YearMonth.now()
-        binding.clrTaskEmp.setup(
-            currentMonth.minusMonths(12),
-            currentMonth.plusMonths(12),
-            DayOfWeek.SATURDAY
-        )
-        binding.clrTaskEmp.scrollToDate(LocalDate.now())
+        Log.v("loginapp", "Here: ${currentMonth.month}")
+        val startMonth = currentMonth.minusMonths(4)
+        val endMonth = currentMonth.plusMonths(4)
+        binding.clrTaskEmp.setup(startMonth, endMonth,org.threeten.bp.DayOfWeek.SATURDAY)
+        binding.clrTaskEmp.scrollToMonth(currentMonth.next)
 
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay // Will be set when this container is bound.

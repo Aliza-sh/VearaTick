@@ -1,7 +1,9 @@
 package com.vearad.vearatick.fgmSub
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
@@ -11,8 +13,10 @@ import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.view.Window
 import android.widget.PopupMenu
 import androidx.activity.OnBackPressedCallback
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -22,10 +26,10 @@ import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.EfficiencyDao
 import com.vearad.vearatick.DataBase.Employee
 import com.vearad.vearatick.DataBase.EmployeeDao
-import com.vearad.vearatick.Dialog.EmployeeDeleteDialogFragment
 import com.vearad.vearatick.ProAndEmpActivity
 import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
+import com.vearad.vearatick.databinding.FragmentDialogDeleteItemEmployeeBinding
 import com.vearad.vearatick.databinding.FragmentEmployeeInformationBinding
 import koleton.api.hideSkeleton
 import koleton.api.loadSkeleton
@@ -36,9 +40,11 @@ class EmployeeInformationFragment(
     val position: Int,
     val employeeDao: EmployeeDao,
     val bindingActivityProAndEmpBinding: ActivityProAndEmpBinding,
+    val goToEmployeeTaskFragment: Boolean,
 ) : Fragment() {
 
     lateinit var binding: FragmentEmployeeInformationBinding
+    lateinit var bindingDialogDeleteItemEmployee: FragmentDialogDeleteItemEmployeeBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +52,8 @@ class EmployeeInformationFragment(
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentEmployeeInformationBinding.inflate(layoutInflater, container, false)
+        bindingDialogDeleteItemEmployee = FragmentDialogDeleteItemEmployeeBinding.inflate(layoutInflater, null, false)
+
         return binding.root
 
     }
@@ -55,6 +63,8 @@ class EmployeeInformationFragment(
         firstRun(view)
         setData(employee)
         setTitleEmployee(view)
+
+        goTo(goToEmployeeTaskFragment,view)
 
         binding.btnStatistics.setOnClickListener {
             btnStatistics(view)
@@ -75,6 +85,11 @@ class EmployeeInformationFragment(
                 .replace(R.id.frame_layout_sub, EmployeeFragment(bindingActivityProAndEmpBinding))
                 .commit()
         }
+    }
+
+    private fun goTo(goToEmployeeTaskFragment: Boolean, view: View) {
+        if (goToEmployeeTaskFragment)
+            btnTask(view)
     }
 
     private fun setTitleEmployee(view: View) {
@@ -164,7 +179,7 @@ class EmployeeInformationFragment(
         binding.txtTask.setTextColor(Color.parseColor("#FFFFFF"))
         binding.viewTask.visibility = INVISIBLE
 
-        replaceFragment(EmployeeCalendarFragment(employee, efficiencyEmployeeDao, position))
+        replaceFragment(EmployeePresenceFragment(employee, efficiencyEmployeeDao, position))
     }
 
     private fun btnTask(view: View) {
@@ -191,7 +206,7 @@ class EmployeeInformationFragment(
     private fun replaceFragment(fragment: Fragment) {
         var elapsedTime:Long = 0
         binding.tablayoutEmp.loadSkeleton()
-       val thread = Thread{
+       Thread{
             val startTime = System.currentTimeMillis()
             val transaction =
                 (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
@@ -257,13 +272,7 @@ class EmployeeInformationFragment(
                     }
 
                     R.id.menu_employee_delete -> {
-                        val dialog = EmployeeDeleteDialogFragment(
-                            employee,
-                            position,
-                            bindingActivityProAndEmpBinding,
-                            this
-                        )
-                        dialog.show((activity as ProAndEmpActivity).supportFragmentManager, null)
+                        showDeleteProjectDialog()
                     }
                 }
                 true
@@ -346,6 +355,43 @@ class EmployeeInformationFragment(
             }else
                 binding.btnInfoPrn.setImageResource(R.drawable.img_male)
 
+    }
+
+    private fun showDeleteProjectDialog() {
+
+        val parent = bindingDialogDeleteItemEmployee.root.parent as? ViewGroup
+        parent?.removeView(bindingDialogDeleteItemEmployee.root)
+        val dialogBuilder = AlertDialog.Builder(bindingDialogDeleteItemEmployee.root.context)
+        dialogBuilder.setView(bindingDialogDeleteItemEmployee.root)
+
+        val alertDialog = dialogBuilder.create()
+        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        alertDialog.window?.setBackgroundDrawable(ColorDrawable(androidx.compose.ui.graphics.Color.Transparent.toArgb()))
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+        bindingDialogDeleteItemEmployee.dialogBtnDeleteCansel.setOnClickListener {
+            alertDialog.dismiss()
+        }
+        bindingDialogDeleteItemEmployee.dialogBtnDeleteSure.setOnClickListener {
+
+            deleteItem(employee, position)
+            alertDialog.dismiss()
+        }
+    }
+
+    fun deleteItem(employee: Employee ,position: Int) {
+
+        val timeDao = AppDatabase.getDataBase(binding.root.context).timeDao
+        val taskEmployeeDao = AppDatabase.getDataBase(binding.root.context).taskDao
+        val dayDao = AppDatabase.getDataBase(binding.root.context).dayDao
+
+        timeDao.deleteTimeByIdEmployee(employee.idEmployee!!)
+        taskEmployeeDao.deleteTasksByidEmployee(employee.idEmployee!!)
+        dayDao.deleteDayByIdEmployee(employee.idEmployee!!)
+        employeeDao.delete(employee)
+        parentFragmentManager.beginTransaction().detach(this@EmployeeInformationFragment)
+            .replace(R.id.frame_layout_sub, EmployeeFragment(bindingActivityProAndEmpBinding))
+            .commit()
     }
 
 }

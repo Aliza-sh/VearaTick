@@ -108,11 +108,14 @@ class EmployeeUpdateTaskBottomsheetFragment(
                 nameTask = txtTask,
                 descriptionTask = txtDescription,
                 volumeTask = txtVolumeTask.toInt(),
-                yearCreation = onClickSubTask.yearCreation,
-                monthCreation = onClickSubTask.monthCreation,
-                dayCreation = onClickSubTask.dayCreation,
+                yearDeadline = onClickSubTask.yearDeadline,
+                monthDeadline = onClickSubTask.monthDeadline,
+                dayDeadline = onClickSubTask.dayDeadline,
                 doneTask = onClickSubTask.doneTask,
                 deadlineTask = daysBetween,
+                dayCreation = onClickSubTask.dayCreation,
+                monthCreation = onClickSubTask.monthCreation,
+                yearCreation = onClickSubTask.yearCreation
             )
             taskEmployeeDao.update(newTask)
             onTaskToEmployee()
