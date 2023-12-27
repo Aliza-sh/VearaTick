@@ -103,6 +103,7 @@ class EmployeePresenceFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         AndroidThreeTen.init(view.context)
+        Log.v("EmployeeInformationFragment", "EmployeePresenceFragment")
         dayDao = AppDatabase.getDataBase(view.context).dayDao
         timeDao = AppDatabase.getDataBase(view.context).timeDao
         setData()
@@ -118,6 +119,7 @@ class EmployeePresenceFragment(
         binding.clrEntExtEmp.scrollToMonth(currentMonth.next)
 
         class DayViewContainer(view: View) : ViewContainer(view) {
+
             lateinit var day: CalendarDay // Will be set when this container is bound.
             val bindingItemCalendarDay = ItemCalendarDayBinding.bind(view)
             val dayEntEmp = bindingItemCalendarDay.dayEntEmp
@@ -127,6 +129,7 @@ class EmployeePresenceFragment(
 
             init {
                 view.setOnClickListener {
+                    Log.v("EmployeeInformationFragment", "init")
                     if (day.owner == DayOwner.THIS_MONTH) {
                         if (selectedDate != day.date) {
                             val oldDate = selectedDate
@@ -256,6 +259,7 @@ class EmployeePresenceFragment(
         binding.clrEntExtEmp.dayBinder = object : DayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
+                Log.v("EmployeeInformationFragment", "DayBinder")
                 container.day = day
                 val textView = container.textView
                 val layout = container.layout
@@ -329,6 +333,7 @@ class EmployeePresenceFragment(
                     if (container.legendLayout.tag == null) {
                         container.legendLayout.tag = month.yearMonth
                         Log.v("loginapp", "month.yearMonth: ${month.yearMonth}")
+                        Log.v("EmployeeInformationFragment", "MonthHeaderFooterBinder")
 
                         container.legendLayout.children.map { it as TextView }
                             .forEachIndexed { index, tv ->
@@ -412,6 +417,9 @@ class EmployeePresenceFragment(
                                     }
                                 }
                             }
+
+                        Log.v("EmployeeInformationFragment", "forEachIndexed")
+
                         binding.clrEntExtEmp.monthScrollListener = { month ->
                             val persianlCalendar = month.yearMonth.persianlCalendar()
                             val monthTitle =

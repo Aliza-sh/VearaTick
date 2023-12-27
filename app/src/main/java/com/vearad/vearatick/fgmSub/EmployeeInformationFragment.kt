@@ -8,8 +8,10 @@ import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
@@ -205,19 +207,30 @@ class EmployeeInformationFragment(
 
     private fun replaceFragment(fragment: Fragment) {
         var elapsedTime:Long = 0
+        binding.progress.visibility = VISIBLE
+        binding.frameLayoutEmp.visibility = GONE
         binding.tablayoutEmp.loadSkeleton()
        Thread{
-            val startTime = System.currentTimeMillis()
-            val transaction =
-                (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frame_layout_emp, fragment)
-                .commit()
-            val endTime = System.currentTimeMillis()
-            elapsedTime = endTime - startTime
+           Log.v("EmployeeInformationFragment", "1")
+           val startTime = System.currentTimeMillis()
+           Log.v("EmployeeInformationFragment", "2")
+           val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
+           Log.v("EmployeeInformationFragment", "3")
+
+           transaction.replace(R.id.frame_layout_emp, fragment).commit()
+           Log.v("EmployeeInformationFragment", "4")
+           val endTime = System.currentTimeMillis()
+           Log.v("EmployeeInformationFragment", "5")
+           elapsedTime = endTime - startTime
         }.start()
+        Log.v("EmployeeInformationFragment", "elapsedTime: ${elapsedTime}")
+        Log.v("EmployeeInformationFragment", "6")
+
 
         Handler(Looper.getMainLooper()).postDelayed({
             binding.tablayoutEmp.hideSkeleton()
+            binding.progress.visibility = GONE
+            binding.frameLayoutEmp.visibility = VISIBLE
         }, elapsedTime)
 
     }
