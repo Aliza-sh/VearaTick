@@ -16,6 +16,8 @@ import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.Window
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.PopupMenu
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.ui.graphics.toArgb
@@ -127,7 +129,6 @@ class EmployeeInformationFragment(
         )
         val efficiencyNewEmployee = efficiencyEmployeeDao.isAllColumnsNonZero()
 
-
         if (employeeNew && efficiencyNewEmployee) {
             binding.txtTitle.text = "این کارمند تازه استخدام شده"
         } else {
@@ -207,32 +208,49 @@ class EmployeeInformationFragment(
 
     private fun replaceFragment(fragment: Fragment) {
         var elapsedTime:Long = 0
-        binding.progress.visibility = VISIBLE
+        binding.loading.visibility = VISIBLE
         binding.frameLayoutEmp.visibility = GONE
         binding.tablayoutEmp.loadSkeleton()
-       Thread{
-           Log.v("EmployeeInformationFragment", "1")
-           val startTime = System.currentTimeMillis()
-           Log.v("EmployeeInformationFragment", "2")
-           val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
-           Log.v("EmployeeInformationFragment", "3")
+        val startTime = System.currentTimeMillis()
+        Log.v("EmployeeInformationFragment", "1")
+        Log.v("EmployeeInformationFragment", "2")
+        val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
+        Log.v("EmployeeInformationFragment", "3")
 
-           transaction.replace(R.id.frame_layout_emp, fragment).commit()
-           Log.v("EmployeeInformationFragment", "4")
-           val endTime = System.currentTimeMillis()
-           Log.v("EmployeeInformationFragment", "5")
-           elapsedTime = endTime - startTime
-        }.start()
+        transaction.replace(R.id.frame_layout_emp, fragment).commit()
+        Log.v("EmployeeInformationFragment", "4")
+        Log.v("EmployeeInformationFragment", "5")
+        val endTime = System.currentTimeMillis()
+        elapsedTime = endTime - startTime
         Log.v("EmployeeInformationFragment", "elapsedTime: ${elapsedTime}")
         Log.v("EmployeeInformationFragment", "6")
 
+        var grub = elapsedTime
+        if (elapsedTime.toInt() == 0) {
+            elapsedTime = 1
+            grub = 1
+        }
+        elapsedTime *= 1000
+        animationLoding(elapsedTime,grub)
 
         Handler(Looper.getMainLooper()).postDelayed({
             binding.tablayoutEmp.hideSkeleton()
-            binding.progress.visibility = GONE
+            binding.loading.visibility = GONE
             binding.frameLayoutEmp.visibility = VISIBLE
         }, elapsedTime)
 
+    }
+
+    fun animationLoding(elapsedTime: Long, grub: Long) {
+        val anim = AlphaAnimation(
+            1f, 0f
+        )
+        anim.duration = (elapsedTime / grub)
+        anim.fillAfter = true
+        anim.repeatCount = ((elapsedTime / 1000).toInt() * grub).toInt()
+        anim.repeatMode = Animation.REVERSE
+
+        binding.splashAnimation.startAnimation(anim)
     }
 
     private fun firstRun(view: View) {
@@ -356,7 +374,21 @@ class EmployeeInformationFragment(
         val efficiencyTotalPresence = progress!!.efficiencyTotalPresence
         val efficiencyTotalDuties = progress.efficiencyTotalDuties
         val efficiencyTotal = (efficiencyTotalPresence + efficiencyTotalDuties) / 2
-        binding.prgTotalEmp.progress = efficiencyTotal.toFloat()
+
+        if (efficiencyTotal > 100) {
+            binding.prgTotalEmp.progress = 100F
+            binding.prgTotalEmp.progressBarColor = Color.parseColor("#70AE84")
+
+        } else if (efficiencyTotal in 1..100) {
+            binding.prgTotalEmp.progress = efficiencyTotal.toFloat()
+            binding.prgTotalEmp.progressBarColor = Color.parseColor("#E600ADB5")
+
+        } else if (efficiencyTotal < 0) {
+            binding.prgTotalEmp.progress = 100f
+            binding.prgTotalEmp.progressBarColor = Color.parseColor("#FE7D8B")
+        }
+
+
         if (employee.imagePath != null) {
             Glide.with(this)
                 .load(employee.imagePath)
@@ -365,7 +397,7 @@ class EmployeeInformationFragment(
         } else
             if (employee.gender == "زن") {
                 binding.btnInfoPrn.setImageResource(R.drawable.img_matter)
-            }else
+            } else
                 binding.btnInfoPrn.setImageResource(R.drawable.img_male)
 
     }
