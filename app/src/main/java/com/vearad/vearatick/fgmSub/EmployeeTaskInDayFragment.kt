@@ -338,7 +338,6 @@ class EmployeeTaskInDayFragment(
             bindingItemSubTask.txtDedlineSubTask.visibility = View.GONE
             bindingItemSubTask.imgDone.visibility = View.VISIBLE
 
-
             val startDate =
                 DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
             val endDate = DateTime(
@@ -365,9 +364,13 @@ class EmployeeTaskInDayFragment(
                 efficiencyWeekDuties = ((daysBetween * 100) / deadlineTask).toInt()
                 efficiencyWeekDuties += 100
             } else  {
-                efficiencyWeekDuties = ((daysBetween * 100) / -deadlineTask).toInt()
-                efficiencyWeekDuties += 100
+               /* efficiencyWeekDuties = ((daysBetween * 100) / -deadlineTask).toInt()
+                efficiencyWeekDuties = 100*/
+                efficiencyWeekDuties = 0
             }
+
+            if(efficiencyWeekDuties < -200)
+                efficiencyWeekDuties = -200
 
             Log.v("loginapp", "startDate: ${startDate}")
             Log.v("loginapp", "endDate: ${endDate}")

@@ -157,6 +157,7 @@ class EmployeePresenceFragment(
                                     showDoneEntryAndExitDialog(
                                         employee.idEmployee,
                                         day.persianCalendar.persianDay,
+                                        day.persianCalendar.persianWeekDayName,
                                         day.persianCalendar.persianMonthName,
                                         day.persianCalendar.persianYear,
                                         dayEntEmp,
@@ -203,9 +204,9 @@ class EmployeePresenceFragment(
                                             day = selectedDate!!.toPersianCalendar().persianDay.toString(),
                                             arrival = false,
                                             entry = 0,
-                                            entryAll = "00:00",
+                                            entryAll = "",
                                             exit = 0,
-                                            exitAll = "00:00"
+                                            exitAll = ""
                                         )
                                     )
                                     inOutAdapter = EntryExitEmployeeAdapter(
@@ -230,9 +231,9 @@ class EmployeePresenceFragment(
                                         day = selectedDate!!.toPersianCalendar().persianDay.toString(),
                                         arrival = false,
                                         entry = 0,
-                                        entryAll = "00:00",
+                                        entryAll = "",
                                         exit = 0,
-                                        exitAll = "00:00"
+                                        exitAll = ""
                                     )
                                 )
                                 inOutAdapter = EntryExitEmployeeAdapter(
@@ -792,6 +793,7 @@ class EmployeePresenceFragment(
     private fun showDoneEntryAndExitDialog(
         idEmployee: Int?,
         day: Int,
+        nameDay:String,
         month: String,
         year: Int,
         dayEntEmp: View,
@@ -899,8 +901,9 @@ class EmployeePresenceFragment(
                 ).show()
             else if (valueBtnNoDate) {
 
-                val timeData =
-                    timeDao.getAllArrivalDay(idEmployee!!, year.toString(), month, day.toString())
+                val timeData = timeDao.getAllArrivalDay(idEmployee!!, year.toString(), month, day.toString())
+                val dayData = dayDao.getAllEntryExit(idEmployee, year.toString(), month, nameDay)
+                val differenceTime = dayData?.exit!!.toInt() - dayData.entry!!.toInt()
                 val newTime = Time(
                     timeData?.idTime,
                     idEmployee = idEmployee,
@@ -912,25 +915,29 @@ class EmployeePresenceFragment(
                     entryAll = "00:00",
                     exit = 0,
                     exitAll = "00:00",
-                    differenceTime = 0
+                    differenceTime = -differenceTime
                 )
                 if (day.toString() == timeData?.day) {
                     timeDao.update(newTime)
 
                     if (valueBtnDoneExit) {
                         inOutAdapter.updateInOut(newTime, 0)
-                        dayExtEmp.setBackgroundColor(it.context.getColor(R.color.red_800))
-                        dayEntEmp.setBackgroundColor(
-                            it.context.getColor(R.color.red_800)
-                        )
+
                     }
                 } else {
                     timeDao.insert(newTime)
-                    dayExtEmp.setBackgroundColor(it.context.getColor(R.color.red_800))
-                    dayEntEmp.setBackgroundColor(
-                        it.context.getColor(R.color.red_800)
-                    )
                 }
+
+                dayEntEmp.setBackgroundColor(
+                    bindingDialogDeleteItemEmployeeEntryExit.root.context.getColor(
+                        R.color.red_800
+                    )
+                )
+                dayExtEmp.setBackgroundColor(
+                    bindingDialogDeleteItemEmployeeEntryExit.root.context.getColor(
+                        R.color.red_800
+                    )
+                )
 
                 alertDialog.dismiss()
             } else {
@@ -1057,7 +1064,7 @@ class EmployeePresenceFragment(
         dayEntEmp: View,
         dayExtEmp: View
     ) {
-        if (onClicktime.entry != 0) {
+        if (onClicktime.entryAll != "") {
             val viewHolder =
                 binding.rcvInOut.findViewHolderForAdapterPosition(position) as EntryExitEmployeeAdapter.EntryExitEmployeeViewHolder
             viewHolder.let { holder ->
