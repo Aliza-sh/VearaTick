@@ -154,7 +154,7 @@ class EmployeeStatisticsFragment(
                     monthVolumeTaskEmployee += taskEmployee.volumeTask
                     monthEfficiencyTaskEmployee += taskEmployee.efficiencyTask
                     counterMonthTask ++
-                    if (taskEmployee.dayCreation in firstDayOfWeek..endDayOfWeek) {
+                    if (taskEmployee.dayDone in firstDayOfWeek..endDayOfWeek) {
                         weekVolumeTaskEmployee += taskEmployee.volumeTask
                         weekEfficiencyTaskEmployee += taskEmployee.efficiencyTask
                         counterWeekTask ++

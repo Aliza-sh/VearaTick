@@ -83,6 +83,9 @@ data class TaskEmployee(
     val volumeTask: Int,
 
     val doneTask: Boolean? = false,
+    val yearDone: Int? = 0,
+    val monthDone: Int? = 0,
+    val dayDone: Int? = 0,
     val deadlineTask: Int,
 
     val efficiencyTask: Int? = 0,

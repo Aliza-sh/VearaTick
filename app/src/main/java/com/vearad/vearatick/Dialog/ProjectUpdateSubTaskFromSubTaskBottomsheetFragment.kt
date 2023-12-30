@@ -225,7 +225,10 @@ class ProjectUpdateSubTaskFromSubTaskBottomsheetFragment(
                         projectTask = onClickTask.projectTask,
                         dayCreation = onClickTask.dayCreation,
                         monthCreation = onClickTask.monthCreation,
-                        yearCreation = onClickTask.yearCreation
+                        yearCreation = onClickTask.yearCreation,
+                        dayDone = onClickTask.dayDone,
+                        monthDone = onClickTask.monthDone,
+                        yearDone = onClickTask.yearDone
                     )
                     taskEmployeeDao.update(newTask)
                 }

@@ -327,7 +327,10 @@ class EmployeeTaskInDayFragment(
                 efficiencyTask = 0,
                 dayCreation = onClickSubTask.dayCreation,
                 monthCreation = onClickSubTask.monthCreation,
-                yearCreation = onClickSubTask.yearCreation
+                yearCreation = onClickSubTask.yearCreation,
+                dayDone = 0,
+                monthDone = 0,
+                yearDone = 0
             )
             taskEmployeeDao.update(newTask)
 
@@ -378,7 +381,6 @@ class EmployeeTaskInDayFragment(
             Log.v("loginapp", "deadlineTask: ${deadlineTask}")
             Log.v("loginapp", "efficiencyWeekDuties: ${efficiencyWeekDuties}")
 
-
             val newTask = TaskEmployee(
                 idTask = onClickSubTask.idTask,
                 idEmployee = onClickSubTask.idEmployee,
@@ -394,7 +396,10 @@ class EmployeeTaskInDayFragment(
                 efficiencyTask = efficiencyWeekDuties,
                 dayCreation = onClickSubTask.dayCreation,
                 monthCreation = onClickSubTask.monthCreation,
-                yearCreation = onClickSubTask.yearCreation
+                yearCreation = onClickSubTask.yearCreation,
+                dayDone = today.persianDay,
+                monthDone = today.persianMonth,
+                yearDone = today.persianYear
             )
             taskEmployeeDao.update(newTask)
 

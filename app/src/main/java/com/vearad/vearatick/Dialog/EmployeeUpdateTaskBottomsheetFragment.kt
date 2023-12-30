@@ -115,7 +115,10 @@ class EmployeeUpdateTaskBottomsheetFragment(
                 deadlineTask = daysBetween,
                 dayCreation = onClickSubTask.dayCreation,
                 monthCreation = onClickSubTask.monthCreation,
-                yearCreation = onClickSubTask.yearCreation
+                yearCreation = onClickSubTask.yearCreation,
+                dayDone = onClickSubTask.dayDone,
+                monthDone = onClickSubTask.monthDone,
+                yearDone = onClickSubTask.yearDone
             )
             taskEmployeeDao.update(newTask)
             onTaskToEmployee()

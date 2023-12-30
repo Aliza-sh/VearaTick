@@ -170,8 +170,10 @@ class ProjectSubTaskAddNewTeamFromSubTaskFragment(
                 projectTask = true,
                 dayCreation = subTaskProject.dayCreation,
                 monthCreation = subTaskProject.monthCreation,
-                yearCreation = subTaskProject.yearCreation
-
+                yearCreation = subTaskProject.yearCreation,
+                        dayDone = 0,
+                monthDone = 0,
+                yearDone = 0
             )
             taskEmployeeDao.insert(newTask)
 
@@ -187,25 +189,7 @@ class ProjectSubTaskAddNewTeamFromSubTaskFragment(
 
             val taskProjectEmployee =
                 taskEmployeeDao.getEmployeeTaskProject(subTaskProject.idSubTask)
-            val newTask = TaskEmployee(
-                idTask = taskProjectEmployee!!.idTask,
-                idEmployee = taskProjectEmployee.idEmployee,
-                idTaskProject = taskProjectEmployee.idTaskProject,
-                nameTask = taskProjectEmployee.nameTask,
-                descriptionTask = taskProjectEmployee.descriptionTask,
-                volumeTask = taskProjectEmployee.volumeTask,
-                doneTask = taskProjectEmployee.doneTask,
-                yearDeadline = subTaskProject.yearDeadline,
-                monthDeadline = subTaskProject.monthDeadline,
-                dayDeadline = subTaskProject.dayDeadline,
-                deadlineTask = taskProjectEmployee.deadlineTask,
-                efficiencyTask = taskProjectEmployee.efficiencyTask,
-                projectTask = taskProjectEmployee.projectTask,
-                dayCreation = taskProjectEmployee.dayCreation,
-                monthCreation = taskProjectEmployee.monthCreation,
-                yearCreation = taskProjectEmployee.yearCreation
-            )
-            taskEmployeeDao.delete(newTask)
+            taskEmployeeDao.delete(taskProjectEmployee!!)
         }
     }
 

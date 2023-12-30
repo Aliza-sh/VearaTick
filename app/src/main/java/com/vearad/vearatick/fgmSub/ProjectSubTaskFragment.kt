@@ -379,7 +379,10 @@ class ProjectSubTaskFragment(
                         projectTask = onClickTask.projectTask,
                         dayCreation = onClickTask.dayCreation,
                         monthCreation = onClickTask.monthCreation,
-                        yearCreation = onClickTask.yearCreation
+                        yearCreation = onClickTask.yearCreation,
+                        dayDone = 0,
+                        monthDone = 0,
+                        yearDone = 0
                     )
                     taskEmployeeDao.update(newTask)
                 }
@@ -506,7 +509,10 @@ class ProjectSubTaskFragment(
                         projectTask = onClickTask.projectTask,
                         dayCreation = onClickTask.dayCreation,
                         monthCreation = onClickTask.monthCreation,
-                        yearCreation = onClickTask.yearCreation
+                        yearCreation = onClickTask.yearCreation,
+                        dayDone = today.persianDay,
+                        monthDone = today.persianMonth,
+                        yearDone = today.persianYear
                     )
                     taskEmployeeDao.update(newTask)
                 }
@@ -586,25 +592,7 @@ class ProjectSubTaskFragment(
                 subTaskProject.idSubTask!!
             )
             for (employeeSubTaskProject in employeeSubTaskProjects) {
-                val newTaskEmployee = TaskEmployee(
-                    idTask = onClickTask!!.idTask,
-                    idEmployee = onClickTask.idEmployee,
-                    idTaskProject = onClickTask.idTaskProject,
-                    nameTask = onClickTask.nameTask,
-                    descriptionTask = onClickTask.descriptionTask,
-                    volumeTask = onClickTask.volumeTask,
-                    doneTask = onClickTask.doneTask,
-                    yearDeadline = onClickTask.yearDeadline,
-                    monthDeadline = onClickTask.monthDeadline,
-                    dayDeadline = onClickTask.dayDeadline,
-                    deadlineTask = onClickTask.deadlineTask,
-                    efficiencyTask = onClickTask.efficiencyTask,
-                    projectTask = onClickTask.projectTask,
-                    dayCreation = onClickTask.dayCreation,
-                    monthCreation = onClickTask.monthCreation,
-                    yearCreation = onClickTask.yearCreation
-                )
-                taskEmployeeDao.delete(newTaskEmployee)
+                taskEmployeeDao.delete(onClickTask)
             }
         }
 
