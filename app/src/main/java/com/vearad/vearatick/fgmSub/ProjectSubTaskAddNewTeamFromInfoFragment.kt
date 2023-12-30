@@ -173,11 +173,17 @@ class ProjectSubTaskAddNewTeamFromInfoFragment(
                 nameTask = subTaskProject.nameSubTask,
                 descriptionTask = subTaskProject.descriptionSubTask,
                 volumeTask = subTaskProject.volumeTask,
-                yearCreation = subTaskProject.yearDeadline,
-                monthCreation = subTaskProject.monthDeadline,
-                dayCreation = subTaskProject.dayDeadline,
+                yearDeadline = subTaskProject.yearDeadline,
+                monthDeadline = subTaskProject.monthDeadline,
+                dayDeadline = subTaskProject.dayDeadline,
                 deadlineTask = subTaskProject.deadlineTask,
-                projectTask = true
+                projectTask = true,
+                dayCreation = subTaskProject.dayCreation,
+                monthCreation = subTaskProject.monthCreation,
+                yearCreation = subTaskProject.yearCreation,
+                dayDone = 0,
+                monthDone = 0,
+                yearDone = 0
             )
             taskEmployeeDao.insert(newTask)
 
@@ -192,23 +198,7 @@ class ProjectSubTaskAddNewTeamFromInfoFragment(
             teamSubTaskDao.delete(newTeamProject)
 
             val taskProjectEmployee = taskEmployeeDao.getEmployeeTaskProject(subTaskProject.idSubTask)
-
-            val newTask = TaskEmployee(
-                idTask = taskProjectEmployee!!.idTask,
-                idEmployee = taskProjectEmployee.idEmployee,
-                idTaskProject = taskProjectEmployee.idTaskProject,
-                nameTask = taskProjectEmployee.nameTask,
-                descriptionTask = taskProjectEmployee.descriptionTask,
-                volumeTask = taskProjectEmployee.volumeTask,
-                doneTask = taskProjectEmployee.doneTask,
-                yearCreation = subTaskProject.yearDeadline,
-                monthCreation = subTaskProject.monthDeadline,
-                dayCreation = subTaskProject.dayDeadline,
-                deadlineTask = taskProjectEmployee.deadlineTask,
-                efficiencyTask = taskProjectEmployee.efficiencyTask,
-                projectTask = taskProjectEmployee.projectTask
-            )
-            taskEmployeeDao.delete(newTask)
+            taskEmployeeDao.delete(taskProjectEmployee!!)
 
         }
     }

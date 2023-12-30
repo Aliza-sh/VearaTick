@@ -1,12 +1,13 @@
 package com.vearad.vearatick
 
-import android.content.Context
+import ApiService
 import android.content.Intent
 import android.os.Bundle
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import com.google.gson.GsonBuilder
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.DayDao
 import com.vearad.vearatick.DataBase.EmployeeDao
@@ -19,6 +20,10 @@ import com.vearad.vearatick.adapter.TaskEmployeeAdapter
 import com.vearad.vearatick.databinding.ActivityMainBinding
 import com.vearad.vearatick.fgmMain.CompanyFragment
 import com.vearad.vearatick.fgmMain.CompanyInformationFragment
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 lateinit var employeeDao: EmployeeDao
 lateinit var dayDao: DayDao
@@ -28,6 +33,7 @@ lateinit var projectAdapter: ProjectNearAdapter
 lateinit var taskAdapter: TaskEmployeeAdapter
 lateinit var inOutAdapter: EntryExitEmployeeAdapter
 lateinit var employeeAdapter: EmployeeAdapter
+lateinit var apiService: ApiService
 
 const val SHAREDVEARATICK = "sharedVearatick"
 const val CHEKBUY = "chekBuy"
@@ -56,9 +62,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         firstRun()
-
-        val sharedPreferences = getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
-        sharedPreferences.edit().putBoolean(CHEKBUY, true).apply()
+        createApiService()
 
         /*val intent = intent
         val data: Uri? = intent.data
@@ -120,6 +124,29 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         finishAffinity()
+    }
+
+    private fun createApiService() {
+
+        // ایجاد شیء OkHttpClient با استفاده از HttpLoggingInterceptor برای نمایش لاگ‌ها
+        val interceptor = HttpLoggingInterceptor().apply {
+            level = HttpLoggingInterceptor.Level.BODY
+        }
+        val client = OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .build()
+
+        val gson = GsonBuilder().setLenient().create()
+        //  ایجاد شیء Retrofit با تنظیمات مورد نیاز
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://step24.ir/api/") // آدرس پایه سرویس API
+            .addConverterFactory(GsonConverterFactory.create(gson)) // تبدیل پاسخ‌ها به شیء با استفاده از Gson
+            .client(client) // استفاده از OkHttpClient برای درخواست‌ها
+            .build()
+
+        //  ایجاد شیء ApiService با استفاده از شیء Retrofit
+        apiService = retrofit.create(ApiService::class.java)
+
     }
 
     fun replaceFragment(fragment: Fragment) {

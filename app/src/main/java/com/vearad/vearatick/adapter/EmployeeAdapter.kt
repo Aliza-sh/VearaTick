@@ -1,6 +1,7 @@
 package com.vearad.vearatick.adapter
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
@@ -88,9 +89,21 @@ class EmployeeAdapter(
                 val progress = efficiencyEmployeeDao.getEfficiencyEmployee(data[position].idEmployee!!)
                 val efficiencyTotalPresence = progress!!.efficiencyTotalPresence
                 val efficiencyTotalDuties = progress.efficiencyTotalDuties
-                val efficiencyTotal =
-                    (efficiencyTotalPresence + efficiencyTotalDuties) / 2
-                binding.progressCircular.progress = efficiencyTotal.toFloat()
+                val efficiencyTotal = (efficiencyTotalPresence + efficiencyTotalDuties) / 2
+
+                if (efficiencyTotal > 100){
+                    binding.progressCircular.progress = 100F
+                    binding.progressCircular.progressBarColor = Color.parseColor("#70AE84")
+
+                } else if (efficiencyTotal in 1..100){
+                    binding.progressCircular.progress = efficiencyTotal.toFloat()
+                    binding.progressCircular.progressBarColor = Color.parseColor("#E600ADB5")
+
+                }
+                else if (efficiencyTotal < 0){
+                    binding.progressCircular.progress = 100f
+                    binding.progressCircular.progressBarColor = Color.parseColor("#FE7D8B")
+                }
 
                 if (efficiencyEmployee!!.totalWeekWatch != 0 && efficiencyEmployee.mustWeekWatch != 0) {
 

@@ -54,6 +54,9 @@ interface DayDao : BaceDao<Day> {
     ): Day?
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrUpdateFood(day: Day)
+
+    @Query("DELETE FROM day_table WHERE idEmployee = :idEmployee")
+    fun deleteDayByIdEmployee(idEmployee: Int)
 }
 
 @Dao
@@ -72,21 +75,24 @@ interface TimeDao : BaceDao<Time> {
     fun getAllArrivalDay(idEmployee: Int, year: String, month: String, day: String): Time?
     @Query("SELECT * FROM time_table WHERE idEmployee = :idEmployee AND entry = :entry AND exit = :exit ")
     fun getDeleteTime(idEmployee: Int, entry: Int, exit: Int): Time?
+
+    @Query("DELETE FROM time_table WHERE idEmployee = :idEmployee")
+    fun deleteTimeByIdEmployee(idEmployee: Int)
 }
 
 @Dao
 interface TaskEmployeeDao : BaceDao<TaskEmployee> {
     @Query("SELECT * FROM taskEmployee_table")
     fun getAllTaskEmployee(): List<TaskEmployee>
-    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND dayCreation = :persianDay ")
+    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND dayDeadline = :persianDay ")
     fun getTaskDay(idEmployee: Int, persianDay: Int): TaskEmployee?
-    @Query("SELECT * FROM taskEmployee_table WHERE idTask = :idTack AND dayCreation = :persianDay ")
+    @Query("SELECT * FROM taskEmployee_table WHERE idTask = :idTack AND dayDeadline = :persianDay ")
     fun getInTaskDay(idTack: Int, persianDay: Int): TaskEmployee?
-    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND yearCreation = :year AND monthCreation = :month AND dayCreation = :day")
+    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND yearDeadline = :year AND monthDeadline = :month AND dayDeadline = :day")
     fun getAllTaskInDay(idEmployee: Int, year: Int, month: Int, day: Int): TaskEmployee?
-    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND yearCreation = :year AND monthCreation = :month AND dayCreation = :day")
+    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND yearDeadline = :year AND monthDeadline = :month AND dayDeadline = :day")
     fun getAllTaskDayInMonth(idEmployee: Int, year: Int, month: Int, day: Int): List<TaskEmployee>
-    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND yearCreation = :year AND monthCreation = :month AND dayCreation = :day")
+    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND yearDeadline = :year AND monthDeadline = :month AND dayDeadline = :day")
     fun getAllTaskInInDay(idEmployee: Int, year: Int, month: Int, day: Int): List<TaskEmployee>
 
     @Query("SELECT * FROM taskEmployee_table WHERE idTask = :idTaskEmployee")
@@ -103,16 +109,19 @@ interface TaskEmployeeDao : BaceDao<TaskEmployee> {
     @Query("SELECT * FROM taskEmployee_table WHERE  idEmployee = :idEmployee AND idTaskProject = :idTaskProject ")
     fun getEmployeeSTaskSProject(idEmployee: Int, idTaskProject: Int): TaskEmployee?
 
-    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND 1 <= (dayCreation - :toDay) <= 7 AND doneTask == 0")
+    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND 1 <= (dayDeadline - :toDay) <= 7 AND doneTask == 0")
     fun getTaskInWeek(idEmployee: Int, toDay: Int): Boolean
-    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND (dayCreation - :toDay) == 1 AND doneTask == 0")
+    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND (dayDeadline - :toDay) == 1 AND doneTask == 0")
     fun getTaskTomorrow(idEmployee: Int, toDay: Int): Boolean
-    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND (dayCreation - :toDay) = 0 AND doneTask == 0")
+    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND (dayDeadline - :toDay) = 0 AND doneTask == 0")
     fun getTaskToday(idEmployee: Int, toDay: Int): Boolean
-    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND (dayCreation - :toDay) <= -1 AND doneTask == 0")
+    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND (dayDeadline - :toDay) <= -1 AND doneTask == 0")
     fun getTaskPast(idEmployee: Int, toDay: Int): Boolean
     @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND doneTask = 1")
     fun getDoneTask(idEmployee: Int): Boolean
+
+    @Query("DELETE FROM taskEmployee_table WHERE idEmployee = :idEmployee")
+    fun deleteTasksByidEmployee(idEmployee: Int)
 
 }
 
@@ -129,7 +138,7 @@ interface ProjectDao : BaceDao<Project> {
     @Query("SELECT * FROM project_table")
     fun getAllProject(): List<Project>
     @Query("SELECT * FROM project_table WHERE idProject = :idProject")
-    fun getProject(idProject: Int,): Project?
+    fun getProject(idProject: Int): Project?
     @Query("DELETE FROM project_table")
     fun deleteAllProject()
     @Query("SELECT * FROM project_table WHERE nameProject LIKE '%'||:searching || '%'")
@@ -150,24 +159,27 @@ interface TeamProjectDao : BaceDao<TeamProject> {
     @Query("SELECT * FROM teamProject_table")
     fun getAllTeamProject(): List<TeamProject>
     @Query("SELECT * FROM teamProject_table WHERE idProject = :idProject")
-    fun getListTeamProject(idProject: Int,): List<TeamProject>
+    fun getListTeamProject(idProject: Int): List<TeamProject>
     @Query("SELECT * FROM teamProject_table WHERE idProject = :idProject")
-    fun getTeamProject(idProject: Int,): TeamProject?
+    fun getTeamProject(idProject: Int): TeamProject?
     @Query("SELECT * FROM teamProject_table WHERE idEmployee = :idEmployee AND idProject = :idProject")
-    fun getEmployeeTeamProject(idEmployee: Int, idProject: Int,): TeamProject?
+    fun getEmployeeTeamProject(idEmployee: Int, idProject: Int): TeamProject?
 }
 @Dao
 interface SubTaskProjectDao : BaceDao<SubTaskProject> {
     @Query("SELECT * FROM subTaskProject_table")
     fun getAllSubTaskProject(): List<SubTaskProject>
     @Query("SELECT * FROM subTaskProject_table WHERE idProject = :idProject")
-    fun getSubTaskProject(idProject: Int,): List<SubTaskProject>
+    fun getSubTaskProject(idProject: Int): List<SubTaskProject>
     @Query("SELECT * FROM subTaskProject_table WHERE idSubTask = :idSubTaskProject")
-    fun getOnClickSubTaskProject(idSubTaskProject: Int,): SubTaskProject?
+    fun getOnClickSubTaskProject(idSubTaskProject: Int): SubTaskProject?
     @Query("SELECT SUM(volumeTask) FROM subTaskProject_table WHERE idProject = :idProject AND doneSubTask = :doneTaskProject")
     fun getDoneVolumeTaskSum(idProject:Int,doneTaskProject: Boolean): Long
     @Query("SELECT SUM(volumeTask) FROM subTaskProject_table WHERE idProject = :idProject")
     fun getTotalVolumeTaskSum(idProject:Int): Long
+
+    @Query("DELETE FROM subTaskProject_table WHERE idProject = :projectId")
+    fun deleteSubTasksByProjectId(projectId: Int)
 }
 @Dao
 interface TeamSubTaskDao : BaceDao<TeamSubTask> {
@@ -211,6 +223,9 @@ interface CompanyReceiptDao : BaceDao<CompanyReceipt> {
 
     @Query("SELECT SUM(companyReceipt) FROM companyReceipt_table WHERE yearCompanyReceipt = :year AND monthCompanyReceipt = :month")
     fun getReceiptSumYearAndMonth(year: Int,month: Int): Long
+
+    @Query("SELECT * FROM companyReceipt_table WHERE idProject = :idProject")
+    fun getReceiptProject(idProject: Int): CompanyReceipt?
 }
 @Dao
 interface CompanyExpensesDao : BaceDao<CompanyExpenses> {

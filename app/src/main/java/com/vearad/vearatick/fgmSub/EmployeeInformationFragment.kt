@@ -1,18 +1,26 @@
 package com.vearad.vearatick.fgmSub
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
+import android.view.Window
+import android.view.animation.AlphaAnimation
+import android.view.animation.Animation
 import android.widget.PopupMenu
 import androidx.activity.OnBackPressedCallback
+import androidx.compose.ui.graphics.toArgb
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
@@ -22,10 +30,10 @@ import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.EfficiencyDao
 import com.vearad.vearatick.DataBase.Employee
 import com.vearad.vearatick.DataBase.EmployeeDao
-import com.vearad.vearatick.Dialog.EmployeeDeleteDialogFragment
 import com.vearad.vearatick.ProAndEmpActivity
 import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
+import com.vearad.vearatick.databinding.FragmentDialogDeleteItemEmployeeBinding
 import com.vearad.vearatick.databinding.FragmentEmployeeInformationBinding
 import koleton.api.hideSkeleton
 import koleton.api.loadSkeleton
@@ -36,9 +44,11 @@ class EmployeeInformationFragment(
     val position: Int,
     val employeeDao: EmployeeDao,
     val bindingActivityProAndEmpBinding: ActivityProAndEmpBinding,
+    val goToEmployeeTaskFragment: Boolean,
 ) : Fragment() {
 
     lateinit var binding: FragmentEmployeeInformationBinding
+    lateinit var bindingDialogDeleteItemEmployee: FragmentDialogDeleteItemEmployeeBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,6 +56,8 @@ class EmployeeInformationFragment(
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentEmployeeInformationBinding.inflate(layoutInflater, container, false)
+        bindingDialogDeleteItemEmployee = FragmentDialogDeleteItemEmployeeBinding.inflate(layoutInflater, null, false)
+
         return binding.root
 
     }
@@ -55,6 +67,8 @@ class EmployeeInformationFragment(
         firstRun(view)
         setData(employee)
         setTitleEmployee(view)
+
+        goTo(goToEmployeeTaskFragment,view)
 
         binding.btnStatistics.setOnClickListener {
             btnStatistics(view)
@@ -75,6 +89,11 @@ class EmployeeInformationFragment(
                 .replace(R.id.frame_layout_sub, EmployeeFragment(bindingActivityProAndEmpBinding))
                 .commit()
         }
+    }
+
+    private fun goTo(goToEmployeeTaskFragment: Boolean, view: View) {
+        if (goToEmployeeTaskFragment)
+            btnTask(view)
     }
 
     private fun setTitleEmployee(view: View) {
@@ -109,7 +128,6 @@ class EmployeeInformationFragment(
             today.persianYear
         )
         val efficiencyNewEmployee = efficiencyEmployeeDao.isAllColumnsNonZero()
-
 
         if (employeeNew && efficiencyNewEmployee) {
             binding.txtTitle.text = "این کارمند تازه استخدام شده"
@@ -164,7 +182,7 @@ class EmployeeInformationFragment(
         binding.txtTask.setTextColor(Color.parseColor("#FFFFFF"))
         binding.viewTask.visibility = INVISIBLE
 
-        replaceFragment(EmployeeCalendarFragment(employee, efficiencyEmployeeDao, position))
+        replaceFragment(EmployeePresenceFragment(employee, efficiencyEmployeeDao, position))
     }
 
     private fun btnTask(view: View) {
@@ -190,21 +208,49 @@ class EmployeeInformationFragment(
 
     private fun replaceFragment(fragment: Fragment) {
         var elapsedTime:Long = 0
+        binding.loading.visibility = VISIBLE
+        binding.frameLayoutEmp.visibility = GONE
         binding.tablayoutEmp.loadSkeleton()
-       val thread = Thread{
-            val startTime = System.currentTimeMillis()
-            val transaction =
-                (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frame_layout_emp, fragment)
-                .commit()
-            val endTime = System.currentTimeMillis()
-            elapsedTime = endTime - startTime
-        }.start()
+        val startTime = System.currentTimeMillis()
+        Log.v("EmployeeInformationFragment", "1")
+        Log.v("EmployeeInformationFragment", "2")
+        val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
+        Log.v("EmployeeInformationFragment", "3")
+
+        transaction.replace(R.id.frame_layout_emp, fragment).commit()
+        Log.v("EmployeeInformationFragment", "4")
+        Log.v("EmployeeInformationFragment", "5")
+        val endTime = System.currentTimeMillis()
+        elapsedTime = endTime - startTime
+        Log.v("EmployeeInformationFragment", "elapsedTime: ${elapsedTime}")
+        Log.v("EmployeeInformationFragment", "6")
+
+        var grub = elapsedTime
+        if (elapsedTime.toInt() == 0) {
+            elapsedTime = 1
+            grub = 1
+        }
+        elapsedTime *= 1000
+        animationLoding(elapsedTime,grub)
 
         Handler(Looper.getMainLooper()).postDelayed({
             binding.tablayoutEmp.hideSkeleton()
+            binding.loading.visibility = GONE
+            binding.frameLayoutEmp.visibility = VISIBLE
         }, elapsedTime)
 
+    }
+
+    fun animationLoding(elapsedTime: Long, grub: Long) {
+        val anim = AlphaAnimation(
+            1f, 0f
+        )
+        anim.duration = (elapsedTime / grub)
+        anim.fillAfter = true
+        anim.repeatCount = ((elapsedTime / 1000).toInt() * grub).toInt()
+        anim.repeatMode = Animation.REVERSE
+
+        binding.splashAnimation.startAnimation(anim)
     }
 
     private fun firstRun(view: View) {
@@ -257,13 +303,7 @@ class EmployeeInformationFragment(
                     }
 
                     R.id.menu_employee_delete -> {
-                        val dialog = EmployeeDeleteDialogFragment(
-                            employee,
-                            position,
-                            bindingActivityProAndEmpBinding,
-                            this
-                        )
-                        dialog.show((activity as ProAndEmpActivity).supportFragmentManager, null)
+                        showDeleteProjectDialog()
                     }
                 }
                 true
@@ -334,7 +374,21 @@ class EmployeeInformationFragment(
         val efficiencyTotalPresence = progress!!.efficiencyTotalPresence
         val efficiencyTotalDuties = progress.efficiencyTotalDuties
         val efficiencyTotal = (efficiencyTotalPresence + efficiencyTotalDuties) / 2
-        binding.prgTotalEmp.progress = efficiencyTotal.toFloat()
+
+        if (efficiencyTotal > 100) {
+            binding.prgTotalEmp.progress = 100F
+            binding.prgTotalEmp.progressBarColor = Color.parseColor("#70AE84")
+
+        } else if (efficiencyTotal in 1..100) {
+            binding.prgTotalEmp.progress = efficiencyTotal.toFloat()
+            binding.prgTotalEmp.progressBarColor = Color.parseColor("#E600ADB5")
+
+        } else if (efficiencyTotal < 0) {
+            binding.prgTotalEmp.progress = 100f
+            binding.prgTotalEmp.progressBarColor = Color.parseColor("#FE7D8B")
+        }
+
+
         if (employee.imagePath != null) {
             Glide.with(this)
                 .load(employee.imagePath)
@@ -343,9 +397,46 @@ class EmployeeInformationFragment(
         } else
             if (employee.gender == "زن") {
                 binding.btnInfoPrn.setImageResource(R.drawable.img_matter)
-            }else
+            } else
                 binding.btnInfoPrn.setImageResource(R.drawable.img_male)
 
+    }
+
+    private fun showDeleteProjectDialog() {
+
+        val parent = bindingDialogDeleteItemEmployee.root.parent as? ViewGroup
+        parent?.removeView(bindingDialogDeleteItemEmployee.root)
+        val dialogBuilder = AlertDialog.Builder(bindingDialogDeleteItemEmployee.root.context)
+        dialogBuilder.setView(bindingDialogDeleteItemEmployee.root)
+
+        val alertDialog = dialogBuilder.create()
+        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        alertDialog.window?.setBackgroundDrawable(ColorDrawable(androidx.compose.ui.graphics.Color.Transparent.toArgb()))
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+        bindingDialogDeleteItemEmployee.dialogBtnDeleteCansel.setOnClickListener {
+            alertDialog.dismiss()
+        }
+        bindingDialogDeleteItemEmployee.dialogBtnDeleteSure.setOnClickListener {
+
+            deleteItem(employee, position)
+            alertDialog.dismiss()
+        }
+    }
+
+    fun deleteItem(employee: Employee ,position: Int) {
+
+        val timeDao = AppDatabase.getDataBase(binding.root.context).timeDao
+        val taskEmployeeDao = AppDatabase.getDataBase(binding.root.context).taskDao
+        val dayDao = AppDatabase.getDataBase(binding.root.context).dayDao
+
+        timeDao.deleteTimeByIdEmployee(employee.idEmployee!!)
+        taskEmployeeDao.deleteTasksByidEmployee(employee.idEmployee!!)
+        dayDao.deleteDayByIdEmployee(employee.idEmployee!!)
+        employeeDao.delete(employee)
+        parentFragmentManager.beginTransaction().detach(this@EmployeeInformationFragment)
+            .replace(R.id.frame_layout_sub, EmployeeFragment(bindingActivityProAndEmpBinding))
+            .commit()
     }
 
 }

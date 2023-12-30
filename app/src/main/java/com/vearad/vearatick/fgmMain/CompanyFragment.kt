@@ -8,6 +8,7 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -19,8 +20,8 @@ import com.ghanshyam.graphlibs.Graph
 import com.ghanshyam.graphlibs.GraphData
 import com.vearad.vearatick.CHEKBUY
 import com.vearad.vearatick.CompanyFinancialReportActivity
-import com.vearad.vearatick.CompanyIncomeActivity
 import com.vearad.vearatick.CompanyPaymentActivity
+import com.vearad.vearatick.CompanyReceiptActivity
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.CompanyExpensesDao
 import com.vearad.vearatick.DataBase.CompanyReceiptDao
@@ -109,7 +110,7 @@ class CompanyFragment : Fragment() {
             if (sharedPreferences.getBoolean(CHEKBUY, false)== false) {
                 showIncreaseCreditDialog()
             }else {
-                val intent = Intent(requireContext(), CompanyIncomeActivity::class.java)
+                val intent = Intent(requireContext(), CompanyReceiptActivity::class.java)
                 startActivity(intent)
                 activity?.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
             }
@@ -135,8 +136,7 @@ class CompanyFragment : Fragment() {
             binding.txtProfit.setTextColor(Color.parseColor("#0E7113"))
             binding.txtProfit.text = value + " +"
         } else if (profit < 0) {
-            profit = -profit
-            val value = formatCurrency(profit)
+            val value = formatCurrency(-profit)
             binding.txtProfit.setTextColor(Color.parseColor("#c62828"))
             binding.txtProfit.text = value + " -"
         } else {
@@ -144,7 +144,9 @@ class CompanyFragment : Fragment() {
         }
 
         val sumInvestment = employeeInvestmentDao.getInvestmentSum()
-        val sumTotal = (sumInvestment + profit)
+        var sumTotal = (sumInvestment + profit)
+        if (sumTotal<0)
+            sumTotal = 0
         binding.btnInvestment.text = formatCurrency(sumTotal)
         binding.btnFinancialReport.setOnClickListener {
             if (sharedPreferences.getBoolean(CHEKBUY, false)== false) {
@@ -196,6 +198,21 @@ class CompanyFragment : Fragment() {
         progressNumProject(binding.progressNumProject)
     }
 
+    override fun onResume() {
+        super.onResume()
+        sharedPreferences = requireActivity().getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
+
+        if (sharedPreferences.getBoolean(CHEKBUY, false)== true) {
+            binding.cardLock.visibility = GONE
+        }
+
+        binding.btnFinancial.setOnClickListener {
+            if (sharedPreferences.getBoolean(CHEKBUY, false)== false) {
+                showIncreaseCreditDialog()
+            }
+        }
+    }
+
     private fun formatCurrency(value: Long?): String {
         val decimalFormat = DecimalFormat("#,###")
         return decimalFormat.format(value) + " تومان"
@@ -242,9 +259,11 @@ class CompanyFragment : Fragment() {
     private fun efficiencyProject(): Int {
         val numberProject = projectDao.getAllProject().size
         val sumProgressProject = projectDao.getColumnprogressProject()
+        Log.v("loginapp", "numberProject: ${numberProject}")
+        Log.v("loginapp", "sumProgressProject: ${sumProgressProject}")
 
-        var sumAllProgressProject =
-            sumProgressProject.sum()
+        var sumAllProgressProject = sumProgressProject.sum()
+        Log.v("loginapp", "sumAllProgressProject: ${sumAllProgressProject}")
 
         if (sumAllProgressProject != 0)
             sumAllProgressProject /= numberProject
@@ -255,12 +274,9 @@ class CompanyFragment : Fragment() {
     private fun efficiencyEmployeeTack(): Int {
 
         val numberEmployee = efficiencyDao.getAllEfficiency().size
-        val sumEfficiencyWeekDuties = efficiencyDao.getColumnEfficiencyWeekDuties()
-        val sumEfficiencyMonthDuties = efficiencyDao.getColumnEfficiencyMonthDuties()
         val sumEfficiencyTotalDuties = efficiencyDao.getColumnEfficiencyTotalDuties()
 
-        var sumEefficiencyEmployeeTack =
-            sumEfficiencyWeekDuties.sum() + sumEfficiencyMonthDuties.sum() + sumEfficiencyTotalDuties.sum()
+        var sumEefficiencyEmployeeTack = sumEfficiencyTotalDuties.sum()
 
         if (sumEefficiencyEmployeeTack != 0)
             sumEefficiencyEmployeeTack /= numberEmployee
@@ -270,11 +286,9 @@ class CompanyFragment : Fragment() {
 
     private fun efficiencyEmployeePresence(): Int {
         val numberEmployee = efficiencyDao.getAllEfficiency().size
-        val sumEfficiencyWeekPresence = efficiencyDao.getColumnEfficiencyWeekPresence()
         val sumEfficiencyTotalPresence = efficiencyDao.getColumnEfficiencyTotalPresence()
 
-        var sumEefficiencyEmployeePresence =
-            sumEfficiencyWeekPresence.sum() + sumEfficiencyTotalPresence.sum()
+        var sumEefficiencyEmployeePresence = sumEfficiencyTotalPresence.sum()
 
         if (sumEefficiencyEmployeePresence != 0)
             sumEefficiencyEmployeePresence /= numberEmployee

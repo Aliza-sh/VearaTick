@@ -2,9 +2,12 @@ package com.vearad.vearatick.fgmSub
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
+import android.content.Context
+import android.content.SharedPreferences
+import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
-import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,12 +16,13 @@ import android.widget.LinearLayout
 import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.Fragment
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kizitonwose.calendarview.model.CalendarDay
 import com.kizitonwose.calendarview.model.CalendarMonth
@@ -41,7 +45,7 @@ import com.vearad.vearatick.databinding.CalendarHeaderBinding
 import com.vearad.vearatick.databinding.FragmentDialogDeleteItemEmployeeEntryExitBinding
 import com.vearad.vearatick.databinding.FragmentDialogEmployeeDoneEntryExitBinding
 import com.vearad.vearatick.databinding.FragmentDialogEmployeeEntryExitBinding
-import com.vearad.vearatick.databinding.FragmentEmployeeCalendarBinding
+import com.vearad.vearatick.databinding.FragmentEmployeePresenceBinding
 import com.vearad.vearatick.databinding.ItemCalendarDayBinding
 import com.vearad.vearatick.dayDao
 import com.vearad.vearatick.inOutAdapter
@@ -52,19 +56,22 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.YearMonth
 
 @Suppress("NAME_SHADOWING")
-class EmployeeCalendarFragment(
+class EmployeePresenceFragment(
     val employee: Employee,
     val efficiencyEmployeeDao: EfficiencyDao,
     val position: Int,
 ) : Fragment(),
     EntryExitEmployeeAdapter.EntryExitEmployeeEvent {
 
-    lateinit var binding: FragmentEmployeeCalendarBinding
+    lateinit var binding: FragmentEmployeePresenceBinding
     lateinit var bindingDialogEmployeeEntryExit: FragmentDialogEmployeeEntryExitBinding
     lateinit var bindingDialogEmployeeDoneEntryExit: FragmentDialogEmployeeDoneEntryExitBinding
     lateinit var bindingDialogDeleteItemEmployeeEntryExit: FragmentDialogDeleteItemEmployeeEntryExitBinding
     private var selectedDate: LocalDate? = null
     var oldLayout: LinearLayout? = null
+
+    val SHAREDFIRST = "SharedFirst"
+    val KEYFIRST = "keyFirst"
 
     var valueHourEntry = ""
     var valueAllEntry = ""
@@ -82,34 +89,37 @@ class EmployeeCalendarFragment(
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
-        binding = FragmentEmployeeCalendarBinding.inflate(layoutInflater, container, false)
+        binding = FragmentEmployeePresenceBinding.inflate(layoutInflater, container, false)
         bindingDialogEmployeeEntryExit =
             FragmentDialogEmployeeEntryExitBinding.inflate(layoutInflater, null, false)
         bindingDialogEmployeeDoneEntryExit =
             FragmentDialogEmployeeDoneEntryExitBinding.inflate(layoutInflater, null, false)
         bindingDialogDeleteItemEmployeeEntryExit =
             FragmentDialogDeleteItemEmployeeEntryExitBinding.inflate(layoutInflater, null, false)
+
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         AndroidThreeTen.init(view.context)
+        Log.v("EmployeeInformationFragment", "EmployeePresenceFragment")
         dayDao = AppDatabase.getDataBase(view.context).dayDao
         timeDao = AppDatabase.getDataBase(view.context).timeDao
         setData()
 
-        val currentMonth = YearMonth.now()
-        binding.clrEntExtEmp.setup(
-            currentMonth.minusMonths(12),
-            currentMonth.plusMonths(12),
-            org.threeten.bp.DayOfWeek.SATURDAY
-        )
-        binding.clrEntExtEmp.scrollToDate(LocalDate.now())
+        Log.v("loginapp", "Here: ${LocalDate.now()}")
 
+
+        val currentMonth = YearMonth.now()
+        Log.v("loginapp", "Here: ${currentMonth.month}")
+        val startMonth = currentMonth.minusMonths(4)
+        val endMonth = currentMonth.plusMonths(4)
+        binding.clrEntExtEmp.setup(startMonth, endMonth, org.threeten.bp.DayOfWeek.SATURDAY)
+        binding.clrEntExtEmp.scrollToMonth(currentMonth.next)
 
         class DayViewContainer(view: View) : ViewContainer(view) {
+
             lateinit var day: CalendarDay // Will be set when this container is bound.
             val bindingItemCalendarDay = ItemCalendarDayBinding.bind(view)
             val dayEntEmp = bindingItemCalendarDay.dayEntEmp
@@ -119,6 +129,7 @@ class EmployeeCalendarFragment(
 
             init {
                 view.setOnClickListener {
+                    Log.v("EmployeeInformationFragment", "init")
                     if (day.owner == DayOwner.THIS_MONTH) {
                         if (selectedDate != day.date) {
                             val oldDate = selectedDate
@@ -146,6 +157,7 @@ class EmployeeCalendarFragment(
                                     showDoneEntryAndExitDialog(
                                         employee.idEmployee,
                                         day.persianCalendar.persianDay,
+                                        day.persianCalendar.persianWeekDayName,
                                         day.persianCalendar.persianMonthName,
                                         day.persianCalendar.persianYear,
                                         dayEntEmp,
@@ -178,7 +190,7 @@ class EmployeeCalendarFragment(
                                         ArrayList(timeDayData),
                                         entryExit,
                                         day.persianCalendar.persianWeekDayName,
-                                        this@EmployeeCalendarFragment,
+                                        this@EmployeePresenceFragment,
                                         dayEntEmp,
                                         dayExtEmp
                                     )
@@ -192,16 +204,16 @@ class EmployeeCalendarFragment(
                                             day = selectedDate!!.toPersianCalendar().persianDay.toString(),
                                             arrival = false,
                                             entry = 0,
-                                            entryAll = "00:00",
+                                            entryAll = "",
                                             exit = 0,
-                                            exitAll = "00:00"
+                                            exitAll = ""
                                         )
                                     )
                                     inOutAdapter = EntryExitEmployeeAdapter(
                                         ArrayList(entryExitList),
                                         entryExit,
                                         day.persianCalendar.persianWeekDayName,
-                                        this@EmployeeCalendarFragment,
+                                        this@EmployeePresenceFragment,
                                         dayEntEmp,
                                         dayExtEmp
                                     )
@@ -219,16 +231,16 @@ class EmployeeCalendarFragment(
                                         day = selectedDate!!.toPersianCalendar().persianDay.toString(),
                                         arrival = false,
                                         entry = 0,
-                                        entryAll = "00:00",
+                                        entryAll = "",
                                         exit = 0,
-                                        exitAll = "00:00"
+                                        exitAll = ""
                                     )
                                 )
                                 inOutAdapter = EntryExitEmployeeAdapter(
                                     ArrayList(entryExitList),
                                     entryExit,
                                     day.persianCalendar.persianWeekDayName,
-                                    this@EmployeeCalendarFragment,
+                                    this@EmployeePresenceFragment,
                                     dayEntEmp,
                                     dayExtEmp
                                 )
@@ -248,6 +260,7 @@ class EmployeeCalendarFragment(
         binding.clrEntExtEmp.dayBinder = object : DayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
+                Log.v("EmployeeInformationFragment", "DayBinder")
                 container.day = day
                 val textView = container.textView
                 val layout = container.layout
@@ -320,11 +333,21 @@ class EmployeeCalendarFragment(
                     // Setup each header day text if we have not done that already.
                     if (container.legendLayout.tag == null) {
                         container.legendLayout.tag = month.yearMonth
+                        Log.v("loginapp", "month.yearMonth: ${month.yearMonth}")
+                        Log.v("EmployeeInformationFragment", "MonthHeaderFooterBinder")
+
                         container.legendLayout.children.map { it as TextView }
                             .forEachIndexed { index, tv ->
                                 when (index) {
-                                    0 -> tv.text =
-                                        "\u0634\u0646\u0628\u0647" // Shanbeh
+                                    0 -> {
+                                        tv.text =
+                                            "\u0634\u0646\u0628\u0647" // Shanbeh
+                                        val sharedPreferencesFirst = requireActivity().getSharedPreferences(SHAREDFIRST, Context.MODE_PRIVATE)
+                                        val ferst = sharedPreferencesFirst.getBoolean(KEYFIRST, false)
+                                        val tapTargetSequence = tapTargetSequence(sharedPreferencesFirst,tv)
+                                        if (ferst == false)
+                                            tapTargetSequence?.start()
+                                    }
                                     1 -> tv.text =
                                         "\u06cc\u06a9\u200c\u0634\u0646\u0628\u0647"// Yekshanbeh
                                     2 -> tv.text =
@@ -338,6 +361,7 @@ class EmployeeCalendarFragment(
                                     6 -> tv.text =
                                         "\u062c\u0645\u0639\u0647" // jome
                                 }
+
                                 val dayData =
                                     dayDao.getDay(("${tv.id}${employee.idEmployee!!}").toLong())
                                 if ((dayData?.idDay) == ("${tv.id}${employee.idEmployee}").toLong() && dayData.idEmployee == employee.idEmployee) {
@@ -394,12 +418,17 @@ class EmployeeCalendarFragment(
                                     }
                                 }
                             }
+
+                        Log.v("EmployeeInformationFragment", "forEachIndexed")
+
                         binding.clrEntExtEmp.monthScrollListener = { month ->
                             val persianlCalendar = month.yearMonth.persianlCalendar()
-                            val monthTitle = "${persianlCalendar.persianMonthName} ${
-                                persianlCalendar.persianYear.toString().persianNumbers()
-                            }"
+                            val monthTitle =
+                                "${persianlCalendar.persianMonthName} ${
+                                    persianlCalendar.persianYear.toString().persianNumbers()
+                                }"
                             binding.txtYM.text = monthTitle
+                            Log.v("loginapp", "monthTitle: ${monthTitle}")
                             selectedDate?.let {
                                 // Clear selection if we scroll to a new month.
                                 selectedDate = null
@@ -416,7 +445,6 @@ class EmployeeCalendarFragment(
                                 binding.clrEntExtEmp.smoothScrollToMonth(it.yearMonth.previous)
                             }
                         }
-
                     }
                 }
             }
@@ -448,7 +476,7 @@ class EmployeeCalendarFragment(
                     ArrayList(timeDayData),
                     entryExit,
                     today.persianWeekDayName,
-                    this@EmployeeCalendarFragment,
+                    this@EmployeePresenceFragment,
                     binding.cardView1,
                     binding.cardView1,
                 )
@@ -471,7 +499,7 @@ class EmployeeCalendarFragment(
                     ArrayList(entryExitList),
                     entryExit,
                     today.persianWeekDayName,
-                    this@EmployeeCalendarFragment,
+                    this@EmployeePresenceFragment,
                     binding.cardView1,
                     binding.cardView1,
                 )
@@ -495,12 +523,55 @@ class EmployeeCalendarFragment(
                 ArrayList(entryExitList),
                 entryExit,
                 today.persianWeekDayName,
-                this@EmployeeCalendarFragment,
+                this@EmployeePresenceFragment,
                 binding.cardView1,
                 binding.cardView1,
             )
             binding.rcvInOut.adapter = inOutAdapter
         }
+    }
+
+    private fun tapTargetSequence(
+        sharedPreferencesFirst: SharedPreferences,
+        legendLayout: TextView,
+    ): TapTargetSequence? {
+
+        val tapTargetSequence = TapTargetSequence(requireActivity())
+            .targets(
+                TapTarget.forView(
+                    legendLayout,
+                    "ثبت حضور و غیاب کارمند",
+                    "ابتدا باید روز هایی که کارمند قصد آمدن دارد را تایین کنید."
+                )
+                    .cancelable(true)
+                    .textTypeface(Typeface.DEFAULT_BOLD)
+                    .titleTextSize(20)
+                    .descriptionTextColor(R.color.blacke)
+                    .transparentTarget(true)
+                    .targetCircleColor(R.color.firoze)
+                    .titleTextColor(R.color.white)
+                    .targetRadius(60)
+                    .id(1)
+            ).listener(object : TapTargetSequence.Listener {
+                override fun onSequenceFinish() {
+                    // دنباله Tap Target ها به پایان رسید
+                }
+
+                override fun onSequenceStep(
+                    lastTarget: TapTarget?,
+                    targetClicked: Boolean
+                ) {
+                    // مرحله جدید Tap Target در دنباله
+                }
+
+                override fun onSequenceCanceled(lastTarget: TapTarget?) {
+                    // دنباله Tap Target ها لغو شد
+                }
+            })
+        sharedPreferencesFirst.edit().putBoolean(KEYFIRST, true).apply()
+
+        return tapTargetSequence
+
     }
 
     private fun showEntryAndExitDialog(
@@ -722,6 +793,7 @@ class EmployeeCalendarFragment(
     private fun showDoneEntryAndExitDialog(
         idEmployee: Int?,
         day: Int,
+        nameDay:String,
         month: String,
         year: Int,
         dayEntEmp: View,
@@ -829,8 +901,9 @@ class EmployeeCalendarFragment(
                 ).show()
             else if (valueBtnNoDate) {
 
-                val timeData =
-                    timeDao.getAllArrivalDay(idEmployee!!, year.toString(), month, day.toString())
+                val timeData = timeDao.getAllArrivalDay(idEmployee!!, year.toString(), month, day.toString())
+                val dayData = dayDao.getAllEntryExit(idEmployee, year.toString(), month, nameDay)
+                val differenceTime = dayData?.exit!!.toInt() - dayData.entry!!.toInt()
                 val newTime = Time(
                     timeData?.idTime,
                     idEmployee = idEmployee,
@@ -842,25 +915,29 @@ class EmployeeCalendarFragment(
                     entryAll = "00:00",
                     exit = 0,
                     exitAll = "00:00",
-                    differenceTime = 0
+                    differenceTime = -differenceTime
                 )
                 if (day.toString() == timeData?.day) {
                     timeDao.update(newTime)
 
                     if (valueBtnDoneExit) {
                         inOutAdapter.updateInOut(newTime, 0)
-                        dayExtEmp.setBackgroundColor(it.context.getColor(R.color.red_800))
-                        dayEntEmp.setBackgroundColor(
-                            it.context.getColor(R.color.red_800)
-                        )
+
                     }
                 } else {
                     timeDao.insert(newTime)
-                    dayExtEmp.setBackgroundColor(it.context.getColor(R.color.red_800))
-                    dayEntEmp.setBackgroundColor(
-                        it.context.getColor(R.color.red_800)
-                    )
                 }
+
+                dayEntEmp.setBackgroundColor(
+                    bindingDialogDeleteItemEmployeeEntryExit.root.context.getColor(
+                        R.color.red_800
+                    )
+                )
+                dayExtEmp.setBackgroundColor(
+                    bindingDialogDeleteItemEmployeeEntryExit.root.context.getColor(
+                        R.color.red_800
+                    )
+                )
 
                 alertDialog.dismiss()
             } else {
@@ -987,33 +1064,37 @@ class EmployeeCalendarFragment(
         dayEntEmp: View,
         dayExtEmp: View
     ) {
+        if (onClicktime.entryAll != "") {
+            val viewHolder =
+                binding.rcvInOut.findViewHolderForAdapterPosition(position) as EntryExitEmployeeAdapter.EntryExitEmployeeViewHolder
+            viewHolder.let { holder ->
+                val btnMenuEntryExitEmployee = holder.btnMenu
+                val popupMenu = PopupMenu(context, btnMenuEntryExitEmployee)
+                popupMenu.inflate(R.menu.menu_employee_entry_exit)
+                popupMenu.show()
+                Log.v("loginapp", "onClicktime: ${onClicktime}")
 
-        val viewHolder =
-            binding.rcvInOut.findViewHolderForAdapterPosition(position) as EntryExitEmployeeAdapter.EntryExitEmployeeViewHolder
-        viewHolder.let { holder ->
-            val btnMenuEntryExitEmployee = holder.btnMenu
-            val popupMenu = PopupMenu(context, btnMenuEntryExitEmployee)
-            popupMenu.inflate(R.menu.menu_employee_entry_exit)
-            popupMenu.show()
+                popupMenu.setOnMenuItemClickListener { item ->
 
-            popupMenu.setOnMenuItemClickListener { item ->
+                    when (item.itemId) {
 
-                when (item.itemId) {
+                        R.id.menu_employee_entry_exit_delete -> {
+                            showDeleteEntryExitEmployeeDialog(
+                                onClicktime,
+                                dayEntEmp,
+                                dayExtEmp
+                            )
+                            true
+                        }
 
-                    R.id.menu_employee_entry_exit_delete -> {
-                        showDeleteEntryExitEmployeeDialog(
-                            onClicktime,
-                            dayEntEmp,
-                            dayExtEmp
-                        )
-                        true
+                        else -> false
                     }
-
-                    else -> false
                 }
             }
+        } else
+            Toast.makeText(context, "ورود و خروجی ثبت نشده است", Toast.LENGTH_SHORT).show()
         }
-    }
+
 
     private fun showDeleteEntryExitEmployeeDialog(
         onClicktime: Time,

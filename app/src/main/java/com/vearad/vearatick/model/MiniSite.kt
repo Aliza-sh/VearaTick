@@ -1,7 +1,7 @@
 package com.vearad.vearatick.model
 
 data class MiniSiteData (
-    val miniSite: Business
+    val business: Business
 
 ){
     data class Business(

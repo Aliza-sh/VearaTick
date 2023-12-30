@@ -6,4 +6,7 @@
     <item
         android:id="@+id/menu_login_minisite"
         android:title="ثبت نام در مینی سایت" />
+    <item
+        android:id="@+id/menu_logout_step24"
+        android:title="خروج از سایت" />
 </menu>

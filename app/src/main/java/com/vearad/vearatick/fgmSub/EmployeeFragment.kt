@@ -30,6 +30,7 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
     lateinit var efficiencyEmployeeDao: EfficiencyDao
     lateinit var employeeDao: EmployeeDao
     lateinit var employeeData: List<Employee>
+    private val goToEmployeeTaskFragment = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -110,7 +111,7 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
     }
     override fun onEmployeeClicked(employee: Employee, position: Int) {
         val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
-        transaction.detach(this@EmployeeFragment)
+        transaction.hide(this@EmployeeFragment)
         transaction.replace(
             R.id.layout_pro_and_emp,
             EmployeeInformationFragment(
@@ -118,10 +119,10 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
                 efficiencyEmployeeDao,
                 position,
                 employeeDao,
-                bindingActivityProAndEmpBinding
+                bindingActivityProAndEmpBinding,
+                goToEmployeeTaskFragment
             )
         )
-            .addToBackStack(null)
             .commit()
     }
     override fun onEmployeeLongClicked(employee: Employee, position: Int) {}

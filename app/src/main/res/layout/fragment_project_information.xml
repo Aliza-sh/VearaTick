@@ -108,7 +108,7 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView28"
+                    android:id="@+id/txt_title_dedline"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
@@ -124,13 +124,13 @@
                     android:id="@+id/txt_day"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="14dp"
                     android:text=""
                     android:textColor="@color/firoze"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="@+id/textView28"
+                    android:textSize="22sp"
+                    app:layout_constraintEnd_toEndOf="@+id/txt_title_dedline"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView28" />
+                    app:layout_constraintTop_toBottomOf="@+id/txt_title_dedline" />
 
                 <TextView
                     android:id="@+id/txt_no_Deadline"
@@ -145,7 +145,7 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView28" />
+                    app:layout_constraintTop_toBottomOf="@+id/txt_title_dedline" />
 
                 <TextView
                     android:id="@+id/txt"
@@ -225,14 +225,16 @@
 
                 <TextView
                     android:id="@+id/txt_budget"
-                    android:layout_width="120dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginStart="12dp"
                     android:gravity="end"
                     android:text="0 تومان"
                     android:textColor="@color/firoze"
                     android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="@+id/textView160"
+                    app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView160" />
 
@@ -243,8 +245,9 @@
                     android:layout_marginStart="-35dp"
                     android:elevation="50dp"
                     android:text=" تسویه"
+                    android:gravity="center"
                     android:textColor="@color/whity"
-                    android:textSize="14sp"
+                    android:textSize="12sp"
                     app:layout_constraintBottom_toBottomOf="@+id/btn_go_to_settlement"
                     app:layout_constraintStart_toEndOf="@+id/btn_go_to_settlement"
                     app:layout_constraintTop_toTopOf="@+id/btn_go_to_settlement" />

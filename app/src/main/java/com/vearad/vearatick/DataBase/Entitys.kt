@@ -74,12 +74,18 @@ data class TaskEmployee(
 
     val nameTask: String,
     val descriptionTask: String,
+    val yearDeadline: Int,
+    val monthDeadline: Int,
+    val dayDeadline: Int,
     val yearCreation: Int,
     val monthCreation: Int,
     val dayCreation: Int,
     val volumeTask: Int,
 
     val doneTask: Boolean? = false,
+    val yearDone: Int? = 0,
+    val monthDone: Int? = 0,
+    val dayDone: Int? = 0,
     val deadlineTask: Int,
 
     val efficiencyTask: Int? = 0,
@@ -217,6 +223,7 @@ data class CompanyReceipt(
 
     @PrimaryKey(autoGenerate = true)
     val idCompanyReceipt: Int? = null,
+    val idProject: Int? = null,
     val companyReceipt: Long? = 0,
     val monthCompanyReceipt: Int,
     val yearCompanyReceipt: Int,

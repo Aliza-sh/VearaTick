@@ -26,67 +26,14 @@
             android:gravity="start|center"
             android:text="فروردین"
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_default="percent" />
+            android:textSize="16sp" />
 
         <View
             android:id="@+id/view10"
             android:layout_width="4dp"
             android:layout_marginEnd="6dp"
             android:layout_height="match_parent"
-            android:background="?attr/colorOnPrimary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@id/view_month"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:layout_weight="2"
-            android:id="@+id/txt_expense_month"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:gravity="end"
-            android:textColor="?attr/colorOnSecondary"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/view11"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:id="@+id/view11"
-            android:layout_width="2dp"
-            android:layout_height="60dp"
-            android:layout_marginEnd="6dp"
-            android:background="?attr/colorOnPrimary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/txt_profit_month"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:layout_weight="2"
-            android:id="@+id/txt_profit_month"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:layout_marginEnd="8dp"
-            android:textColor="?attr/colorOnSecondary"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <View
-            android:id="@+id/view12"
-            android:layout_width="2dp"
-            android:layout_height="60dp"
-            android:layout_marginEnd="6dp"
-            android:background="?attr/colorOnPrimary"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/txt_expense_month"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:background="?attr/colorOnPrimary" />
 
         <TextView
             android:layout_weight="2"
@@ -96,10 +43,41 @@
             android:layout_marginEnd="8dp"
             android:gravity="end"
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/view12"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="12sp" />
+
+        <View
+            android:id="@+id/view11"
+            android:layout_width="2dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="6dp"
+            android:background="?attr/colorOnPrimary" />
+
+        <TextView
+            android:layout_weight="2"
+            android:id="@+id/txt_expense_month"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:gravity="end"
+            android:textColor="?attr/colorOnSecondary"
+            android:textSize="12sp" />
+
+        <View
+            android:id="@+id/view12"
+            android:layout_width="2dp"
+            android:layout_height="60dp"
+            android:layout_marginEnd="6dp"
+            android:background="?attr/colorOnPrimary" />
+
+        <TextView
+            android:layout_weight="2"
+            android:id="@+id/txt_profit_month"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:layout_marginEnd="8dp"
+            android:textColor="?attr/colorOnSecondary"
+            android:textSize="12sp" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

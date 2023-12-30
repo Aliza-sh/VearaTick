@@ -5,9 +5,12 @@ import android.app.AlertDialog
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.PopupMenu
@@ -31,7 +34,6 @@ import com.vearad.vearatick.DataBase.SubTaskProjectDao
 import com.vearad.vearatick.DataBase.TaskEmployee
 import com.vearad.vearatick.DataBase.TaskEmployeeDao
 import com.vearad.vearatick.DataBase.TeamSubTaskDao
-import com.vearad.vearatick.Dialog.ProjectDeleteDialogFragment
 import com.vearad.vearatick.Dialog.ProjectUpdateSubTaskFromInfoBottomsheetFragment
 import com.vearad.vearatick.ProAndEmpActivity
 import com.vearad.vearatick.R
@@ -39,6 +41,7 @@ import com.vearad.vearatick.adapter.SubTaskProjectAdapter
 import com.vearad.vearatick.adapter.TeamProjectAdapter
 import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
 import com.vearad.vearatick.databinding.FragmentDialogCheckoutProjectBinding
+import com.vearad.vearatick.databinding.FragmentDialogDeleteProjectBinding
 import com.vearad.vearatick.databinding.FragmentDialogDeleteSubtaskProjectBinding
 import com.vearad.vearatick.databinding.FragmentProjectInformationBinding
 import com.vearad.vearatick.databinding.ItemSubTaskBinding
@@ -60,11 +63,13 @@ class ProjectInformationFragment(
     lateinit var binding: FragmentProjectInformationBinding
     lateinit var bindingDialogDeleteSubtaskProject: FragmentDialogDeleteSubtaskProjectBinding
     lateinit var bindingDialogCheckoutProject: FragmentDialogCheckoutProjectBinding
+    lateinit var bindingDialogDeleteProject: FragmentDialogDeleteProjectBinding
     lateinit var bindingItemSubTask: ItemSubTaskBinding
     lateinit var subTaskProjectAdapter: SubTaskProjectAdapter
     lateinit var efficiencyEmployeeDao: EfficiencyDao
     lateinit var teamSubTaskDao: TeamSubTaskDao
     lateinit var taskEmployeeDao: TaskEmployeeDao
+    lateinit var newCompanyFinancialReport: FinancialReport
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,6 +82,8 @@ class ProjectInformationFragment(
             FragmentDialogDeleteSubtaskProjectBinding.inflate(layoutInflater, container, false)
         bindingDialogCheckoutProject =
             FragmentDialogCheckoutProjectBinding.inflate(layoutInflater, container, false)
+        bindingDialogDeleteProject =
+            FragmentDialogDeleteProjectBinding.inflate(layoutInflater, container, false)
 
         return binding.root
     }
@@ -173,9 +180,9 @@ class ProjectInformationFragment(
             binding.txtBudget.text = project.budgetProject + " تومان"
 
         } else {
-            binding.txtBudget.visibility = View.GONE
-            binding.btnGoToSettlement.visibility = View.GONE
-            binding.txtSettlement.visibility = View.GONE
+            binding.txtBudget.visibility = GONE
+            binding.btnGoToSettlement.visibility = GONE
+            binding.txtSettlement.visibility = GONE
             val shape = GradientDrawable()
             shape.shape = GradientDrawable.RECTANGLE
             shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
@@ -188,10 +195,10 @@ class ProjectInformationFragment(
             binding.txtNoBudget.text = "پروژه بودجه \nندارد"
         }
         if (project.doneProject!!) {
-            binding.txtDay.visibility = View.GONE
-            binding.txt.visibility = View.GONE
-            binding.textView28.visibility = View.GONE
-            binding.txtDone.visibility = View.VISIBLE
+            binding.txtDay.visibility = GONE
+            binding.txt.visibility = GONE
+            binding.txtTitleDedline.visibility = GONE
+            binding.txtDone.visibility = VISIBLE
             val shape = GradientDrawable()
             shape.shape = GradientDrawable.RECTANGLE
             shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
@@ -319,12 +326,8 @@ class ProjectInformationFragment(
         var efficiencyProject = 0
 
         if (project1.settled!!) {
-            binding.textView160.visibility = View.GONE
-            binding.txtBudget.visibility = View.GONE
-            binding.txtSettlement.visibility = View.GONE
-            binding.btnGoToSettlement.visibility = View.GONE
-            binding.txtNoBudget.visibility = View.VISIBLE
-            binding.txtNoBudget.text = "پروژه\nتسویه شد"
+
+            binding.txtSettlement.text = "پروژه\nتسویه شد"
             val shape = GradientDrawable()
             shape.shape = GradientDrawable.RECTANGLE
             shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
@@ -387,9 +390,9 @@ class ProjectInformationFragment(
         popupMenu.menuInflater.inflate(R.menu.menu_project, popupMenu.menu)
         binding.btnMenuProject.setOnClickListener {
             popupMenu.show()
-
+            val project = projectDao.getProject(project.idProject!!)
             val doneMenuItem = popupMenu.menu.findItem(R.id.menu_project_done)
-            if (project.doneProject!!) {
+            if (project?.doneProject!!) {
                 doneMenuItem.title = "تکمیل نشد"
             } else {
                 doneMenuItem.title = "تکمیل شد"
@@ -417,24 +420,11 @@ class ProjectInformationFragment(
 
                     R.id.menu_project_done -> {
                         doneProject(doneMenuItem)
-                        parentFragmentManager.beginTransaction()
-                            .detach(this@ProjectInformationFragment)
-                            .replace(
-                                R.id.frame_layout_sub,
-                                ProjectFragment(bindingActivityProAndEmp)
-                            ).commit()
                     }
 
                     R.id.menu_project_delete -> {
 
-                        val dialog = ProjectDeleteDialogFragment(
-                            project,
-                            position,
-                            projectDao,
-                            bindingActivityProAndEmp,
-                            this
-                        )
-                        dialog.show((activity as ProAndEmpActivity).supportFragmentManager, null)
+                        showDeleteProjectDialog()
 
                     }
                 }
@@ -445,9 +435,12 @@ class ProjectInformationFragment(
 
     private fun doneProject(doneMenuItem: MenuItem) {
 
+        val project = projectDao.getProject(project.idProject!!)!!
+        var done = project.doneProject
         if (project.doneProject!!) {
 
             doneMenuItem.title = "تکمیل شد"
+            done = false
 
             val newProject = Project(
                 idProject = project.idProject,
@@ -459,11 +452,11 @@ class ProjectInformationFragment(
                 typeProject = project.typeProject,
                 valueCalendar = project.valueCalendar,
                 deadlineTask = project.deadlineTask,
-                doneProject = false,
+                doneProject = done,
                 descriptionProject = project.descriptionProject,
                 numberSubTaskProject = project.numberSubTaskProject,
                 numberDoneSubTaskProject = project.numberDoneSubTaskProject,
-                progressProject = project.progressProject,
+                progressProject = 0,
                 budgetProject = project.budgetProject,
                 doneVolumeProject = project.doneVolumeProject,
                 totalVolumeProject = project.totalVolumeProject,
@@ -471,36 +464,373 @@ class ProjectInformationFragment(
                 urlProject = project.urlProject
             )
             projectDao.update(newProject)
+            setViewDoneProject(done)
 
         } else {
 
-            doneMenuItem.title = "تکمیل نشد"
+            if (project.numberDoneSubTaskProject == project.numberSubTaskProject) {
+
+                if (project.budgetProject == "0" || project.settled == true) {
+                    doneMenuItem.title = "تکمیل نشد"
+                    done = true
+
+                    val totalVolumeProject =
+                        subTaskProjectDao.getTotalVolumeTaskSum(project.idProject!!)
+                    val doneVolumeProject =
+                        subTaskProjectDao.getDoneVolumeTaskSum(project.idProject, true)
+                    var efficiencyProject = 0
+                    if (doneVolumeProject != null)
+                        efficiencyProject =
+                            ((doneVolumeProject.toDouble() / totalVolumeProject) * 100).toInt()
+                    Log.v(
+                        "loginapp",
+                        "doneVolumeProject: ${project.doneVolumeProject!!.toDouble()}"
+                    )
+                    Log.v("loginapp", "totalVolumeProject: ${project.totalVolumeProject!!}")
+
+
+                    val newProject = Project(
+                        idProject = project.idProject,
+                        nameProject = project.nameProject,
+                        noDeadlineProject = project.noDeadlineProject,
+                        dayCreation = project.dayCreation,
+                        monthCreation = project.monthCreation,
+                        yearCreation = project.yearCreation,
+                        typeProject = project.typeProject,
+                        valueCalendar = project.valueCalendar,
+                        deadlineTask = project.deadlineTask,
+                        doneProject = done,
+                        descriptionProject = project.descriptionProject,
+                        numberSubTaskProject = project.numberSubTaskProject,
+                        numberDoneSubTaskProject = project.numberDoneSubTaskProject,
+                        progressProject = efficiencyProject,
+                        budgetProject = project.budgetProject,
+                        doneVolumeProject = project.doneVolumeProject,
+                        totalVolumeProject = project.totalVolumeProject,
+                        settled = project.settled,
+                        urlProject = project.urlProject
+                    )
+                    projectDao.update(newProject)
+                    setViewDoneProject(done)
+
+                    Toast.makeText(
+                        binding.root.context,
+                        " پروژه ${project.nameProject} تکمیل شد. ",
+                        Toast.LENGTH_LONG
+                    )
+                        .show()
+                } else {
+                    Toast.makeText(
+                        binding.root.context,
+                        "پروژه تسویه حساب نشده است",
+                        Toast.LENGTH_LONG
+                    )
+                        .show()
+                }
+            } else {
+                Toast.makeText(
+                    binding.root.context,
+                    "هنوز تسک های پروژه تکمیل نشده است",
+                    Toast.LENGTH_LONG
+                )
+                    .show()
+            }
+        }
+    }
+
+    private fun setViewDoneProject(done: Boolean) {
+
+        if (done) {
+            binding.txtDay.visibility = View.GONE
+            binding.txt.visibility = View.GONE
+            binding.txtTitleDedline.visibility = View.GONE
+            binding.txtNoDeadline.visibility = View.GONE
+
+            binding.txtDone.visibility = View.VISIBLE
+            val shape = GradientDrawable()
+            shape.shape = GradientDrawable.RECTANGLE
+            shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+            shape.setStroke(
+                5,
+                ContextCompat.getColor(binding.root.context, R.color.green_700)
+            )
+            shape.setColor(ContextCompat.getColor(binding.root.context, R.color.blacke))
+            binding.cardView5.background = shape
+
+        } else {
+            if (!project.noDeadlineProject!!) {
+
+                binding.txtDone.visibility = GONE
+                binding.txtTitleDedline.visibility = VISIBLE
+                binding.txtDay.visibility = VISIBLE
+                binding.txt.visibility = VISIBLE
+                binding.txtNoDeadline.visibility = VISIBLE
+
+                val today = LocalDate.now().toPersianCalendar()
+                val startDate =
+                    DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
+                val endDate = DateTime(
+                    project.yearCreation,
+                    project.monthCreation,
+                    project.dayCreation,
+                    0,
+                    0,
+                    0
+                )
+                var daysBetween = Days.daysBetween(startDate, endDate).days
+
+                if (daysBetween > 0) {
+                    binding.txtDay.text = "$daysBetween روز "
+                    binding.txt.text = " دیگر باقیمانده است "
+                    val shape = GradientDrawable()
+                    shape.shape = GradientDrawable.RECTANGLE
+                    shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                    shape.setStroke(
+                        5,
+                        ContextCompat.getColor(binding.root.context, R.color.firoze)
+                    )
+                    shape.setColor(ContextCompat.getColor(binding.root.context, R.color.blacke))
+                    binding.cardView5.background = shape
+                } else if (daysBetween == 0) {
+                    val shape = GradientDrawable()
+                    shape.shape = GradientDrawable.RECTANGLE
+                    shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                    shape.setStroke(
+                        5,
+                        ContextCompat.getColor(binding.root.context, R.color.yelowe_light)
+                    )
+                    shape.setColor(ContextCompat.getColor(binding.root.context, R.color.blacke))
+                    binding.cardView5.background = shape
+                    binding.txtNoDeadline.text = " امروز باید تسک تحویل داده شه"
+                    binding.txtNoDeadline.textSize = 18f
+                } else {
+                    daysBetween = -daysBetween
+                    binding.txtDay.text = "$daysBetween روز "
+                    binding.txt.text = " از تحویل پروژه گذشته"
+                    val shape = GradientDrawable()
+                    shape.shape = GradientDrawable.RECTANGLE
+                    shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                    shape.setStroke(
+                        5,
+                        ContextCompat.getColor(binding.root.context, R.color.red_800)
+                    )
+                    shape.setColor(ContextCompat.getColor(binding.root.context, R.color.blacke))
+                    binding.txtDay.setTextColor(android.graphics.Color.parseColor("#c62828"))
+                    binding.cardView5.background = shape
+
+                }
+            } else {
+                binding.txtDone.visibility = GONE
+                binding.txtDay.visibility = GONE
+                binding.txt.visibility = GONE
+                binding.txtTitleDedline.visibility = VISIBLE
+                binding.txtNoDeadline.visibility = VISIBLE
+
+                binding.txtNoDeadline.text = "پروژه ددلاین \nندارد"
+                val shape = GradientDrawable()
+                shape.shape = GradientDrawable.RECTANGLE
+                shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                shape.setStroke(
+                    5,
+                    ContextCompat.getColor(binding.root.context, R.color.white)
+                )
+                shape.setColor(ContextCompat.getColor(binding.root.context, R.color.blacke))
+                binding.cardView5.background = shape
+            }
+        }
+
+    }
+
+    private fun showCheckoutDialog() {
+        val parent = bindingDialogCheckoutProject.root.parent as? ViewGroup
+        parent?.removeView(bindingDialogCheckoutProject.root)
+        val dialogBuilder = AlertDialog.Builder(bindingDialogCheckoutProject.root.context)
+        dialogBuilder.setView(bindingDialogCheckoutProject.root)
+
+        val project = projectDao.getProject(project.idProject!!)!!
+
+        if (project.settled == true)
+            bindingDialogCheckoutProject.textView.text = "پروژه تسویه نشده است ؟!"
+        else
+            bindingDialogCheckoutProject.textView.text = "پروژه تسویه حساب شد ؟"
+
+        val alertDialog = dialogBuilder.create()
+        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.Transparent.toArgb()))
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+        bindingDialogCheckoutProject.dialogBtnDeleteCansel.setOnClickListener {
+            alertDialog.dismiss()
+        }
+        bindingDialogCheckoutProject.dialogBtnDeleteSure.setOnClickListener {
+
+            checkoutProject()
+            setDataOnDone()
+            alertDialog.dismiss()
+        }
+    }
+
+    private fun checkoutProject() {
+        val companyReceiptDao =
+            AppDatabase.getDataBase(bindingDialogCheckoutProject.root.context).companyReceiptDao
+        var budgetProject = project.budgetProject
+        budgetProject = budgetProject!!.replace(",", "")
+        val today = PersianCalendar()
+        var companyReceiptProject = companyReceiptDao.getReceiptProject(project.idProject!!)
+        val project = projectDao.getProject(project.idProject!!)!!
+
+        if (project.settled == true) {
 
             val newProject = Project(
                 idProject = project.idProject,
                 nameProject = project.nameProject,
-                noDeadlineProject = project.noDeadlineProject,
                 dayCreation = project.dayCreation,
                 monthCreation = project.monthCreation,
                 yearCreation = project.yearCreation,
-                typeProject = project.typeProject,
                 valueCalendar = project.valueCalendar,
                 deadlineTask = project.deadlineTask,
-                doneProject = true,
+                doneProject = project.doneProject,
+                typeProject = project.typeProject,
                 descriptionProject = project.descriptionProject,
                 numberSubTaskProject = project.numberSubTaskProject,
                 numberDoneSubTaskProject = project.numberDoneSubTaskProject,
+                noDeadlineProject = project.noDeadlineProject,
                 progressProject = project.progressProject,
                 budgetProject = project.budgetProject,
                 doneVolumeProject = project.doneVolumeProject,
                 totalVolumeProject = project.totalVolumeProject,
-                settled = project.settled,
+                settled = false,
                 urlProject = project.urlProject
             )
             projectDao.update(newProject)
-            Toast.makeText(context, " پروژه ${project.nameProject} تکمیل شد. ", Toast.LENGTH_SHORT)
-                .show()
+
+            val newReceipt = CompanyReceipt(
+                idCompanyReceipt = companyReceiptProject?.idCompanyReceipt,
+                idProject = companyReceiptProject?.idProject,
+                companyReceipt = budgetProject.toLong(),
+                companyReceiptDescription = "بابت پروژه ${project.nameProject}",
+                companyReceiptDate = "${today.persianYear}/${today.persianMonth + 1}/${today.persianDay}",
+                monthCompanyReceipt = today.persianMonth + 1,
+                yearCompanyReceipt = today.persianYear
+            )
+            companyReceiptDao.delete(newReceipt)
+            onCompanyFinancialReport(budgetProject, today)
+        } else {
+            val newProject = Project(
+                idProject = project.idProject,
+                nameProject = project.nameProject,
+                dayCreation = project.dayCreation,
+                monthCreation = project.monthCreation,
+                yearCreation = project.yearCreation,
+                valueCalendar = project.valueCalendar,
+                deadlineTask = project.deadlineTask,
+                doneProject = project.doneProject,
+                typeProject = project.typeProject,
+                descriptionProject = project.descriptionProject,
+                numberSubTaskProject = project.numberSubTaskProject,
+                numberDoneSubTaskProject = project.numberDoneSubTaskProject,
+                noDeadlineProject = project.noDeadlineProject,
+                progressProject = project.progressProject,
+                budgetProject = project.budgetProject,
+                doneVolumeProject = project.doneVolumeProject,
+                totalVolumeProject = project.totalVolumeProject,
+                settled = true,
+                urlProject = project.urlProject
+            )
+            projectDao.update(newProject)
+
+            val newReceipt = CompanyReceipt(
+                idProject = project.idProject,
+                companyReceipt = budgetProject.toLong(),
+                companyReceiptDescription = "بابت پروژه ${project.nameProject}",
+                companyReceiptDate = "${today.persianYear}/${today.persianMonth + 1}/${today.persianDay}",
+                monthCompanyReceipt = today.persianMonth + 1,
+                yearCompanyReceipt = today.persianYear
+            )
+            companyReceiptDao.insert(newReceipt)
+            onCompanyFinancialReport(budgetProject, today)
         }
+        setViewCheckoutProject()
+    }
+
+    private fun showDeleteProjectDialog() {
+
+        val parent = bindingDialogDeleteProject.root.parent as? ViewGroup
+        parent?.removeView(bindingDialogDeleteProject.root)
+        val dialogBuilder = AlertDialog.Builder(bindingDialogDeleteProject.root.context)
+        dialogBuilder.setView(bindingDialogDeleteProject.root)
+
+        val alertDialog = dialogBuilder.create()
+        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.Transparent.toArgb()))
+        alertDialog.setCancelable(false)
+        alertDialog.show()
+        bindingDialogDeleteProject.dialogBtnDeleteCansel.setOnClickListener {
+            alertDialog.dismiss()
+        }
+        bindingDialogDeleteProject.dialogBtnDeleteSure.setOnClickListener {
+
+            deleteItem(project, position)
+            alertDialog.dismiss()
+        }
+    }
+
+    fun deleteItem(project: Project, position: Int) {
+        val companyReceiptDao =
+            AppDatabase.getDataBase(bindingDialogCheckoutProject.root.context).companyReceiptDao
+
+        if (project.settled == true) {
+            var companyReceiptProject = companyReceiptDao.getReceiptProject(project.idProject!!)
+            val newReceipt = CompanyReceipt(
+                idCompanyReceipt = companyReceiptProject!!.idCompanyReceipt,
+                idProject = companyReceiptProject.idProject,
+                companyReceipt = companyReceiptProject.companyReceipt,
+                companyReceiptDescription = companyReceiptProject.companyReceiptDescription,
+                companyReceiptDate = companyReceiptProject.companyReceiptDate,
+                monthCompanyReceipt = companyReceiptProject.monthCompanyReceipt,
+                yearCompanyReceipt = companyReceiptProject.yearCompanyReceipt
+            )
+        companyReceiptDao.delete(newReceipt)
+        }
+
+        subTaskProjectDao.deleteSubTasksByProjectId(project.idProject!!)
+        projectDao.delete(project)
+        parentFragmentManager.beginTransaction().detach(this@ProjectInformationFragment)
+            .replace(R.id.frame_layout_sub, ProjectFragment(bindingActivityProAndEmp))
+            .commit()
+    }
+
+    fun setViewCheckoutProject() {
+        val project = projectDao.getProject(project.idProject!!)!!
+
+        if (project.settled!!) {
+
+            binding.txtSettlement.text = "پروژه\nتسویه شد"
+            val shape = GradientDrawable()
+            shape.shape = GradientDrawable.RECTANGLE
+            shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+            shape.setStroke(
+                5,
+                ContextCompat.getColor(binding.root.context, R.color.green_700)
+            )
+            shape.setColor(ContextCompat.getColor(binding.root.context, R.color.blacke))
+            binding.cardView50.background = shape
+            binding.txtNoBudget.setTextColor(android.graphics.Color.parseColor("#2F8558"))
+        } else {
+            binding.txtSettlement.text = "تسویه"
+            val shape = GradientDrawable()
+            shape.shape = GradientDrawable.RECTANGLE
+            shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+            shape.setStroke(
+                5,
+                ContextCompat.getColor(binding.root.context, R.color.blacke)
+            )
+            shape.setColor(ContextCompat.getColor(binding.root.context, R.color.blacke))
+            binding.cardView50.background = shape
+            binding.txtNoBudget.setTextColor(android.graphics.Color.parseColor("#202020"))
+        }
+
+
     }
 
     override fun onSubTaskClicked(task: SubTaskProject, position: Int) {}
@@ -546,8 +876,15 @@ class ProjectInformationFragment(
                     }
 
                     R.id.menu_task_project_done -> {
-                        doneSubTask(onClickSubTask, doneMenuItem)
-                        setDataOnDone()
+                        val project = projectDao.getProject(project.idProject!!)
+                        if (project?.doneProject == false)
+                            doneSubTask(onClickSubTask, doneMenuItem)
+                        else
+                            Toast.makeText(
+                                context,
+                                "پروژه تکمیل شده این کار مجاز نیست",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         true
                     }
 
@@ -579,70 +916,6 @@ class ProjectInformationFragment(
             .commit()
     }
 
-    private fun showCheckoutDialog() {
-        val parent = bindingDialogCheckoutProject.root.parent as? ViewGroup
-        parent?.removeView(bindingDialogCheckoutProject.root)
-        val dialogBuilder = AlertDialog.Builder(bindingDialogCheckoutProject.root.context)
-        dialogBuilder.setView(bindingDialogCheckoutProject.root)
-
-        val alertDialog = dialogBuilder.create()
-        alertDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        alertDialog.window?.setBackgroundDrawable(ColorDrawable(Color.Transparent.toArgb()))
-        alertDialog.setCancelable(false)
-        alertDialog.show()
-        bindingDialogCheckoutProject.dialogBtnDeleteCansel.setOnClickListener {
-            alertDialog.dismiss()
-        }
-        bindingDialogCheckoutProject.dialogBtnDeleteSure.setOnClickListener {
-
-            checkoutProject()
-            setDataOnDone()
-            alertDialog.dismiss()
-        }
-    }
-
-    private fun checkoutProject() {
-        val companyReceiptDao =
-            AppDatabase.getDataBase(bindingDialogCheckoutProject.root.context).companyReceiptDao
-        var budgetProject = project.budgetProject
-        budgetProject = budgetProject!!.replace(",", "")
-        val today = PersianCalendar()
-
-        val newProject = Project(
-            idProject = project.idProject,
-            nameProject = project.nameProject,
-            dayCreation = project.dayCreation,
-            monthCreation = project.monthCreation,
-            yearCreation = project.yearCreation,
-            valueCalendar = project.valueCalendar,
-            deadlineTask = project.deadlineTask,
-            doneProject = project.doneProject,
-            typeProject = project.typeProject,
-            descriptionProject = project.descriptionProject,
-            numberSubTaskProject = project.numberSubTaskProject,
-            numberDoneSubTaskProject = project.numberDoneSubTaskProject,
-            noDeadlineProject = project.noDeadlineProject,
-            progressProject = project.progressProject,
-            budgetProject = project.budgetProject,
-            doneVolumeProject = project.doneVolumeProject,
-            totalVolumeProject = project.totalVolumeProject,
-            settled = true,
-            urlProject = project.urlProject
-        )
-        projectDao.update(newProject)
-
-        val newReceipt = CompanyReceipt(
-            companyReceipt = budgetProject.toLong(),
-            companyReceiptDescription = "بابت پروژه ${project.nameProject}",
-            companyReceiptDate = "${today.persianYear}/${today.persianMonth + 1}/${today.persianDay}",
-            monthCompanyReceipt = today.persianMonth + 1,
-            yearCompanyReceipt = today.persianYear
-        )
-        companyReceiptDao.insert(newReceipt)
-        onCompanyFinancialReport(budgetProject, today)
-    }
-
-    lateinit var newCompanyFinancialReport: FinancialReport
     private fun onCompanyFinancialReport(income: String, today: PersianCalendar) {
 
         val financialReportDao = AppDatabase.getDataBase(binding.root.context).financialReportDao
@@ -679,8 +952,8 @@ class ProjectInformationFragment(
 
             doneMenuItem.title = "تکمیل شد"
 
-            bindingItemSubTask.txtDedlineSubTask.visibility = View.VISIBLE
-            bindingItemSubTask.imgDone.visibility = View.GONE
+            bindingItemSubTask.txtDedlineSubTask.visibility = VISIBLE
+            bindingItemSubTask.imgDone.visibility = GONE
 
             val newSubTask = SubTaskProject(
                 idSubTask = onClickSubTask.idSubTask,
@@ -751,11 +1024,17 @@ class ProjectInformationFragment(
                         volumeTask = onClickTask.volumeTask,
                         doneTask = false,
                         deadlineTask = onClickTask.deadlineTask,
-                        yearCreation = onClickTask.yearCreation,
-                        monthCreation = onClickTask.monthCreation,
-                        dayCreation = onClickTask.dayCreation,
+                        yearDeadline = onClickTask.yearDeadline,
+                        monthDeadline = onClickTask.monthDeadline,
+                        dayDeadline = onClickTask.dayDeadline,
                         efficiencyTask = 0,
-                        projectTask = onClickTask.projectTask
+                        projectTask = onClickTask.projectTask,
+                        dayCreation = onClickTask.dayCreation,
+                        monthCreation = onClickTask.monthCreation,
+                        yearCreation = onClickTask.yearCreation,
+                        dayDone = 0,
+                        monthDone = 0,
+                        yearDone = 0
                     )
                     taskEmployeeDao.update(newTask)
                 }
@@ -867,16 +1146,23 @@ class ProjectInformationFragment(
                         volumeTask = onClickTask.volumeTask,
                         doneTask = true,
                         deadlineTask = onClickTask.deadlineTask,
-                        yearCreation = onClickTask.yearCreation,
-                        monthCreation = onClickTask.monthCreation,
-                        dayCreation = onClickTask.dayCreation,
+                        yearDeadline = onClickTask.yearDeadline,
+                        monthDeadline = onClickTask.monthDeadline,
+                        dayDeadline = onClickTask.dayDeadline,
                         efficiencyTask = efficiencyWeekDuties,
-                        projectTask = onClickTask.projectTask
+                        projectTask = onClickTask.projectTask,
+                        dayCreation = onClickTask.dayCreation,
+                        monthCreation = onClickTask.monthCreation,
+                        yearCreation = onClickTask.yearCreation,
+                        dayDone = today.persianDay,
+                        monthDone = today.persianMonth,
+                        yearDone = today.persianYear
                     )
                     taskEmployeeDao.update(newTask)
                 }
             }
         }
+        setDataOnDone()
     }
 
     private fun showDeleteDialog(onClickSubTask: SubTaskProject) {
@@ -950,22 +1236,7 @@ class ProjectInformationFragment(
                 subTaskProject.idSubTask!!
             )
             for (employeeSubTaskProject in employeeSubTaskProjects) {
-                val newTaskEmployee = TaskEmployee(
-                    idTask = onClickTask!!.idTask,
-                    idEmployee = onClickTask.idEmployee,
-                    idTaskProject = onClickTask.idTaskProject,
-                    nameTask = onClickTask.nameTask,
-                    descriptionTask = onClickTask.descriptionTask,
-                    volumeTask = onClickTask.volumeTask,
-                    doneTask = onClickTask.doneTask,
-                    yearCreation = onClickTask.yearCreation,
-                    monthCreation = onClickTask.monthCreation,
-                    dayCreation = onClickTask.dayCreation,
-                    deadlineTask = onClickTask.deadlineTask,
-                    efficiencyTask = onClickTask.efficiencyTask,
-                    projectTask = onClickTask.projectTask
-                )
-                taskEmployeeDao.delete(newTaskEmployee)
+                taskEmployeeDao.delete(onClickTask)
             }
         }
 

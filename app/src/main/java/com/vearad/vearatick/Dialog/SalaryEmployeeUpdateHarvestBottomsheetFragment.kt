@@ -9,14 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints
-import com.xdev.arch.persiancalendar.datepicker.DateValidatorPointForward
-import com.xdev.arch.persiancalendar.datepicker.MaterialDatePicker
-import com.xdev.arch.persiancalendar.datepicker.MaterialPickerOnPositiveButtonClickListener
-import com.xdev.arch.persiancalendar.datepicker.Month
-import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import com.vearad.vearatick.BottomSheetCallback
-import com.vearad.vearatick.CompanyIncomeActivity
+import com.vearad.vearatick.CompanyReceiptActivity
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.Employee
 import com.vearad.vearatick.DataBase.EmployeeHarvest
@@ -24,7 +18,15 @@ import com.vearad.vearatick.DataBase.EmployeeHarvestDao
 import com.vearad.vearatick.DataBase.FinancialReport
 import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.BottomsheetfragmentCompanyNewReceiptBinding
+import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints
+import com.xdev.arch.persiancalendar.datepicker.DateValidatorPointForward
+import com.xdev.arch.persiancalendar.datepicker.MaterialDatePicker
+import com.xdev.arch.persiancalendar.datepicker.MaterialPickerOnPositiveButtonClickListener
+import com.xdev.arch.persiancalendar.datepicker.Month
+import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 
 class SalaryEmployeeUpdateHarvestBottomsheetFragment(
@@ -58,7 +60,9 @@ class SalaryEmployeeUpdateHarvestBottomsheetFragment(
         }
         binding.text.text = "دریافتی شرکت رو آپدیت کن ."
         var formattedValue = "0"
-        val decimalFormat = DecimalFormat("#,###")
+        val decimalFormatSymbols = DecimalFormatSymbols(Locale("fa", "IR"))
+        decimalFormatSymbols.groupingSeparator = ','
+        val decimalFormat = DecimalFormat("#,###",decimalFormatSymbols)
         binding.edtReceipt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // قبل از تغییرات متنی
@@ -82,6 +86,8 @@ class SalaryEmployeeUpdateHarvestBottomsheetFragment(
                 if (value != null) {
                     formattedValue = decimalFormat.format(value)
                     binding.txtReceipt.text = formatCurrency(value)
+                    binding.edtReceipt.setText(formattedValue)
+                    binding.edtReceipt.setSelection(formattedValue.length)
                 }
                 isUpdating = false
             }
@@ -126,7 +132,7 @@ class SalaryEmployeeUpdateHarvestBottomsheetFragment(
             .setTitleText("تاریخ را انتخاب کنید.")
             .setTheme(R.style.AppTheme_PersianCalendar)
             .setCalendarConstraints(constraints).build()
-        datePicker.show((activity as CompanyIncomeActivity).supportFragmentManager, "aTag")
+        datePicker.show((activity as CompanyReceiptActivity).supportFragmentManager, "aTag")
         datePicker.isCancelable
 
         datePicker.addOnPositiveButtonClickListener(
@@ -145,7 +151,9 @@ class SalaryEmployeeUpdateHarvestBottomsheetFragment(
     }
 
     private fun formatCurrency(value: Long?): String {
-        val decimalFormat = DecimalFormat("#,###")
+        val decimalFormatSymbols = DecimalFormatSymbols(Locale("fa", "IR"))
+        decimalFormatSymbols.groupingSeparator = ','
+        val decimalFormat = DecimalFormat("#,###", decimalFormatSymbols)
         return decimalFormat.format(value) + " تومان"
     }
 
@@ -155,9 +163,10 @@ class SalaryEmployeeUpdateHarvestBottomsheetFragment(
             binding.txtDateReceipt.length() > 0 &&
             binding.dialogEdtTozih.length() > 0
         ) {
-            val txtReceipt = binding.edtReceipt.text.toString()
+            var txtReceipt = binding.edtReceipt.text.toString()
             val txtDescription = binding.dialogEdtTozih.text.toString()
             val txtDate = binding.txtDateReceipt.text
+            txtReceipt = txtReceipt!!.replace(",", "")
 
 
             val newEmployeeHarvest = EmployeeHarvest(

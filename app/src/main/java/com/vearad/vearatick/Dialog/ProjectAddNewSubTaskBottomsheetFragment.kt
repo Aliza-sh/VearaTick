@@ -138,13 +138,13 @@ class ProjectAddNewSubTaskBottomsheetFragment(
                 nameSubTask = txtTask,
                 descriptionSubTask = txtDescription,
                 volumeTask = txtVolume.toInt(),
-                dayDeadline = valueCalendar!!.day,
+                dayDeadline = valueCalendar!!.day - 1,
                 monthDeadline = valueCalendar!!.month,
                 yearDeadline = valueCalendar!!.year,
                 dayCreation = today.persianDay,
                 monthCreation = today.persianMonth,
                 yearCreation = today.persianYear,
-                valueCalendar = "${valueCalendar!!.year}/${valueCalendar!!.month + 1}/${valueCalendar!!.day}",
+                valueCalendar = "${valueCalendar!!.year}/${valueCalendar!!.month + 1}/${valueCalendar!!.day -1}",
                 deadlineTask = daysBetween
                 )
             subTaskProjectDao.insert(newSubTask)

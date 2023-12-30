@@ -1,6 +1,7 @@
 package com.vearad.vearatick.fgmSub
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -49,6 +50,10 @@ class EmployeeStatisticsFragment(
     var counterMonth = 0
     var counterWeek = 0
 
+    var counterAllTask = 0
+    var counterMonthTask = 0
+    var counterWeekTask = 0
+
     var efficiencyAllPresenceEmployee = 0
     var efficiencyMonthPresenceEmployee = 0
     var efficiencyWeekPresenceEmployee = 0
@@ -79,7 +84,7 @@ class EmployeeStatisticsFragment(
         val currentDate = LocalDate.of(day.persianYear, day.persianMonth + 1, day.persianDay)
         // یافتن روز اول هفته
         val firstDayOfWeek =
-            currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SATURDAY)).dayOfMonth - 1
+            currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SATURDAY)).dayOfMonth
         var endDayOfWeek = firstDayOfWeek + 6
         if (endDayOfWeek > 31)
             if (day.persianMonth < 7)
@@ -110,71 +115,82 @@ class EmployeeStatisticsFragment(
 
         if (efficiencyEmployee.totalWeekWatch != weekPresenceEmployee){
             efficiencyAllPresenceEmployee += efficiencyWeekPresenceEmployee
+
             Log.v("loginapp", "efficiencyAllPresenceEmployee: ${efficiencyAllPresenceEmployee}")
             Log.v("loginapp", "efficiencyWeekPresenceEmployee: ${efficiencyWeekPresenceEmployee}")
             }
 
-        val newEfficiencyEmployee1 = EfficiencyEmployee(
-            idEfficiency = efficiencyEmployee.idEfficiency,
-            idEmployee = efficiencyEmployee.idEmployee,
-            mustWeekWatch = efficiencyEmployee.mustWeekWatch,
-            numberDay = efficiencyEmployee.numberDay,
-            totalWeekWatch = weekPresenceEmployee,
-            totalMonthWatch = monthPresenceEmployee,
-            totalWatch = allPresenceEmployee,
-            efficiencyWeekPresence = efficiencyWeekPresenceEmployee,
-            efficiencyTotalPresence = efficiencyAllPresenceEmployee,
-            efficiencyWeekDuties = efficiencyEmployee.efficiencyWeekDuties,
-            efficiencyMonthDuties = efficiencyEmployee.totalMonthDuties,
-            efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties,
-            totalWeekDuties = efficiencyEmployee.totalWeekDuties,
-            totalMonthDuties = efficiencyEmployee.totalMonthDuties,
-            totalDuties = efficiencyEmployee.totalDuties,
-            efficiencyTotal = efficiencyEmployee.efficiencyTotal
-        )
-            efficiencyEmployeeDao.update(newEfficiencyEmployee1)
+            binding.txtWatchWeek.text = "$weekPresenceEmployee ساعت"
+            binding.txtWatchMonth.text = "$monthPresenceEmployee ساعت"
+            binding.txtWatchTotal.text = "$allPresenceEmployee ساعت"
 
-            binding.txtWatchWeek.text = efficiencyEmployee.totalWeekWatch.toString() + " ساعت"
-            binding.txtWatchMonth.text = efficiencyEmployee.totalMonthWatch.toString() + " ساعت"
-            binding.txtWatchTotal.text = efficiencyEmployee.totalWatch.toString() + " ساعت"
+        if (efficiencyWeekPresenceEmployee > 100){
+            binding.progressTotalPresence.setPercent(100)
+            binding.progressTotalPresence.setProgressBarColor(Color.parseColor("#70AE84"))
+            binding.txtTotalPresence.text = "+100 %"
+            binding.txtTotalPresence.setTextColor(Color.parseColor("#70AE84"))
 
-            binding.progressTotalPresence.setPercent(efficiencyEmployee.efficiencyTotalPresence.toInt())
-            binding.txtTotalPresence.text = efficiencyEmployee.efficiencyTotalPresence.toString() + " %"
+        } else if (efficiencyWeekPresenceEmployee in 1..100){
+            binding.progressTotalPresence.setPercent(efficiencyWeekPresenceEmployee)
+            binding.progressTotalPresence.setProgressBarColor(Color.parseColor("#E600ADB5"))
+            binding.txtTotalPresence.text = "$efficiencyWeekPresenceEmployee %"
+            binding.txtTotalPresence.setTextColor(Color.parseColor("#E600ADB5"))
 
+        }
+        else if (efficiencyWeekPresenceEmployee < 0){
+            binding.progressTotalPresence.setPercent(0)
+            binding.progressTotalPresence.setProgressBarColor(Color.parseColor("#FE7D8B"))
+            binding.txtTotalPresence.text = "-0 %"
+            binding.txtTotalPresence.setTextColor(Color.parseColor("#FE7D8B"))
+
+        }
 
         for (taskEmployee in tasksEmployee) {
             if (taskEmployee.doneTask == true) {
                 allVolumeTaskEmployee += taskEmployee.volumeTask
                 allEfficiencyTaskEmployee += taskEmployee.efficiencyTask!!
+                counterAllTask ++
                 if (day.persianMonth == taskEmployee.monthCreation) {
                     monthVolumeTaskEmployee += taskEmployee.volumeTask
                     monthEfficiencyTaskEmployee += taskEmployee.efficiencyTask
-                    if (firstDayOfWeek <= taskEmployee.dayCreation && taskEmployee.dayCreation <= endDayOfWeek) {
+                    counterMonthTask ++
+                    if (taskEmployee.dayDone in firstDayOfWeek..endDayOfWeek) {
                         weekVolumeTaskEmployee += taskEmployee.volumeTask
                         weekEfficiencyTaskEmployee += taskEmployee.efficiencyTask
+                        counterWeekTask ++
+                        Log.v("loginapp", "firstDayOfWeek: ${firstDayOfWeek}")
+                        Log.v("loginapp", "endDayOfWeek: ${endDayOfWeek}")
+                        Log.v("loginapp", "firstDayOfWeek: ${taskEmployee.dayCreation}")
                     }
                 }
             }
         }
+
+        if (counterAllTask == 0)
+            counterAllTask ++
+        if (counterMonthTask == 0)
+            counterMonthTask ++
+        if (counterWeekTask == 0)
+            counterWeekTask ++
 
 
 //            efficiencyWeekPresenceEmployee = weekPresenceEmployee / counterWeek
 //            efficiencyMonthPresenceEmployee = monthPresenceEmployee / counterMonth
 //            efficiencyAllPresenceEmployee = allPresenceEmployee / counterAll
 
-            val newEfficiencyEmployee = EfficiencyEmployee(
-                idEfficiency = efficiencyEmployee!!.idEfficiency,
+             val newEfficiencyEmployee = EfficiencyEmployee(
+                idEfficiency = efficiencyEmployee.idEfficiency,
                 idEmployee = efficiencyEmployee.idEmployee,
                 mustWeekWatch = efficiencyEmployee.mustWeekWatch,
                 numberDay = efficiencyEmployee.numberDay,
-                totalWeekWatch = efficiencyEmployee.totalWeekWatch,
-                totalMonthWatch = efficiencyEmployee.totalMonthWatch,
-                totalWatch = efficiencyEmployee.totalWatch,
-                efficiencyWeekPresence = efficiencyEmployee.efficiencyWeekPresence,
-                efficiencyTotalPresence = efficiencyEmployee.efficiencyTotalPresence,
-                efficiencyWeekDuties = weekEfficiencyTaskEmployee,
-                efficiencyMonthDuties = monthEfficiencyTaskEmployee,
-                efficiencyTotalDuties = allEfficiencyTaskEmployee,
+                totalWeekWatch = weekPresenceEmployee,
+                totalMonthWatch = monthPresenceEmployee,
+                totalWatch = allPresenceEmployee,
+                efficiencyWeekPresence = efficiencyWeekPresenceEmployee,
+                efficiencyTotalPresence = efficiencyAllPresenceEmployee,
+                efficiencyWeekDuties = weekEfficiencyTaskEmployee/counterWeekTask,
+                efficiencyMonthDuties = monthEfficiencyTaskEmployee/counterMonthTask,
+                efficiencyTotalDuties = allEfficiencyTaskEmployee/counterAllTask,
                 totalWeekDuties = weekVolumeTaskEmployee,
                 totalMonthDuties = monthVolumeTaskEmployee,
                 totalDuties = allVolumeTaskEmployee,
@@ -186,38 +202,85 @@ class EmployeeStatisticsFragment(
             binding.txtTackMonth.text = efficiencyEmployee.totalMonthDuties.toString() + " تا"
             binding.txtTackTotal.text = efficiencyEmployee.totalDuties.toString() + " تا"
 
-            binding.progressWeekDuties.setPercent(efficiencyEmployee.efficiencyWeekDuties.toInt())
-            binding.txtWeekDuties.text = efficiencyEmployee.efficiencyWeekDuties.toString() + " %"
-            binding.progressMonthDuties.setPercent(efficiencyEmployee.efficiencyMonthDuties.toInt())
-            binding.txtMonthDuties.text = efficiencyEmployee.efficiencyMonthDuties.toString() + " %"
-            binding.progressTotalDuties.setPercent(efficiencyEmployee.efficiencyTotalDuties.toInt())
-            binding.txtTotalDuties.text = efficiencyEmployee.efficiencyTotalDuties.toString() + " %"
+        setColorProgress(efficiencyEmployee)
+
+
         }
 
+    private fun setColorProgress(efficiencyEmployee: EfficiencyEmployee) {
 
-    override fun onResume() {
-        super.onResume()
-        presencesEmployee = presenceEmployeeDao.getEmployeeAllTime(employee.idEmployee!!)
-        tasksEmployee = taskEmployeeDao.getEmployeeAllTask(employee.idEmployee)
-        val efficiencyEmployee = efficiencyEmployeeDao.getEfficiencyEmployee(employee.idEmployee)
 
-        binding.txtWatchWeek.text = efficiencyEmployee!!.totalWeekWatch.toString() + " ساعت"
-        binding.txtWatchMonth.text = efficiencyEmployee.totalMonthWatch.toString() + " ساعت"
-        binding.txtWatchTotal.text = efficiencyEmployee.totalWatch.toString() + " ساعت"
+        if (efficiencyEmployee.efficiencyWeekDuties.toInt() > 100){
+            val sign = "+"
+            setColorAndProgresWeekDuties(100, Color.parseColor("#70AE84"), sign)
+        } else if (efficiencyEmployee.efficiencyWeekDuties.toInt() in 1..100){
+            val sign = ""
+            setColorAndProgresWeekDuties(efficiencyEmployee.efficiencyWeekDuties,Color.parseColor("#E600ADB5"),sign)
+        }
+        else if ( efficiencyEmployee.efficiencyWeekDuties.toInt() < 0){
+            val sign = "- "
+            setColorAndProgresWeekDuties(0, Color.parseColor("#FE7D8B"), sign)
+        }
 
-        binding.progressTotalPresence.setPercent(efficiencyEmployee.efficiencyTotalPresence.toInt())
-        binding.txtTotalPresence.text =
-            efficiencyEmployee.efficiencyTotalPresence.toString() + " %"
+        if (efficiencyEmployee.efficiencyMonthDuties.toInt() > 100){
+            val sign = "+"
+            setColorAndProgresMonthDuties(100, Color.parseColor("#70AE84"), sign)
+        } else if (efficiencyEmployee.efficiencyMonthDuties.toInt() in 1..100){
+            val sign = ""
+            setColorAndProgresMonthDuties(efficiencyEmployee.efficiencyMonthDuties,Color.parseColor("#E600ADB5"),sign)
+        }
+        else if ( efficiencyEmployee.efficiencyMonthDuties.toInt() < 0){
+            val sign = "- "
+            setColorAndProgresMonthDuties(0, Color.parseColor("#FE7D8B"), sign)
+        }
 
-        binding.txtTackWeek.text = efficiencyEmployee.totalWeekDuties.toString() + " تا"
-        binding.txtTackMonth.text = efficiencyEmployee.totalMonthDuties.toString() + " تا"
-        binding.txtTackTotal.text = efficiencyEmployee.totalDuties.toString() + " تا"
-
-        binding.progressWeekDuties.setPercent(efficiencyEmployee.efficiencyWeekDuties.toInt())
-        binding.txtWeekDuties.text = efficiencyEmployee.efficiencyWeekDuties.toString() + " %"
-        binding.progressMonthDuties.setPercent(efficiencyEmployee.efficiencyMonthDuties.toInt())
-        binding.txtMonthDuties.text = efficiencyEmployee.efficiencyMonthDuties.toString() + " %"
-        binding.progressTotalDuties.setPercent(efficiencyEmployee.efficiencyTotalDuties.toInt())
-        binding.txtTotalDuties.text = efficiencyEmployee.efficiencyTotalDuties.toString() + " %"
+        if (efficiencyEmployee.efficiencyTotalDuties.toInt() > 100){
+            val sign = "+"
+            setColorAndProgresTotalDuties(100, Color.parseColor("#70AE84"), sign)
+        } else if (efficiencyEmployee.efficiencyTotalDuties.toInt() in 1..100){
+            val sign = ""
+            setColorAndProgresTotalDuties(efficiencyEmployee.efficiencyTotalDuties,Color.parseColor("#E600ADB5"),sign)
+        }
+        else if ( efficiencyEmployee.efficiencyTotalDuties.toInt() < 0){
+            val sign = "- "
+            setColorAndProgresTotalDuties(0, Color.parseColor("#FE7D8B"), sign)
+        }
     }
-}
+
+    @SuppressLint("SetTextI18n")
+    private fun setColorAndProgresWeekDuties(
+        efficiency: Int,
+        parseColor: Int,
+        sign: String
+    ) {
+        binding.progressWeekDuties.setPercent(efficiency)
+        binding.progressWeekDuties.setProgressBarColor(parseColor)
+        binding.txtWeekDuties.text = "$sign$efficiency %"
+        binding.txtWeekDuties.setTextColor(parseColor)
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setColorAndProgresMonthDuties(
+        efficiency: Int,
+        parseColor: Int,
+        sign: String
+    ) {
+        binding.progressMonthDuties.setPercent(efficiency)
+        binding.progressMonthDuties.setProgressBarColor(parseColor)
+        binding.txtMonthDuties.text = "$sign$efficiency %"
+        binding.txtMonthDuties.setTextColor(parseColor)
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun setColorAndProgresTotalDuties(
+        efficiency: Int,
+        parseColor: Int,
+        sign: String
+    ) {
+        binding.progressTotalDuties.setPercent(efficiency)
+        binding.progressTotalDuties.setProgressBarColor(parseColor)
+        binding.txtTotalDuties.text = "$sign$efficiency %"
+        binding.txtTotalDuties.setTextColor(parseColor)
+
+    }
+    }

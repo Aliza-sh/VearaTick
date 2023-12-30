@@ -25,6 +25,8 @@ import com.xdev.arch.persiancalendar.datepicker.MaterialPickerOnPositiveButtonCl
 import com.xdev.arch.persiancalendar.datepicker.Month
 import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.Locale
 
 
 class CompanyNewExpensesBottomsheetFragment(
@@ -54,7 +56,9 @@ class CompanyNewExpensesBottomsheetFragment(
             onCreateCalendar()
         }
         var formattedValue = "0"
-        val decimalFormat = DecimalFormat("#,###")
+        val decimalFormatSymbols = DecimalFormatSymbols(Locale("fa", "IR"))
+        decimalFormatSymbols.groupingSeparator = ','
+        val decimalFormat = DecimalFormat("#,###",decimalFormatSymbols)
         binding.edtReceipt.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // قبل از تغییرات متنی
@@ -77,6 +81,8 @@ class CompanyNewExpensesBottomsheetFragment(
 
                 if (value != null) {
                     formattedValue = decimalFormat.format(value)
+                    binding.edtReceipt.setText(formattedValue)
+                    binding.edtReceipt.setSelection(formattedValue.length)
                     binding.txtReceipt.text = formatCurrency(value)
                 }
                 isUpdating = false
@@ -130,7 +136,9 @@ class CompanyNewExpensesBottomsheetFragment(
     }
 
     private fun formatCurrency(value: Long?): String {
-        val decimalFormat = DecimalFormat("#,###")
+        val decimalFormatSymbols = DecimalFormatSymbols(Locale("fa", "IR"))
+        decimalFormatSymbols.groupingSeparator = ','
+        val decimalFormat = DecimalFormat("#,###",decimalFormatSymbols)
         return decimalFormat.format(value) + " تومان"
     }
 
@@ -140,9 +148,10 @@ class CompanyNewExpensesBottomsheetFragment(
             binding.txtDateReceipt.length() > 0 &&
             binding.dialogEdtTozih.length() > 0
         ) {
-            val txtReceipt = binding.edtReceipt.text.toString()
+            var txtReceipt = binding.edtReceipt.text.toString()
             val txtDescription = binding.dialogEdtTozih.text.toString()
 
+            txtReceipt = txtReceipt!!.replace(",", "")
 
             val newReceipt = CompanyExpenses(
                 companyExpenses = txtReceipt.toLong(),

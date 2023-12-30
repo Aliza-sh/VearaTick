@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.view.Window
 import android.view.animation.LinearInterpolator
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -89,7 +90,10 @@ class ProjectSubTaskFragment(
         }
 
         binding.btnFabTack.setOnClickListener {
+            if (project.doneProject!=true)
             addNewTask()
+            else
+                Toast.makeText(view.context, "پروژه تکمیل شده است.", Toast.LENGTH_SHORT).show()
         }
 
     }
@@ -368,11 +372,17 @@ class ProjectSubTaskFragment(
                         volumeTask = onClickTask.volumeTask,
                         doneTask = false,
                         deadlineTask = onClickTask.deadlineTask,
-                        yearCreation = onClickTask.yearCreation,
-                        monthCreation = onClickTask.monthCreation,
-                        dayCreation = onClickTask.dayCreation,
+                        yearDeadline = onClickTask.yearDeadline,
+                        monthDeadline = onClickTask.monthDeadline,
+                        dayDeadline = onClickTask.dayDeadline,
                         efficiencyTask = 0,
-                        projectTask = onClickTask.projectTask
+                        projectTask = onClickTask.projectTask,
+                        dayCreation = onClickTask.dayCreation,
+                        monthCreation = onClickTask.monthCreation,
+                        yearCreation = onClickTask.yearCreation,
+                        dayDone = 0,
+                        monthDone = 0,
+                        yearDone = 0
                     )
                     taskEmployeeDao.update(newTask)
                 }
@@ -492,11 +502,17 @@ class ProjectSubTaskFragment(
                         volumeTask = onClickTask.volumeTask,
                         doneTask = true,
                         deadlineTask = onClickTask.deadlineTask,
-                        yearCreation = onClickTask.yearCreation,
-                        monthCreation = onClickTask.monthCreation,
-                        dayCreation = onClickTask.dayCreation,
+                        yearDeadline = onClickTask.yearDeadline,
+                        monthDeadline = onClickTask.monthDeadline,
+                        dayDeadline = onClickTask.dayDeadline,
                         efficiencyTask = efficiencyWeekDuties,
-                        projectTask = onClickTask.projectTask
+                        projectTask = onClickTask.projectTask,
+                        dayCreation = onClickTask.dayCreation,
+                        monthCreation = onClickTask.monthCreation,
+                        yearCreation = onClickTask.yearCreation,
+                        dayDone = today.persianDay,
+                        monthDone = today.persianMonth,
+                        yearDone = today.persianYear
                     )
                     taskEmployeeDao.update(newTask)
                 }
@@ -576,22 +592,7 @@ class ProjectSubTaskFragment(
                 subTaskProject.idSubTask!!
             )
             for (employeeSubTaskProject in employeeSubTaskProjects) {
-                val newTaskEmployee = TaskEmployee(
-                    idTask = onClickTask!!.idTask,
-                    idEmployee = onClickTask.idEmployee,
-                    idTaskProject = onClickTask.idTaskProject,
-                    nameTask = onClickTask.nameTask,
-                    descriptionTask = onClickTask.descriptionTask,
-                    volumeTask = onClickTask.volumeTask,
-                    doneTask = onClickTask.doneTask,
-                    yearCreation = onClickTask.yearCreation,
-                    monthCreation = onClickTask.monthCreation,
-                    dayCreation = onClickTask.dayCreation,
-                    deadlineTask = onClickTask.deadlineTask,
-                    efficiencyTask = onClickTask.efficiencyTask,
-                    projectTask = onClickTask.projectTask
-                )
-                taskEmployeeDao.delete(newTaskEmployee)
+                taskEmployeeDao.delete(onClickTask)
             }
         }
 

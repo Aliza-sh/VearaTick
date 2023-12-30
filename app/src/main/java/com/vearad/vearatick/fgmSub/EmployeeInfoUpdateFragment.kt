@@ -42,7 +42,7 @@ class EmployeeInfoUpdateFragment(
     var imagePath: String? = null
     lateinit var imageBytes: ByteArray
     lateinit var newEmployee: Employee
-
+    private val goToEmployeeTaskFragment = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -142,6 +142,7 @@ class EmployeeInfoUpdateFragment(
                                 position,
                                 employeeDao,
                                 bindingActivityProAndEmpBinding,
+                                goToEmployeeTaskFragment,
                             )
                         ).commit()
                 }
@@ -158,6 +159,7 @@ class EmployeeInfoUpdateFragment(
                     position,
                     employeeDao,
                     bindingActivityProAndEmpBinding,
+                    goToEmployeeTaskFragment,
                 )
             ).commit()
     }

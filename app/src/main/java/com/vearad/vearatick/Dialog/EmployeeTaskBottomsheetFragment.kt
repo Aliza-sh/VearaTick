@@ -92,10 +92,13 @@ class EmployeeTaskBottomsheetFragment(
                 nameTask = txtTask,
                 descriptionTask = txtDescription,
                 volumeTask = txtVolumeTask.toInt(),
-                yearCreation = selectedDate.persianYear,
-                monthCreation = selectedDate.persianMonth,
-                dayCreation = selectedDate.persianDay,
+                yearDeadline = selectedDate.persianYear,
+                monthDeadline =  selectedDate.persianMonth,
+                dayDeadline = selectedDate.persianDay,
                 deadlineTask = daysBetween,
+                dayCreation = today.persianDay,
+                monthCreation = today.persianMonth,
+                yearCreation = today.persianYear
             )
             taskEmployeeDao.insert(newTask)
             onTaskToEmployee()
