@@ -1,7 +1,6 @@
 package com.vearad.vearatick
 
 import ApiService
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.animation.AlphaAnimation
@@ -64,9 +63,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         firstRun()
         createApiService()
-
-        val sharedPreferences = getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
-        sharedPreferences.edit().putBoolean(CHEKBUY, true).apply()
 
         /*val intent = intent
         val data: Uri? = intent.data
@@ -152,7 +148,6 @@ class MainActivity : AppCompatActivity() {
         apiService = retrofit.create(ApiService::class.java)
 
     }
-
 
     fun replaceFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()

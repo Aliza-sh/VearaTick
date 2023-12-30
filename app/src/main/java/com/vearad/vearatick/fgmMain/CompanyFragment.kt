@@ -198,6 +198,21 @@ class CompanyFragment : Fragment() {
         progressNumProject(binding.progressNumProject)
     }
 
+    override fun onResume() {
+        super.onResume()
+        sharedPreferences = requireActivity().getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
+
+        if (sharedPreferences.getBoolean(CHEKBUY, false)== true) {
+            binding.cardLock.visibility = GONE
+        }
+
+        binding.btnFinancial.setOnClickListener {
+            if (sharedPreferences.getBoolean(CHEKBUY, false)== false) {
+                showIncreaseCreditDialog()
+            }
+        }
+    }
+
     private fun formatCurrency(value: Long?): String {
         val decimalFormat = DecimalFormat("#,###")
         return decimalFormat.format(value) + " تومان"
