@@ -34,6 +34,50 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:visibility="invisible"
+        android:id="@+id/empty_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:elevation="50dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:tint="@color/gray"
+            android:src="@drawable/img_empty_list"
+            android:layout_height="100dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="سهام‌داری ثبت نشده است."
+            android:textColor="@color/gray"
+            android:textSize="18sp"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/btn_menu_project"
+            app:tint="@color/white" />
+
+        <Button
+            android:id="@+id/btn_go_to_emplooyes"
+            style="@style/Widget.Material3.Button.ElevatedButton.Icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/firoze"
+            android:text="ایجاد سهام‌دار"
+            android:textSize="12sp"
+            app:icon="@drawable/ic_add_round"
+            app:iconTint="@color/whity"
+            android:textColor="@color/whity" />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/txt_title"
         android:layout_width="wrap_content"

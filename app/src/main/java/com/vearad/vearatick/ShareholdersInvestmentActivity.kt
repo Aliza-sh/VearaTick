@@ -2,6 +2,7 @@ package com.vearad.vearatick
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View.VISIBLE
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,7 +38,19 @@ class ShareholdersInvestmentActivity : AppCompatActivity(), ShareholdersInvestme
         employeeInvestmentDao = AppDatabase.getDataBase(applicationContext).employeeInvestmentDao
         employeeHarvestDao = AppDatabase.getDataBase(applicationContext).employeeHarvestDao
         val shareholdersData = employeeDao.rankEmployee("سهام دار")
-        val  shareholdersInvestmentAdapter = ShareholdersInvestmentAdapter(
+
+        if (shareholdersData.isEmpty()) {
+            binding.emptyList.visibility = VISIBLE
+        }
+
+        binding.btnGoToEmplooyes.setOnClickListener {
+            val intent = Intent(applicationContext, ProAndEmpActivity::class.java)
+            intent.putExtra("itemClicked", 2)
+            startActivity(intent)
+            overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
+        }
+
+        val shareholdersInvestmentAdapter = ShareholdersInvestmentAdapter(
             ArrayList(shareholdersData),
             employeeHarvestDao,
             employeeInvestmentDao,
