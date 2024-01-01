@@ -17,7 +17,7 @@ interface EmployeeDao : BaceDao<Employee> {
     fun getAllEmployee(): List<Employee>
 
     @Query("SELECT * FROM employee_table WHERE name = :name AND family = :family AND cellularPhone =:cellularPhone")
-    fun getObjectAllEmployee(name: String, family: String, cellularPhone: Long): Employee?
+    fun getObjectAllEmployee(name: String, family: String, cellularPhone: String): Employee?
 
     @Query("SELECT * FROM employee_table WHERE idEmployee = :idEmployee")
     fun getEmployee(idEmployee: Int): Employee?

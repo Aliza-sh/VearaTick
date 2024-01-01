@@ -335,8 +335,9 @@ class EmployeeInformationFragment(
 
     @SuppressLint("SetTextI18n")
     private fun setData(employee: Employee, view: View) {
+        val employee = employeeDao.getEmployee(employee.idEmployee!!)
         setEfficiency(view)
-        binding.txtNameEmp.text = employee.name + " " + employee.family
+        binding.txtNameEmp.text = employee!!.name + " " + employee.family
         binding.txtSpecialtyEmp.text = employee.specialty
 
 
