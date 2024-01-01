@@ -105,7 +105,10 @@ class EmployeeAdapter(
                     binding.progressCircular.progressBarColor = Color.parseColor("#FE7D8B")
                 }
 
-                if (efficiencyEmployee!!.totalWeekWatch != 0 && efficiencyEmployee.mustWeekWatch != 0) {
+                setPresenceWeek(efficiencyEmployee)
+                setDutiesWeek(efficiencyEmployee)
+
+                /*if (efficiencyEmployee!!.totalWeekWatch != 0 && efficiencyEmployee.mustWeekWatch != 0) {
 
                     var totalWeekWatch = efficiencyEmployee.totalWeekWatch
                     var mustWeekWatch = efficiencyEmployee.mustWeekWatch
@@ -133,13 +136,8 @@ class EmployeeAdapter(
                         efficiencyMonthDuties = efficiencyEmployee.efficiencyMonthDuties
                     )
                     efficiencyEmployeeDao.update(newEfficiencyEmployee)
-                }
+                }*/
 
-                binding.txtPresenceWeek.text =
-                    efficiencyEmployee?.efficiencyWeekPresence.toString() + "%"
-
-                binding.txtDutiesWeek.text =
-                    efficiencyEmployee?.efficiencyWeekDuties.toString() + "%"
             }
 
             binding.txtnameprn.text = data[position].name + " " + data[position].family
@@ -164,6 +162,45 @@ class EmployeeAdapter(
                 true
             }
         }
+    }
+
+    private fun setDutiesWeek(efficiencyEmployee: EfficiencyEmployee?) {
+
+        val efficiencyWeekDuties = efficiencyEmployee?.efficiencyWeekDuties
+
+        if (efficiencyWeekDuties!! > 100){
+            binding.txtDutiesWeek.setTextColor(Color.parseColor("#70AE84"))
+            binding.txtDutiesWeek.text = "100%+"
+
+        } else if (efficiencyWeekDuties in 1..100){
+            binding.txtDutiesWeek.setTextColor(Color.parseColor("#E600ADB5"))
+            binding.txtDutiesWeek.text = "${efficiencyWeekDuties}%"
+
+        }
+        else if (efficiencyWeekDuties < 0){
+            binding.txtDutiesWeek.setTextColor(Color.parseColor("#FE7D8B"))
+            binding.txtDutiesWeek.text = "0%-"
+        }
+    }
+
+    private fun setPresenceWeek(efficiencyEmployee: EfficiencyEmployee?) {
+
+        val efficiencyWeekPresence = efficiencyEmployee?.efficiencyWeekPresence
+
+        if (efficiencyWeekPresence!! > 100){
+            binding.txtPresenceWeek.setTextColor(Color.parseColor("#70AE84"))
+            binding.txtPresenceWeek.text = "100%+"
+
+        } else if (efficiencyWeekPresence in 1..100){
+            binding.txtPresenceWeek.setTextColor(Color.parseColor("#E600ADB5"))
+            binding.txtPresenceWeek.text = "${efficiencyWeekPresence}%"
+
+        }
+        else if (efficiencyWeekPresence < 0){
+            binding.txtPresenceWeek.setTextColor(Color.parseColor("#FE7D8B"))
+            binding.txtPresenceWeek.text = "0%-"
+        }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EmployeeViewHolder {
