@@ -8,7 +8,6 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
 import com.google.gson.Gson
 import com.vearad.vearatick.databinding.ActivityRegisterStep24Binding
 import com.vearad.vearatick.model.RegisterData
@@ -50,7 +49,7 @@ class RegisterStep24Activity : AppCompatActivity() {
             overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
 
-        binding.tilUser.editText?.addTextChangedListener {
+        /*binding.tilUser.editText?.addTextChangedListener {
             if (it.toString() == userError) {
                 binding.tilUser.error = "این نام کاربری در دسترس نیست."
             } else
@@ -88,7 +87,7 @@ class RegisterStep24Activity : AppCompatActivity() {
             else {
                 binding.tilEmail.error = null
             }
-        }
+        }*/
 
 
         binding.btnDone.setOnClickListener {
@@ -248,6 +247,9 @@ class RegisterStep24Activity : AppCompatActivity() {
 
         val sharedPreferencesAccessToken = getSharedPreferences(ACCESSTOKEN, Context.MODE_PRIVATE)
         sharedPreferencesAccessToken.edit().putString(KEYACCESSTOKEN, accessToken).apply()
+
+        val sharedPreferencesFirstRun = getSharedPreferences(FIRSTRUN, Context.MODE_PRIVATE)
+        sharedPreferencesFirstRun.edit().putBoolean(KEYUFIRSTRUN, true).apply()
 
         val expire = expires?.div((3600*24))
         Log.v("loginapp", "expires: ${expires}")

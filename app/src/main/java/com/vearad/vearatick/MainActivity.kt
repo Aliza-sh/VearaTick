@@ -1,6 +1,7 @@
 package com.vearad.vearatick
 
 import ApiService
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.animation.AlphaAnimation
@@ -53,6 +54,9 @@ const val KEYEXPIRATIONACCESSTOKEN = "keyExpirationAccessToken"
 const val USER = "sharedUser"
 const val KEYUSER = "keyUser"
 
+const val FIRSTRUN = "FirstRun"
+const val KEYUFIRSTRUN = "keyFirstRun"
+
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
@@ -104,16 +108,26 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 R.id.menu_settings -> {
-                    replaceFragment(CompanyInformationFragment())
 
-                    val anim = AlphaAnimation(
-                        1f, 0f
-                    )
-                    anim.duration = 1000
-                    anim.fillAfter = true
-                    anim.repeatCount = 5
-                    anim.repeatMode = Animation.REVERSE
+                    val sharedPreferencesFirstRun = getSharedPreferences(FIRSTRUN, Context.MODE_PRIVATE)
+                    val firstRun = sharedPreferencesFirstRun.getBoolean(KEYUFIRSTRUN,false)
 
+                    if (!firstRun){
+                        val intent = Intent(this, RegisterStep24Activity::class.java)
+                        startActivity(intent)
+                        overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
+                    }else {
+
+                        replaceFragment(CompanyInformationFragment())
+
+                        val anim = AlphaAnimation(
+                            1f, 0f
+                        )
+                        anim.duration = 1000
+                        anim.fillAfter = true
+                        anim.repeatCount = 5
+                        anim.repeatMode = Animation.REVERSE
+                    }
                 }
             }
             true

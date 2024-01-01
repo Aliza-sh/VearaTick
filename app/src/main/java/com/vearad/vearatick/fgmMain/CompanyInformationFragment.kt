@@ -9,9 +9,11 @@ import android.graphics.Typeface
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.PopupMenu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -294,7 +296,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
                             sharedPreferencesMiniSite?.edit()?.putString(KEYMINISITE, miniSiteDataData.business.namePer)!!.apply()
                         } else {
                             // Handle the case where the response body is null
-                            Snackbar.make(
+                           val snackbar =  Snackbar.make(
                                 binding.root,
                                 "مینی سایت نداری!",
                                 Snackbar.ANIMATION_MODE_SLIDE
@@ -302,7 +304,14 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
                                 .setAction("ساخت مینی سایت") {
                                     goToMiniSite(user)
                                 }
-                                .show()
+                                .setBackgroundTint(Color.parseColor("#FFFFFF"))
+                                .setTextColor(Color.parseColor("#000000"))
+                                .setActionTextColor(Color.parseColor("#E600ADB5"))
+                            val view = snackbar.view
+                            val params = view.layoutParams as FrameLayout.LayoutParams
+                            params.gravity = Gravity.TOP
+                            view.layoutParams = params
+                            snackbar.show()
                         }
                         // Process the data and update the UI
                     } else {
@@ -323,7 +332,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
     }
 
     fun goToLogin() {
-        Snackbar.make(binding.root, "نیاز به ورود به سایت است!", Snackbar.ANIMATION_MODE_SLIDE)
+        val snackbar = Snackbar.make(binding.root, "نیاز به ورود به سایت است!", Snackbar.ANIMATION_MODE_SLIDE)
             .setAction("ورود") {
                 val goFromEvent = true
                 val intent = Intent(requireActivity(), LoginStep24Activity::class.java)
@@ -333,8 +342,14 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
                     R.anim.slide_from_left,
                     R.anim.slide_to_right
                 )
-            }
-            .show()
+            }.setBackgroundTint(Color.parseColor("#FFFFFF"))
+            .setTextColor(Color.parseColor("#000000"))
+            .setActionTextColor(Color.parseColor("#E600ADB5"))
+        val view = snackbar.view
+        val params = view.layoutParams as FrameLayout.LayoutParams
+        params.gravity = Gravity.TOP
+        view.layoutParams = params
+        snackbar.show()
     }
 
     private fun goToMiniSite(user: String?) {

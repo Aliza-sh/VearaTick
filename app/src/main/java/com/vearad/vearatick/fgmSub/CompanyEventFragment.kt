@@ -6,12 +6,15 @@ import CustomBottomMarginItemDecoration
 import CustomTopMarginItemDecoration
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.google.android.material.snackbar.Snackbar
@@ -159,7 +162,7 @@ class CompanyEventFragment : Fragment() {
     }
 
     fun goToLogin() {
-        Snackbar.make(binding.root, "نیاز به ورود به سایت است!", Snackbar.ANIMATION_MODE_SLIDE)
+        val snackbar = Snackbar.make(binding.root, "نیاز به ورود به سایت است!", Snackbar.ANIMATION_MODE_SLIDE)
             .setAction("ورود") {
                 val goFromEvent = true
                 val intent = Intent(requireActivity(), LoginStep24Activity::class.java)
@@ -169,8 +172,14 @@ class CompanyEventFragment : Fragment() {
                     R.anim.slide_from_left,
                     R.anim.slide_to_right
                 )
-            }
-            .show()
+            }.setBackgroundTint(Color.parseColor("#FFFFFF"))
+            .setTextColor(Color.parseColor("#000000"))
+            .setActionTextColor(Color.parseColor("#E600ADB5"))
+        val view = snackbar.view
+        val params = view.layoutParams as FrameLayout.LayoutParams
+        params.gravity = Gravity.TOP
+        view.layoutParams = params
+        snackbar.show()
     }
 
     private fun topMargin() {
