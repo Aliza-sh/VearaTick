@@ -35,8 +35,8 @@ lateinit var inOutAdapter: EntryExitEmployeeAdapter
 lateinit var employeeAdapter: EmployeeAdapter
 lateinit var apiService: ApiService
 
-const val SHAREDVEARATICK = "sharedVearatick"
-const val CHEKBUY = "chekBuy"
+const val SHAREDEXPIRATIONSUBSCRIPTION = "SharedExpirationSubscription"
+const val CHEKEXPIRATION = "ChekExpiration"
 
 const val SHAREDLOGINSTEP24 = "SharedLoginStep24"
 const val LOGINSTEP24 = "loginStep24"

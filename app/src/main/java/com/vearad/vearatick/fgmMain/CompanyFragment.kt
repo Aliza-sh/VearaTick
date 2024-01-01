@@ -18,7 +18,7 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.Fragment
 import com.ghanshyam.graphlibs.Graph
 import com.ghanshyam.graphlibs.GraphData
-import com.vearad.vearatick.CHEKBUY
+import com.vearad.vearatick.CHEKEXPIRATION
 import com.vearad.vearatick.CompanyFinancialReportActivity
 import com.vearad.vearatick.CompanyPaymentActivity
 import com.vearad.vearatick.CompanyReceiptActivity
@@ -34,13 +34,15 @@ import com.vearad.vearatick.MainActivity
 import com.vearad.vearatick.PoolakeyActivity
 import com.vearad.vearatick.ProAndEmpActivity
 import com.vearad.vearatick.R
-import com.vearad.vearatick.SHAREDVEARATICK
+import com.vearad.vearatick.SHAREDEXPIRATIONSUBSCRIPTION
 import com.vearad.vearatick.ShareholdersInvestmentActivity
 import com.vearad.vearatick.databinding.FragmentCompanyBinding
 import com.vearad.vearatick.databinding.FragmentDialogIncreaseCreditBinding
 import com.vearad.vearatick.databinding.ItemProjectBinding
 import com.vearad.vearatick.fgmSub.ProjectNumberFragment
 import java.text.DecimalFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 class CompanyFragment : Fragment() {
@@ -56,6 +58,8 @@ class CompanyFragment : Fragment() {
     lateinit var employeeHarvestDao: EmployeeHarvestDao
     lateinit var employeeInvestmentDao: EmployeeInvestmentDao
     lateinit var sharedPreferences: SharedPreferences
+    lateinit var date: LocalDate
+    lateinit var expirationDate: String
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -64,7 +68,8 @@ class CompanyFragment : Fragment() {
     ): View {
         binding = FragmentCompanyBinding.inflate(layoutInflater, container, false)
         bindingItemProject = ItemProjectBinding.inflate(layoutInflater, container, false)
-        bindingDialogIncreaseCredit = FragmentDialogIncreaseCreditBinding.inflate(layoutInflater, container, false)
+        bindingDialogIncreaseCredit =
+            FragmentDialogIncreaseCreditBinding.inflate(layoutInflater, container, false)
         return binding.root
 
     }
@@ -72,18 +77,6 @@ class CompanyFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        sharedPreferences = requireActivity().getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
-
-        if (sharedPreferences.getBoolean(CHEKBUY, false)== true) {
-            binding.cardLock.visibility = GONE
-        }
-
-        binding.btnFinancial.setOnClickListener {
-            if (sharedPreferences.getBoolean(CHEKBUY, false)== false) {
-                showIncreaseCreditDialog()
-            }
-        }
 
         efficiencyDao = AppDatabase.getDataBase(view.context).efficiencyDao
         projectDao = AppDatabase.getDataBase(view.context).projectDao
@@ -93,71 +86,97 @@ class CompanyFragment : Fragment() {
         employeeHarvestDao = AppDatabase.getDataBase(view.context).employeeHarvestDao
         employeeInvestmentDao = AppDatabase.getDataBase(view.context).employeeInvestmentDao
 
-        binding.btnInvestment.setOnClickListener {
-            if (sharedPreferences.getBoolean(CHEKBUY, false) == false) {
+        sharedPreferences = requireActivity().getSharedPreferences(
+            SHAREDEXPIRATIONSUBSCRIPTION,
+            Context.MODE_PRIVATE
+        )
+
+        expirationDate = sharedPreferences.getString(CHEKEXPIRATION, "").toString()
+        Log.v("expirationDate", "expiration: ${expirationDate}")
+
+        if (expirationDate != "") {
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-d")
+            date = LocalDate.parse(expirationDate, formatter)
+            val today = LocalDate.now()
+            Log.v("expirationDate", "date: ${date}")
+            Log.v("expirationDate", "today: ${today}")
+
+            if (today != date) {
+                binding.cardLock.visibility = GONE
+                binding.btnInvestment.setOnClickListener {
+                    val intent =
+                        Intent(requireContext(), ShareholdersInvestmentActivity::class.java)
+                    startActivity(intent)
+                    activity?.overridePendingTransition(
+                        R.anim.slide_from_right,
+                        R.anim.slide_to_left
+                    )
+                }
+
+                val sumCompanyReceipt = companyReceiptDao.getReceiptSum()
+                binding.txtReceipt.text = formatCurrency(sumCompanyReceipt.toLong())
+                binding.btnIncome.setOnClickListener {
+                    val intent = Intent(requireContext(), CompanyReceiptActivity::class.java)
+                    startActivity(intent)
+                    activity?.overridePendingTransition(
+                        R.anim.slide_from_right,
+                        R.anim.slide_to_left
+                    )
+                }
+
+                val sumCompanyExpenses = companyExpensesDao.getExpensesSum()
+                val sumEmployeeHarvest = employeeHarvestDao.getHarvestSum()
+                val sumTotalExpenses = sumCompanyExpenses + sumEmployeeHarvest
+                binding.txtPayment.text = formatCurrency(sumTotalExpenses.toLong())
+                binding.btnExpense.setOnClickListener {
+                    val intent = Intent(requireContext(), CompanyPaymentActivity::class.java)
+                    startActivity(intent)
+                    activity?.overridePendingTransition(
+                        R.anim.slide_from_right,
+                        R.anim.slide_to_left
+                    )
+                }
+
+                var profit = sumCompanyReceipt - sumTotalExpenses
+                if (profit > 0) {
+                    val value = formatCurrency(profit)
+                    binding.txtProfit.setTextColor(Color.parseColor("#0E7113"))
+                    binding.txtProfit.text = value + " +"
+                } else if (profit < 0) {
+                    val value = formatCurrency(-profit)
+                    binding.txtProfit.setTextColor(Color.parseColor("#c62828"))
+                    binding.txtProfit.text = value + " -"
+                } else {
+                    binding.txtProfit.text = "0"
+                }
+
+                val sumInvestment = employeeInvestmentDao.getInvestmentSum()
+                var sumTotal = (sumInvestment + profit)
+                if (sumTotal < 0)
+                    sumTotal = 0
+                binding.btnInvestment.text = formatCurrency(sumTotal)
+                binding.btnFinancialReport.setOnClickListener {
+                    val intent =
+                        Intent(requireContext(), CompanyFinancialReportActivity::class.java)
+                    startActivity(intent)
+                    activity?.overridePendingTransition(
+                        R.anim.slide_from_right,
+                        R.anim.slide_to_left
+                    )
+                }
+            } else
+                binding.cardLock.setOnClickListener {
+                    showIncreaseCreditDialog()
+                    Log.v("expirationDate", "Here: 2")
+
+                }
+        } else
+            binding.cardLock.setOnClickListener {
                 showIncreaseCreditDialog()
-            }else {
-                val intent = Intent(requireContext(), ShareholdersInvestmentActivity::class.java)
-                startActivity(intent)
-                activity?.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
+                Log.v("expirationDate", "Here: 1")
 
             }
-        }
 
-        val sumCompanyReceipt = companyReceiptDao.getReceiptSum()
-        binding.txtReceipt.text = formatCurrency(sumCompanyReceipt.toLong())
-        binding.btnIncome.setOnClickListener {
-            if (sharedPreferences.getBoolean(CHEKBUY, false)== false) {
-                showIncreaseCreditDialog()
-            }else {
-                val intent = Intent(requireContext(), CompanyReceiptActivity::class.java)
-                startActivity(intent)
-                activity?.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
-            }
-        }
-
-        val sumCompanyExpenses = companyExpensesDao.getExpensesSum()
-        val sumEmployeeHarvest = employeeHarvestDao.getHarvestSum()
-        val sumTotalExpenses = sumCompanyExpenses + sumEmployeeHarvest
-        binding.txtPayment.text = formatCurrency(sumTotalExpenses.toLong())
-        binding.btnExpense.setOnClickListener {
-            if (sharedPreferences.getBoolean(CHEKBUY, false)== false) {
-                showIncreaseCreditDialog()
-            }else {
-                val intent = Intent(requireContext(), CompanyPaymentActivity::class.java)
-                startActivity(intent)
-                activity?.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
-            }
-        }
-
-        var profit = sumCompanyReceipt - sumTotalExpenses
-        if (profit > 0) {
-            val value = formatCurrency(profit)
-            binding.txtProfit.setTextColor(Color.parseColor("#0E7113"))
-            binding.txtProfit.text = value + " +"
-        } else if (profit < 0) {
-            val value = formatCurrency(-profit)
-            binding.txtProfit.setTextColor(Color.parseColor("#c62828"))
-            binding.txtProfit.text = value + " -"
-        } else {
-            binding.txtProfit.text = "0"
-        }
-
-        val sumInvestment = employeeInvestmentDao.getInvestmentSum()
-        var sumTotal = (sumInvestment + profit)
-        if (sumTotal<0)
-            sumTotal = 0
-        binding.btnInvestment.text = formatCurrency(sumTotal)
-        binding.btnFinancialReport.setOnClickListener {
-            if (sharedPreferences.getBoolean(CHEKBUY, false)== false) {
-                showIncreaseCreditDialog()
-            }else {
-                val intent = Intent(requireContext(), CompanyFinancialReportActivity::class.java)
-                startActivity(intent)
-                activity?.overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
-
-            }
-        }
 
         setProgressEfficiencyCompamy()
 
@@ -241,16 +260,90 @@ class CompanyFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        sharedPreferences = requireActivity().getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
+        sharedPreferences = requireActivity().getSharedPreferences(
+            SHAREDEXPIRATIONSUBSCRIPTION,
+            Context.MODE_PRIVATE
+        )
 
-        if (sharedPreferences.getBoolean(CHEKBUY, false)== true) {
-            binding.cardLock.visibility = GONE
-        }
+        expirationDate = sharedPreferences.getString(CHEKEXPIRATION, "").toString()
+        Log.v("expirationDate", "expiration: ${expirationDate}")
 
-        binding.btnFinancial.setOnClickListener {
-            if (sharedPreferences.getBoolean(CHEKBUY, false)== false) {
-                showIncreaseCreditDialog()
-            }
+        if (expirationDate != "") {
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-d")
+            date = LocalDate.parse(expirationDate, formatter)
+            val today = LocalDate.now()
+            Log.v("expirationDate", "date: ${date}")
+            Log.v("expirationDate", "today: ${today}")
+
+            if (today != date) {
+                binding.cardLock.visibility = GONE
+                binding.btnInvestment.setOnClickListener {
+                    val intent =
+                        Intent(requireContext(), ShareholdersInvestmentActivity::class.java)
+                    startActivity(intent)
+                    activity?.overridePendingTransition(
+                        R.anim.slide_from_right,
+                        R.anim.slide_to_left
+                    )
+                }
+
+                val sumCompanyReceipt = companyReceiptDao.getReceiptSum()
+                binding.txtReceipt.text = formatCurrency(sumCompanyReceipt.toLong())
+                binding.btnIncome.setOnClickListener {
+                    val intent = Intent(requireContext(), CompanyReceiptActivity::class.java)
+                    startActivity(intent)
+                    activity?.overridePendingTransition(
+                        R.anim.slide_from_right,
+                        R.anim.slide_to_left
+                    )
+                }
+
+                val sumCompanyExpenses = companyExpensesDao.getExpensesSum()
+                val sumEmployeeHarvest = employeeHarvestDao.getHarvestSum()
+                val sumTotalExpenses = sumCompanyExpenses + sumEmployeeHarvest
+                binding.txtPayment.text = formatCurrency(sumTotalExpenses.toLong())
+                binding.btnExpense.setOnClickListener {
+                    val intent = Intent(requireContext(), CompanyPaymentActivity::class.java)
+                    startActivity(intent)
+                    activity?.overridePendingTransition(
+                        R.anim.slide_from_right,
+                        R.anim.slide_to_left
+                    )
+                }
+
+                var profit = sumCompanyReceipt - sumTotalExpenses
+                if (profit > 0) {
+                    val value = formatCurrency(profit)
+                    binding.txtProfit.setTextColor(Color.parseColor("#0E7113"))
+                    binding.txtProfit.text = value + " +"
+                } else if (profit < 0) {
+                    val value = formatCurrency(-profit)
+                    binding.txtProfit.setTextColor(Color.parseColor("#c62828"))
+                    binding.txtProfit.text = value + " -"
+                } else {
+                    binding.txtProfit.text = "0"
+                }
+
+                val sumInvestment = employeeInvestmentDao.getInvestmentSum()
+                var sumTotal = (sumInvestment + profit)
+                if (sumTotal < 0)
+                    sumTotal = 0
+                binding.btnInvestment.text = formatCurrency(sumTotal)
+                binding.btnFinancialReport.setOnClickListener {
+                    val intent =
+                        Intent(requireContext(), CompanyFinancialReportActivity::class.java)
+                    startActivity(intent)
+                    activity?.overridePendingTransition(
+                        R.anim.slide_from_right,
+                        R.anim.slide_to_left
+                    )
+                }
+            } else
+                binding.cardLock.setOnClickListener {
+                    showIncreaseCreditDialog()
+                    Log.v("expirationDate", "Here: 2")
+
+                }
         }
     }
 

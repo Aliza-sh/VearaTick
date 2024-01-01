@@ -4,20 +4,24 @@ import android.annotation.SuppressLint
 import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.vearad.vearatick.databinding.ActivityPoolakeyBinding
 import ir.cafebazaar.poolakey.Payment
 import ir.cafebazaar.poolakey.config.PaymentConfiguration
 import ir.cafebazaar.poolakey.config.SecurityCheck
 import ir.cafebazaar.poolakey.request.PurchaseRequest
-
+import org.threeten.bp.LocalDate
+import org.threeten.bp.Period
 
 class PoolakeyActivity : AppCompatActivity() {
 
@@ -25,10 +29,12 @@ class PoolakeyActivity : AppCompatActivity() {
 
     private val TAG: String = "ActivityPoolakey_log"
     lateinit var binding: ActivityPoolakeyBinding
+    lateinit var sharedPreferences: SharedPreferences
 
     @SuppressLint("SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AndroidThreeTen.init(this)
         binding = ActivityPoolakeyBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.btnBck.setOnClickListener {
@@ -58,13 +64,10 @@ class PoolakeyActivity : AppCompatActivity() {
         val localSecurityCheck = SecurityCheck.Enable(
             rsaPublicKey = "MIHNMA0GCSqGSIb3DQEBAQUAA4G7ADCBtwKBrwCp3YRwWzg1xPuVxikivkDOJ+xU1QEWoOs1B30dEl36fCy+bvPZiNnfq6Ch8I74h7psd7ZJgYu8bJMB0Sblm7mCfKRb5h/a6cepZgDIRtL4w2nC2qMFL2zgwaL5p0cTfj2VkgqzYSrK+Ag10HsTzfqni/+fsPGC4XADtHJn+tn1B8zFlQoq0soN5n5drtDuE6eaVL9KKLfrgdbrFOKkty8oGDjaoD1J7SvjDwmc8Z8CAwEAAQ=="
         )
-
         val paymentConfiguration = PaymentConfiguration(
             localSecurityCheck = localSecurityCheck
         )
-
         val payment = Payment(context = this, config = paymentConfiguration)
-
         val paymentConnection = payment.connect {
             connectionSucceed {
 
@@ -86,62 +89,110 @@ class PoolakeyActivity : AppCompatActivity() {
             }
         }
 
-        binding.btnBuy.setOnClickListener {
+        sharedPreferences = getSharedPreferences(SHAREDEXPIRATIONSUBSCRIPTION, Context.MODE_PRIVATE)
 
+        binding.btnBuyOneYear.setOnClickListener {
 
             val purchaseRequest = PurchaseRequest(
                 //productId = "trial_subscription",
                 productId = "365days",
                 payload = "PAYLOAD"
             )
+            val today = LocalDate.now()
+            val oneYearLater = today.plus(Period.ofYears(1))
+            Log.v("loginapp", "today: ${today}")
+            Log.v("loginapp", "oneYearLater: ${oneYearLater}")
 
-            payment.purchaseProduct(
-                registry = activityResultRegistry,
-                request = purchaseRequest
-            ) {
-                purchaseFlowBegan {
-//                    ...
-                    Log.d(TAG, "msg: purchaseFlowBegan")
-
-                }
-                failedToBeginFlow { throwable ->
-//                    ...
-                    Log.d(TAG, "msg: failedToBeginFlow")
-                }
-                purchaseSucceed { purchaseEntity ->
-//                    ...
-                    Log.d(TAG, "msg: purchaseSucceed")
-
-                    val sharedPreferences = getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
-                    sharedPreferences.edit().putBoolean(CHEKBUY, true).apply()
-
-                    Log.d(TAG, "msg: " + purchaseEntity)
-
-                    payment.consumeProduct(purchaseEntity.purchaseToken) {
-                        consumeSucceed {
-//                    ...
-                        }
-                        consumeFailed { throwable ->
-//                    ...
-                        }
-                    }
-
-                    finish()
-
-                }
-                purchaseCanceled {
-//                    ...
-                    Log.d(TAG, "msg: purchaseCanceled")
-                }
-                purchaseFailed { throwable ->
-//                    ...
-                    Log.d(TAG, "msg: purchaseFailed")
-                }
-            }
-
+            buy(purchaseRequest, oneYearLater, payment)
 
         }
 
+        binding.btnBuyThreeMonth.setOnClickListener {
+
+            val purchaseRequest = PurchaseRequest(
+                //productId = "trial_subscription",
+                productId = "90days",
+                payload = "PAYLOAD"
+            )
+            val today = LocalDate.now()
+            val threeMonthsLater = today.plus(Period.ofMonths(3))
+            Log.v("loginapp", "today: ${today}")
+            Log.v("loginapp", "threeMonthsLater: ${threeMonthsLater}")
+
+            buy(purchaseRequest,threeMonthsLater,payment)
+
+        }
+
+        binding.btnBuyOneMonth.setOnClickListener {
+
+            val purchaseRequest = PurchaseRequest(
+                //productId = "trial_subscription",
+                productId = "30days",
+                payload = "PAYLOAD"
+            )
+            val today = LocalDate.now()
+            val oneMonthLater = today.plus(Period.ofMonths(1))
+            Log.v("loginapp", "today: ${today}")
+            Log.v("loginapp", "oneMonthLater: ${oneMonthLater}")
+
+            buy(purchaseRequest, oneMonthLater, payment)
+
+        }
+
+        binding.btnSupport.setOnClickListener {
+
+            val phoneNumber = "09358668218"  // شماره تلفن مورد نظر
+            val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber"))
+            startActivity(dialIntent)
+
+        }
+
+    }
+
+    fun buy(purchaseRequest: PurchaseRequest, today: LocalDate, payment: Payment) {
+
+        payment.purchaseProduct(
+            registry = activityResultRegistry,
+            request = purchaseRequest
+        ) {
+            purchaseFlowBegan {
+//                    ...
+                Log.d(TAG, "msg: purchaseFlowBegan")
+
+            }
+            failedToBeginFlow { throwable ->
+//                    ...
+                Log.d(TAG, "msg: failedToBeginFlow")
+            }
+            purchaseSucceed { purchaseEntity ->
+//                    ...
+                Log.d(TAG, "msg: purchaseSucceed")
+
+                sharedPreferences.edit().putString(CHEKEXPIRATION, "$today").apply()
+
+                Log.d(TAG, "msg: " + purchaseEntity)
+
+                payment.consumeProduct(purchaseEntity.purchaseToken) {
+                    consumeSucceed {
+//                    ...
+                    }
+                    consumeFailed { throwable ->
+//                    ...
+                    }
+                }
+
+                finish()
+
+            }
+            purchaseCanceled {
+//                    ...
+                Log.d(TAG, "msg: purchaseCanceled")
+            }
+            purchaseFailed { throwable ->
+//                    ...
+                Log.d(TAG, "msg: purchaseFailed")
+            }
+        }
 
     }
 
@@ -152,12 +203,9 @@ class PoolakeyActivity : AppCompatActivity() {
         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
     }
 
-    /*
-
-        override fun onDestroy() {
-            paymentConnection.disconnect()
-            super.onDestroy()
-        }
-    */
+    /*override fun onDestroy() {
+        paymentConnection.disconnect()
+        super.onDestroy()
+    }*/
 
 }
