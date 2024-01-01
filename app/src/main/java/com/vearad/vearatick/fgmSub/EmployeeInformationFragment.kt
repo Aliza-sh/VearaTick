@@ -28,6 +28,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.kizitonwose.calendarview.utils.persian.PersianCalendar
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.EfficiencyDao
+import com.vearad.vearatick.DataBase.EfficiencyEmployee
 import com.vearad.vearatick.DataBase.Employee
 import com.vearad.vearatick.DataBase.EmployeeDao
 import com.vearad.vearatick.ProAndEmpActivity
@@ -37,6 +38,9 @@ import com.vearad.vearatick.databinding.FragmentDialogDeleteItemEmployeeBinding
 import com.vearad.vearatick.databinding.FragmentEmployeeInformationBinding
 import koleton.api.hideSkeleton
 import koleton.api.loadSkeleton
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.temporal.TemporalAdjusters
 
 class EmployeeInformationFragment(
     var employee: Employee,
@@ -65,7 +69,7 @@ class EmployeeInformationFragment(
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         onBackPressed()
         firstRun(view)
-        setData(employee)
+        setData(employee, view)
         setTitleEmployee(view)
 
         goTo(goToEmployeeTaskFragment,view)
@@ -89,6 +93,11 @@ class EmployeeInformationFragment(
                 .replace(R.id.frame_layout_sub, EmployeeFragment(bindingActivityProAndEmpBinding))
                 .commit()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setData(employee, binding.root.rootView)
     }
 
     private fun goTo(goToEmployeeTaskFragment: Boolean, view: View) {
@@ -127,7 +136,13 @@ class EmployeeInformationFragment(
             today.persianMonth,
             today.persianYear
         )
-        val efficiencyNewEmployee = efficiencyEmployeeDao.isAllColumnsNonZero()
+        Log.v("employeeNew", "employeeNew: ${employeeNew}")
+        Log.v("employeeNew", "Here: ${today.persianDay}")
+        Log.v("employeeNew", "Here: ${today.persianMonth}")
+        Log.v("employeeNew", "Here: ${today.persianYear}")
+
+        val efficiencyNewEmployee = efficiencyEmployeeDao.isAllColumnsNonZero(employee.idEmployee!!)
+        Log.v("employeeNew", "efficiencyNewEmployee: ${efficiencyNewEmployee}")
 
         if (employeeNew && efficiencyNewEmployee) {
             binding.txtTitle.text = "این کارمند تازه استخدام شده"
@@ -144,11 +159,10 @@ class EmployeeInformationFragment(
                 else if (taskInWeekEmployee)
                     binding.txtTitle.text = "این هفته باید تسک تحویل بده"
                 else {
-                    val totalWeekWatch = efficiencyEmployee!!.totalWeekWatch
-                    val mustWeekWatch = efficiencyEmployee!!.mustWeekWatch
+                    val efficiencyWeekPresence = efficiencyEmployee!!.efficiencyWeekPresence
                     val efficiencyTotalDuties = efficiencyEmployee.efficiencyTotalDuties
 
-                    if ((mustWeekWatch - totalWeekWatch) < (mustWeekWatch/4))
+                    if (efficiencyWeekPresence < 0)
                         binding.txtTitle.text = "حضور درست حسابی تو شرکت نداشته"
                     else if (taskDoneEmployee && efficiencyTotalDuties < 50)
                         binding.txtTitle.text = "تسک هاش رو درست حسابی انجام نداده"
@@ -160,6 +174,7 @@ class EmployeeInformationFragment(
     }
 
     private fun btnStatistics(view: View) {
+        setEfficiency(view)
         binding.txtStatistics.setTextColor(Color.parseColor("#E600ADB5"))
         binding.viewStatistics.visibility = VISIBLE
 
@@ -173,6 +188,7 @@ class EmployeeInformationFragment(
     }
 
     private fun btnCalendar(view: View) {
+        setEfficiency(view)
         binding.txtCalendar.setTextColor(Color.parseColor("#E600ADB5"))
         binding.viewCalendar.visibility = VISIBLE
 
@@ -186,6 +202,7 @@ class EmployeeInformationFragment(
     }
 
     private fun btnTask(view: View) {
+        setEfficiency(view)
         binding.txtTask.setTextColor(Color.parseColor("#E600ADB5"))
         binding.viewTask.visibility = VISIBLE
 
@@ -311,19 +328,14 @@ class EmployeeInformationFragment(
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        updateYourData()
-        setData(employee)
-    }
 
     private fun updateYourData() {
         employee = employeeDao.getEmployee(employee.idEmployee!!)!!
     }
 
     @SuppressLint("SetTextI18n")
-    private fun setData(employee: Employee) {
-
+    private fun setData(employee: Employee, view: View) {
+        setEfficiency(view)
         binding.txtNameEmp.text = employee.name + " " + employee.family
         binding.txtSpecialtyEmp.text = employee.specialty
 
@@ -370,6 +382,145 @@ class EmployeeInformationFragment(
             binding.txtRank.background = shape
         }
 
+        if (employee.imagePath != null) {
+            Glide.with(this)
+                .load(employee.imagePath)
+                .apply(RequestOptions.circleCropTransform())
+                .into(binding.btnInfoPrn)
+        } else
+            if (employee.gender == "زن") {
+                binding.btnInfoPrn.setImageResource(R.drawable.img_matter)
+            } else
+                binding.btnInfoPrn.setImageResource(R.drawable.img_male)
+
+    }
+
+    private fun setEfficiency(view: View) {
+
+        var allPresenceEmployee = 0
+        var monthPresenceEmployee = 0
+        var weekPresenceEmployee = 0
+
+        var allVolumeTaskEmployee = 0
+        var monthVolumeTaskEmployee = 0
+        var weekVolumeTaskEmployee = 0
+        var allEfficiencyTaskEmployee = 0
+        var monthEfficiencyTaskEmployee = 0
+        var weekEfficiencyTaskEmployee = 0
+
+        var counterAll = 0
+        var counterMonth = 0
+        var counterWeek = 0
+
+        var counterAllTask = 0
+        var counterMonthTask = 0
+        var counterWeekTask = 0
+
+        var efficiencyAllPresenceEmployee = 0
+        var efficiencyMonthPresenceEmployee = 0
+        var efficiencyWeekPresenceEmployee = 0
+
+        val presenceEmployeeDao = AppDatabase.getDataBase(view.context).timeDao
+        val taskEmployeeDao = AppDatabase.getDataBase(view.context).taskDao
+
+        val presencesEmployee = presenceEmployeeDao.getEmployeeAllTime(employee.idEmployee!!)
+        val tasksEmployee = taskEmployeeDao.getEmployeeAllTask(employee.idEmployee!!)
+
+        val efficiencyEmployee = efficiencyEmployeeDao.getEfficiencyEmployee(employee.idEmployee!!)
+        val day = PersianCalendar()
+
+        val currentDate = LocalDate.of(day.persianYear, day.persianMonth + 1, day.persianDay)
+        // یافتن روز اول هفته
+        val firstDayOfWeek =
+            currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SATURDAY)).dayOfMonth
+        var endDayOfWeek = firstDayOfWeek + 6
+        if (endDayOfWeek > 31)
+            if (day.persianMonth < 7)
+                endDayOfWeek = 31
+            else
+                endDayOfWeek = 30
+
+        for (presenceEmployee in presencesEmployee) {
+            allPresenceEmployee += presenceEmployee.differenceTime!!
+            counterAll++
+            if (day.persianMonthName == presenceEmployee.month) {
+                monthPresenceEmployee += presenceEmployee.differenceTime
+//                counterMonth++
+                if (presenceEmployee.day.toInt() in firstDayOfWeek..endDayOfWeek) {
+                    weekPresenceEmployee += presenceEmployee.differenceTime
+                    counterWeek++
+                }
+            }
+        }
+
+        efficiencyWeekPresenceEmployee =
+            ((weekPresenceEmployee.toDouble() / efficiencyEmployee!!.mustWeekWatch.toDouble()) * 100).toInt()
+
+        if (presencesEmployee.isEmpty())
+            efficiencyAllPresenceEmployee = 0
+        else
+            efficiencyAllPresenceEmployee = efficiencyEmployee.efficiencyTotalPresence
+
+        if (efficiencyEmployee.totalWeekWatch != weekPresenceEmployee) {
+            efficiencyAllPresenceEmployee += efficiencyWeekPresenceEmployee
+
+            Log.v("loginapp", "efficiencyAllPresenceEmployee: ${efficiencyAllPresenceEmployee}")
+            Log.v("loginapp", "efficiencyWeekPresenceEmployee: ${efficiencyWeekPresenceEmployee}")
+        }
+
+        for (taskEmployee in tasksEmployee) {
+            if (taskEmployee.doneTask == true) {
+                allVolumeTaskEmployee += taskEmployee.volumeTask
+                allEfficiencyTaskEmployee += taskEmployee.efficiencyTask!!
+                counterAllTask++
+                if (day.persianMonth == taskEmployee.monthCreation) {
+                    monthVolumeTaskEmployee += taskEmployee.volumeTask
+                    monthEfficiencyTaskEmployee += taskEmployee.efficiencyTask
+                    counterMonthTask++
+                    if (taskEmployee.dayDone in firstDayOfWeek..endDayOfWeek) {
+                        weekVolumeTaskEmployee += taskEmployee.volumeTask
+                        weekEfficiencyTaskEmployee += taskEmployee.efficiencyTask
+                        counterWeekTask++
+                        Log.v("loginapp", "firstDayOfWeek: ${firstDayOfWeek}")
+                        Log.v("loginapp", "endDayOfWeek: ${endDayOfWeek}")
+                        Log.v("loginapp", "firstDayOfWeek: ${taskEmployee.dayCreation}")
+                    }
+                }
+            }
+        }
+
+        if (counterAllTask == 0)
+            counterAllTask++
+        if (counterMonthTask == 0)
+            counterMonthTask++
+        if (counterWeekTask == 0)
+            counterWeekTask++
+
+
+//            efficiencyWeekPresenceEmployee = weekPresenceEmployee / counterWeek
+//            efficiencyMonthPresenceEmployee = monthPresenceEmployee / counterMonth
+//            efficiencyAllPresenceEmployee = allPresenceEmployee / counterAll
+
+        val newEfficiencyEmployee = EfficiencyEmployee(
+            idEfficiency = efficiencyEmployee.idEfficiency,
+            idEmployee = efficiencyEmployee.idEmployee,
+            mustWeekWatch = efficiencyEmployee.mustWeekWatch,
+            numberDay = efficiencyEmployee.numberDay,
+            totalWeekWatch = weekPresenceEmployee,
+            totalMonthWatch = monthPresenceEmployee,
+            totalWatch = allPresenceEmployee,
+            efficiencyWeekPresence = efficiencyWeekPresenceEmployee,
+            efficiencyTotalPresence = efficiencyAllPresenceEmployee,
+            efficiencyWeekDuties = weekEfficiencyTaskEmployee / counterWeekTask,
+            efficiencyMonthDuties = monthEfficiencyTaskEmployee / counterMonthTask,
+            efficiencyTotalDuties = allEfficiencyTaskEmployee / counterAllTask,
+            totalWeekDuties = weekVolumeTaskEmployee,
+            totalMonthDuties = monthVolumeTaskEmployee,
+            totalDuties = allVolumeTaskEmployee,
+            efficiencyTotal = efficiencyEmployee.efficiencyTotal
+        )
+        efficiencyEmployeeDao.update(newEfficiencyEmployee)
+
         val progress = efficiencyEmployeeDao.getEfficiencyEmployee(employee.idEmployee!!)
         val efficiencyTotalPresence = progress!!.efficiencyTotalPresence
         val efficiencyTotalDuties = progress.efficiencyTotalDuties
@@ -388,18 +539,7 @@ class EmployeeInformationFragment(
             binding.prgTotalEmp.progressBarColor = Color.parseColor("#FE7D8B")
         }
 
-
-        if (employee.imagePath != null) {
-            Glide.with(this)
-                .load(employee.imagePath)
-                .apply(RequestOptions.circleCropTransform())
-                .into(binding.btnInfoPrn)
-        } else
-            if (employee.gender == "زن") {
-                binding.btnInfoPrn.setImageResource(R.drawable.img_matter)
-            } else
-                binding.btnInfoPrn.setImageResource(R.drawable.img_male)
-
+        setTitleEmployee(view)
     }
 
     private fun showDeleteProjectDialog() {
