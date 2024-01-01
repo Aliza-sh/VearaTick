@@ -2,14 +2,16 @@ package com.vearad.vearatick
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.vearad.vearatick.adapter.CompanyEventAdapter
@@ -55,10 +57,9 @@ class LoginStep24Activity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
             overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
-
         }
 
-        binding.tilPassword.editText?.addTextChangedListener {
+        /*binding.tilPassword.editText?.addTextChangedListener {
             if (it!!.length < 8) {
                 binding.tilPassword.error = "رمز عبور باید حداقل 8 حرف باشد."
             } else
@@ -81,7 +82,7 @@ class LoginStep24Activity : AppCompatActivity() {
 
             snackbar?.dismiss()
 
-        }
+        }*/
 
 
         binding.btnDone.setOnClickListener {
@@ -91,7 +92,6 @@ class LoginStep24Activity : AppCompatActivity() {
     }
     fun login() {
         if (
-
             binding.edtEmail.length() > 0 &&
             binding.edtPassword.length() > 0
         ) {
@@ -230,8 +230,6 @@ class LoginStep24Activity : AppCompatActivity() {
                         // Process the events data as needed
                         Log.v("loginapp", "username: ${userData?.user?.username}")
                         val user = userData?.user?.username
-                        
-
 
                         setSharedPreferences(user,accessToken,expires)
 
@@ -273,6 +271,10 @@ class LoginStep24Activity : AppCompatActivity() {
 
         val sharedPreferencesAccessToken = getSharedPreferences(ACCESSTOKEN, Context.MODE_PRIVATE)
         sharedPreferencesAccessToken.edit().putString(KEYACCESSTOKEN, accessToken).apply()
+
+        val sharedPreferencesFirstRun = getSharedPreferences(FIRSTRUN, Context.MODE_PRIVATE)
+        sharedPreferencesFirstRun.edit().putBoolean(KEYUFIRSTRUN, true).apply()
+
 
         val expire = expires?.div((3600*24))
         Log.v("loginapp", "expires: ${expires}")
@@ -341,9 +343,14 @@ class LoginStep24Activity : AppCompatActivity() {
         }
 
         if (authFailedErrors != null) {
-            snackbar = Snackbar.make(binding.root, "$authFailedErrors", Snackbar.LENGTH_INDEFINITE)
-
-            snackbar!!.show()
+            val snackbar = Snackbar.make(binding.root, "$authFailedErrors", Snackbar.LENGTH_INDEFINITE).setBackgroundTint(Color.parseColor("#FFFFFF"))
+                .setTextColor(Color.parseColor("#000000"))
+                .setActionTextColor(Color.parseColor("#E600ADB5"))
+            val view = snackbar.view
+            val params = view.layoutParams as FrameLayout.LayoutParams
+            params.gravity = Gravity.TOP
+            view.layoutParams = params
+            snackbar.show()
         }
 
         if (passwordErrors != null) {

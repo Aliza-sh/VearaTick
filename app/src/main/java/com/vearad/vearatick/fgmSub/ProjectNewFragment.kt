@@ -70,7 +70,7 @@ class ProjectNewFragment(
         }
 
         val today = PersianCalendar()
-        valueDay = today.day - 1
+        valueDay = today.day
         valueMonth = today.month
         valueYear = today.year
         valueCalendar = "$valueYear/$valueMonth/$valueDay"

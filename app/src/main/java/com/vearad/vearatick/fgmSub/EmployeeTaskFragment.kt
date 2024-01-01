@@ -83,8 +83,11 @@ class EmployeeTaskFragment(
         val startMonth = currentMonth.minusMonths(4)
         val endMonth = currentMonth.plusMonths(4)
         binding.clrTaskEmp.setup(startMonth, endMonth,org.threeten.bp.DayOfWeek.SATURDAY)
-        binding.clrTaskEmp.scrollToMonth(currentMonth.next)
-
+        val today = LocalDate.now()
+        if (today.dayOfMonth > 15)
+            binding.clrTaskEmp.scrollToMonth(currentMonth.next)
+        else
+            binding.clrTaskEmp.scrollToMonth(currentMonth)
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay // Will be set when this container is bound.
             val bindingItemCalendarDayEmployeeTask = ItemCalendarDayEmployeeTaskBinding.bind(view)

@@ -89,7 +89,9 @@ class EmployeeRecruitmentFragment(
         val popupMenu = PopupMenu(this.context, binding.imgprn2)
         onPhotoClicked(popupMenu)
 
-        binding.btnNumberPhone.setOnClickListener {selectContact()  }
+        binding.btnNumberPhone.setOnClickListener {
+            selectContact()
+        }
 
         binding.btnBck.setOnClickListener {
             if (parentFragmentManager.backStackEntryCount > 0) {
@@ -248,8 +250,8 @@ class EmployeeRecruitmentFragment(
                 family = txtFamily,
                 age = txtAge.toInt(),
                 gender = txtGender,
-                cellularPhone = txtNumber.toLong(),
-                homePhone = txtNumberHome.toLong(),
+                cellularPhone = txtNumber,
+                homePhone = txtNumberHome,
                 address = txtAddress,
                 specialty = txtSpecialty,
                 skill = txtMaharat,
@@ -267,8 +269,8 @@ class EmployeeRecruitmentFragment(
                     family = txtFamily,
                     age = txtAge.toInt(),
                     gender = txtGender,
-                    cellularPhone = txtNumber.toLong(),
-                    homePhone = txtNumberHome.toLong(),
+                    cellularPhone = txtNumber,
+                    homePhone = txtNumberHome,
                     address = txtAddress,
                     specialty = txtSpecialty,
                     skill = txtMaharat,
@@ -283,7 +285,7 @@ class EmployeeRecruitmentFragment(
             employeeAdapter.addEmployee(newEmployee)
             employeeDao.insert(newEmployee)
 
-            val employee = employeeDao.getObjectAllEmployee(txtname, txtFamily, txtNumber.toLong())
+            val employee = employeeDao.getObjectAllEmployee(txtname, txtFamily, txtNumber)
 
             val newEfficiencyEmployee = EfficiencyEmployee(
                 idEmployee = employee?.idEmployee!!,

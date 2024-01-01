@@ -17,7 +17,7 @@ interface EmployeeDao : BaceDao<Employee> {
     fun getAllEmployee(): List<Employee>
 
     @Query("SELECT * FROM employee_table WHERE name = :name AND family = :family AND cellularPhone =:cellularPhone")
-    fun getObjectAllEmployee(name: String, family: String, cellularPhone: Long): Employee?
+    fun getObjectAllEmployee(name: String, family: String, cellularPhone: String): Employee?
 
     @Query("SELECT * FROM employee_table WHERE idEmployee = :idEmployee")
     fun getEmployee(idEmployee: Int): Employee?
@@ -149,8 +149,8 @@ interface ProjectDao : BaceDao<Project> {
     fun getFirstRecord(): Project?
     @Query("SELECT progressProject FROM project_table")
     fun getColumnprogressProject(): List<Int>
-    @Query("SELECT * FROM project_table WHERE typeProject = :typeProject AND doneProject = :doneProject")
-    fun getNumberProject(typeProject: String,doneProject: Boolean): List<Project>
+    @Query("SELECT * FROM project_table WHERE typeProject = :typeProject ")
+    fun getNumberProject(typeProject: String): List<Project>
     @Query("SELECT * FROM project_table WHERE doneProject = :doneProject")
     fun getAllDoneProject(doneProject: Boolean): List<Project>
 }
@@ -200,17 +200,21 @@ interface EfficiencyDao : BaceDao<EfficiencyEmployee> {
     fun getEfficiencyEmployee(idEmployee: Int): EfficiencyEmployee?
     @Query("SELECT efficiencyWeekDuties FROM efficiency_table")
     fun getColumnEfficiencyWeekDuties(): List<Int>
+
     @Query("SELECT efficiencyMonthDuties FROM efficiency_table")
     fun getColumnEfficiencyMonthDuties(): List<Int>
+
     @Query("SELECT efficiencyTotalDuties FROM efficiency_table")
     fun getColumnEfficiencyTotalDuties(): List<Int>
+
     @Query("SELECT efficiencyWeekPresence FROM efficiency_table")
     fun getColumnEfficiencyWeekPresence(): List<Int>
+
     @Query("SELECT efficiencyTotalPresence FROM efficiency_table")
     fun getColumnEfficiencyTotalPresence(): List<Int>
 
-    @Query("SELECT CASE WHEN SUM(CASE WHEN idEmployee = 0 OR idEfficiency = 0 THEN 0 ELSE 1 END) = 0 THEN 1 ELSE 0 END FROM efficiency_table")
-    fun isAllColumnsNonZero(): Boolean
+    @Query("SELECT CASE WHEN (SUM(CASE WHEN mustWeekWatch != 0 THEN 1 ELSE 0 END) = 0) AND (SUM(CASE WHEN numberDay != 0 THEN 1 ELSE 0 END) = 0) AND (SUM(CASE WHEN totalWeekWatch != 0 THEN 1 ELSE 0 END) = 0) AND (SUM(CASE WHEN totalMonthWatch != 0 THEN 1 ELSE 0 END) = 0) AND (SUM(CASE WHEN totalWatch != 0 THEN 1 ELSE 0 END) = 0) AND (SUM(CASE WHEN efficiencyWeekPresence != 0 THEN 1 ELSE 0 END) = 0) AND (SUM(CASE WHEN efficiencyTotalPresence != 0 THEN 1 ELSE 0 END) = 0) AND (SUM(CASE WHEN totalWeekDuties != 0 THEN 1 ELSE 0 END) = 0) AND (SUM(CASE WHEN totalMonthDuties != 0 THEN 1 ELSE 0 END) = 0) AND (SUM(CASE WHEN totalDuties != 0 THEN 1 ELSE 0 END) = 0) AND (SUM(CASE WHEN efficiencyWeekDuties != 0 THEN 1 ELSE 0 END) = 0) AND (SUM(CASE WHEN efficiencyMonthDuties != 0 THEN 1 ELSE 0 END) = 0) AND (SUM(CASE WHEN efficiencyTotalDuties != 0 THEN 1 ELSE 0 END) = 0) AND (SUM(CASE WHEN efficiencyTotal != 0 THEN 1 ELSE 0 END) = 0) THEN 1 ELSE 0 END FROM efficiency_table WHERE idEmployee = :idEmployee")
+    fun isAllColumnsNonZero(idEmployee: Int): Boolean
 }
 @Dao
 interface CompanyReceiptDao : BaceDao<CompanyReceipt> {

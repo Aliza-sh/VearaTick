@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.vearad.vearatick.databinding.ItemEventBinding
 import com.vearad.vearatick.model.Events
 import saman.zamani.persiandate.PersianDate
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 
 class CompanyEventAdapter(
@@ -25,7 +27,17 @@ class CompanyEventAdapter(
         fun bindData(position: Int, clickListener: CompanyEventEvent) {
 
             val persianDate = PersianDate()
-            persianDate.initGrgDate(2023,12,25)
+            val dateString = data[position].start_date
+            Log.v("loginapp", "dateString: ${dateString}")
+
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-d")
+            val date = LocalDate.parse(dateString, formatter)
+
+            val day = date.dayOfMonth
+            val month = date.monthValue
+            val year = date.year
+
+            persianDate.initGrgDate(year,month, day)
             val persianYear = persianDate.shYear
             val persianMonth = persianDate.shMonth
             val persianDay = persianDate.shDay

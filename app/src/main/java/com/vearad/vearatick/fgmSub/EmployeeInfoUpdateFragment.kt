@@ -1,10 +1,17 @@
 package com.vearad.vearatick.fgmSub
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.provider.ContactsContract
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
@@ -15,7 +22,8 @@ import android.widget.AutoCompleteTextView
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -28,6 +36,7 @@ import com.vearad.vearatick.databinding.FragmentEmployeeInfoUpdateBinding
 import com.vearad.vearatick.employeeAdapter
 
 private val PICK_IMAGE_REQUEST = 1
+private val PICK_CONTACT_REQUEST = 2
 
 class EmployeeInfoUpdateFragment(
     val employee: Employee,
@@ -114,6 +123,10 @@ class EmployeeInfoUpdateFragment(
 //            }
 //        })
 
+        binding.btnNumberPhone.setOnClickListener {
+            selectContact()
+        }
+
         binding.sheetBtnDone.setOnClickListener {
             addNewEmployee()
         }
@@ -125,6 +138,21 @@ class EmployeeInfoUpdateFragment(
             if (parentFragmentManager.backStackEntryCount > 0) {
                 parentFragmentManager.popBackStack()
             }
+        }
+    }
+
+    private fun selectContact() {
+        val activity = activity ?: return
+
+        if (ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(
+                activity,
+                arrayOf(Manifest.permission.READ_CONTACTS),
+                PICK_CONTACT_REQUEST
+            )
+        } else {
+            val intent = Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI)
+            startActivityForResult(intent, PICK_CONTACT_REQUEST)
         }
     }
 
@@ -209,19 +237,59 @@ class EmployeeInfoUpdateFragment(
         startActivityForResult(intent, PICK_IMAGE_REQUEST)
     }
 
+    @SuppressLint("Range")
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == AppCompatActivity.RESULT_OK && data != null) {
-            val selectedImageUri: Uri = data.data!!
-            imagePath = selectedImageUri.toString()
-            imageUri = selectedImageUri
-            Glide.with(this)
-                .load(selectedImageUri)
-                .apply(RequestOptions.circleCropTransform())
-                .into(binding.imgprn2)
-            binding.imgprn2.setPadding(20, 20, 20, 20)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                PICK_IMAGE_REQUEST -> {
+                    val selectedImageUri: Uri = data?.data!!
+                    imagePath = selectedImageUri.toString()
+                    imageUri = selectedImageUri
+                    Glide.with(this)
+                        .load(selectedImageUri)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(binding.imgprn2)
+                    binding.imgprn2.setPadding(20, 20, 20, 20)
+                }
+                PICK_CONTACT_REQUEST -> {
+
+                    val contactData: Uri = data!!.data!!
+                    val cur: Cursor =
+                        requireActivity().getContentResolver().query(contactData, null, null, null, null)!!
+                    if (cur.count > 0) { // thats mean some resutl has been found
+                        if (cur.moveToNext()) {
+                            val id =
+                                cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID))
+                            val name =
+                                cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                            Log.e("Names", name)
+                            if (cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))
+                                    .toInt() > 0
+                            ) {
+                                val phones: Cursor = requireActivity().getContentResolver().query(
+                                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                    null,
+                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id,
+                                    null,
+                                    null
+                                )!!
+                                while (phones.moveToNext()) {
+                                    val phoneNumber = phones.getString(phones.getColumnIndex(
+                                        ContactsContract.CommonDataKinds.Phone.NUMBER))
+                                    binding.edtNumEmp.setText(phoneNumber)
+                                }
+                                phones.close()
+                            }
+                        }
+                    }
+                    cur.close()
+
+                }
+            }
         }
+
     }
     private fun deletePhoto() {
         imageUri = null
@@ -262,8 +330,8 @@ class EmployeeInfoUpdateFragment(
                 family = txtFamily,
                 age = txtAge.toInt(),
                 gender = txtGender,
-                cellularPhone = txtNumber.toLong(),
-                homePhone = txtNumberHome.toLong(),
+                cellularPhone = txtNumber,
+                homePhone = txtNumberHome,
                 address = txtAddress,
                 specialty = txtSpecialty,
                 skill = "",
@@ -282,8 +350,8 @@ class EmployeeInfoUpdateFragment(
                     family = txtFamily,
                     age = txtAge.toInt(),
                     gender = txtGender,
-                    cellularPhone = txtNumber.toLong(),
-                    homePhone = txtNumberHome.toLong(),
+                    cellularPhone = txtNumber,
+                    homePhone = txtNumberHome,
                     address = txtAddress,
                     specialty = txtSpecialty,
                     skill = "",
