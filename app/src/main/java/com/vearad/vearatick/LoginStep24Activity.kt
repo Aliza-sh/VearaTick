@@ -2,11 +2,14 @@ package com.vearad.vearatick
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View.GONE
 import android.view.View.VISIBLE
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
@@ -340,9 +343,14 @@ class LoginStep24Activity : AppCompatActivity() {
         }
 
         if (authFailedErrors != null) {
-            snackbar = Snackbar.make(binding.root, "$authFailedErrors", Snackbar.LENGTH_INDEFINITE)
-
-            snackbar!!.show()
+            val snackbar = Snackbar.make(binding.root, "$authFailedErrors", Snackbar.LENGTH_INDEFINITE).setBackgroundTint(Color.parseColor("#FFFFFF"))
+                .setTextColor(Color.parseColor("#000000"))
+                .setActionTextColor(Color.parseColor("#E600ADB5"))
+            val view = snackbar.view
+            val params = view.layoutParams as FrameLayout.LayoutParams
+            params.gravity = Gravity.TOP
+            view.layoutParams = params
+            snackbar.show()
         }
 
         if (passwordErrors != null) {
