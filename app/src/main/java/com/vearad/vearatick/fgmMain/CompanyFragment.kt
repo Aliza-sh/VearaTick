@@ -9,15 +9,18 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
 import android.view.ViewGroup
 import android.view.Window
+import android.widget.FrameLayout
 import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.Fragment
 import com.ghanshyam.graphlibs.Graph
 import com.ghanshyam.graphlibs.GraphData
+import com.google.android.material.snackbar.Snackbar
 import com.vearad.vearatick.CHEKEXPIRATION
 import com.vearad.vearatick.CompanyFinancialReportActivity
 import com.vearad.vearatick.CompanyPaymentActivity
@@ -100,6 +103,23 @@ class CompanyFragment : Fragment() {
             val today = LocalDate.now()
             Log.v("expirationDate", "date: ${date}")
             Log.v("expirationDate", "today: ${today}")
+
+            if (today == date) {
+                val snackbar = Snackbar.make(binding.root, "اشتراک شما منقضی شده است!", Snackbar.LENGTH_LONG)
+                    .setAction("خرید اشتراک") {
+                        showIncreaseCreditDialog()
+                    }.setBackgroundTint(Color.parseColor("#FFFFFF"))
+                    .setTextColor(Color.parseColor("#000000"))
+                    .setActionTextColor(Color.parseColor("#E600ADB5"))
+
+                val view = snackbar.view
+                val params = view.layoutParams as FrameLayout.LayoutParams
+                params.gravity = Gravity.TOP
+                view.layoutParams = params
+                snackbar.show()
+
+            }
+
 
             if (today != date) {
                 binding.cardLock.visibility = GONE
