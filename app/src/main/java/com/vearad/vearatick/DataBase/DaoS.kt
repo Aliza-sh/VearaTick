@@ -149,8 +149,8 @@ interface ProjectDao : BaceDao<Project> {
     fun getFirstRecord(): Project?
     @Query("SELECT progressProject FROM project_table")
     fun getColumnprogressProject(): List<Int>
-    @Query("SELECT * FROM project_table WHERE typeProject = :typeProject AND doneProject = :doneProject")
-    fun getNumberProject(typeProject: String,doneProject: Boolean): List<Project>
+    @Query("SELECT * FROM project_table WHERE typeProject = :typeProject ")
+    fun getNumberProject(typeProject: String): List<Project>
     @Query("SELECT * FROM project_table WHERE doneProject = :doneProject")
     fun getAllDoneProject(doneProject: Boolean): List<Project>
 }

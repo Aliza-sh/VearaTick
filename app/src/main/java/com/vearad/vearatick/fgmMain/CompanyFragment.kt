@@ -159,14 +159,7 @@ class CompanyFragment : Fragment() {
             }
         }
 
-        binding.progressEfficiencyPro.setPercent(efficiencyProject())
-        binding.txtEfficiencyPro.text = efficiencyProject().toString() + "%"
-
-        binding.progressEfficiencyEmpTask.setPercent(efficiencyEmployeeTack())
-        binding.txtEfficiencyEmpTask.text = efficiencyEmployeeTack().toString() + "%"
-
-        binding.progressEfficiencyEmpPresence.setPercent(efficiencyEmployeePresence())
-        binding.txtEfficiencyEmpPresence.text = efficiencyEmployeePresence().toString() + "%"
+        setProgressEfficiencyCompamy()
 
         binding.btnEffPro.setOnClickListener {
             val intent = Intent(requireContext(), ProAndEmpActivity::class.java)
@@ -198,6 +191,54 @@ class CompanyFragment : Fragment() {
         progressNumProject(binding.progressNumProject)
     }
 
+    @SuppressLint("SetTextI18n")
+    private fun setProgressEfficiencyCompamy() {
+
+        if (efficiencyProject() > 100){
+            binding.progressEfficiencyPro.setPercent(100)
+            binding.txtEfficiencyPro.text = "100%+"
+
+        } else if (efficiencyProject() in 1..100){
+            binding.progressEfficiencyPro.setPercent(efficiencyProject())
+            binding.txtEfficiencyPro.text = "${efficiencyProject()}%"
+
+        }
+        else if (efficiencyProject() < 0){
+            binding.progressEfficiencyPro.setPercent(0)
+            binding.txtEfficiencyPro.text = "0%-"
+        }
+
+
+        if (efficiencyEmployeeTack() > 100){
+            binding.progressEfficiencyEmpTask.setPercent(100)
+            binding.txtEfficiencyEmpTask.text = "100%+"
+
+        } else if (efficiencyEmployeeTack() in 1..100){
+            binding.progressEfficiencyEmpTask.setPercent(efficiencyProject())
+            binding.txtEfficiencyEmpTask.text = "${efficiencyProject()}%"
+
+        }
+        else if (efficiencyEmployeeTack() < 0){
+            binding.progressEfficiencyEmpTask.setPercent(0)
+            binding.txtEfficiencyEmpTask.text = "0%-"
+        }
+
+        if (efficiencyEmployeePresence() > 100){
+            binding.progressEfficiencyEmpPresence.setPercent(100)
+            binding.txtEfficiencyEmpPresence.text = "100%+"
+
+        } else if (efficiencyEmployeePresence() in 1..100){
+            binding.progressEfficiencyEmpPresence.setPercent(efficiencyProject())
+            binding.txtEfficiencyEmpPresence.text = "${efficiencyProject()}%"
+
+        }
+        else if (efficiencyEmployeePresence() < 0){
+            binding.progressEfficiencyEmpPresence.setPercent(0)
+            binding.txtEfficiencyEmpPresence.text = "0%-"
+        }
+
+    }
+
     override fun onResume() {
         super.onResume()
         sharedPreferences = requireActivity().getSharedPreferences(SHAREDVEARATICK, Context.MODE_PRIVATE)
@@ -220,13 +261,13 @@ class CompanyFragment : Fragment() {
 
     private fun progressNumProject(graph: Graph) {
 
-        val numAndroid = projectDao.getNumberProject("اندروید", true).size
-        val numSite = projectDao.getNumberProject("سایت",true).size
-        val numFrontEnd = projectDao.getNumberProject("فرانت اند", true).size
-        val numBackEnd = projectDao.getNumberProject("بک اند", true).size
-        val numRobotic = projectDao.getNumberProject("رباتیک", true).size
-        val numDsign = projectDao.getNumberProject("طراحی", true).size
-        val numSeo = projectDao.getNumberProject("سئو", true).size
+        val numAndroid = projectDao.getNumberProject("اندروید").size
+        val numSite = projectDao.getNumberProject("سایت").size
+        val numFrontEnd = projectDao.getNumberProject("فرانت اند").size
+        val numBackEnd = projectDao.getNumberProject("بک اند").size
+        val numRobotic = projectDao.getNumberProject("رباتیک").size
+        val numDsign = projectDao.getNumberProject("طراحی").size
+        val numSeo = projectDao.getNumberProject("سئو").size
         val numTotalProject = projectDao.getAllDoneProject(true).size
 
         graph.setMinValue(0f)
