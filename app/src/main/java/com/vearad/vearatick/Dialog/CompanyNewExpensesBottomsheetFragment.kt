@@ -51,7 +51,7 @@ class CompanyNewExpensesBottomsheetFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         valueCalendar = PersianCalendar()
-        binding.txtDateReceipt.text = "${valueCalendar!!.year}/${valueCalendar!!.month + 1}/${valueCalendar!!.day - 1}"
+        binding.txtDateReceipt.text = "${valueCalendar!!.year}/${valueCalendar!!.month + 1}/${valueCalendar!!.day}"
         binding.btnCalendar.setOnClickListener {
             onCreateCalendar()
         }
@@ -191,7 +191,7 @@ class CompanyNewExpensesBottomsheetFragment(
         } else {
             newCompanyFinancialReport = FinancialReport(
                 year = valueCalendar!!.year,
-                month = valueCalendar!!.month +1,
+                month = valueCalendar!!.month + 1,
                 expense = expense.toLong(),
             )
             financialReportDao.insert(newCompanyFinancialReport)

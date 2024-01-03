@@ -211,8 +211,7 @@ class EmployeePresenceFragment(
                                             entry = 0,
                                             entryAll = "",
                                             exit = 0,
-                                            exitAll = ""
-                                        )
+                                            exitAll = "")
                                     )
                                     inOutAdapter = EntryExitEmployeeAdapter(
                                         ArrayList(entryExitList),
@@ -238,7 +237,7 @@ class EmployeePresenceFragment(
                                         entry = 0,
                                         entryAll = "",
                                         exit = 0,
-                                        exitAll = ""
+                                        exitAll = "",
                                     )
                                 )
                                 inOutAdapter = EntryExitEmployeeAdapter(
@@ -497,7 +496,7 @@ class EmployeePresenceFragment(
                         entry = 0,
                         entryAll = "00:00",
                         exit = 0,
-                        exitAll = "00:00"
+                        exitAll = "00:00",
                     )
                 )
                 inOutAdapter = EntryExitEmployeeAdapter(
@@ -521,7 +520,7 @@ class EmployeePresenceFragment(
                     entry = 0,
                     entryAll = "00:00",
                     exit = 0,
-                    exitAll = "00:00"
+                    exitAll = "00:00",
                 )
             )
             inOutAdapter = EntryExitEmployeeAdapter(
@@ -909,6 +908,7 @@ class EmployeePresenceFragment(
                 val timeData = timeDao.getAllArrivalDay(idEmployee!!, year.toString(), month, day.toString())
                 val dayData = dayDao.getAllEntryExit(idEmployee, year.toString(), month, nameDay)
                 val differenceTime = dayData?.exit!!.toInt() - dayData.entry!!.toInt()
+                val mustTime = dayData?.exit!!.toInt() - dayData.entry!!.toInt()
                 val newTime = Time(
                     timeData?.idTime,
                     idEmployee = idEmployee,
@@ -920,7 +920,8 @@ class EmployeePresenceFragment(
                     entryAll = "00:00",
                     exit = 0,
                     exitAll = "00:00",
-                    differenceTime = -differenceTime
+                    differenceTime = -differenceTime,
+                    mustTime = mustTime
                 )
                 if (day.toString() == timeData?.day) {
                     timeDao.update(newTime)
@@ -947,9 +948,10 @@ class EmployeePresenceFragment(
                 alertDialog.dismiss()
             } else {
 
-                var timeData =
-                    timeDao.getAllArrivalDay(idEmployee!!, year.toString(), month, day.toString())
+                var timeData = timeDao.getAllArrivalDay(idEmployee!!, year.toString(), month, day.toString())
                 val differenceTime = valueHourDoneExit - valueHourDoneEntry
+                val dayData = dayDao.getAllEntryExit(idEmployee, year.toString(), month, nameDay)
+                val mustTime = dayData?.exit!!.toInt() - dayData.entry!!.toInt()
                 val newTime = Time(
                     timeData?.idTime,
                     idEmployee = idEmployee,
@@ -961,7 +963,9 @@ class EmployeePresenceFragment(
                     exit = valueHourDoneExit,
                     entryAll = valueAllDoneEntry,
                     exitAll = valueAllDoneExit,
-                    differenceTime = differenceTime
+                    differenceTime = differenceTime,
+                    mustTime = mustTime
+
                 )
 
                 if (day.toString() == timeData?.day) {
@@ -1137,21 +1141,8 @@ class EmployeePresenceFragment(
         dayEntEmp: View,
         dayExtEmp: View
     ) {
-        val newTime = Time(
-            idTime = onClicktime.idTime,
-            idEmployee = onClicktime.idEmployee,
-            year = onClicktime.year,
-            month = onClicktime.month,
-            day = onClicktime.day,
-            arrival = onClicktime.arrival,
-            entry = onClicktime.entry,
-            exit = onClicktime.exit,
-            entryAll = onClicktime.entryAll,
-            exitAll = onClicktime.exitAll,
-            differenceTime = onClicktime.differenceTime
-        )
 
-        timeDao.delete(newTime)
+        timeDao.delete(onClicktime)
 
         val newTime1 = Time(
             idTime = onClicktime.idTime,
@@ -1164,7 +1155,7 @@ class EmployeePresenceFragment(
             exit = 0,
             entryAll = "00:00",
             exitAll = "00:00",
-            differenceTime = onClicktime.differenceTime
+            differenceTime = onClicktime.differenceTime,
         )
         inOutAdapter.updateInOut(newTime1, 0)
 

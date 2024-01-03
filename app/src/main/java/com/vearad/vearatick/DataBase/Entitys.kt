@@ -59,9 +59,10 @@ data class Time(
     val entryAll: String,
     val exit: Int? = 0,
     val exitAll: String? = "00:00",
-    val differenceTime: Int? = 0
+    val differenceTime: Int? = 0,
+    val mustTime: Int? = 0,
 
-)
+    )
 
 @Entity(tableName = "taskEmployee_table")
 data class TaskEmployee(

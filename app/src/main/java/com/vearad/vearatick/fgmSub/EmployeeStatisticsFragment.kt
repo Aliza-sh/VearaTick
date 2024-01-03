@@ -36,8 +36,10 @@ class EmployeeStatisticsFragment(
     lateinit var tasksEmployee: List<TaskEmployee>
 
     var allPresenceEmployee = 0
+    var allPresenceEmployeeMustTime = 0
     var monthPresenceEmployee = 0
-    var weekPresenceEmployee = 0
+    var weekPresenceEmployeeDifferenceTime = 0
+    var weekPresenceEmployeeMustTime = 0
 
     var allVolumeTaskEmployee = 0
     var monthVolumeTaskEmployee = 0
@@ -94,50 +96,45 @@ class EmployeeStatisticsFragment(
 
         for (presenceEmployee in presencesEmployee) {
             allPresenceEmployee += presenceEmployee.differenceTime!!
+            allPresenceEmployeeMustTime += presenceEmployee.mustTime!!
             counterAll++
             if (day.persianMonthName == presenceEmployee.month) {
                 monthPresenceEmployee += presenceEmployee.differenceTime
 //                counterMonth++
                 if (presenceEmployee.day.toInt() in firstDayOfWeek..endDayOfWeek) {
-                    weekPresenceEmployee += presenceEmployee.differenceTime
+                    weekPresenceEmployeeDifferenceTime += presenceEmployee.differenceTime
+                    weekPresenceEmployeeMustTime += presenceEmployee.mustTime!!
                     counterWeek++
                 }
             }
         }
 
-        efficiencyWeekPresenceEmployee =
-            ((weekPresenceEmployee.toDouble() / efficiencyEmployee!!.mustWeekWatch.toDouble()) * 100).toInt()
+        efficiencyWeekPresenceEmployee = ((weekPresenceEmployeeDifferenceTime.toDouble() / weekPresenceEmployeeMustTime.toDouble()) * 100).toInt()
+        efficiencyAllPresenceEmployee = ((allPresenceEmployee.toDouble() / allPresenceEmployeeMustTime.toDouble()) * 100).toInt()
 
-        if (presencesEmployee.isEmpty())
-            efficiencyAllPresenceEmployee = 0
-        else
-            efficiencyAllPresenceEmployee = efficiencyEmployee.efficiencyTotalPresence
 
-        if (efficiencyEmployee.totalWeekWatch != weekPresenceEmployee){
-            efficiencyAllPresenceEmployee += efficiencyWeekPresenceEmployee
+        Log.v("efficiency", "efficiencyAllPresenceEmployee: ${efficiencyAllPresenceEmployee}")
+        Log.v("efficiency", "efficiencyWeekPresenceEmployee: ${efficiencyWeekPresenceEmployee}")
 
-            Log.v("loginapp", "efficiencyAllPresenceEmployee: ${efficiencyAllPresenceEmployee}")
-            Log.v("loginapp", "efficiencyWeekPresenceEmployee: ${efficiencyWeekPresenceEmployee}")
-            }
 
-            binding.txtWatchWeek.text = "$weekPresenceEmployee ساعت"
-            binding.txtWatchMonth.text = "$monthPresenceEmployee ساعت"
-            binding.txtWatchTotal.text = "$allPresenceEmployee ساعت"
+        binding.txtWatchWeek.text = "$weekPresenceEmployeeDifferenceTime ساعت"
+        binding.txtWatchMonth.text = "$monthPresenceEmployee ساعت"
+        binding.txtWatchTotal.text = "$allPresenceEmployee ساعت"
 
-        if (efficiencyWeekPresenceEmployee > 100){
+        if (efficiencyAllPresenceEmployee > 100){
             binding.progressTotalPresence.setPercent(100)
             binding.progressTotalPresence.setProgressBarColor(Color.parseColor("#70AE84"))
             binding.txtTotalPresence.text = "+100 %"
             binding.txtTotalPresence.setTextColor(Color.parseColor("#70AE84"))
 
-        } else if (efficiencyWeekPresenceEmployee in 1..100){
-            binding.progressTotalPresence.setPercent(efficiencyWeekPresenceEmployee)
+        } else if (efficiencyAllPresenceEmployee in 1..100){
+            binding.progressTotalPresence.setPercent(efficiencyAllPresenceEmployee)
             binding.progressTotalPresence.setProgressBarColor(Color.parseColor("#E600ADB5"))
-            binding.txtTotalPresence.text = "$efficiencyWeekPresenceEmployee %"
+            binding.txtTotalPresence.text = "$efficiencyAllPresenceEmployee %"
             binding.txtTotalPresence.setTextColor(Color.parseColor("#E600ADB5"))
 
         }
-        else if (efficiencyWeekPresenceEmployee < 0){
+        else if (efficiencyAllPresenceEmployee < 0){
             binding.progressTotalPresence.setPercent(0)
             binding.progressTotalPresence.setProgressBarColor(Color.parseColor("#FE7D8B"))
             binding.txtTotalPresence.text = "-0 %"
@@ -179,11 +176,11 @@ class EmployeeStatisticsFragment(
 //            efficiencyAllPresenceEmployee = allPresenceEmployee / counterAll
 
              val newEfficiencyEmployee = EfficiencyEmployee(
-                idEfficiency = efficiencyEmployee.idEfficiency,
+                idEfficiency = efficiencyEmployee!!.idEfficiency,
                 idEmployee = efficiencyEmployee.idEmployee,
                 mustWeekWatch = efficiencyEmployee.mustWeekWatch,
                 numberDay = efficiencyEmployee.numberDay,
-                totalWeekWatch = weekPresenceEmployee,
+                totalWeekWatch = weekPresenceEmployeeDifferenceTime,
                 totalMonthWatch = monthPresenceEmployee,
                 totalWatch = allPresenceEmployee,
                 efficiencyWeekPresence = efficiencyWeekPresenceEmployee,

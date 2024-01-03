@@ -75,9 +75,12 @@ interface TimeDao : BaceDao<Time> {
     fun getAllArrivalDay(idEmployee: Int, year: String, month: String, day: String): Time?
     @Query("SELECT * FROM time_table WHERE idEmployee = :idEmployee AND entry = :entry AND exit = :exit ")
     fun getDeleteTime(idEmployee: Int, entry: Int, exit: Int): Time?
-
     @Query("DELETE FROM time_table WHERE idEmployee = :idEmployee")
     fun deleteTimeByIdEmployee(idEmployee: Int)
+    @Query("SELECT SUM(differenceTime) FROM time_table WHERE idEmployee = :idEmployee")
+    fun getDifferenceTimeSum(idEmployee: Int): Int
+    @Query("SELECT SUM(mustTime) FROM time_table WHERE idEmployee = :idEmployee")
+    fun getMustTimeSum(idEmployee: Int): Int
 }
 
 @Dao
@@ -109,8 +112,8 @@ interface TaskEmployeeDao : BaceDao<TaskEmployee> {
     @Query("SELECT * FROM taskEmployee_table WHERE  idEmployee = :idEmployee AND idTaskProject = :idTaskProject ")
     fun getEmployeeSTaskSProject(idEmployee: Int, idTaskProject: Int): TaskEmployee?
 
-    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND 1 <= (dayDeadline - :toDay) <= 7 AND doneTask == 0")
-    fun getTaskInWeek(idEmployee: Int, toDay: Int): Boolean
+    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND :firstDayOfWeek <= dayDeadline AND dayDeadline  <= :endDayOfWeek AND doneTask == 0")
+    fun getTaskInWeek(idEmployee: Int, firstDayOfWeek: Int,endDayOfWeek: Int): Boolean
     @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND (dayDeadline - :toDay) == 1 AND doneTask == 0")
     fun getTaskTomorrow(idEmployee: Int, toDay: Int): Boolean
     @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND (dayDeadline - :toDay) = 0 AND doneTask == 0")

@@ -51,14 +51,13 @@ class ProjectSubTaskAddNewTeamFromSubTaskFragment(
         taskEmployeeDao = AppDatabase.getDataBase(view.context).taskDao
 
         binding.btnBck.setOnClickListener {
-            parentFragmentManager.beginTransaction()
-                .detach(this@ProjectSubTaskAddNewTeamFromSubTaskFragment).replace(
-                    R.id.layout_pro_and_emp, ProjectInformationFragment(
+            parentFragmentManager.beginTransaction().detach(this@ProjectSubTaskAddNewTeamFromSubTaskFragment)
+                .replace(
+                    R.id.layout_pro_and_emp, ProjectSubTaskFragment(
                         project,
-                        subTaskProjectDao,
                         projectDao,
                         position,
-                        bindingActivityProAndEmp,false
+                        bindingActivityProAndEmp, subTaskProjectDao
                     )
                 ).commit()
         }

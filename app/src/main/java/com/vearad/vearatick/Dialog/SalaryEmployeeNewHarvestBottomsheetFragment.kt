@@ -53,7 +53,7 @@ class SalaryEmployeeNewHarvestBottomsheetFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         valueCalendar = PersianCalendar()
-        binding.txtDateReceipt.text = "${valueCalendar!!.year}/${valueCalendar!!.month + 1}/${valueCalendar!!.day - 1}"
+        binding.txtDateReceipt.text = "${valueCalendar!!.year}/${valueCalendar!!.month + 1}/${valueCalendar!!.day}"
         binding.btnCalendar.setOnClickListener {
             onCreateCalendar()
         }
