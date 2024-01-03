@@ -5,12 +5,14 @@ import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
@@ -41,6 +43,9 @@ class PoolakeyActivity : AppCompatActivity() {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
         }
+
+        val popupMenu = PopupMenu(this, binding.btnSupport)
+        onMenuClicked(popupMenu)
 
         val connectivityManager =
             getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -93,6 +98,15 @@ class PoolakeyActivity : AppCompatActivity() {
 
         binding.btnBuyOneYear.setOnClickListener {
 
+            binding.rv3.setBackgroundColor(Color.parseColor("#E600ADB5"))
+            binding.tv3.setBackgroundColor(Color.parseColor("#E600ADB5"))
+
+            binding.rv2.setBackgroundColor(Color.parseColor("#333333"))
+            binding.tv2.setBackgroundColor(Color.parseColor("#333333"))
+
+            binding.rv1.setBackgroundColor(Color.parseColor("#333333"))
+            binding.tv1.setBackgroundColor(Color.parseColor("#333333"))
+
             val purchaseRequest = PurchaseRequest(
                 //productId = "trial_subscription",
                 productId = "365days",
@@ -108,6 +122,15 @@ class PoolakeyActivity : AppCompatActivity() {
         }
 
         binding.btnBuyThreeMonth.setOnClickListener {
+
+            binding.rv2.setBackgroundColor(Color.parseColor("#E600ADB5"))
+            binding.tv2.setBackgroundColor(Color.parseColor("#E600ADB5"))
+
+            binding.rv1.setBackgroundColor(Color.parseColor("#333333"))
+            binding.tv1.setBackgroundColor(Color.parseColor("#333333"))
+
+            binding.rv3.setBackgroundColor(Color.parseColor("#333333"))
+            binding.tv3.setBackgroundColor(Color.parseColor("#333333"))
 
             val purchaseRequest = PurchaseRequest(
                 //productId = "trial_subscription",
@@ -125,6 +148,15 @@ class PoolakeyActivity : AppCompatActivity() {
 
         binding.btnBuyOneMonth.setOnClickListener {
 
+            binding.rv1.setBackgroundColor(Color.parseColor("#E600ADB5"))
+            binding.tv1.setBackgroundColor(Color.parseColor("#E600ADB5"))
+
+            binding.rv2.setBackgroundColor(Color.parseColor("#333333"))
+            binding.tv2.setBackgroundColor(Color.parseColor("#333333"))
+
+            binding.rv3.setBackgroundColor(Color.parseColor("#333333"))
+            binding.tv3.setBackgroundColor(Color.parseColor("#333333"))
+
             val purchaseRequest = PurchaseRequest(
                 //productId = "trial_subscription",
                 productId = "30days",
@@ -139,14 +171,32 @@ class PoolakeyActivity : AppCompatActivity() {
 
         }
 
+    }
+
+    private fun onMenuClicked(popupMenu: PopupMenu) {
+
+        popupMenu.menuInflater.inflate(R.menu.menu_support, popupMenu.menu)
         binding.btnSupport.setOnClickListener {
+            popupMenu.show()
+            popupMenu.setOnMenuItemClickListener { item ->
 
-            val phoneNumber = "09358668218"  // شماره تلفن مورد نظر
-            val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber"))
-            startActivity(dialIntent)
+                when (item.itemId) {
 
+                    R.id.menu_support_technical -> {
+                        val phoneNumber = "09022700813"  // شماره تلفن فنی
+                        val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber"))
+                        startActivity(dialIntent)
+                    }
+
+                    R.id.menu_support_sale -> {
+                        val phoneNumber = "09358668218"  // شماره تلفن فروش
+                        val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber"))
+                        startActivity(dialIntent)                    }
+
+                }
+                true
+            }
         }
-
     }
 
     fun buy(purchaseRequest: PurchaseRequest, today: LocalDate, payment: Payment) {
