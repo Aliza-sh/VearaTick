@@ -416,8 +416,10 @@ class EmployeeInformationFragment(
     private fun setEfficiency(view: View) {
 
         var allPresenceEmployee = 0
+        var allPresenceEmployeeMustTime = 0
         var monthPresenceEmployee = 0
-        var weekPresenceEmployee = 0
+        var weekPresenceEmployeeDifferenceTime = 0
+        var weekPresenceEmployeeMustTime = 0
 
         var allVolumeTaskEmployee = 0
         var monthVolumeTaskEmployee = 0
@@ -460,31 +462,25 @@ class EmployeeInformationFragment(
 
         for (presenceEmployee in presencesEmployee) {
             allPresenceEmployee += presenceEmployee.differenceTime!!
+            allPresenceEmployeeMustTime += presenceEmployee.mustTime!!
             counterAll++
             if (day.persianMonthName == presenceEmployee.month) {
                 monthPresenceEmployee += presenceEmployee.differenceTime
 //                counterMonth++
                 if (presenceEmployee.day.toInt() in firstDayOfWeek..endDayOfWeek) {
-                    weekPresenceEmployee += presenceEmployee.differenceTime
+                    weekPresenceEmployeeDifferenceTime += presenceEmployee.differenceTime
+                    weekPresenceEmployeeMustTime += presenceEmployee.mustTime!!
                     counterWeek++
                 }
             }
         }
 
-        efficiencyWeekPresenceEmployee =
-            ((weekPresenceEmployee.toDouble() / efficiencyEmployee!!.mustWeekWatch.toDouble()) * 100).toInt()
+        efficiencyWeekPresenceEmployee = ((weekPresenceEmployeeDifferenceTime.toDouble() / weekPresenceEmployeeMustTime.toDouble()) * 100).toInt()
+        efficiencyAllPresenceEmployee = ((allPresenceEmployee.toDouble() / allPresenceEmployeeMustTime.toDouble()) * 100).toInt()
 
-        if (presencesEmployee.isEmpty())
-            efficiencyAllPresenceEmployee = 0
-        else
-            efficiencyAllPresenceEmployee = efficiencyEmployee.efficiencyTotalPresence
+        Log.v("efficiency", "efficiencyAllPresenceEmployee: ${efficiencyAllPresenceEmployee}")
+        Log.v("efficiency", "efficiencyWeekPresenceEmployee: ${efficiencyWeekPresenceEmployee}")
 
-        if (efficiencyEmployee.totalWeekWatch != weekPresenceEmployee) {
-            efficiencyAllPresenceEmployee += efficiencyWeekPresenceEmployee
-
-            Log.v("loginapp", "efficiencyAllPresenceEmployee: ${efficiencyAllPresenceEmployee}")
-            Log.v("loginapp", "efficiencyWeekPresenceEmployee: ${efficiencyWeekPresenceEmployee}")
-        }
 
         for (taskEmployee in tasksEmployee) {
             if (taskEmployee.doneTask == true) {
@@ -520,11 +516,11 @@ class EmployeeInformationFragment(
 //            efficiencyAllPresenceEmployee = allPresenceEmployee / counterAll
 
         val newEfficiencyEmployee = EfficiencyEmployee(
-            idEfficiency = efficiencyEmployee.idEfficiency,
+            idEfficiency = efficiencyEmployee!!.idEfficiency,
             idEmployee = efficiencyEmployee.idEmployee,
             mustWeekWatch = efficiencyEmployee.mustWeekWatch,
             numberDay = efficiencyEmployee.numberDay,
-            totalWeekWatch = weekPresenceEmployee,
+            totalWeekWatch = weekPresenceEmployeeDifferenceTime,
             totalMonthWatch = monthPresenceEmployee,
             totalWatch = allPresenceEmployee,
             efficiencyWeekPresence = efficiencyWeekPresenceEmployee,
