@@ -109,8 +109,8 @@ interface TaskEmployeeDao : BaceDao<TaskEmployee> {
     @Query("SELECT * FROM taskEmployee_table WHERE  idEmployee = :idEmployee AND idTaskProject = :idTaskProject ")
     fun getEmployeeSTaskSProject(idEmployee: Int, idTaskProject: Int): TaskEmployee?
 
-    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND 1 <= (dayDeadline - :toDay) <= 7 AND doneTask == 0")
-    fun getTaskInWeek(idEmployee: Int, toDay: Int): Boolean
+    @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND :firstDayOfWeek <= dayDeadline AND dayDeadline  <= :endDayOfWeek AND doneTask == 0")
+    fun getTaskInWeek(idEmployee: Int, firstDayOfWeek: Int,endDayOfWeek: Int): Boolean
     @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND (dayDeadline - :toDay) == 1 AND doneTask == 0")
     fun getTaskTomorrow(idEmployee: Int, toDay: Int): Boolean
     @Query("SELECT * FROM taskEmployee_table WHERE idEmployee = :idEmployee AND (dayDeadline - :toDay) = 0 AND doneTask == 0")

@@ -112,7 +112,24 @@ class EmployeeInformationFragment(
         val dayDao = AppDatabase.getDataBase(view.context).dayDao
         val today = PersianCalendar()
 
-        val taskInWeekEmployee = taskDao.getTaskInWeek(employee.idEmployee!!, today.persianDay)
+        val day = PersianCalendar()
+        val currentDate = LocalDate.of(day.persianYear, day.persianMonth + 1, day.persianDay)
+        // یافتن روز اول هفته
+        val firstDayOfWeek =
+            currentDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.SATURDAY)).dayOfMonth
+        var endDayOfWeek = firstDayOfWeek + 6
+        if (endDayOfWeek > 31)
+            if (day.persianMonth < 7)
+                endDayOfWeek = 31
+            else
+                endDayOfWeek = 30
+
+        Log.v("taskInWeekEmployee", "firstDayOfWeek: ${firstDayOfWeek}")
+        Log.v("taskInWeekEmployee", "endDayOfWeek: ${endDayOfWeek}")
+
+        val taskInWeekEmployee = taskDao.getTaskInWeek(employee.idEmployee!!, firstDayOfWeek,endDayOfWeek)
+        Log.v("taskInWeekEmployee", "taskInWeekEmployee: ${taskInWeekEmployee}")
+
         val taskTodayEmployee = taskDao.getTaskToday(employee.idEmployee!!, today.persianDay)
         val taskTomorrowEmployee = taskDao.getTaskTomorrow(employee.idEmployee!!, today.persianDay)
         val taskPastEmployee = taskDao.getTaskPast(employee.idEmployee!!, today.persianDay)
