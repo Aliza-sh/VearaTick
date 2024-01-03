@@ -381,7 +381,7 @@ class CompanyFragment : Fragment() {
         val numRobotic = projectDao.getNumberProject("رباتیک").size
         val numDsign = projectDao.getNumberProject("طراحی").size
         val numSeo = projectDao.getNumberProject("سئو").size
-        val numTotalProject = projectDao.getAllDoneProject(true).size
+        val numTotalProject = projectDao.getAllProject().size
 
         graph.setMinValue(0f)
         graph.setMaxValue(numTotalProject.toFloat())
@@ -390,7 +390,7 @@ class CompanyFragment : Fragment() {
         graph.setShapeForegroundColor(Color.parseColor("#202020"))
         graph.setShapeBackgroundColor(Color.parseColor("#202020"))
 
-        binding.txtTotalProject.text = " $numTotalProject"
+        binding.txtTotalProject.text = numTotalProject.toString()
         val data: MutableCollection<GraphData> = ArrayList()
         //اندروید
         data.add(GraphData(numAndroid.toFloat(), Color.parseColor("#97DAE4")))

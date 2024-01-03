@@ -51,17 +51,17 @@ class EmployeeFragment(val bindingActivityProAndEmpBinding: ActivityProAndEmpBin
         employeeAdapter = EmployeeAdapter(ArrayList(employeeData), this, efficiencyEmployeeDao)
         binding.recyclerViewEmployee.adapter = employeeAdapter
         binding.recyclerViewEmployee.layoutManager = GridLayoutManager(context, 2)
-        val topMargin = 10 // اندازه مارجین بالا را از منابع دریافت کنید
+        val topMargin = 20 // اندازه مارجین بالا را از منابع دریافت کنید
         val itemDecoratio = CustomTopMarginItemDecoration(topMargin)
         binding.recyclerViewEmployee.addItemDecoration(itemDecoratio)
         binding.recyclerViewEmployee.addItemDecoration(itemDecoratio)
         val itemCount = employeeData.size // تعداد آیتم‌های موجود در لیست را دریافت کنید
         if (itemCount % 2 == 0) {
-            val bottomMargin = 100 // اندازه مارجین پایین را از منابع دریافت کنید
+            val bottomMargin = 200 // اندازه مارجین پایین را از منابع دریافت کنید
             val itemDecoration = CustomBottomMarginItemDecoration(bottomMargin)
             binding.recyclerViewEmployee.addItemDecoration(itemDecoration)
         } else {
-            val bottomMargin = 100 // اندازه مارجین پایین را از منابع دریافت کنید
+            val bottomMargin = 200 // اندازه مارجین پایین را از منابع دریافت کنید
             val itemDecoration = BottomMarginItemDecoration(bottomMargin)
             binding.recyclerViewEmployee.addItemDecoration(itemDecoration)
         }

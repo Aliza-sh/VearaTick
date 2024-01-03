@@ -49,17 +49,17 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
         projectAdapter = ProjectNearAdapter(ArrayList(projectNearData), this, projectDao)
         binding.recyclerViewProject.adapter = projectAdapter
         binding.recyclerViewProject.layoutManager = GridLayoutManager(context, 2)
-        val topMargin = 10 // اندازه مارجین بالا را از منابع دریافت کنید
+        val topMargin = 30 // اندازه مارجین بالا را از منابع دریافت کنید
         val itemDecoratio = CustomTopMarginItemDecoration(topMargin)
         binding.recyclerViewProject.addItemDecoration(itemDecoratio)
 
         val itemCount = projectNearData.size // تعداد آیتم‌های موجود در لیست را دریافت کنید
         if (itemCount % 2 == 0) {
-            val bottomMargin = 100 // اندازه مارجین پایین را از منابع دریافت کنید
+            val bottomMargin = 200 // اندازه مارجین پایین را از منابع دریافت کنید
             val itemDecoration = CustomBottomMarginItemDecoration(bottomMargin)
             binding.recyclerViewProject.addItemDecoration(itemDecoration)
         } else {
-            val bottomMargin = 100 // اندازه مارجین پایین را از منابع دریافت کنید
+            val bottomMargin = 200 // اندازه مارجین پایین را از منابع دریافت کنید
             val itemDecoration = BottomMarginItemDecoration(bottomMargin)
             binding.recyclerViewProject.addItemDecoration(itemDecoration)
         }
@@ -90,11 +90,11 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
         binding.recyclerViewProject.addItemDecoration(itemDecoratio)
         val itemCount = projectNearData.size // تعداد آیتم‌های موجود در لیست را دریافت کنید
         if (itemCount % 2 == 0) {
-            val bottomMargin = 100 // اندازه مارجین پایین را از منابع دریافت کنید
+            val bottomMargin = 150 // اندازه مارجین پایین را از منابع دریافت کنید
             val itemDecoration = CustomBottomMarginItemDecoration(bottomMargin)
             binding.recyclerViewProject.addItemDecoration(itemDecoration)
         } else {
-            val bottomMargin = 100 // اندازه مارجین پایین را از منابع دریافت کنید
+            val bottomMargin = 150 // اندازه مارجین پایین را از منابع دریافت کنید
             val itemDecoration = BottomMarginItemDecoration(bottomMargin)
             binding.recyclerViewProject.addItemDecoration(itemDecoration)
         }

@@ -102,7 +102,7 @@ class ProjectUpdateInfoFragment(
             when (checkedId) {
 
                 R.id.btn_no_settlement -> {
-                    binding.budget.visibility = View.GONE
+                    binding.budget.visibility = View.INVISIBLE
                 }
 
                 R.id.btn_settlement -> {
