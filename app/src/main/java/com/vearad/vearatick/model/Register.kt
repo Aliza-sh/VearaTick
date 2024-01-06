@@ -6,7 +6,8 @@ data class RegisterData(
     val email: String,
     val phone: String,
     val password: String,
-    val password_confirmation: String
+    val password_confirmation: String,
+    val origin: String= "android"
 )
 
 data class RegisterResponse(

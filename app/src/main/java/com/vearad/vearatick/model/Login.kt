@@ -3,6 +3,7 @@ package com.vearad.vearatick.model
 data class LoginData(
     val email: String,
     val password: String,
+    val origin: String= "android"
 )
 
 data class LoginResponse(
