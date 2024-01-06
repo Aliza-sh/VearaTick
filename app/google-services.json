@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "889743265291",
+    "project_id": "veartich",
+    "storage_bucket": "veartich.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:889743265291:android:e8c7f58220e47c05f2410e",
+        "android_client_info": {
+          "package_name": "com.vearad.vearatick"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQygZ4nF27flCswO6JUwQ_0ogNuRy8SDE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
