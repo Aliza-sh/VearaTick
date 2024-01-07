@@ -21,20 +21,17 @@ import java.time.LocalDate
 class RegisterStep24Activity : AppCompatActivity() {
 
     lateinit var binding: ActivityRegisterStep24Binding
-    var userError: String? = null
-    var emailError: String? = null
-    var phoneError: String? = null
+    private var userError: String? = null
+    private var emailError: String? = null
+    private var phoneError: String? = null
+    private var firstRun: Boolean = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityRegisterStep24Binding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        /*binding.edtNameAndFamily.setText("غللم")
-        binding.edtUser.setText("golam")
-        binding.edtEmail.setText("nkkjhin@hi2.in")
-        binding.edtNumberPhone.setText("09366227895")
-        binding.edtPassword.setText("alialiali")
-        binding.edtPasswordConfirmation.setText("alialiali")*/
+        firstRun = intent.getBooleanExtra("FIRSTRUN", false)
+        Log.v("firstRun", "RegisterStep24Activity: ${firstRun}")
 
         binding.btnBck.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
@@ -45,6 +42,8 @@ class RegisterStep24Activity : AppCompatActivity() {
 
         binding.btnLogin.setOnClickListener {
             val intent = Intent(this, LoginStep24Activity::class.java)
+            intent.putExtra("FIRSTRUN", firstRun)
+            Log.v("firstRun", "RegisterStep24Activity: ${firstRun}")
             startActivity(intent)
             overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
@@ -267,7 +266,6 @@ class RegisterStep24Activity : AppCompatActivity() {
             futureDate.dayOfMonth
         ).apply()
     }
-
 
     private fun setError(
         nameErrors: List<String>?,

@@ -114,7 +114,10 @@ class MainActivity : AppCompatActivity() {
 
                     if (!firstRun){
                         val intent = Intent(this, RegisterStep24Activity::class.java)
+                        val firstRun = true
+                        intent.putExtra("FIRSTRUN", firstRun)
                         startActivity(intent)
+                        android.util.Log.v("firstRun", "MainActivity: ${firstRun}")
                         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
                     }else {
 
