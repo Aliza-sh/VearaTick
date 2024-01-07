@@ -13,11 +13,13 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.FrameLayout
 import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.ghanshyam.graphlibs.Graph
 import com.ghanshyam.graphlibs.GraphData
 import com.google.android.material.snackbar.Snackbar
@@ -28,6 +30,7 @@ import com.vearad.vearatick.CompanyReceiptActivity
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.CompanyExpensesDao
 import com.vearad.vearatick.DataBase.CompanyReceiptDao
+import com.vearad.vearatick.DataBase.CompanySkill
 import com.vearad.vearatick.DataBase.EfficiencyDao
 import com.vearad.vearatick.DataBase.EmployeeHarvestDao
 import com.vearad.vearatick.DataBase.EmployeeInvestmentDao
@@ -39,6 +42,8 @@ import com.vearad.vearatick.ProAndEmpActivity
 import com.vearad.vearatick.R
 import com.vearad.vearatick.SHAREDEXPIRATIONSUBSCRIPTION
 import com.vearad.vearatick.ShareholdersInvestmentActivity
+import com.vearad.vearatick.adapter.CompanySkillAdapter
+import com.vearad.vearatick.adapter.CompanySkillInCompanyFragmentAdapter
 import com.vearad.vearatick.databinding.FragmentCompanyBinding
 import com.vearad.vearatick.databinding.FragmentDialogIncreaseCreditBinding
 import com.vearad.vearatick.databinding.ItemProjectBinding
@@ -48,7 +53,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 
-class CompanyFragment : Fragment() {
+class CompanyFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent {
 
     lateinit var binding: FragmentCompanyBinding
     lateinit var bindingDialogIncreaseCredit: FragmentDialogIncreaseCreditBinding
@@ -105,12 +110,13 @@ class CompanyFragment : Fragment() {
             Log.v("expirationDate", "today: ${today}")
 
             if (today == date) {
-                val snackbar = Snackbar.make(binding.root, "اشتراک شما منقضی شده است!", Snackbar.LENGTH_LONG)
-                    .setAction("خرید اشتراک") {
-                        showIncreaseCreditDialog()
-                    }.setBackgroundTint(Color.parseColor("#FFFFFF"))
-                    .setTextColor(Color.parseColor("#000000"))
-                    .setActionTextColor(Color.parseColor("#E600ADB5"))
+                val snackbar =
+                    Snackbar.make(binding.root, "اشتراک شما منقضی شده است!", Snackbar.LENGTH_LONG)
+                        .setAction("خرید اشتراک") {
+                            showIncreaseCreditDialog()
+                        }.setBackgroundTint(Color.parseColor("#FFFFFF"))
+                        .setTextColor(Color.parseColor("#000000"))
+                        .setActionTextColor(Color.parseColor("#E600ADB5"))
 
                 val view = snackbar.view
                 val params = view.layoutParams as FrameLayout.LayoutParams
@@ -227,51 +233,48 @@ class CompanyFragment : Fragment() {
                 .addToBackStack(null)
                 .commit()
         }
-        progressNumProject(binding.progressNumProject)
+        progressNumProject(binding.progressNumProject, view)
     }
 
     @SuppressLint("SetTextI18n")
     private fun setProgressEfficiencyCompamy() {
 
-        if (efficiencyProject() > 100){
+        if (efficiencyProject() > 100) {
             binding.progressEfficiencyPro.setPercent(100)
             binding.txtEfficiencyPro.text = "100%+"
 
-        } else if (efficiencyProject() in 1..100){
+        } else if (efficiencyProject() in 1..100) {
             binding.progressEfficiencyPro.setPercent(efficiencyProject())
             binding.txtEfficiencyPro.text = "${efficiencyProject()}%"
 
-        }
-        else if (efficiencyProject() < 0){
+        } else if (efficiencyProject() < 0) {
             binding.progressEfficiencyPro.setPercent(0)
             binding.txtEfficiencyPro.text = "0%-"
         }
 
 
-        if (efficiencyEmployeeTack() > 100){
+        if (efficiencyEmployeeTack() > 100) {
             binding.progressEfficiencyEmpTask.setPercent(100)
             binding.txtEfficiencyEmpTask.text = "100%+"
 
-        } else if (efficiencyEmployeeTack() in 1..100){
+        } else if (efficiencyEmployeeTack() in 1..100) {
             binding.progressEfficiencyEmpTask.setPercent(efficiencyProject())
             binding.txtEfficiencyEmpTask.text = "${efficiencyProject()}%"
 
-        }
-        else if (efficiencyEmployeeTack() < 0){
+        } else if (efficiencyEmployeeTack() < 0) {
             binding.progressEfficiencyEmpTask.setPercent(0)
             binding.txtEfficiencyEmpTask.text = "0%-"
         }
 
-        if (efficiencyEmployeePresence() > 100){
+        if (efficiencyEmployeePresence() > 100) {
             binding.progressEfficiencyEmpPresence.setPercent(100)
             binding.txtEfficiencyEmpPresence.text = "100%+"
 
-        } else if (efficiencyEmployeePresence() in 1..100){
+        } else if (efficiencyEmployeePresence() in 1..100) {
             binding.progressEfficiencyEmpPresence.setPercent(efficiencyProject())
             binding.txtEfficiencyEmpPresence.text = "${efficiencyProject()}%"
 
-        }
-        else if (efficiencyEmployeePresence() < 0){
+        } else if (efficiencyEmployeePresence() < 0) {
             binding.progressEfficiencyEmpPresence.setPercent(0)
             binding.txtEfficiencyEmpPresence.text = "0%-"
         }
@@ -372,16 +375,38 @@ class CompanyFragment : Fragment() {
         return decimalFormat.format(value) + " تومان"
     }
 
-    private fun progressNumProject(graph: Graph) {
+    private fun progressNumProject(graph: Graph, view: View) {
 
-        val numAndroid = projectDao.getNumberProject("اندروید").size
+        val companySkillDao = AppDatabase.getDataBase(view.context).companySkillDao
+        val companySkillData = companySkillDao.getAllListCompanySkillDao()
+        Log.v("companySkillData", companySkillData.toString())
+        if (companySkillData.isEmpty())
+            binding.emptyList.visibility = VISIBLE
+
+        val companySkillInCompanyFragmentAdapter =
+            CompanySkillInCompanyFragmentAdapter(ArrayList(companySkillData))
+        binding.rcvSkill.layoutManager = LinearLayoutManager(context)
+        binding.rcvSkill.adapter = companySkillInCompanyFragmentAdapter
+
+        val numTotalProject = projectDao.getAllProject().size
+        binding.txtTotalProject.text = numTotalProject.toString()
+        val data: MutableCollection<GraphData> = ArrayList()
+
+        for (skill in companySkillData) {
+            Log.v("skill", skill.nameCompanySkill)
+            val numProject = projectDao.getNumberProject(skill.nameCompanySkill).size
+            data.add(GraphData(numProject.toFloat(), Color.parseColor(skill.colorSkill)))
+            Log.v("skill", skill.colorSkill)
+        }
+
+        /*val numAndroid = projectDao.getNumberProject("اندروید").size
         val numSite = projectDao.getNumberProject("سایت").size
         val numFrontEnd = projectDao.getNumberProject("فرانت اند").size
         val numBackEnd = projectDao.getNumberProject("بک اند").size
         val numRobotic = projectDao.getNumberProject("رباتیک").size
         val numDsign = projectDao.getNumberProject("طراحی").size
         val numSeo = projectDao.getNumberProject("سئو").size
-        val numTotalProject = projectDao.getAllProject().size
+        val numTotalProject = projectDao.getAllProject().size*/
 
         graph.setMinValue(0f)
         graph.setMaxValue(numTotalProject.toFloat())
@@ -389,8 +414,9 @@ class CompanyFragment : Fragment() {
         graph.setForegroundShapeWidthInPx(50)
         graph.setShapeForegroundColor(Color.parseColor("#202020"))
         graph.setShapeBackgroundColor(Color.parseColor("#202020"))
+        graph.setData(data)
 
-        binding.txtTotalProject.text = numTotalProject.toString()
+        /*binding.txtTotalProject.text = numTotalProject.toString()
         val data: MutableCollection<GraphData> = ArrayList()
         //اندروید
         data.add(GraphData(numAndroid.toFloat(), Color.parseColor("#97DAE4")))
@@ -407,7 +433,7 @@ class CompanyFragment : Fragment() {
         //سئو
         data.add(GraphData(numSeo.toFloat(), Color.parseColor("#B6AA3B")))
 
-        graph.setData(data)
+        graph.setData(data)*/
     }
 
     private fun efficiencyProject(): Int {
@@ -473,5 +499,7 @@ class CompanyFragment : Fragment() {
             alertDialog.dismiss()
         }
     }
+
+    override fun onMenuItemClick(companySkill: CompanySkill, position: Int) {}
 
 }

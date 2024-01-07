@@ -307,6 +307,11 @@ interface CompanySkillDao : BaceDao<CompanySkill> {
     fun getAllCompanySkillDao(): CompanySkill?
     @Query("SELECT * FROM companySkill_table WHERE idCompanySkill = :idCompanySkill")
     fun getOnClickEmployeeHarvest(idCompanySkill: Int): CompanySkill?
+    @Query("SELECT nameCompanySkill FROM companySkill_table")
+    fun getAllSkills(): List<String>
+
+    @Query("SELECT * FROM companySkill_table WHERE nameCompanySkill = :skillName")
+    fun checkSkillExists(skillName: String): Boolean
 
 }
 @Dao

@@ -137,13 +137,7 @@ class CompanySkillFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent,
     }
 
     fun deleteItem(onClickSkill: CompanySkill?, position: Int) {
-
-        val newCompanySkill = CompanySkill(
-            idCompanySkill = onClickSkill!!.idCompanySkill,
-            nameCompanySkill = onClickSkill.nameCompanySkill,
-            volumeSkill = onClickSkill.volumeSkill
-        )
-        companySkillDao.delete(newCompanySkill)
+        companySkillDao.delete(onClickSkill!!)
         onCompanyDeleteSkill()
     }
 

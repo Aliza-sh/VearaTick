@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.vearad.vearatick.BottomSheetCallback
+import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.CompanySkill
 import com.vearad.vearatick.DataBase.CompanySkillDao
 import com.vearad.vearatick.databinding.BottomsheetfragmentCompanyNewSkillBinding
@@ -42,7 +43,7 @@ class CompanyUpdateSkillBottomsheetFragment(
 
         }
         binding.sheetBtnDone.setOnClickListener {
-            addNewSkill()
+            addNewSkill(view)
         }
     }
 
@@ -60,7 +61,7 @@ class CompanyUpdateSkillBottomsheetFragment(
         callback?.onConfirmButtonClicked()
     }
 
-    private fun addNewSkill() {
+    private fun addNewSkill(view: View) {
         if (
             binding.edtNameSkill.length() > 0 &&
             binding.edtVolumeSkill.length() > 0 &&
@@ -68,16 +69,21 @@ class CompanyUpdateSkillBottomsheetFragment(
         ) {
             val txtName = binding.edtNameSkill.text.toString()
             val txtVolune = binding.edtVolumeSkill.text.toString()
-
+            val companySkillDao = AppDatabase.getDataBase(view.context).companySkillDao
+            val existenceSkill = companySkillDao.checkSkillExists(txtName)
+            if (!existenceSkill) {
 
             val newSkill = CompanySkill(
                 idCompanySkill = onClickCompanySkill!!.idCompanySkill,
                 nameCompanySkill = txtName,
-                volumeSkill = txtVolune.toInt()
+                volumeSkill = txtVolune.toInt(),
+                colorSkill = onClickCompanySkill.colorSkill
             )
             companySkillDao.update(newSkill)
             onCompanyNewSkill()
             dismiss()
+            }else
+                Toast.makeText(context, "این مهارت قبلا ایجاد شده است.", Toast.LENGTH_SHORT).show()
         } else {
             Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()
         }

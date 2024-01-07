@@ -17,6 +17,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.Fragment
+import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.Project
 import com.vearad.vearatick.DataBase.ProjectDao
 import com.vearad.vearatick.DataBase.SubTaskProjectDao
@@ -72,7 +73,9 @@ class ProjectUpdateInfoFragment(
         onBackPressed()
         setdata(project)
 
-        val typeProject = listOf(
+        val companySkillDao = AppDatabase.getDataBase(view.context).companySkillDao
+        val companySkillData = companySkillDao.getAllSkills()
+        /*val typeProject = listOf(
             "اندروید",
             "سایت",
             "بک اند",
@@ -80,9 +83,9 @@ class ProjectUpdateInfoFragment(
             "رباتیک",
             "طراحی",
             "سئو"
-        )
+        )*/
 
-        val myAdapteredt = ArrayAdapter(requireContext(), R.layout.item_gender, typeProject)
+        val myAdapteredt = ArrayAdapter(requireContext(), R.layout.item_gender, companySkillData)
         (binding.dialogMainEdtGdrperson.editText as AutoCompleteTextView).setAdapter(
             myAdapteredt
         )

@@ -4,6 +4,7 @@ import BottomMarginItemDecoration
 import CustomBottomMarginItemDecoration
 import CustomTopMarginItemDecoration
 import android.content.Intent
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,8 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.Project
 import com.vearad.vearatick.DataBase.ProjectDao
@@ -47,6 +50,12 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
         projectDao = AppDatabase.getDataBase(view.context).projectDao
         projectNearData = projectDao.getAllProject()
         projectAdapter = ProjectNearAdapter(ArrayList(projectNearData), this, projectDao)
+        val companySkillDao = AppDatabase.getDataBase(view.context).companySkillDao
+
+        val tapTargetSequence = tapTargetSequence()
+        if (companySkillDao.getAllListCompanySkillDao().isEmpty())
+                tapTargetSequence?.start()
+
         binding.recyclerViewProject.adapter = projectAdapter
         binding.recyclerViewProject.layoutManager = GridLayoutManager(context, 2)
         val topMargin = 30 // اندازه مارجین بالا را از منابع دریافت کنید
@@ -78,6 +87,45 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
             }
         })
     }
+
+    private fun tapTargetSequence(): TapTargetSequence? {
+        val tapTargetSequence = TapTargetSequence(requireActivity())
+            .targets(
+                TapTarget.forView(
+                    bindingActivityProAndEmp.btnAdd,
+                    "مهارتی ثبت نشده است.",
+                    "لطفا به قسمت درباره شرکت رفته و مهارت های خود را ثبت کنید."
+                )
+                    .cancelable(true)
+                    .textTypeface(Typeface.DEFAULT_BOLD)
+                    .titleTextSize(20)
+                    .descriptionTextColor(R.color.blacke)
+                    .transparentTarget(true)
+                    .targetCircleColor(R.color.firoze)
+                    .titleTextColor(R.color.white)
+                    .targetRadius(60)
+                    .id(1)
+            ).listener(object : TapTargetSequence.Listener {
+                override fun onSequenceFinish() {
+                    // دنباله Tap Target ها به پایان رسید
+                }
+
+                override fun onSequenceStep(
+                    lastTarget: TapTarget?,
+                    targetClicked: Boolean
+                ) {
+                    // مرحله جدید Tap Target در دنباله
+                }
+
+                override fun onSequenceCanceled(lastTarget: TapTarget?) {
+                    // دنباله Tap Target ها لغو شد
+                }
+            })
+
+        return tapTargetSequence
+
+    }
+
 
     private fun updateYourData() {
         projectNearData = projectDao.getAllProject()

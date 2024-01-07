@@ -289,6 +289,7 @@ data class CompanySkill(
 
     val nameCompanySkill: String,
     val volumeSkill: Int,
+    val colorSkill: String,
 
     )
 @Entity(tableName = "companyInfo_table")
