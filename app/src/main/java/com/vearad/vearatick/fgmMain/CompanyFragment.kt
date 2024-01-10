@@ -434,10 +434,32 @@ class CompanyFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent {
         val companySkillDao = AppDatabase.getDataBase(view.context).companySkillDao
         var companySkillData = companySkillDao.getAllListCompanySkillDao()
         Log.v("companySkillData", companySkillData.toString())
-        if (companySkillData.isEmpty() || projectDao.getAllProject().isEmpty())
+        if (companySkillData.isEmpty())
             binding.emptyList.visibility = VISIBLE
 
         val numProjectDefault = projectDao.getNumberProject("دسته بندی نشده").size
+
+        val data: MutableCollection<GraphData> = ArrayList()
+        val numProjectDefault1 = projectDao.getNumberProject("دسته بندی نشده").size
+        if (numProjectDefault > 0) {
+            data.add(GraphData(numProjectDefault1.toFloat(), Color.parseColor("#FFFFFF")))
+        }
+        var counterColor = 1
+        for (skill in companySkillData) {
+            Log.v("companySkillData", skill.nameCompanySkill)
+            val numProject = projectDao.getNumberProject(skill.nameCompanySkill).size
+            Log.v("companySkillData", numProject.toString())
+            Log.v("companySkillData", counterColor.toString())
+
+            val colorId =
+                view.context.resources.getIdentifier("color$counterColor", "color", view.context.packageName)
+            val color = ContextCompat.getColor(view.context, colorId)
+            data.add(GraphData(numProject.toFloat(), color))
+            Log.v("companySkillDatacompanySkillData", color.toString())
+            counterColor++
+
+        }
+
         if (numProjectDefault > 0) {
             val manuallyAddedSkills = CompanySkill(
                 idCompanySkill = 0,
@@ -447,10 +469,8 @@ class CompanyFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent {
 
             val companySkillList: MutableList<CompanySkill> = mutableListOf()
             companySkillList.add(manuallyAddedSkills)
-
             companySkillData = companySkillList + companySkillData
         }
-
         val companySkillInCompanyFragmentAdapter =
             CompanySkillInCompanyFragmentAdapter(ArrayList(companySkillData))
         binding.rcvSkill.layoutManager = LinearLayoutManager(context)
@@ -458,36 +478,6 @@ class CompanyFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent {
 
         val numTotalProject = projectDao.getAllProject().size
         binding.txtTotalProject.text = numTotalProject.toString()
-        val data: MutableCollection<GraphData> = ArrayList()
-        val numProjectDefault1 = projectDao.getNumberProject("دسته بندی نشده").size
-        if (numProjectDefault > 0) {
-            data.add(GraphData(numProjectDefault1.toFloat(), Color.parseColor("#FFFFFF")))
-        }
-        var i = 1
-        for (skill in companySkillData) {
-            Log.v("skill", skill.nameCompanySkill)
-            val numProject = projectDao.getNumberProject(skill.nameCompanySkill).size
-            val numSkill = companySkillDao.getAllListCompanySkillDao().size
-
-
-            val colorId =
-                view.context.resources.getIdentifier("color$i", "color", view.context.packageName)
-            val color = ContextCompat.getColor(view.context, colorId)
-            data.add(GraphData(numProject.toFloat(), color))
-            Log.v("color", color.toString())
-            i++
-
-        }
-
-        /*val numAndroid = projectDao.getNumberProject("اندروید").size
-        val numSite = projectDao.getNumberProject("سایت").size
-        val numFrontEnd = projectDao.getNumberProject("فرانت اند").size
-        val numBackEnd = projectDao.getNumberProject("بک اند").size
-        val numRobotic = projectDao.getNumberProject("رباتیک").size
-        val numDsign = projectDao.getNumberProject("طراحی").size
-        val numSeo = projectDao.getNumberProject("سئو").size
-        val numTotalProject = projectDao.getAllProject().size*/
-
         graph.setMinValue(0f)
         graph.setMaxValue(numTotalProject.toFloat())
         graph.setBackgroundShapeWidthInDp(20)
@@ -496,24 +486,6 @@ class CompanyFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent {
         graph.setShapeBackgroundColor(Color.parseColor("#202020"))
         graph.setData(data)
 
-        /*binding.txtTotalProject.text = numTotalProject.toString()
-        val data: MutableCollection<GraphData> = ArrayList()
-        //اندروید
-        data.add(GraphData(numAndroid.toFloat(), Color.parseColor("#97DAE4")))
-        //سایت
-        data.add(GraphData(numSite.toFloat(), Color.parseColor("#FE7D8B")))
-        //بک اند
-        data.add(GraphData(numBackEnd.toFloat(), Color.parseColor("#4D7E68")))
-        //فرانت اند
-        data.add(GraphData(numFrontEnd.toFloat(), Color.parseColor("#F2E45B")))
-        //رباتیک
-        data.add(GraphData(numRobotic.toFloat(), Color.parseColor("#68A7B1")))
-        //طراحی
-        data.add(GraphData(numDsign.toFloat(), Color.parseColor("#6D9884")))
-        //سئو
-        data.add(GraphData(numSeo.toFloat(), Color.parseColor("#B6AA3B")))
-
-        graph.setData(data)*/
     }
 
     private fun efficiencyProject(): Int {

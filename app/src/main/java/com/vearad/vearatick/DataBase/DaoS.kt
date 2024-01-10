@@ -156,6 +156,8 @@ interface ProjectDao : BaceDao<Project> {
     fun getNumberProject(typeProject: String): List<Project>
     @Query("SELECT * FROM project_table WHERE doneProject = :doneProject")
     fun getAllDoneProject(doneProject: Boolean): List<Project>
+    @Query("UPDATE project_table SET typeProject = 'دسته بندی نشده' WHERE typeProject = :type")
+    fun updateProjectsByType(type: String)
 }
 @Dao
 interface TeamProjectDao : BaceDao<TeamProject> {

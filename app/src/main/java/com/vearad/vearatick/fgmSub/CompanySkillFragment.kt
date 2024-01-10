@@ -143,7 +143,9 @@ class CompanySkillFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent,
     }
 
     fun deleteItem(onClickSkill: CompanySkill?, position: Int) {
-        companySkillDao.delete(onClickSkill!!)
+        val projectDao = AppDatabase.getDataBase(binding.root.context).projectDao
+        projectDao.updateProjectsByType(onClickSkill!!.nameCompanySkill)
+        companySkillDao.delete(onClickSkill)
         onCompanyDeleteSkill()
     }
 
