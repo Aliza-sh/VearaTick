@@ -90,7 +90,7 @@ class CompanyNewSkillBottomsheetFragment(
         if (green > 255) green = 255
         if (blue > 255) blue = 255
 
-        return String.format("%02X%02X%02X%02X", alpha, red, green, blue)
+        return String.format("%02X%02X%02X%02X", alpha, green, red, blue)
     }
     fun setCallback(callback: BottomSheetCallback) {
         this.callback = callback
