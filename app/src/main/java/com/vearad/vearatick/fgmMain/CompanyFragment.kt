@@ -236,12 +236,14 @@ class CompanyFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent {
             startActivity(intent)
             activity?.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
-        
+
         progressNumProject(binding.progressNumProject, view)
         binding.btnSeeMoreNumPro.setOnClickListener {
             val companySkillDao = AppDatabase.getDataBase(view.context).companySkillDao
             val tapTargetSequence = tapTargetSequence()
-            if (companySkillDao.getAllListCompanySkillDao().isEmpty())
+            if (companySkillDao.getAllListCompanySkillDao().isEmpty() || projectDao.getAllProject()
+                    .isEmpty()
+            )
                 tapTargetSequence?.start()
             else {
                 val transaction =
@@ -252,6 +254,7 @@ class CompanyFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent {
             }
         }
     }
+
     private fun onMenuClicked(popupMenu: PopupMenu) {
 
         popupMenu.menuInflater.inflate(R.menu.menu_about_us, popupMenu.menu)
@@ -263,10 +266,10 @@ class CompanyFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent {
 
                     R.id.menu_about_about_us -> {
                         var createEventUrl = "https://vearad.ir/resume/"
-                            val modifiedUrl = Uri.parse(createEventUrl)
+                        val modifiedUrl = Uri.parse(createEventUrl)
 
-                            val intent = Intent(Intent.ACTION_VIEW, modifiedUrl)
-                            startActivity(intent)
+                        val intent = Intent(Intent.ACTION_VIEW, modifiedUrl)
+                        startActivity(intent)
                     }
 
                     R.id.menu_about_technical -> {
@@ -278,13 +281,15 @@ class CompanyFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent {
                     R.id.menu_about_sale -> {
                         val phoneNumber = "09358668218"  // شماره تلفن فروش
                         val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber"))
-                        startActivity(dialIntent)                    }
+                        startActivity(dialIntent)
+                    }
 
                 }
                 true
             }
         }
     }
+
     @SuppressLint("SetTextI18n")
     private fun setProgressEfficiencyCompamy() {
 
@@ -427,10 +432,24 @@ class CompanyFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent {
     private fun progressNumProject(graph: Graph, view: View) {
 
         val companySkillDao = AppDatabase.getDataBase(view.context).companySkillDao
-        val companySkillData = companySkillDao.getAllListCompanySkillDao()
+        var companySkillData = companySkillDao.getAllListCompanySkillDao()
         Log.v("companySkillData", companySkillData.toString())
-        if (companySkillData.isEmpty())
+        if (companySkillData.isEmpty() || projectDao.getAllProject().isEmpty())
             binding.emptyList.visibility = VISIBLE
+
+        val numProjectDefault = projectDao.getNumberProject("دسته بندی نشده").size
+        if (numProjectDefault > 0) {
+            val manuallyAddedSkills = CompanySkill(
+                idCompanySkill = 0,
+                nameCompanySkill = "دسته بندی نشده",
+                volumeSkill = 0
+            )
+
+            val companySkillList: MutableList<CompanySkill> = mutableListOf()
+            companySkillList.add(manuallyAddedSkills)
+
+            companySkillData = companySkillList + companySkillData
+        }
 
         val companySkillInCompanyFragmentAdapter =
             CompanySkillInCompanyFragmentAdapter(ArrayList(companySkillData))
@@ -440,24 +459,25 @@ class CompanyFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent {
         val numTotalProject = projectDao.getAllProject().size
         binding.txtTotalProject.text = numTotalProject.toString()
         val data: MutableCollection<GraphData> = ArrayList()
-
+        val numProjectDefault1 = projectDao.getNumberProject("دسته بندی نشده").size
+        if (numProjectDefault > 0) {
+            data.add(GraphData(numProjectDefault1.toFloat(), Color.parseColor("#FFFFFF")))
+        }
+        var i = 1
         for (skill in companySkillData) {
             Log.v("skill", skill.nameCompanySkill)
             val numProject = projectDao.getNumberProject(skill.nameCompanySkill).size
             val numSkill = companySkillDao.getAllListCompanySkillDao().size
 
-            for (i in 1..numSkill) {
-                val colorId = view.context.resources.getIdentifier("color$i", "color", view.context.packageName)
-                val color = ContextCompat.getColor(view.context, colorId)
-                data.add(GraphData(numProject.toFloat(), color))
-                Log.v("color", color.toString())
-            }
+
+            val colorId =
+                view.context.resources.getIdentifier("color$i", "color", view.context.packageName)
+            val color = ContextCompat.getColor(view.context, colorId)
+            data.add(GraphData(numProject.toFloat(), color))
+            Log.v("color", color.toString())
+            i++
 
         }
-
-        val numberOfColors = 50  // تعداد رنگ‌ها
-
-
 
         /*val numAndroid = projectDao.getNumberProject("اندروید").size
         val numSite = projectDao.getNumberProject("سایت").size

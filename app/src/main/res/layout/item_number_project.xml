@@ -43,7 +43,7 @@
             android:layout_marginTop="8dp"
             android:text="اندروید "
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/view"
             app:layout_constraintTop_toTopOf="parent" />
@@ -56,7 +56,7 @@
             android:layout_marginBottom="8dp"
             android:text=" 0"
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="20sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

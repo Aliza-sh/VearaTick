@@ -14,6 +14,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.vearad.vearatick.DataBase.AppDatabase
+import com.vearad.vearatick.DataBase.CompanySkill
 import com.vearad.vearatick.DataBase.ProjectDao
 import com.vearad.vearatick.MainActivity
 import com.vearad.vearatick.R
@@ -44,8 +45,23 @@ class ProjectNumberFragment(val projectDao: ProjectDao) : Fragment() {
         }
 
         val companySkillDao = AppDatabase.getDataBase(view.context).companySkillDao
-        val companySkillData = companySkillDao.getAllListCompanySkillDao()
+        var companySkillData = companySkillDao.getAllListCompanySkillDao()
         Log.v("companySkillData", companySkillData.toString())
+
+        val numProjectDefault = projectDao.getNumberProject("دسته بندی نشده").size
+
+        if (numProjectDefault > 0) {
+            val manuallyAddedSkills = CompanySkill(
+                idCompanySkill = 0,
+                nameCompanySkill = "دسته بندی نشده",
+                volumeSkill = 0
+            )
+
+            val companySkillList: MutableList<CompanySkill> = mutableListOf()
+            companySkillList.add(manuallyAddedSkills)
+
+            companySkillData = companySkillList + companySkillData
+        }
 
         val ProjectNumberFAdapter = ProjectNumberAdapter(ArrayList(companySkillData),projectDao)
         val topMargin = 150 // اندازه مارجین بالا را از منابع دریافت کنید

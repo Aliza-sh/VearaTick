@@ -1,5 +1,6 @@
 package com.vearad.vearatick.adapter
 
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
@@ -11,30 +12,52 @@ import com.vearad.vearatick.databinding.ItemSkillInCompanyFragmentBinding
 
 class CompanySkillInCompanyFragmentAdapter(
     val data: ArrayList<CompanySkill>,
-    ) :
+) :
     RecyclerView.Adapter<CompanySkillInCompanyFragmentAdapter.CompanySkillViewHolder>() {
 
     lateinit var binding: ItemSkillInCompanyFragmentBinding
+    var default = false
 
     inner class CompanySkillViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindData(position: Int) {
-
-            binding.txtNameSkill.text = data[position].nameCompanySkill
-
-            val colorId = itemView.context.resources.getIdentifier("color${position + 1}", "color", itemView.context.packageName)
-            val color = ContextCompat.getColor(itemView.context, colorId)
             val shape = GradientDrawable()
-            shape.shape = GradientDrawable.RECTANGLE
-            shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
-            shape.setColor(
-                color
-            )
-            binding.txtColorSkill.setBackgroundColor(color)
-            binding.txtColorSkill.background = shape
 
+            if (data[position].nameCompanySkill == "دسته بندی نشده") {
+                binding.txtNameSkill.text = "دسته بندی نشده"
+                shape.shape = GradientDrawable.RECTANGLE
+                shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                shape.setColor(
+                    Color.parseColor("#FFFFFF")
+                )
+                binding.txtColorSkill.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                binding.txtColorSkill.background = shape
+                default = true
+
+            } else {
+
+                binding.txtNameSkill.text = data[position].nameCompanySkill
+
+                var numberColor = 0
+                if (default)
+                    numberColor = position
+                else
+                    numberColor = position + 1
+                val colorId = itemView.context.resources.getIdentifier(
+                    "color${numberColor}",
+                    "color",
+                    itemView.context.packageName
+                )
+                val color = ContextCompat.getColor(itemView.context, colorId)
+                shape.shape = GradientDrawable.RECTANGLE
+                shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                shape.setColor(
+                    color
+                )
+                binding.txtColorSkill.setBackgroundColor(color)
+                binding.txtColorSkill.background = shape
+            }
         }
-
     }
 
     override fun onCreateViewHolder(
@@ -42,7 +65,11 @@ class CompanySkillInCompanyFragmentAdapter(
         viewType: Int
     ): CompanySkillViewHolder {
         binding =
-            ItemSkillInCompanyFragmentBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            ItemSkillInCompanyFragmentBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
 
         return CompanySkillViewHolder(binding.root)
     }

@@ -1,5 +1,6 @@
 package com.vearad.vearatick.adapter
 
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
@@ -17,27 +18,50 @@ class ProjectNumberAdapter(
     RecyclerView.Adapter<ProjectNumberAdapter.CompanySkillViewHolder>() {
 
     lateinit var binding: ItemNumberProjectBinding
+    var default = false
+    var numberColor = 0
 
     inner class CompanySkillViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
         fun bindData(position: Int) {
-
-            binding.txtNameSkill.text = data[position].nameCompanySkill
-
-            val colorId = itemView.context.resources.getIdentifier("color${position + 1}", "color", itemView.context.packageName)
-            val color = ContextCompat.getColor(itemView.context, colorId)
-
             val shape = GradientDrawable()
-            shape.shape = GradientDrawable.RECTANGLE
-            shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
-            shape.setColor(
-                color
-            )
-            binding.colorPro.setBackgroundColor(color)
 
-            val numProject = projectDao.getNumberProject(data[position].nameCompanySkill).size
-            binding.txtNumPro.text = numProject.toString()
+            if (data[position].nameCompanySkill ==  "دسته بندی نشده" ) {
+                binding.txtNameSkill.text = "دسته بندی نشده"
+                shape.shape = GradientDrawable.RECTANGLE
+                shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                shape.setColor(
+                    Color.parseColor("#FFFFFF")
+                )
+                binding.colorPro.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                val numProject = projectDao.getNumberProject(data[position].nameCompanySkill).size
+                binding.txtNumPro.text = numProject.toString()
+                default = true
 
+            }else {
+
+                binding.txtNameSkill.text = data[position].nameCompanySkill
+                if (default)
+                    numberColor = position
+                else
+                    numberColor = position +1
+                val colorId = itemView.context.resources.getIdentifier(
+                    "color${numberColor}",
+                    "color",
+                    itemView.context.packageName
+                )
+                val color = ContextCompat.getColor(itemView.context, colorId)
+
+                shape.shape = GradientDrawable.RECTANGLE
+                shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                shape.setColor(
+                    color
+                )
+                binding.colorPro.setBackgroundColor(color)
+
+                val numProject = projectDao.getNumberProject(data[position].nameCompanySkill).size
+                binding.txtNumPro.text = numProject.toString()
+            }
         }
 
     }

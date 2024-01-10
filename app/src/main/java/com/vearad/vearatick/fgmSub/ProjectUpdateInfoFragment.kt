@@ -75,17 +75,11 @@ class ProjectUpdateInfoFragment(
 
         val companySkillDao = AppDatabase.getDataBase(view.context).companySkillDao
         val companySkillData = companySkillDao.getAllSkills()
-        /*val typeProject = listOf(
-            "اندروید",
-            "سایت",
-            "بک اند",
-            "فرانت اند",
-            "رباتیک",
-            "طراحی",
-            "سئو"
-        )*/
+        val manuallyAddedSkills = arrayOf("دسته بندی نشده")
 
-        val myAdapteredt = ArrayAdapter(requireContext(), R.layout.item_gender, companySkillData)
+        val allSkills = manuallyAddedSkills + companySkillData
+
+        val myAdapteredt = ArrayAdapter(requireContext(), R.layout.item_gender, allSkills)
         (binding.dialogMainEdtGdrperson.editText as AutoCompleteTextView).setAdapter(
             myAdapteredt
         )
