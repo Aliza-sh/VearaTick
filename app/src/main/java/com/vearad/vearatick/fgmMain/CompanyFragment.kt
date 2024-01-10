@@ -122,6 +122,7 @@ class CompanyFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent {
                 val params = view.layoutParams as FrameLayout.LayoutParams
                 params.gravity = Gravity.TOP
                 view.layoutParams = params
+                snackbar.view.layoutDirection = View.LAYOUT_DIRECTION_RTL
                 snackbar.show()
 
             }

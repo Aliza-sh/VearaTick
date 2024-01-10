@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.widget.Toast
@@ -354,6 +355,7 @@ class LoginStep24Activity : AppCompatActivity() {
             val snackbar = Snackbar.make(binding.root, "$authFailedErrors", Snackbar.LENGTH_LONG).setBackgroundTint(Color.parseColor("#FFFFFF"))
                 .setTextColor(Color.parseColor("#000000"))
                 .setActionTextColor(Color.parseColor("#E600ADB5"))
+            snackbar.view.layoutDirection = View.LAYOUT_DIRECTION_RTL
             snackbar.show()
         }
 

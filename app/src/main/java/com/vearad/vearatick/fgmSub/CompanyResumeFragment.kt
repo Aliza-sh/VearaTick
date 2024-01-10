@@ -74,20 +74,22 @@ class CompanyResumeFragment : Fragment(), CompanyResumeAdapter.CompanyResumeEven
     override fun onResumeClicked(companyResume: Project, position: Int) {
 
         if (companyResume.urlProject == "") {
-            Snackbar.make(binding.root, "لینک گیت هاب موجود نیست!", Snackbar.LENGTH_LONG)
-                .setAction("تنظیم لینک") {
-                    val bottomsheet = CompanyResumeSetLinkBottomsheetFragment(
-                        companyResumeDao,
-                        companyResume
-                    )
-                    bottomsheet.setStyle(
-                        R.style.BottomSheetStyle,
-                        R.style.BottomSheetDialogTheme
-                    )
-                    bottomsheet.setCallback(this)
-                    bottomsheet.show(parentFragmentManager, null)
-                }
-                .show()
+            val snackbar =
+                Snackbar.make(binding.root, "لینک گیت هاب موجود نیست!", Snackbar.LENGTH_LONG)
+                    .setAction("تنظیم لینک") {
+                        val bottomsheet = CompanyResumeSetLinkBottomsheetFragment(
+                            companyResumeDao,
+                            companyResume
+                        )
+                        bottomsheet.setStyle(
+                            R.style.BottomSheetStyle,
+                            R.style.BottomSheetDialogTheme
+                        )
+                        bottomsheet.setCallback(this)
+                        bottomsheet.show(parentFragmentManager, null)
+                    }
+            snackbar.view.layoutDirection = View.LAYOUT_DIRECTION_RTL
+            snackbar.show()
         } else {
             val url = companyResume.urlProject
             // Intent برای باز کردن لینک در مرورگر
@@ -114,7 +116,10 @@ class CompanyResumeFragment : Fragment(), CompanyResumeAdapter.CompanyResumeEven
                     R.id.menu_goto_pro -> {
                         val intent = Intent(requireContext(), ProAndEmpActivity::class.java)
                         startActivity(intent)
-                        activity?.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
+                        activity?.overridePendingTransition(
+                            R.anim.slide_from_left,
+                            R.anim.slide_to_right
+                        )
 //                        val subTaskProjectDao =
 //                            AppDatabase.getDataBase(binding.root.context).subTaskProjectDao
 //                        val transaction =
@@ -149,6 +154,7 @@ class CompanyResumeFragment : Fragment(), CompanyResumeAdapter.CompanyResumeEven
             }
         }
     }
+
     fun setCallback(callback: BottomSheetCallback) {
         this.callback = callback
     }
@@ -162,5 +168,6 @@ class CompanyResumeFragment : Fragment(), CompanyResumeAdapter.CompanyResumeEven
                 this,
             )
         binding.rcvResume.layoutManager = LinearLayoutManager(context)
-        binding.rcvResume.adapter = companyResumeAdapter    }
+        binding.rcvResume.adapter = companyResumeAdapter
+    }
 }

@@ -59,6 +59,7 @@ class PoolakeyActivity : AppCompatActivity() {
             snackbar?.dismiss() // بستن Snackbar
         } else {
             // No internet connection, you might want to notify the user.
+            snackbar!!.view.layoutDirection = View.LAYOUT_DIRECTION_RTL
             snackbar?.show() // بستن Snackbar
         }
 
