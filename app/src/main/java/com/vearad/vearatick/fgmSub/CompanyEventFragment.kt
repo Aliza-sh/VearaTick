@@ -58,6 +58,7 @@ class CompanyEventFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnAddNewEvent.setOnClickListener {
+            binding.btnAddNewEvent.elevation = 0F
             var createEventUrl = "https://step24.ir/events/create"
             try {
                 val modifiedUrl = Uri.parse(createEventUrl)
