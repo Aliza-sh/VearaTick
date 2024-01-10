@@ -19,12 +19,12 @@ import org.joda.time.DateTime
 import org.joda.time.Days
 import org.threeten.bp.LocalDate
 
-class ProjectNearAdapter(
+class ProjectAdapter(
     private val data: ArrayList<Project>,
     private val projectNearEvents: ProjectNearEvents,
     val projectDao: ProjectDao
 ) :
-    RecyclerView.Adapter<ProjectNearAdapter.ProjectNearViewHolder>() {
+    RecyclerView.Adapter<ProjectAdapter.ProjectNearViewHolder>() {
 
     lateinit var binding: ItemProjectBinding
 
@@ -102,6 +102,7 @@ class ProjectNearAdapter(
                     }
                     else if (daysBetween == 0) {
                         binding.txtDatePro.text = "امروز"
+                        binding.txtDatePro.setTextColor(Color.parseColor("#000000"))
                         val shape = GradientDrawable()
                         shape.shape = GradientDrawable.RECTANGLE
                         shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)

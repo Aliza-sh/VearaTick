@@ -16,7 +16,7 @@ import com.vearad.vearatick.DataBase.TaskEmployeeDao
 import com.vearad.vearatick.DataBase.TimeDao
 import com.vearad.vearatick.adapter.EmployeeAdapter
 import com.vearad.vearatick.adapter.EntryExitEmployeeAdapter
-import com.vearad.vearatick.adapter.ProjectNearAdapter
+import com.vearad.vearatick.adapter.ProjectAdapter
 import com.vearad.vearatick.adapter.TaskEmployeeAdapter
 import com.vearad.vearatick.databinding.ActivityMainBinding
 import com.vearad.vearatick.fgmMain.CompanyFragment
@@ -30,7 +30,7 @@ lateinit var employeeDao: EmployeeDao
 lateinit var dayDao: DayDao
 lateinit var timeDao: TimeDao
 lateinit var taskEmployeeDao: TaskEmployeeDao
-lateinit var projectAdapter: ProjectNearAdapter
+lateinit var projectAdapter: ProjectAdapter
 lateinit var taskAdapter: TaskEmployeeAdapter
 lateinit var inOutAdapter: EntryExitEmployeeAdapter
 lateinit var employeeAdapter: EmployeeAdapter

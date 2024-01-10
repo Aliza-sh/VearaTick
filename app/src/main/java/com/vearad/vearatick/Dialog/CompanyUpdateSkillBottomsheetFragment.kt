@@ -65,16 +65,21 @@ class CompanyUpdateSkillBottomsheetFragment(
         if (
             binding.edtNameSkill.length() > 0 &&
             binding.edtVolumeSkill.length() > 0 &&
-            binding.edtVolumeSkill.text.toString().toInt() > 100
+            binding.edtVolumeSkill.text.toString().toInt() <= 100
         ) {
             val txtName = binding.edtNameSkill.text.toString()
             val txtVolune = binding.edtVolumeSkill.text.toString()
             val companySkillDao = AppDatabase.getDataBase(view.context).companySkillDao
             val existenceSkill = companySkillDao.checkSkillExists(txtName)
-            if (!existenceSkill) {
+            var noChange = false
+
+            if (txtName == onClickCompanySkill!!.nameCompanySkill)
+                noChange = true
+
+            if (!existenceSkill || noChange) {
 
             val newSkill = CompanySkill(
-                idCompanySkill = onClickCompanySkill!!.idCompanySkill,
+                idCompanySkill = onClickCompanySkill.idCompanySkill,
                 nameCompanySkill = txtName,
                 volumeSkill = txtVolune.toInt(),
                 colorSkill = onClickCompanySkill.colorSkill

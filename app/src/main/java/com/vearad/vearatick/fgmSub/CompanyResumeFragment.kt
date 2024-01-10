@@ -74,7 +74,7 @@ class CompanyResumeFragment : Fragment(), CompanyResumeAdapter.CompanyResumeEven
     override fun onResumeClicked(companyResume: Project, position: Int) {
 
         if (companyResume.urlProject == "") {
-            Snackbar.make(binding.root, "لینک گیت هاب موجود نیست!", Snackbar.LENGTH_INDEFINITE)
+            Snackbar.make(binding.root, "لینک گیت هاب موجود نیست!", Snackbar.LENGTH_LONG)
                 .setAction("تنظیم لینک") {
                     val bottomsheet = CompanyResumeSetLinkBottomsheetFragment(
                         companyResumeDao,
