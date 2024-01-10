@@ -24,9 +24,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="start"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/shape_circle"
+            android:background="@drawable/shape_background_menu_or_back_bottom_left"
             android:backgroundTint="?attr/colorOnPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -57,6 +55,7 @@
             android:background="@drawable/shape_dor_di"
             android:gravity="center"
             android:padding="5dp"
+            android:layout_marginTop="8dp"
             android:paddingStart="13dp"
             android:paddingEnd="13dp"
             android:text="1402/3/2"
@@ -64,7 +63,7 @@
             android:textSize="14sp"
             android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btn_menu" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <FrameLayout
             android:id="@+id/linearLayout5"
