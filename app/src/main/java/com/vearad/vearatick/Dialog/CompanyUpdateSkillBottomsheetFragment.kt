@@ -82,7 +82,6 @@ class CompanyUpdateSkillBottomsheetFragment(
                 idCompanySkill = onClickCompanySkill.idCompanySkill,
                 nameCompanySkill = txtName,
                 volumeSkill = txtVolune.toInt(),
-                colorSkill = onClickCompanySkill.colorSkill
             )
             companySkillDao.update(newSkill)
             onCompanyNewSkill()

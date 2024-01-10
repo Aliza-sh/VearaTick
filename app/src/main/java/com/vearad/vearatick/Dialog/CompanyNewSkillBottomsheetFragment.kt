@@ -62,13 +62,10 @@ class CompanyNewSkillBottomsheetFragment(
             val companySkillDao = AppDatabase.getDataBase(view.context).companySkillDao
             val existenceSkill = companySkillDao.checkSkillExists(txtName)
             if (!existenceSkill) {
-                val random = Random()
-                val randomColorCode = generateRandomColorCode(random)
 
                 val newSkill = CompanySkill(
                     nameCompanySkill = txtName,
                     volumeSkill = txtVolune.toInt(),
-                    colorSkill = "#$randomColorCode"
                 )
                 companySkillDao.insert(newSkill)
                 onCompanyNewCompanySkill()

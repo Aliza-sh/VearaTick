@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
@@ -18,8 +19,11 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.FrameLayout
 import androidx.compose.ui.graphics.toArgb
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.ghanshyam.graphlibs.Graph
 import com.ghanshyam.graphlibs.GraphData
 import com.google.android.material.snackbar.Snackbar
@@ -227,14 +231,21 @@ class CompanyFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent {
             startActivity(intent)
             activity?.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
-
-        binding.btnSeeMoreNumPro.setOnClickListener {
-            val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frame_layout_main2, ProjectNumberFragment(projectDao))
-                .addToBackStack(null)
-                .commit()
-        }
+        
         progressNumProject(binding.progressNumProject, view)
+        binding.btnSeeMoreNumPro.setOnClickListener {
+            val companySkillDao = AppDatabase.getDataBase(view.context).companySkillDao
+            val tapTargetSequence = tapTargetSequence()
+            if (companySkillDao.getAllListCompanySkillDao().isEmpty())
+                tapTargetSequence?.start()
+            else {
+                val transaction =
+                    (activity as MainActivity).supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.frame_layout_main2, ProjectNumberFragment(projectDao))
+                    .addToBackStack(null)
+                    .commit()
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -396,9 +407,20 @@ class CompanyFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent {
         for (skill in companySkillData) {
             Log.v("skill", skill.nameCompanySkill)
             val numProject = projectDao.getNumberProject(skill.nameCompanySkill).size
-            data.add(GraphData(numProject.toFloat(), Color.parseColor(skill.colorSkill)))
-            Log.v("skill", skill.colorSkill)
+            val numSkill = companySkillDao.getAllListCompanySkillDao().size
+
+            for (i in 1..numSkill) {
+                val colorId = view.context.resources.getIdentifier("color$i", "color", view.context.packageName)
+                val color = ContextCompat.getColor(view.context, colorId)
+                data.add(GraphData(numProject.toFloat(), color))
+                Log.v("color", color.toString())
+            }
+
         }
+
+        val numberOfColors = 50  // تعداد رنگ‌ها
+
+
 
         /*val numAndroid = projectDao.getNumberProject("اندروید").size
         val numSite = projectDao.getNumberProject("سایت").size
@@ -502,5 +524,43 @@ class CompanyFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent {
     }
 
     override fun onMenuItemClick(companySkill: CompanySkill, position: Int) {}
+
+    private fun tapTargetSequence(): TapTargetSequence? {
+        val tapTargetSequence = TapTargetSequence(requireActivity())
+            .targets(
+                TapTarget.forView(
+                    binding.btnSeeMoreNumPro,
+                    "مهارتی ثبت نشده است.",
+                    "لطفا به قسمت درباره شرکت رفته و مهارت های خود را ثبت کنید."
+                )
+                    .cancelable(true)
+                    .textTypeface(Typeface.DEFAULT_BOLD)
+                    .titleTextSize(20)
+                    .descriptionTextColor(R.color.blacke)
+                    .transparentTarget(true)
+                    .targetCircleColor(R.color.firoze)
+                    .titleTextColor(R.color.white)
+                    .targetRadius(60)
+                    .id(1)
+            ).listener(object : TapTargetSequence.Listener {
+                override fun onSequenceFinish() {
+                    // دنباله Tap Target ها به پایان رسید
+                }
+
+                override fun onSequenceStep(
+                    lastTarget: TapTarget?,
+                    targetClicked: Boolean
+                ) {
+                    // مرحله جدید Tap Target در دنباله
+                }
+
+                override fun onSequenceCanceled(lastTarget: TapTarget?) {
+                    // دنباله Tap Target ها لغو شد
+                }
+            })
+
+        return tapTargetSequence
+
+    }
 
 }
