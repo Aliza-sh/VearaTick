@@ -8,6 +8,7 @@ import android.content.SharedPreferences
 import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -18,6 +19,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.FrameLayout
+import android.widget.PopupMenu
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -97,6 +99,9 @@ class CompanyFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent {
         companyExpensesDao = AppDatabase.getDataBase(view.context).companyExpensesDao
         employeeHarvestDao = AppDatabase.getDataBase(view.context).employeeHarvestDao
         employeeInvestmentDao = AppDatabase.getDataBase(view.context).employeeInvestmentDao
+
+        val popupMenu = PopupMenu(view.context, binding.btnSupport)
+        onMenuClicked(popupMenu)
 
         sharedPreferences = requireActivity().getSharedPreferences(
             SHAREDEXPIRATIONSUBSCRIPTION,
@@ -247,7 +252,39 @@ class CompanyFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent {
             }
         }
     }
+    private fun onMenuClicked(popupMenu: PopupMenu) {
 
+        popupMenu.menuInflater.inflate(R.menu.menu_about_us, popupMenu.menu)
+        binding.btnSupport.setOnClickListener {
+            popupMenu.show()
+            popupMenu.setOnMenuItemClickListener { item ->
+
+                when (item.itemId) {
+
+                    R.id.menu_about_about_us -> {
+                        var createEventUrl = "https://vearad.ir/resume/"
+                            val modifiedUrl = Uri.parse(createEventUrl)
+
+                            val intent = Intent(Intent.ACTION_VIEW, modifiedUrl)
+                            startActivity(intent)
+                    }
+
+                    R.id.menu_about_technical -> {
+                        val phoneNumber = "09022700813"  // شماره تلفن فنی
+                        val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber"))
+                        startActivity(dialIntent)
+                    }
+
+                    R.id.menu_about_sale -> {
+                        val phoneNumber = "09358668218"  // شماره تلفن فروش
+                        val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber"))
+                        startActivity(dialIntent)                    }
+
+                }
+                true
+            }
+        }
+    }
     @SuppressLint("SetTextI18n")
     private fun setProgressEfficiencyCompamy() {
 

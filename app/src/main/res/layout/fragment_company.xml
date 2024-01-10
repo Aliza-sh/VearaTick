@@ -8,7 +8,6 @@
     android:layoutDirection="rtl"
     tools:context=".fgmMain.CompanyFragment">
 
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
         android:layout_width="match_parent"
@@ -63,20 +62,20 @@
             app:layout_constraintStart_toEndOf="@+id/textView9"
             app:layout_constraintTop_toTopOf="@+id/textView9" />
 
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_margin="6dp"
-            android:layout_marginEnd="8dp"
-            android:background="?attr/colorPrimaryVariant"
-            android:padding="5dp"
-            android:src="@drawable/ic_notifications"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="@+id/img_logo"
+        <ImageView
+            android:id="@+id/btn_support"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_gravity="start|center"
+            android:background="@drawable/shape_circle"
+            android:padding="7dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/img_about_us"
+            app:backgroundTint="?attr/colorOnPrimary"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/img_logo" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/white" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
