@@ -35,7 +35,7 @@
             android:layout_marginTop="16dp"
             android:text="اندروید"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintEnd_toStartOf="@+id/btn_menu_entry_exit"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/btn_menu_entry_exit" />

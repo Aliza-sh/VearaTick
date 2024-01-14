@@ -130,6 +130,7 @@ class EmployeeInformationFragment(
         val taskInWeekEmployee = taskDao.getTaskInWeek(employee.idEmployee!!, firstDayOfWeek,endDayOfWeek)
         Log.v("taskInWeekEmployee", "taskInWeekEmployee: ${taskInWeekEmployee}")
 
+        val isTask = taskDao.getAllTaskEmployee().isEmpty()
         val taskTodayEmployee = taskDao.getTaskToday(employee.idEmployee!!, today.persianDay)
         val taskTomorrowEmployee = taskDao.getTaskTomorrow(employee.idEmployee!!, today.persianDay)
         val taskPastEmployee = taskDao.getTaskPast(employee.idEmployee!!, today.persianDay)
@@ -161,11 +162,11 @@ class EmployeeInformationFragment(
         val efficiencyNewEmployee = efficiencyEmployeeDao.isAllColumnsNonZero(employee.idEmployee!!)
         Log.v("employeeNew", "efficiencyNewEmployee: ${efficiencyNewEmployee}")
 
-        if (employeeNew && efficiencyNewEmployee) {
+        if (employeeNew && efficiencyNewEmployee && isTask) {
             binding.txtTitle.text = "این کارمند تازه استخدام شده"
         } else {
             if (dayEmployee!= null && timeEmployee == null )
-                binding.txtTitle.text = "دیر شد نیومده یه خبر بگیر ازش"
+                binding.txtTitle.text = "دیر شد نیومده!! یه خبر بگیر ازش"
             else {
                 if (taskPastEmployee)
                     binding.txtTitle.text = "از موعد تحویل تسکش گذشته"

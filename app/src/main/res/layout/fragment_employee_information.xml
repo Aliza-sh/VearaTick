@@ -232,7 +232,7 @@
             android:paddingBottom="10dp"
             android:text="این کارمند کارش درسته"
             android:textColor="?attr/colorPrimary"
-            android:textSize="14sp"
+            android:textSize="12sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/linearLayout8"
             app:layout_constraintTop_toBottomOf="@+id/btn_menu_employee" />
@@ -262,7 +262,7 @@
             android:paddingBottom="2dp"
             android:text="کار آموز"
             android:textColor="#227158"
-            android:textSize="14sp"
+            android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/linearLayout8"
             app:layout_constraintTop_toTopOf="@+id/linearLayout8" />
 

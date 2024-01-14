@@ -43,7 +43,7 @@
                     android:text="آمار کلی حضور "
                     android:textAlignment="textEnd"
                     android:textColor="?attr/colorOnSecondary"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -56,7 +56,7 @@
                     android:layout_marginTop="16dp"
                     android:text="هفته"
                     android:textColor="@color/fi_light"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/textView102"
                     app:layout_constraintTop_toBottomOf="@+id/textView17" />
@@ -89,7 +89,7 @@
                     android:layout_height="wrap_content"
                     android:text="ماه"
                     android:textColor="@color/fi_light"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     app:layout_constraintEnd_toStartOf="@+id/textView101"
                     app:layout_constraintStart_toEndOf="@+id/textView103"
                     app:layout_constraintTop_toTopOf="@+id/textView101" />
@@ -121,7 +121,7 @@
                     android:layout_marginEnd="16dp"
                     android:text="کل"
                     android:textColor="@color/fi_light"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     app:layout_constraintEnd_toStartOf="@+id/textView102"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/textView102" />
@@ -197,7 +197,7 @@
                     android:layout_marginEnd="8dp"
                     android:text="آمار کلی تعداد وظایف انجام شده"
                     android:textColor="?attr/colorOnSecondary"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -210,7 +210,7 @@
                     android:layout_marginTop="16dp"
                     android:text="هفته"
                     android:textColor="@color/fi_light"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/textView1020"
                     app:layout_constraintTop_toBottomOf="@+id/textView170" />
@@ -272,7 +272,7 @@
                     android:layout_height="wrap_content"
                     android:text="ماه"
                     android:textColor="@color/fi_light"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     app:layout_constraintEnd_toStartOf="@+id/textView1010"
                     app:layout_constraintStart_toEndOf="@+id/textView1030"
                     app:layout_constraintTop_toTopOf="@+id/textView1010" />
@@ -332,7 +332,7 @@
                     android:layout_marginEnd="16dp"
                     android:text="کل"
                     android:textColor="@color/fi_light"
-                    android:textSize="22sp"
+                    android:textSize="20sp"
                     app:layout_constraintEnd_toStartOf="@+id/textView1020"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/textView1020" />

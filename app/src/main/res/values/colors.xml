@@ -74,24 +74,25 @@
     <color name="red">#FE7D8B</color>
     <color name="orange">#FE8D71</color>
 
+
     <color name="color1">#F44336</color>
-    <color name="color2">#E91E63</color>
-    <color name="color3">#9C27B0</color>
-    <color name="color4">#673AB7</color>
-    <color name="color5">#3F51B5</color>
-    <color name="color6">#2196F3</color>
-    <color name="color7">#03A9F4</color>
-    <color name="color8">#00BCD4</color>
+    <color name="color2">#3F51B5</color>
+    <color name="color3">#03A9F4</color>
+    <color name="color4">#FFEB3B</color>
+    <color name="color5">#E91E63</color>
+    <color name="color6">#4CAF50</color>
+    <color name="color7">#9C27B0</color>
+    <color name="color8">#FFC107</color>
     <color name="color9">#009688</color>
-    <color name="color10">#4CAF50</color>
-    <color name="color11">#8BC34A</color>
+    <color name="color10">#673AB7</color>
+    <color name="color11">#00BCD4</color>
     <color name="color12">#CDDC39</color>
-    <color name="color13">#FFEB3B</color>
-    <color name="color14">#FFC107</color>
+    <color name="color13">#2196F3</color>
+    <color name="color14">#8BC34A</color>
     <color name="color15">#FF9800</color>
-    <color name="color16">#FF5722</color>
+    <color name="color16">#9E9E9E</color>
     <color name="color17">#795548</color>
-    <color name="color18">#9E9E9E</color>
+    <color name="color18">#FF5722</color>
     <color name="color19">#607D8B</color>
     <color name="color20">#FF8A80</color>
     <color name="color21">#FF80AB</color>
@@ -124,6 +125,7 @@
     <color name="color48">#A5D6A7</color>
     <color name="color49">#C5E1A5</color>
     <color name="color50">#E6EE9C</color>
+
 
 
 </resources>

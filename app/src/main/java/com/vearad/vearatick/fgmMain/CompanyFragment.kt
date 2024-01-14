@@ -241,7 +241,7 @@ class CompanyFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent {
         binding.btnSeeMoreNumPro.setOnClickListener {
             val companySkillDao = AppDatabase.getDataBase(view.context).companySkillDao
             val tapTargetSequence = tapTargetSequence()
-            if (companySkillDao.getAllListCompanySkillDao().isEmpty() || projectDao.getAllProject()
+            if (companySkillDao.getAllListCompanySkillDao().isEmpty() && projectDao.getAllProject()
                     .isEmpty()
             )
                 tapTargetSequence?.start()

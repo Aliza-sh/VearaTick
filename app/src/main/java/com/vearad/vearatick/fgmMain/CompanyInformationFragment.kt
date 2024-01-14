@@ -277,6 +277,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
         Log.v("loginapp", "accessToken: ${accessToken}")
 
         if (user != null && accessToken != null) {
+            Log.v("loginapp", "Login")
             val call = apiService.getMiniSite(
                 "admin/minisite/users/${user}/business",
                 "Bearer $accessToken"
@@ -286,10 +287,11 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
                     call: Call<MiniSiteData>,
                     response: Response<MiniSiteData>
                 ) {
+                    Log.v("loginapp", "is onResponse")
+                    Log.v("loginapp", "isSuccessful ${response.isSuccessful}")
+                    Log.v("loginapp", "response ${response}")
                     if (response.isSuccessful) {
                         //companyEventData = response.body()!!.event
-                        Log.v("loginapp", "response: ${response}")
-                        Log.v("loginapp", "call: ${call}")
 
                         val miniSiteDataData: MiniSiteData? = response.body()
                         Log.v("loginapp", "miniSiteDataData: ${miniSiteDataData}")

@@ -21,6 +21,6 @@
         android:layout_marginStart="8dp"
         android:text="اندروید"
         android:textColor="@color/white"
-        android:textSize="14sp" />
+        android:textSize="12sp" />
 
 </LinearLayout>

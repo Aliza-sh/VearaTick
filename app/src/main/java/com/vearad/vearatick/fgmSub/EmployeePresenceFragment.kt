@@ -545,7 +545,7 @@ class EmployeePresenceFragment(
                 TapTarget.forView(
                     legendLayout,
                     "ثبت حضور و غیاب کارمند",
-                    "ابتدا باید روز هایی که کارمند قصد آمدن دارد را تایین کنید."
+                    "ابتدا باید روز هایی که کارمند قصد آمدن دارد را تعیین کنید."
                 )
                     .cancelable(true)
                     .textTypeface(Typeface.DEFAULT_BOLD)
