@@ -24,9 +24,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="start"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/shape_circle"
+            android:background="@drawable/shape_background_menu_or_back_bottom_left"
             android:backgroundTint="?attr/colorOnPrimary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -57,6 +55,7 @@
             android:background="@drawable/shape_dor_di"
             android:gravity="center"
             android:padding="5dp"
+            android:layout_marginTop="8dp"
             android:paddingStart="13dp"
             android:paddingEnd="13dp"
             android:text="1402/3/2"
@@ -64,7 +63,7 @@
             android:textSize="14sp"
             android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/btn_menu" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <FrameLayout
             android:id="@+id/linearLayout5"
@@ -86,13 +85,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:layout_marginTop="40dp"
+                android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp"
                 android:gravity="end"
                 android:text="240,000 تومان"
                 android:textColor="@color/white_light"
-                android:textSize="19sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/txt1"
@@ -103,7 +102,7 @@
                 android:layout_marginEnd="12dp"
                 android:text="مبلغ"
                 android:textColor="?attr/colorOnSecondary"
-                android:textSize="22sp"
+                android:textSize="19sp"
                 android:textStyle="bold" />
 
         </FrameLayout>
@@ -135,7 +134,7 @@
                 android:layout_marginBottom="12dp"
                 android:text="بابت قبض"
                 android:textColor="?attr/colorOnSecondary"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
         </FrameLayout>
 

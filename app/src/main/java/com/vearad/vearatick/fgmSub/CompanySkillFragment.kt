@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.Fragment
@@ -58,19 +59,24 @@ class CompanySkillFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent,
         binding.rcvSkill.adapter = companySkillAdapter
         topMargin()
         bottomMargin()
-        binding.btnAddCompanySkill.setOnClickListener {
-            val bottomsheet = CompanyNewSkillBottomsheetFragment(
-                companySkillDao,
-                companySkillAdapter
-            )
-            bottomsheet.setStyle(
-                R.style.BottomSheetStyle,
-                R.style.BottomSheetDialogTheme
-            )
-            bottomsheet.setCallback(this)
-            bottomsheet.show(parentFragmentManager, null)
-        }
 
+        binding.btnAddCompanySkill.setOnClickListener {
+            val numSkill = companySkillDao.getAllListCompanySkillDao().size
+            if (numSkill < 50) {
+                val bottomsheet = CompanyNewSkillBottomsheetFragment(
+                    companySkillDao,
+                    companySkillAdapter
+                )
+                bottomsheet.setStyle(
+                    R.style.BottomSheetStyle,
+                    R.style.BottomSheetDialogTheme
+                )
+                bottomsheet.setCallback(this)
+                bottomsheet.show(parentFragmentManager, null)
+            } else
+                Toast.makeText(context, "سقف مچاز ایجاد مهارت ها 50 می باشد", Toast.LENGTH_SHORT)
+                    .show()
+        }
 
     }
 
@@ -137,13 +143,9 @@ class CompanySkillFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent,
     }
 
     fun deleteItem(onClickSkill: CompanySkill?, position: Int) {
-
-        val newCompanySkill = CompanySkill(
-            idCompanySkill = onClickSkill!!.idCompanySkill,
-            nameCompanySkill = onClickSkill.nameCompanySkill,
-            volumeSkill = onClickSkill.volumeSkill
-        )
-        companySkillDao.delete(newCompanySkill)
+        val projectDao = AppDatabase.getDataBase(binding.root.context).projectDao
+        projectDao.updateProjectsByType(onClickSkill!!.nameCompanySkill)
+        companySkillDao.delete(onClickSkill)
         onCompanyDeleteSkill()
     }
 

@@ -15,19 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageButton
-            android:id="@+id/img_done2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="16dp"
-            android:background="?attr/colorPrimaryVariant"
-            android:visibility="gone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_done" />
-
         <ProgressBar
             android:id="@+id/progress_limit4"
             style="?android:attr/progressBarStyleHorizontal"
@@ -50,10 +37,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:text="پیشرفت"
             android:layout_marginTop="25dp"
+            android:text="پیشرفت"
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="10sp"
+            android:textSize="8sp"
             app:layout_constraintStart_toStartOf="@+id/progress_limit4"
             app:layout_constraintTop_toBottomOf="@+id/txt_name_pro" />
 
@@ -80,8 +67,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/progress_limit4"
-            app:layout_constraintVertical_bias="0.477" />
+            app:layout_constraintTop_toBottomOf="@+id/progress_limit4" />
 
         <TextView
             android:id="@+id/txt_date_pro"
@@ -94,10 +80,25 @@
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:text="1400/2/12"
+            android:textAllCaps="false"
             android:textColor="?attr/colorOnSecondary"
             android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/cardView2" />
+
+        <View
+            android:visibility="invisible"
+            android:id="@+id/view_complete"
+            android:layout_width="0dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_height="1dp"
+            android:background="@color/gray"
+            app:layout_constraintBottom_toBottomOf="@+id/txt_date_pro"
+            app:layout_constraintEnd_toEndOf="@+id/txt_date_pro"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/txt_date_pro"
+            app:layout_constraintTop_toTopOf="@+id/txt_date_pro" />
 
         <TextView
             android:id="@+id/txt_name_pro"
@@ -125,13 +126,22 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/img_project"
+                android:visibility="invisible"
+                android:id="@+id/img_complete"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:backgroundTint="?attr/colorOnPrimary"
+                app:srcCompat="@drawable/img_done" />
+
+            <ImageView
+                android:id="@+id/img_process"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 app:tint="@color/firoze"
                 android:backgroundTint="?attr/colorOnPrimary"
-                app:srcCompat="@drawable/ic_android" />
+                app:srcCompat="@drawable/img_process" />
 
 
         </androidx.cardview.widget.CardView>

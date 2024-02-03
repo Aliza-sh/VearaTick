@@ -214,7 +214,7 @@ class CompanyInfoBottomsheetFragment : BottomSheetDialogFragment() {
             onNewCompany()
             dismiss()
         } else {
-            Snackbar.make(binding.root, "لطفا همه مقادیر را وارد کنید!", Snackbar.LENGTH_INDEFINITE)
+            val snackbar = Snackbar.make(binding.root, "لطفا همه مقادیر را وارد کنید!", Snackbar.LENGTH_INDEFINITE)
                 .setAction("صرف نظر") {
                     val intent = Intent(requireContext(), MainActivity::class.java)
                     startActivity(intent)
@@ -223,7 +223,8 @@ class CompanyInfoBottomsheetFragment : BottomSheetDialogFragment() {
                         R.anim.slide_to_left
                     )
                 }
-                .show()
+            snackbar.view.layoutDirection = View.LAYOUT_DIRECTION_RTL
+            snackbar.show()
         }
     }
 

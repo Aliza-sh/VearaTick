@@ -18,51 +18,28 @@
         <ImageButton
             android:id="@+id/btn_menu_entry_exit"
             android:layout_width="35dp"
-            android:layout_height="35dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/shape_circle"
+            android:layout_height="0dp"
+            android:background="@drawable/shape_background_menu_link_project"
             android:backgroundTint="?attr/colorOnPrimary"
             android:padding="8dp"
             android:src="@drawable/ic_menu"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/cardView2"
-            android:layout_width="70dp"
-            android:layout_height="30dp"
-            android:layout_marginEnd="8dp"
-            android:backgroundTint="?attr/colorOnPrimary"
-            app:cardCornerRadius="25dp"
-            app:layout_constraintEnd_toStartOf="@+id/btn_menu_entry_exit"
-            app:layout_constraintTop_toTopOf="@+id/btn_menu_entry_exit">
-
-            <ImageView
-                android:id="@+id/img_project"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:backgroundTint="?attr/colorOnPrimary"
-                app:srcCompat="@drawable/ic_android"
-                app:tint="@color/firoze" />
-
-
-        </androidx.cardview.widget.CardView>
 
         <TextView
             android:id="@+id/txt_name_pro"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="12dp"
             android:text="پروژه"
             android:textColor="@color/white"
-            android:textSize="20sp"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/cardView2"
-            app:layout_constraintTop_toBottomOf="@+id/cardView2" />
+            app:layout_constraintEnd_toStartOf="@+id/btn_menu_entry_exit"
+            app:layout_constraintTop_toTopOf="@+id/btn_menu_entry_exit" />
 
         <View
             android:id="@+id/view8"
@@ -81,11 +58,11 @@
             android:gravity="center"
             android:padding="6dp"
             android:src="@drawable/img_github"
-            app:tint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintWidth_default="percent" />
+            app:layout_constraintWidth_default="percent"
+            app:tint="@color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

@@ -156,6 +156,8 @@ interface ProjectDao : BaceDao<Project> {
     fun getNumberProject(typeProject: String): List<Project>
     @Query("SELECT * FROM project_table WHERE doneProject = :doneProject")
     fun getAllDoneProject(doneProject: Boolean): List<Project>
+    @Query("UPDATE project_table SET typeProject = 'دسته بندی نشده' WHERE typeProject = :type")
+    fun updateProjectsByType(type: String)
 }
 @Dao
 interface TeamProjectDao : BaceDao<TeamProject> {
@@ -307,6 +309,11 @@ interface CompanySkillDao : BaceDao<CompanySkill> {
     fun getAllCompanySkillDao(): CompanySkill?
     @Query("SELECT * FROM companySkill_table WHERE idCompanySkill = :idCompanySkill")
     fun getOnClickEmployeeHarvest(idCompanySkill: Int): CompanySkill?
+    @Query("SELECT nameCompanySkill FROM companySkill_table")
+    fun getAllSkills(): List<String>
+
+    @Query("SELECT * FROM companySkill_table WHERE nameCompanySkill = :skillName")
+    fun checkSkillExists(skillName: String): Boolean
 
 }
 @Dao

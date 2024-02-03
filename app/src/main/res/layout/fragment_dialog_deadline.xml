@@ -20,9 +20,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="ددلاین پروژه را تعیین کنید."
+            android:text="موعد پروژه را تعیین کنید."
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="22sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -93,7 +93,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="30dp"
                 android:letterSpacing="0.02"
-                android:text="پروژه ددلاین ندارد"
+                android:text="محدودیت زمانی ندارد"
                 android:textAlignment="center"
                 android:textColor="@color/white"
                 android:textSize="12sp" />

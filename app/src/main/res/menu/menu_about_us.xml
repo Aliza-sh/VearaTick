@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_about_about_us"
+        android:title="درباره ما" />
+    <item
+        android:id="@+id/menu_about_technical"
+        android:title="پشتیبانی فنی" />
+    <item
+        android:id="@+id/menu_about_sale"
+        android:title="پشتیبانی فروش" />
+</menu>

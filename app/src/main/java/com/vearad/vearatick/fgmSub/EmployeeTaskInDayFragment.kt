@@ -88,8 +88,10 @@ class EmployeeTaskInDayFragment(
         )
         var daysBetween = Days.daysBetween(startDate, endDate).days
 
-        binding.txtClickedDay.text =
-            " ${selectedDate.persianWeekDayName} ${selectedDate.persianDay} ${selectedDate.persianMonthName} \n $daysBetween روز"
+        if (daysBetween>0)
+        binding.txtClickedDay.text = " ${selectedDate.persianWeekDayName} ${selectedDate.persianDay} ${selectedDate.persianMonthName} \n $daysBetween روز"
+        else
+            binding.txtClickedDay.text = " ${selectedDate.persianWeekDayName} ${selectedDate.persianDay} ${selectedDate.persianMonthName} \n ${-daysBetween} روز گذشته"
 
         binding.btnBck.setOnClickListener {
             parentFragmentManager.beginTransaction().detach(this@EmployeeTaskInDayFragment)

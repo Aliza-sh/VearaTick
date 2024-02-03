@@ -21,12 +21,11 @@
 
         <ImageButton
             android:id="@+id/btn_menu_task_employee"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:layout_gravity="start"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:background="?attr/colorPrimaryVariant"
+            android:background="@drawable/shape_background_menu_or_back_bottom_left"
+            android:backgroundTint="@color/blacke"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_menu" />
@@ -49,7 +48,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/shape_dor_di"
             android:gravity="center"
             android:padding="5dp"
@@ -57,7 +56,7 @@
             android:paddingEnd="13dp"
             android:text="1402/3/2"
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:visibility="visible"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -66,8 +65,8 @@
             android:id="@+id/txt_project_task_employee"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="12dp"
             android:background="@drawable/shape_dor_di"
             android:gravity="center"
             android:padding="5dp"
@@ -75,7 +74,7 @@
             android:paddingEnd="13dp"
             android:text="پروژه"
             android:textColor="?attr/colorOnSecondary"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:visibility="visible"
             app:layout_constraintEnd_toStartOf="@+id/btn_menu_task_employee"
             app:layout_constraintTop_toTopOf="parent" />
@@ -85,7 +84,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="16dp"
             android:layout_marginBottom="24dp"
             android:background="@drawable/shape_background_rcv"
@@ -105,7 +104,7 @@
                 android:layout_marginEnd="12dp"
                 android:text="وظیفه"
                 android:textColor="?attr/colorOnSecondary"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -116,7 +115,7 @@
                 android:layout_marginBottom="16dp"
                 android:text="توضیحات"
                 android:textColor="@color/white_dark"
-                android:textSize="14sp" />
+                android:textSize="12sp" />
 
         </LinearLayout>
 

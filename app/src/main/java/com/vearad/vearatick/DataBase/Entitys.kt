@@ -289,7 +289,6 @@ data class CompanySkill(
 
     val nameCompanySkill: String,
     val volumeSkill: Int,
-
     )
 @Entity(tableName = "companyInfo_table")
 data class CompanyInfo(

@@ -6,10 +6,9 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
+import android.view.View
 import android.view.View.GONE
 import android.view.View.VISIBLE
-import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
@@ -30,15 +29,18 @@ import java.time.LocalDate
 class LoginStep24Activity : AppCompatActivity() {
 
     lateinit var binding: ActivityLoginStep24Binding
-    var emailError: String? = null
+    private var emailError: String? = null
     private var snackbar: Snackbar? = null
-    var goFromEvent: Boolean = false
+    private var goFromEvent: Boolean = false
+    private var firstRun: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginStep24Binding.inflate(layoutInflater)
         setContentView(binding.root)
-        goFromEvent = intent.getBooleanExtra("GOFROMEVENT", false)
+        goFromEvent = intent.getBooleanExtra("GOFROMEVENT", false,)
+        firstRun = intent.getBooleanExtra("FIRSTRUN", false)
+        Log.v("firstRun", "LoginStep24Activity: ${firstRun}")
 
         binding.btnBck.setOnClickListener {
             val intent = Intent(this, MainActivity::class.java)
@@ -49,6 +51,8 @@ class LoginStep24Activity : AppCompatActivity() {
 
         binding.btnRegister.setOnClickListener {
             val intent = Intent(this, RegisterStep24Activity::class.java)
+            intent.putExtra("FIRSTRUN", firstRun)
+            Log.v("firstRun", "firstRun: ${firstRun}")
             startActivity(intent)
             overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
@@ -237,7 +241,12 @@ class LoginStep24Activity : AppCompatActivity() {
                             val intent = Intent(applicationContext, MainActivity::class.java)
                             startActivity(intent)
                             overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
-                        } else {
+                        } else if (firstRun){
+                            val intent = Intent(applicationContext, MainActivity::class.java)
+                            startActivity(intent)
+                            overridePendingTransition(R.anim.slide_from_right, R.anim.slide_to_left)
+                        }
+                        else {
                             goFromEvent = false
                             goToMiniSite(user)
                         }
@@ -343,13 +352,10 @@ class LoginStep24Activity : AppCompatActivity() {
         }
 
         if (authFailedErrors != null) {
-            val snackbar = Snackbar.make(binding.root, "$authFailedErrors", Snackbar.LENGTH_INDEFINITE).setBackgroundTint(Color.parseColor("#FFFFFF"))
+            val snackbar = Snackbar.make(binding.root, "$authFailedErrors", Snackbar.LENGTH_LONG).setBackgroundTint(Color.parseColor("#FFFFFF"))
                 .setTextColor(Color.parseColor("#000000"))
                 .setActionTextColor(Color.parseColor("#E600ADB5"))
-            val view = snackbar.view
-            val params = view.layoutParams as FrameLayout.LayoutParams
-            params.gravity = Gravity.TOP
-            view.layoutParams = params
+            snackbar.view.layoutDirection = View.LAYOUT_DIRECTION_RTL
             snackbar.show()
         }
 

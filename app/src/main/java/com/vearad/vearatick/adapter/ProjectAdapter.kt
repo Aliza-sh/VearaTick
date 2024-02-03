@@ -1,29 +1,30 @@
 package com.vearad.vearatick.adapter
 
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kizitonwose.calendarview.utils.persian.toPersianCalendar
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.Project
 import com.vearad.vearatick.DataBase.ProjectDao
-import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.ItemProjectBinding
 import org.joda.time.DateTime
 import org.joda.time.Days
 import org.threeten.bp.LocalDate
 
-class ProjectNearAdapter(
+class ProjectAdapter(
     private val data: ArrayList<Project>,
     private val projectNearEvents: ProjectNearEvents,
     val projectDao: ProjectDao
 ) :
-    RecyclerView.Adapter<ProjectNearAdapter.ProjectNearViewHolder>() {
+    RecyclerView.Adapter<ProjectAdapter.ProjectNearViewHolder>() {
 
     lateinit var binding: ItemProjectBinding
 
@@ -41,7 +42,7 @@ class ProjectNearAdapter(
                 binding.recyclerView.adapter = teamProjectAdapter
             }
 
-            if (data[position].typeProject == "سایت")
+            /*if (data[position].typeProject == "سایت")
                 binding.imgProject.setImageResource(R.drawable.img_site)
             if (data[position].typeProject == "بک اند")
                 binding.imgProject.setImageResource(R.drawable.img_backend)
@@ -52,13 +53,27 @@ class ProjectNearAdapter(
             else if (data[position].typeProject == "طراحی")
                 binding.imgProject.setImageResource(R.drawable.img_designing)
             else if (data[position].typeProject == "سئو")
-                binding.imgProject.setImageResource(R.drawable.img_seo)
+                binding.imgProject.setImageResource(R.drawable.img_seo)*/
 
             binding.txtNamePro.text = data[position].nameProject
 
             if (data[position].doneProject!!){
-                binding.txtDatePro.visibility = View.GONE
-                binding.imgDone2.visibility =View.VISIBLE
+                binding.imgProcess.visibility = INVISIBLE
+                binding.imgComplete.visibility = VISIBLE
+
+                val shape = GradientDrawable()
+                shape.shape = GradientDrawable.RECTANGLE
+                shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                shape.setColor(
+                    Color.parseColor("#60AA83")
+                )
+                binding.txtDatePro.background = shape
+                binding.txtDatePro.text = data[position].valueCalendar
+                binding.viewComplete.visibility = VISIBLE
+                if (data[position].noDeadlineProject!!) {
+                    binding.txtDatePro.text = "پروژه ددلاین \nندارد"
+                    binding.viewComplete.visibility = INVISIBLE
+                }
             }
             else {
                 if (!data[position].noDeadlineProject!!) {
@@ -75,23 +90,46 @@ class ProjectNearAdapter(
                     )
                     var daysBetween = Days.daysBetween(startDate, endDate).days
 
-                    if (daysBetween > 0)
+                    if (daysBetween > 0) {
+                        val shape = GradientDrawable()
+                        shape.shape = GradientDrawable.RECTANGLE
+                        shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                        shape.setColor(
+                            Color.parseColor("#E600ADB5")
+                        )
+                        binding.txtDatePro.background = shape
                         binding.txtDatePro.text = data[position].valueCalendar
-                    else if (daysBetween == 0)
+                    }
+                    else if (daysBetween == 0) {
                         binding.txtDatePro.text = "امروز"
+                        binding.txtDatePro.setTextColor(Color.parseColor("#000000"))
+                        val shape = GradientDrawable()
+                        shape.shape = GradientDrawable.RECTANGLE
+                        shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                        shape.setColor(
+                            Color.parseColor("#FCCD66")
+                        )
+                        binding.txtDatePro.background = shape
+                    }
                     else {
                         val shape = GradientDrawable()
                         shape.shape = GradientDrawable.RECTANGLE
                         shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
-                        shape.setStroke(
-                            5,
-                            ContextCompat.getColor(binding.root.context, R.color.red_800)
+                        shape.setColor(
+                            Color.parseColor("#c62828")
                         )
                         binding.txtDatePro.background = shape
                         binding.txtDatePro.text = "مهلت پروژه\n به اتمام رسید"
                     }
                 } else {
                     binding.txtDatePro.text = "پروژه ددلاین \nندارد"
+                    val shape = GradientDrawable()
+                    shape.shape = GradientDrawable.RECTANGLE
+                    shape.cornerRadii = floatArrayOf(40f, 40f, 40f, 40f, 40f, 40f, 40f, 40f)
+                    shape.setColor(
+                        Color.parseColor("#929292")
+                    )
+                    binding.txtDatePro.background = shape
                 }
             }
 

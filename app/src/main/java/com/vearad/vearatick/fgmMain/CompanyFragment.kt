@@ -6,18 +6,26 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.FrameLayout
+import android.widget.PopupMenu
 import androidx.compose.ui.graphics.toArgb
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.ghanshyam.graphlibs.Graph
 import com.ghanshyam.graphlibs.GraphData
 import com.google.android.material.snackbar.Snackbar
@@ -28,6 +36,7 @@ import com.vearad.vearatick.CompanyReceiptActivity
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.CompanyExpensesDao
 import com.vearad.vearatick.DataBase.CompanyReceiptDao
+import com.vearad.vearatick.DataBase.CompanySkill
 import com.vearad.vearatick.DataBase.EfficiencyDao
 import com.vearad.vearatick.DataBase.EmployeeHarvestDao
 import com.vearad.vearatick.DataBase.EmployeeInvestmentDao
@@ -39,6 +48,8 @@ import com.vearad.vearatick.ProAndEmpActivity
 import com.vearad.vearatick.R
 import com.vearad.vearatick.SHAREDEXPIRATIONSUBSCRIPTION
 import com.vearad.vearatick.ShareholdersInvestmentActivity
+import com.vearad.vearatick.adapter.CompanySkillAdapter
+import com.vearad.vearatick.adapter.CompanySkillInCompanyFragmentAdapter
 import com.vearad.vearatick.databinding.FragmentCompanyBinding
 import com.vearad.vearatick.databinding.FragmentDialogIncreaseCreditBinding
 import com.vearad.vearatick.databinding.ItemProjectBinding
@@ -48,7 +59,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 
-class CompanyFragment : Fragment() {
+class CompanyFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent {
 
     lateinit var binding: FragmentCompanyBinding
     lateinit var bindingDialogIncreaseCredit: FragmentDialogIncreaseCreditBinding
@@ -89,6 +100,9 @@ class CompanyFragment : Fragment() {
         employeeHarvestDao = AppDatabase.getDataBase(view.context).employeeHarvestDao
         employeeInvestmentDao = AppDatabase.getDataBase(view.context).employeeInvestmentDao
 
+        val popupMenu = PopupMenu(view.context, binding.btnSupport)
+        onMenuClicked(popupMenu)
+
         sharedPreferences = requireActivity().getSharedPreferences(
             SHAREDEXPIRATIONSUBSCRIPTION,
             Context.MODE_PRIVATE
@@ -105,17 +119,19 @@ class CompanyFragment : Fragment() {
             Log.v("expirationDate", "today: ${today}")
 
             if (today == date) {
-                val snackbar = Snackbar.make(binding.root, "اشتراک شما منقضی شده است!", Snackbar.LENGTH_LONG)
-                    .setAction("خرید اشتراک") {
-                        showIncreaseCreditDialog()
-                    }.setBackgroundTint(Color.parseColor("#FFFFFF"))
-                    .setTextColor(Color.parseColor("#000000"))
-                    .setActionTextColor(Color.parseColor("#E600ADB5"))
+                val snackbar =
+                    Snackbar.make(binding.root, "اشتراک شما منقضی شده است!", Snackbar.LENGTH_LONG)
+                        .setAction("خرید اشتراک") {
+                            showIncreaseCreditDialog()
+                        }.setBackgroundTint(Color.parseColor("#FFFFFF"))
+                        .setTextColor(Color.parseColor("#000000"))
+                        .setActionTextColor(Color.parseColor("#E600ADB5"))
 
                 val view = snackbar.view
                 val params = view.layoutParams as FrameLayout.LayoutParams
                 params.gravity = Gravity.TOP
                 view.layoutParams = params
+                snackbar.view.layoutDirection = View.LAYOUT_DIRECTION_RTL
                 snackbar.show()
 
             }
@@ -221,57 +237,98 @@ class CompanyFragment : Fragment() {
             activity?.overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
         }
 
+        progressNumProject(binding.progressNumProject, view)
         binding.btnSeeMoreNumPro.setOnClickListener {
-            val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.frame_layout_main2, ProjectNumberFragment(projectDao))
-                .addToBackStack(null)
-                .commit()
+            val companySkillDao = AppDatabase.getDataBase(view.context).companySkillDao
+            val tapTargetSequence = tapTargetSequence()
+            if (companySkillDao.getAllListCompanySkillDao().isEmpty() && projectDao.getAllProject()
+                    .isEmpty()
+            )
+                tapTargetSequence?.start()
+            else {
+                val transaction =
+                    (activity as MainActivity).supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.frame_layout_main2, ProjectNumberFragment(projectDao))
+                    .addToBackStack(null)
+                    .commit()
+            }
         }
-        progressNumProject(binding.progressNumProject)
+    }
+
+    private fun onMenuClicked(popupMenu: PopupMenu) {
+
+        popupMenu.menuInflater.inflate(R.menu.menu_about_us, popupMenu.menu)
+        binding.btnSupport.setOnClickListener {
+            popupMenu.show()
+            popupMenu.setOnMenuItemClickListener { item ->
+
+                when (item.itemId) {
+
+                    R.id.menu_about_about_us -> {
+                        var createEventUrl = "https://vearad.ir/resume/"
+                        val modifiedUrl = Uri.parse(createEventUrl)
+
+                        val intent = Intent(Intent.ACTION_VIEW, modifiedUrl)
+                        startActivity(intent)
+                    }
+
+                    R.id.menu_about_technical -> {
+                        val phoneNumber = "09022700813"  // شماره تلفن فنی
+                        val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber"))
+                        startActivity(dialIntent)
+                    }
+
+                    R.id.menu_about_sale -> {
+                        val phoneNumber = "09358668218"  // شماره تلفن فروش
+                        val dialIntent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:$phoneNumber"))
+                        startActivity(dialIntent)
+                    }
+
+                }
+                true
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
     private fun setProgressEfficiencyCompamy() {
 
-        if (efficiencyProject() > 100){
+        if (efficiencyProject() > 100) {
             binding.progressEfficiencyPro.setPercent(100)
             binding.txtEfficiencyPro.text = "100%+"
 
-        } else if (efficiencyProject() in 1..100){
+        } else if (efficiencyProject() in 1..100) {
             binding.progressEfficiencyPro.setPercent(efficiencyProject())
             binding.txtEfficiencyPro.text = "${efficiencyProject()}%"
 
-        }
-        else if (efficiencyProject() < 0){
+        } else if (efficiencyProject() < 0) {
             binding.progressEfficiencyPro.setPercent(0)
             binding.txtEfficiencyPro.text = "0%-"
         }
 
 
-        if (efficiencyEmployeeTack() > 100){
+        if (efficiencyEmployeeTack() > 100) {
             binding.progressEfficiencyEmpTask.setPercent(100)
             binding.txtEfficiencyEmpTask.text = "100%+"
 
-        } else if (efficiencyEmployeeTack() in 1..100){
+        } else if (efficiencyEmployeeTack() in 1..100) {
             binding.progressEfficiencyEmpTask.setPercent(efficiencyProject())
             binding.txtEfficiencyEmpTask.text = "${efficiencyProject()}%"
 
-        }
-        else if (efficiencyEmployeeTack() < 0){
+        } else if (efficiencyEmployeeTack() < 0) {
             binding.progressEfficiencyEmpTask.setPercent(0)
             binding.txtEfficiencyEmpTask.text = "0%-"
         }
 
-        if (efficiencyEmployeePresence() > 100){
+        if (efficiencyEmployeePresence() > 100) {
             binding.progressEfficiencyEmpPresence.setPercent(100)
             binding.txtEfficiencyEmpPresence.text = "100%+"
 
-        } else if (efficiencyEmployeePresence() in 1..100){
+        } else if (efficiencyEmployeePresence() in 1..100) {
             binding.progressEfficiencyEmpPresence.setPercent(efficiencyProject())
             binding.txtEfficiencyEmpPresence.text = "${efficiencyProject()}%"
 
-        }
-        else if (efficiencyEmployeePresence() < 0){
+        } else if (efficiencyEmployeePresence() < 0) {
             binding.progressEfficiencyEmpPresence.setPercent(0)
             binding.txtEfficiencyEmpPresence.text = "0%-"
         }
@@ -372,42 +429,63 @@ class CompanyFragment : Fragment() {
         return decimalFormat.format(value) + " تومان"
     }
 
-    private fun progressNumProject(graph: Graph) {
+    private fun progressNumProject(graph: Graph, view: View) {
 
-        val numAndroid = projectDao.getNumberProject("اندروید").size
-        val numSite = projectDao.getNumberProject("سایت").size
-        val numFrontEnd = projectDao.getNumberProject("فرانت اند").size
-        val numBackEnd = projectDao.getNumberProject("بک اند").size
-        val numRobotic = projectDao.getNumberProject("رباتیک").size
-        val numDsign = projectDao.getNumberProject("طراحی").size
-        val numSeo = projectDao.getNumberProject("سئو").size
+        val companySkillDao = AppDatabase.getDataBase(view.context).companySkillDao
+        var companySkillData = companySkillDao.getAllListCompanySkillDao()
+        Log.v("companySkillData", companySkillData.toString())
+        if (companySkillData.isEmpty())
+            binding.emptyList.visibility = VISIBLE
+
+        val numProjectDefault = projectDao.getNumberProject("دسته بندی نشده").size
+
+        val data: MutableCollection<GraphData> = ArrayList()
+        val numProjectDefault1 = projectDao.getNumberProject("دسته بندی نشده").size
+        if (numProjectDefault > 0) {
+            data.add(GraphData(numProjectDefault1.toFloat(), Color.parseColor("#FFFFFF")))
+        }
+        var counterColor = 1
+        for (skill in companySkillData) {
+            Log.v("companySkillData", skill.nameCompanySkill)
+            val numProject = projectDao.getNumberProject(skill.nameCompanySkill).size
+            Log.v("companySkillData", numProject.toString())
+            Log.v("companySkillData", counterColor.toString())
+
+            val colorId =
+                view.context.resources.getIdentifier("color$counterColor", "color", view.context.packageName)
+            val color = ContextCompat.getColor(view.context, colorId)
+            data.add(GraphData(numProject.toFloat(), color))
+            Log.v("companySkillDatacompanySkillData", color.toString())
+            counterColor++
+
+        }
+
+        if (numProjectDefault > 0) {
+            val manuallyAddedSkills = CompanySkill(
+                idCompanySkill = 0,
+                nameCompanySkill = "دسته بندی نشده",
+                volumeSkill = 0
+            )
+
+            val companySkillList: MutableList<CompanySkill> = mutableListOf()
+            companySkillList.add(manuallyAddedSkills)
+            companySkillData = companySkillList + companySkillData
+        }
+        val companySkillInCompanyFragmentAdapter =
+            CompanySkillInCompanyFragmentAdapter(ArrayList(companySkillData))
+        binding.rcvSkill.layoutManager = LinearLayoutManager(context)
+        binding.rcvSkill.adapter = companySkillInCompanyFragmentAdapter
+
         val numTotalProject = projectDao.getAllProject().size
-
+        binding.txtTotalProject.text = numTotalProject.toString()
         graph.setMinValue(0f)
         graph.setMaxValue(numTotalProject.toFloat())
         graph.setBackgroundShapeWidthInDp(20)
         graph.setForegroundShapeWidthInPx(50)
         graph.setShapeForegroundColor(Color.parseColor("#202020"))
         graph.setShapeBackgroundColor(Color.parseColor("#202020"))
-
-        binding.txtTotalProject.text = numTotalProject.toString()
-        val data: MutableCollection<GraphData> = ArrayList()
-        //اندروید
-        data.add(GraphData(numAndroid.toFloat(), Color.parseColor("#97DAE4")))
-        //سایت
-        data.add(GraphData(numSite.toFloat(), Color.parseColor("#FE7D8B")))
-        //بک اند
-        data.add(GraphData(numBackEnd.toFloat(), Color.parseColor("#4D7E68")))
-        //فرانت اند
-        data.add(GraphData(numFrontEnd.toFloat(), Color.parseColor("#F2E45B")))
-        //رباتیک
-        data.add(GraphData(numRobotic.toFloat(), Color.parseColor("#68A7B1")))
-        //طراحی
-        data.add(GraphData(numDsign.toFloat(), Color.parseColor("#6D9884")))
-        //سئو
-        data.add(GraphData(numSeo.toFloat(), Color.parseColor("#B6AA3B")))
-
         graph.setData(data)
+
     }
 
     private fun efficiencyProject(): Int {
@@ -472,6 +550,46 @@ class CompanyFragment : Fragment() {
 
             alertDialog.dismiss()
         }
+    }
+
+    override fun onMenuItemClick(companySkill: CompanySkill, position: Int) {}
+
+    private fun tapTargetSequence(): TapTargetSequence? {
+        val tapTargetSequence = TapTargetSequence(requireActivity())
+            .targets(
+                TapTarget.forView(
+                    binding.btnSeeMoreNumPro,
+                    "مهارتی ثبت نشده است.",
+                    "لطفا به قسمت درباره شرکت رفته و مهارت های خود را ثبت کنید."
+                )
+                    .cancelable(true)
+                    .textTypeface(Typeface.DEFAULT_BOLD)
+                    .titleTextSize(20)
+                    .descriptionTextColor(R.color.blacke)
+                    .transparentTarget(true)
+                    .targetCircleColor(R.color.firoze)
+                    .titleTextColor(R.color.white)
+                    .targetRadius(60)
+                    .id(1)
+            ).listener(object : TapTargetSequence.Listener {
+                override fun onSequenceFinish() {
+                    // دنباله Tap Target ها به پایان رسید
+                }
+
+                override fun onSequenceStep(
+                    lastTarget: TapTarget?,
+                    targetClicked: Boolean
+                ) {
+                    // مرحله جدید Tap Target در دنباله
+                }
+
+                override fun onSequenceCanceled(lastTarget: TapTarget?) {
+                    // دنباله Tap Target ها لغو شد
+                }
+            })
+
+        return tapTargetSequence
+
     }
 
 }

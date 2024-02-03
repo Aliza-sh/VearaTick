@@ -28,7 +28,7 @@
                 android:background="@drawable/shape_dore_button"
                 android:text="تایید"
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="12sp"
                 android:textStyle="bold"
                 app:backgroundTint="@color/firoze"
                 app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +47,7 @@
                 android:paddingBottom="5dp"
                 android:text="پروژه جدید"
                 android:textColor="@color/white"
-                android:textSize="20sp"
+                android:textSize="16sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -235,7 +235,7 @@
                             <TextView
                                 android:textColor="@color/gray"
                                 android:layout_width="wrap_content"
-                                android:text="انتخاب تاریخ"
+                                android:text="موعد پروژه"
                                 android:layout_marginEnd="10sp"
                                 android:layout_height="wrap_content"/>
 

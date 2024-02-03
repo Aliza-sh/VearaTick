@@ -65,7 +65,6 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
     var sharedPreferencesAccessToken: SharedPreferences? = null
     var sharedPreferencesMiniSite: SharedPreferences? = null
 
-    var login = false
     var expirationAccessToken = 0
     var user = ""
     var accessToken = ""
@@ -73,9 +72,11 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
     val SHAREDLOGINSTEP24 = "SharedLoginStep24"
     val LOGINSTEP24 = "loginStep24"
+    var login = false
 
     val SHAREDMINISITE = "SharedMinisite"
     val KEYMINISITE = "keyMinisite"
+    var idMiniSite = ""
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -173,10 +174,9 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
                 requireActivity().getSharedPreferences(SHAREDLOGINSTEP24, Context.MODE_PRIVATE)
             login = sharedPreferencesLoginStep24.getBoolean(LOGINSTEP24, false)
 
-            val tapTargetSequence = tapTargetSequence(sharedPreferencesLoginStep24)
-
+            /*val tapTargetSequence = tapTargetSequence(sharedPreferencesLoginStep24)
             if (login == false)
-                tapTargetSequence?.start()
+                tapTargetSequence?.start()*/
 
             val miniSite = popupMenu.menu.findItem(R.id.menu_login_minisite)
             if (nameMiniSite == "")
@@ -219,9 +219,13 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
                                 R.anim.slide_from_left,
                                 R.anim.slide_to_right
                             )
-                        } else
-                            if (nameMiniSite != "")
+                        } else {
+                            Log.v("nameMiniSite", "nameMiniSite: ${nameMiniSite}")
+                            if (nameMiniSite != "" || nameMiniSite != null) {
+                                Log.v("nameMiniSite", "nameMiniSite: ${nameMiniSite}")
                                 goToMiniSite(user)
+                            }
+                        }
 
                     }
 
@@ -273,6 +277,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
         Log.v("loginapp", "accessToken: ${accessToken}")
 
         if (user != null && accessToken != null) {
+            Log.v("loginapp", "Login")
             val call = apiService.getMiniSite(
                 "admin/minisite/users/${user}/business",
                 "Bearer $accessToken"
@@ -282,21 +287,26 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
                     call: Call<MiniSiteData>,
                     response: Response<MiniSiteData>
                 ) {
+                    Log.v("loginapp", "is onResponse")
+                    Log.v("loginapp", "isSuccessful ${response.isSuccessful}")
+                    Log.v("loginapp", "response ${response}")
                     if (response.isSuccessful) {
                         //companyEventData = response.body()!!.event
-                        Log.v("loginapp", "response: ${response}")
-                        Log.v("loginapp", "call: ${call}")
 
                         val miniSiteDataData: MiniSiteData? = response.body()
                         Log.v("loginapp", "miniSiteDataData: ${miniSiteDataData}")
 
                         if (miniSiteDataData?.business != null) {
                             // Process the events data as needed
-                            binding.idMiniSite.text = miniSiteDataData.business.namePer
-                            sharedPreferencesMiniSite?.edit()?.putString(KEYMINISITE, miniSiteDataData.business.namePer)!!.apply()
+                            idMiniSite = miniSiteDataData.business.namePer
+                            binding.idMiniSite.text = idMiniSite
+
+                            sharedPreferencesMiniSite?.edit()
+                                ?.putString(KEYMINISITE, miniSiteDataData.business.namePer)!!
+                                .apply()
                         } else {
                             // Handle the case where the response body is null
-                           val snackbar =  Snackbar.make(
+                            val snackbar = Snackbar.make(
                                 binding.root,
                                 "مینی سایت نداری!",
                                 Snackbar.ANIMATION_MODE_SLIDE
@@ -311,6 +321,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
                             val params = view.layoutParams as FrameLayout.LayoutParams
                             params.gravity = Gravity.TOP
                             view.layoutParams = params
+                            snackbar.view.layoutDirection = View.LAYOUT_DIRECTION_RTL
                             snackbar.show()
                         }
                         // Process the data and update the UI
@@ -319,6 +330,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
                         goToLogin()
                     }
                 }
+
                 override fun onFailure(call: Call<MiniSiteData>, t: Throwable) {
                     Log.e("RequestError", "Error: ${t.message}")
                     // Handle the error
@@ -332,35 +344,37 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
     }
 
     fun goToLogin() {
-        val snackbar = Snackbar.make(binding.root, "نیاز به ورود به سایت است!", Snackbar.ANIMATION_MODE_SLIDE)
-            .setAction("ورود") {
-                val goFromEvent = true
-                val intent = Intent(requireActivity(), LoginStep24Activity::class.java)
-                intent.putExtra("GOFROMEVENT", goFromEvent);
-                startActivity(intent)
-                requireActivity().overridePendingTransition(
-                    R.anim.slide_from_left,
-                    R.anim.slide_to_right
-                )
-            }.setBackgroundTint(Color.parseColor("#FFFFFF"))
-            .setTextColor(Color.parseColor("#000000"))
-            .setActionTextColor(Color.parseColor("#E600ADB5"))
+        val snackbar =
+            Snackbar.make(binding.root, "نیاز به ورود به سایت است!", Snackbar.ANIMATION_MODE_SLIDE)
+                .setAction("ورود") {
+                    val goFromEvent = true
+                    val intent = Intent(requireActivity(), LoginStep24Activity::class.java)
+                    intent.putExtra("GOFROMEVENT", goFromEvent);
+                    startActivity(intent)
+                    requireActivity().overridePendingTransition(
+                        R.anim.slide_from_left,
+                        R.anim.slide_to_right
+                    )
+                }.setBackgroundTint(Color.parseColor("#FFFFFF"))
+                .setTextColor(Color.parseColor("#000000"))
+                .setActionTextColor(Color.parseColor("#E600ADB5"))
         val view = snackbar.view
         val params = view.layoutParams as FrameLayout.LayoutParams
         params.gravity = Gravity.TOP
         view.layoutParams = params
+        snackbar.view.layoutDirection = View.LAYOUT_DIRECTION_RTL
         snackbar.show()
     }
 
     private fun goToMiniSite(user: String?) {
 
-        val createEventUrl =
-            "https://step24.ir/${user}/admin/minisite-panel"
+        var createEventUrl = "https://step24.ir/minisites"
+        if (idMiniSite != "")
+            createEventUrl = "https://step24.ir/${user}/admin/minisite-panel"
 
         try {
             val modifiedUrl = Uri.parse(createEventUrl)
                 .buildUpon()
-                .appendQueryParameter("appOrigin", "android")
                 .build()
 
             val intentMainActivity = Intent(requireContext(), MainActivity::class.java)
@@ -433,11 +447,13 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
             }
         }
     }
+
     fun pickImage() {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         startActivityForResult(intent, PICK_IMAGE_REQUEST)
     }
+
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
 
@@ -454,6 +470,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
             addPhoto()
         }
     }
+
     private fun addPhoto() {
         val newInfo = CompanyInfo(
             idCompanyInfo = companyInfo!!.idCompanyInfo,
@@ -468,6 +485,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
         companyInfoDao.update(newInfo)
         onConfirmButtonClicked()
     }
+
     private fun deletePhoto() {
         val newInfo = CompanyInfo(
             idCompanyInfo = companyInfo!!.idCompanyInfo,
@@ -482,6 +500,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
         companyInfoDao.update(newInfo)
         onConfirmButtonClicked()
     }
+
     private fun btnCompanySkill(view: View) {
 
         binding.icCompanySkill.backgroundTintList =
@@ -534,6 +553,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
         replaceFragment(CompanySkillFragment())
     }
+
     private fun btnCompanyResume(view: View) {
         binding.icCompanyResume.backgroundTintList =
             ContextCompat.getColorStateList(view.context, R.color.firoze)
@@ -585,6 +605,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
         replaceFragment(CompanyResumeFragment())
     }
+
     private fun btnEvent(view: View) {
         binding.icEvent.backgroundTintList =
             ContextCompat.getColorStateList(view.context, R.color.firoze)
@@ -636,15 +657,18 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
 
         replaceFragment(CompanyEventFragment())
     }
+
     private fun replaceFragment(fragment: Fragment) {
         val transaction = (activity as MainActivity).supportFragmentManager.beginTransaction()
         transaction.replace(R.id.fragment_com_info, fragment)
             .commit()
     }
+
     private fun firstRun(view: View) {
         btnCompanySkill(view)
         replaceFragment(CompanySkillFragment())
     }
+
     override fun onConfirmButtonClicked() {
 
         companyInfoDao = AppDatabase.getDataBase(binding.root.context).companyInfoDao

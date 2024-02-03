@@ -24,7 +24,7 @@ class CompanyResumeAdapter(
 
             binding.txtNamePro.text = data[position].nameProject
 
-            if (data[position].typeProject == "بک اند")
+            /*if (data[position].typeProject == "بک اند")
                 binding.imgProject.setImageResource(R.drawable.img_backend)
             else if (data[position].typeProject == "فرانت اند")
                 binding.imgProject.setImageResource(R.drawable.img_frontend)
@@ -33,7 +33,7 @@ class CompanyResumeAdapter(
             else if (data[position].typeProject == "طراحی")
                 binding.imgProject.setImageResource(R.drawable.img_designing)
             else if (data[position].typeProject == "سئو")
-                binding.imgProject.setImageResource(R.drawable.img_seo)
+                binding.imgProject.setImageResource(R.drawable.img_seo)*/
 
             if (data[position].urlProject != "")
                 binding.icGithub.backgroundTintList =
