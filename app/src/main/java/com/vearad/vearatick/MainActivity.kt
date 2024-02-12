@@ -1,12 +1,19 @@
 package com.vearad.vearatick
 
 import ApiService
+import android.Manifest
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.google.gson.GsonBuilder
 import com.vearad.vearatick.DataBase.AppDatabase
@@ -25,6 +32,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 
 lateinit var employeeDao: EmployeeDao
 lateinit var dayDao: DayDao
@@ -68,29 +76,9 @@ class MainActivity : AppCompatActivity() {
         firstRun()
         createApiService()
 
-        /*val intent = intent
-        val data: Uri? = intent.data
-        if (data != null) {
-            val jsonData = data.getQueryParameter("jsonData")
-            if (jsonData != null) {
-                // Parse the JSON data and handle it accordingly
-                try {
-                    val jsonObject = JSONObject(jsonData)
-                    val accessToken = jsonObject.getString("access_token")
-                    val username = jsonObject.getString("username")
-                    Log.v("loginapp", "accessToken: ${accessToken}")
-                    Log.v("loginapp", "username: ${username}")
-                    val sharedPreferencesLoginStep24 = getSharedPreferences(SHAREDLOGINSTEP24, Context.MODE_PRIVATE)
-                    sharedPreferencesLoginStep24.edit().putString(LOGINSTEP24, username).apply()
-
-                    val sharedPreferencesAccessToken = getSharedPreferences(ACCESSTOKEN, Context.MODE_PRIVATE)
-                    sharedPreferencesAccessToken.edit().putString(KEYACCESSTOKEN, accessToken).apply()
-                    // Handle the retrieved data
-                } catch (e: JSONException) {
-                    // Handle JSON parsing error
-                }
-            }
-        }*/
+        if (ContextCompat.checkSelfPermission(applicationContext,  Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS),1)
+        }
 
         employeeDao = AppDatabase.getDataBase(this).employeeDao
 
@@ -141,6 +129,32 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         super.onBackPressed()
         finishAffinity()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == 1) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // کاربر مجوز را داده است
+                // ذخیره وضعیت مجوز در حافظه
+                val preferences = getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
+                preferences.edit().putBoolean("has_post_notifications_permission", true).apply()
+
+                val intent = Intent(this, NotificationBroadcastReceiver::class.java)
+                val pendingIntent = PendingIntent.getBroadcast(this, 1001, intent, PendingIntent.FLAG_IMMUTABLE)
+                val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+
+                alarmManager.setInexactRepeating(
+                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
+                    SystemClock.elapsedRealtime(),
+                    AlarmManager.INTERVAL_HOUR,
+                    pendingIntent
+                )
+            } else {
+                // کاربر مجوز را رد کرد
+            }
+        }
     }
 
     private fun createApiService() {
