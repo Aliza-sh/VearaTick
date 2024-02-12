@@ -26,8 +26,8 @@ import com.vearad.vearatick.DataBase.Employee
 import com.vearad.vearatick.DataBase.EmployeeDao
 import com.vearad.vearatick.DataBase.TaskEmployee
 import com.vearad.vearatick.DataBase.TaskEmployeeDao
-import com.vearad.vearatick.Dialog.EmployeeTaskBottomsheetFragment
-import com.vearad.vearatick.Dialog.EmployeeUpdateTaskBottomsheetFragment
+import com.vearad.vearatick.dialog.EmployeeTaskBottomsheetFragment
+import com.vearad.vearatick.dialog.EmployeeUpdateTaskBottomsheetFragment
 import com.vearad.vearatick.R
 import com.vearad.vearatick.adapter.TaskEmployeeAdapter
 import com.vearad.vearatick.databinding.ActivityProAndEmpBinding

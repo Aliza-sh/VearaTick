@@ -1,4 +1,4 @@
-package com.vearad.vearatick.Dialog
+package com.vearad.vearatick.dialog
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -20,7 +20,6 @@ import com.vearad.vearatick.R
 import com.vearad.vearatick.adapter.SubTaskProjectAdapter
 import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
 import com.vearad.vearatick.databinding.BottomsheetfragmentUpdeteSubtaskProjectBinding
-import com.vearad.vearatick.fgmSub.ProjectInformationFragment
 import com.vearad.vearatick.fgmSub.ProjectSubTaskFragment
 import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints
 import com.xdev.arch.persiancalendar.datepicker.DateValidatorPointForward
@@ -31,7 +30,7 @@ import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
 import org.joda.time.DateTime
 import org.joda.time.Days
 
-class ProjectUpdateSubTaskFromInfoBottomsheetFragment(
+class ProjectUpdateSubTaskFromSubTaskBottomsheetFragment(
     val subTaskProjectDao: SubTaskProjectDao,
     val project: Project,
     val subTaskProjectAdapter: SubTaskProjectAdapter,
@@ -66,6 +65,7 @@ class ProjectUpdateSubTaskFromInfoBottomsheetFragment(
         teamSubTaskDao = AppDatabase.getDataBase(view.context).teamSubTaskDao
         taskEmployeeDao = AppDatabase.getDataBase(view.context).taskDao
 
+
         binding.sheetBtnDone.setOnClickListener {
             addNewTask()
             onSubTaskToProject()
@@ -86,7 +86,7 @@ class ProjectUpdateSubTaskFromInfoBottomsheetFragment(
             valueDay = subTaskProject.dayDeadline.toString()
             valueMonth = subTaskProject.monthDeadline.toString()
             valueYear = subTaskProject.yearDeadline.toString()
-            valueCalendar = subTaskProject.valueCalendar.toString()
+            valueCalendar = subTaskProject.valueCalendar
             binding.btnCalendar.visibility = View.GONE
         } else {
             valueDay = subTaskProject.dayDeadline.toString()
@@ -126,26 +126,26 @@ class ProjectUpdateSubTaskFromInfoBottomsheetFragment(
                 override fun onPositiveButtonClick(selection: Long?) {
                     val date = PersianCalendar(selection!!)
                     valueCalendar = "${date.year}/${date.month + 1}/${date.day}"
-                    valueDay = date.day.toString()
-                    valueMonth = date.month.toString()
-                    valueYear = date.year.toString()
+                    valueDay  = date.day.toString()
+                    valueMonth= date.month.toString()
+                    valueYear= date.year.toString()
                     binding.txtDedlineDateTime.text = valueCalendar
                 }
             }
         )
-
     }
 
     fun onSubTaskToProject() {
         parentFragmentManager.beginTransaction()
-            .detach(this@ProjectUpdateSubTaskFromInfoBottomsheetFragment)
+            .detach(this@ProjectUpdateSubTaskFromSubTaskBottomsheetFragment)
             .replace(
                 R.id.layout_pro_and_emp,
-                ProjectInformationFragment(
+                ProjectSubTaskFragment(
                     project,
-                    subTaskProjectDao,
                     projectDao,
-                    position, bindingActivityProAndEmp,false
+                    position,
+                    bindingActivityProAndEmp,
+                    subTaskProjectDao,
                 )
             ).commit()
     }
@@ -159,19 +159,14 @@ class ProjectUpdateSubTaskFromInfoBottomsheetFragment(
         ) {
             val txtTask = binding.edtNameTask.text.toString()
             val txtDescription = binding.edtDescriptionTask.text.toString()
+            val txtDate = valueCalendar
             val txtVolume = binding.edtVolumeTask.text.toString()
 
+            val today = com.kizitonwose.calendarview.utils.persian.PersianCalendar()
             val startDate =
-                DateTime(
-                    subTaskProject.yearCreation,
-                    subTaskProject.monthCreation,
-                    subTaskProject.dayCreation,
-                    0,
-                    0,
-                    0
-                )
+                DateTime(subTaskProject.yearCreation, subTaskProject.monthCreation , subTaskProject.dayCreation, 0, 0, 0)
             val endDate = DateTime(
-                valueYear.toInt(),
+                valueYear.toInt() ,
                 valueMonth.toInt(),
                 valueDay.toInt(),
                 0,
@@ -212,8 +207,7 @@ class ProjectUpdateSubTaskFromInfoBottomsheetFragment(
                 for (employeeSubTaskProject in employeeSubTaskProjects) {
 
                     val onClickTask = taskEmployeeDao.getEmployeeSTaskSProject(
-                        employeeSubTaskProject.idEmployee!!, employeeSubTaskProject.idSubTask
-                    )
+                        employeeSubTaskProject.idEmployee!!,employeeSubTaskProject.idSubTask)
 
                     val newTask = TaskEmployee(
                         idTask = onClickTask!!.idTask,
@@ -238,24 +232,24 @@ class ProjectUpdateSubTaskFromInfoBottomsheetFragment(
                     )
                     taskEmployeeDao.update(newTask)
                 }
-
-                val transaction =
-                    (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
-                transaction.replace(
-                    R.id.layout_pro_and_emp, ProjectSubTaskFragment(
-                        project,
-                        projectDao,
-                        position,
-                        bindingActivityProAndEmp,
-                        subTaskProjectDao,
-                    )
-                )
-                    .addToBackStack(null)
-                    .commit()
-                dismiss()
-            } else {
-                Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()
             }
+
+            val transaction =
+                (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
+            transaction.replace(
+                R.id.layout_pro_and_emp, ProjectSubTaskFragment(
+                    project,
+                    projectDao,
+                    position,
+                    bindingActivityProAndEmp,
+                    subTaskProjectDao,
+                )
+            )
+                .addToBackStack(null)
+                .commit()
+            dismiss()
+        } else {
+            Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()
         }
     }
 }

@@ -16,7 +16,7 @@ import com.vearad.vearatick.BottomSheetCallback
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.Project
 import com.vearad.vearatick.DataBase.ProjectDao
-import com.vearad.vearatick.Dialog.CompanyResumeSetLinkBottomsheetFragment
+import com.vearad.vearatick.dialog.CompanyResumeSetLinkBottomsheetFragment
 import com.vearad.vearatick.ProAndEmpActivity
 import com.vearad.vearatick.R
 import com.vearad.vearatick.adapter.CompanyResumeAdapter

@@ -23,8 +23,8 @@ import com.vearad.vearatick.DataBase.Employee
 import com.vearad.vearatick.DataBase.EmployeeHarvest
 import com.vearad.vearatick.DataBase.EmployeeHarvestDao
 import com.vearad.vearatick.DataBase.FinancialReport
-import com.vearad.vearatick.Dialog.SalaryEmployeeNewHarvestBottomsheetFragment
-import com.vearad.vearatick.Dialog.SalaryEmployeeUpdateHarvestBottomsheetFragment
+import com.vearad.vearatick.dialog.SalaryEmployeeNewHarvestBottomsheetFragment
+import com.vearad.vearatick.dialog.SalaryEmployeeUpdateHarvestBottomsheetFragment
 import com.vearad.vearatick.R
 import com.vearad.vearatick.adapter.SalaryEmployeeHarvestAdapter
 import com.vearad.vearatick.databinding.FragmentDialogDeleteCompanyReceiptBinding

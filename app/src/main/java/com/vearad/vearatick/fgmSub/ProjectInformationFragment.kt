@@ -34,7 +34,7 @@ import com.vearad.vearatick.DataBase.SubTaskProjectDao
 import com.vearad.vearatick.DataBase.TaskEmployee
 import com.vearad.vearatick.DataBase.TaskEmployeeDao
 import com.vearad.vearatick.DataBase.TeamSubTaskDao
-import com.vearad.vearatick.Dialog.ProjectUpdateSubTaskFromInfoBottomsheetFragment
+import com.vearad.vearatick.dialog.ProjectUpdateSubTaskFromInfoBottomsheetFragment
 import com.vearad.vearatick.ProAndEmpActivity
 import com.vearad.vearatick.R
 import com.vearad.vearatick.adapter.SubTaskProjectAdapter

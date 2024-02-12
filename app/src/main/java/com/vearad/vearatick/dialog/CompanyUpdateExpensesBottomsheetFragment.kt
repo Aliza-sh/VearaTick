@@ -1,9 +1,10 @@
-package com.vearad.vearatick.Dialog
+package com.vearad.vearatick.dialog
 
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,13 +13,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.vearad.vearatick.BottomSheetCallback
 import com.vearad.vearatick.CompanyPaymentActivity
 import com.vearad.vearatick.DataBase.AppDatabase
-import com.vearad.vearatick.DataBase.Employee
-import com.vearad.vearatick.DataBase.EmployeeHarvest
-import com.vearad.vearatick.DataBase.EmployeeHarvestDao
+import com.vearad.vearatick.DataBase.CompanyExpenses
+import com.vearad.vearatick.DataBase.CompanyExpensesDao
 import com.vearad.vearatick.DataBase.FinancialReport
 import com.vearad.vearatick.R
-import com.vearad.vearatick.adapter.SalaryEmployeeHarvestAdapter
-import com.vearad.vearatick.databinding.BottomsheetfragmentCompanyNewExpensesBinding
+import com.vearad.vearatick.adapter.CompanyExpensesAdapter
+import com.vearad.vearatick.databinding.BottomsheetfragmentCompanyNewReceiptBinding
 import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints
 import com.xdev.arch.persiancalendar.datepicker.DateValidatorPointForward
 import com.xdev.arch.persiancalendar.datepicker.MaterialDatePicker
@@ -30,14 +30,17 @@ import java.text.DecimalFormatSymbols
 import java.util.Locale
 
 
-class SalaryEmployeeNewHarvestBottomsheetFragment(
-    val employeeHarvestDao: EmployeeHarvestDao,
-    val employeeHarvestAdapter: SalaryEmployeeHarvestAdapter,
-    val employee: Employee
+class CompanyUpdateExpensesBottomsheetFragment(
+    val companyExpensesDao: CompanyExpensesDao,
+    val companyExpensesAdapter: CompanyExpensesAdapter,
+    val onClickCompanyExpenses: CompanyExpenses?,
+    val position: Int,
 ) : BottomSheetDialogFragment() {
 
-    lateinit var binding: BottomsheetfragmentCompanyNewExpensesBinding
+    lateinit var binding: BottomsheetfragmentCompanyNewReceiptBinding
     var valueCalendar: PersianCalendar? = null
+    var month: Int = 0
+    var year: Int = 0
     private var isUpdating = false
     private var callback: BottomSheetCallback? = null
 
@@ -47,17 +50,17 @@ class SalaryEmployeeNewHarvestBottomsheetFragment(
         savedInstanceState: Bundle?
     ): View {
         binding =
-            BottomsheetfragmentCompanyNewExpensesBinding.inflate(layoutInflater, container, false)
+            BottomsheetfragmentCompanyNewReceiptBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        valueCalendar = PersianCalendar()
-        binding.txtDateReceipt.text = "${valueCalendar!!.year}/${valueCalendar!!.month + 1}/${valueCalendar!!.day}"
+        setdata()
+
         binding.btnCalendar.setOnClickListener {
             onCreateCalendar()
         }
-        binding.text.text = "برداشتی جدید رو وارد کن ."
+        binding.text.text = "هزینه شرکت رو آپدیت کن ."
         var formattedValue = "0"
         val decimalFormatSymbols = DecimalFormatSymbols(Locale("fa", "IR"))
         decimalFormatSymbols.groupingSeparator = ','
@@ -96,11 +99,20 @@ class SalaryEmployeeNewHarvestBottomsheetFragment(
         }
     }
 
+    private fun setdata() {
+        binding.edtReceipt.setText(onClickCompanyExpenses!!.companyExpenses.toString())
+        binding.txtDateReceipt.setText(onClickCompanyExpenses.companyExpensesDate.toString())
+        binding.dialogEdtTozih.setText(onClickCompanyExpenses.companyExpensesDescription)
+        binding.txtReceipt.setText(formatCurrency(onClickCompanyExpenses.companyExpenses))
+        month = onClickCompanyExpenses.monthCompanyExpenses
+        year = onClickCompanyExpenses.yearCompanyExpenses
+    }
+
     fun setCallback(callback: BottomSheetCallback) {
         this.callback = callback
     }
 
-    fun onCompanyNewReceipt() {
+    fun onCompanyNewExpenses() {
         callback?.onConfirmButtonClicked()
     }
 
@@ -132,6 +144,8 @@ class SalaryEmployeeNewHarvestBottomsheetFragment(
                     val date = PersianCalendar(selection!!)
                     valueCalendar = date
                     binding.txtDateReceipt.text = "${date.year}/${date.month + 1}/${date.day}"
+                    month = date.month + 1
+                    year = date.year
                 }
             }
         )
@@ -153,21 +167,22 @@ class SalaryEmployeeNewHarvestBottomsheetFragment(
         ) {
             var txtReceipt = binding.edtReceipt.text.toString()
             val txtDescription = binding.dialogEdtTozih.text.toString()
+            val txtDate = binding.txtDateReceipt.text
             txtReceipt = txtReceipt!!.replace(",", "")
 
 
-            val newEmployeeHarvest = EmployeeHarvest(
-                idEmployee = employee.idEmployee!!,
-                harvest = txtReceipt.toLong(),
-                harvestDescription = txtDescription,
-                harvestDate = "${valueCalendar?.year}/${valueCalendar?.month!! + 1}/${valueCalendar?.day}",
-                yearHarvest = valueCalendar?.year!!,
-                monthHarvest = valueCalendar?.month!! + 1
+            val newReceipt = CompanyExpenses(
+                idCompanyExpenses = onClickCompanyExpenses!!.idCompanyExpenses,
+                companyExpenses = txtReceipt.toLong(),
+                companyExpensesDescription = txtDescription,
+                companyExpensesDate = txtDate.toString(),
+                monthCompanyExpenses = month,
+                yearCompanyExpenses = year
             )
-            employeeHarvestDao.insert(newEmployeeHarvest)
-            employeeHarvestAdapter.addSalaryEmployeeInvestment(newEmployeeHarvest)
-            onCompanyNewReceipt()
-            onCompanyFinancialReport(txtReceipt)
+            onCompanyFinancialReport(txtReceipt, onClickCompanyExpenses.companyExpenses!!)
+            companyExpensesDao.update(newReceipt)
+            companyExpensesAdapter.updateCompanyExpenses(newReceipt, position)
+            onCompanyNewExpenses()
             dismiss()
         } else {
             Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()
@@ -175,32 +190,24 @@ class SalaryEmployeeNewHarvestBottomsheetFragment(
     }
 
     lateinit var newCompanyFinancialReport: FinancialReport
-    private fun onCompanyFinancialReport(expense: String) {
+    private fun onCompanyFinancialReport(expense: String, oldCompanyExpenses: Long) {
 
         val financialReportDao = AppDatabase.getDataBase(binding.root.context).financialReportDao
-        val financialReportYearAndMonth = financialReportDao.getFinancialReportYearAndMonthDao(valueCalendar!!.year , valueCalendar!!.month + 1)
+        val financialReportYearAndMonth =
+            financialReportDao.getFinancialReportYearAndMonthDao(year, month )
+        Log.v("logAdapter", "dataAnnualReport: "+ year.toString() + month.toString())
 
-        if (financialReportYearAndMonth != null) {
-
-            val agoExpense = financialReportYearAndMonth.expense
-            val newExpense = agoExpense!!.toLong() + expense.toLong()
-            newCompanyFinancialReport = FinancialReport(
-                idFinancialReport = financialReportYearAndMonth.idFinancialReport,
-                year = financialReportYearAndMonth.year,
-                month = financialReportYearAndMonth.month,
-                expense = newExpense,
-                income = financialReportYearAndMonth.income,
-                profit = financialReportYearAndMonth.profit
-            )
-            financialReportDao.update(newCompanyFinancialReport)
-        } else {
-            newCompanyFinancialReport = FinancialReport(
-                year = valueCalendar!!.year,
-                month = valueCalendar!!.month +1,
-                expense = expense.toLong(),
-            )
-            financialReportDao.insert(newCompanyFinancialReport)
-        }
+        val agoExpense = financialReportYearAndMonth!!.expense
+        val newExpense = (agoExpense!!.toLong() - oldCompanyExpenses) + expense.toLong()
+        newCompanyFinancialReport = FinancialReport(
+            idFinancialReport = financialReportYearAndMonth.idFinancialReport,
+            year = year,
+            month = month,
+            expense = newExpense,
+            income = financialReportYearAndMonth.income,
+            profit = financialReportYearAndMonth.profit
+        )
+        financialReportDao.update(newCompanyFinancialReport)
     }
 
 }

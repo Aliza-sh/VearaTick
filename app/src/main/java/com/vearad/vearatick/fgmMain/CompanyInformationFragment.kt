@@ -29,7 +29,7 @@ import com.vearad.vearatick.BottomSheetCallback
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.CompanyInfo
 import com.vearad.vearatick.DataBase.CompanyInfoDao
-import com.vearad.vearatick.Dialog.CompanyInfoBottomsheetFragment
+import com.vearad.vearatick.dialog.CompanyInfoBottomsheetFragment
 import com.vearad.vearatick.EXPIRATIONACCESSTOKEN
 import com.vearad.vearatick.KEYACCESSTOKEN
 import com.vearad.vearatick.KEYEXPIRATIONACCESSTOKEN

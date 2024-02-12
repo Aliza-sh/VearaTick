@@ -7,7 +7,7 @@
     android:background="@drawable/shape_back_bottomsheet"
     android:orientation="vertical"
     android:layoutDirection="ltr"
-    tools:context=".Dialog.EmployeeTaskBottomsheetFragment">
+    tools:context=".dialog.EmployeeTaskBottomsheetFragment">
 
     <ImageView
         android:layout_marginTop="-20dp"

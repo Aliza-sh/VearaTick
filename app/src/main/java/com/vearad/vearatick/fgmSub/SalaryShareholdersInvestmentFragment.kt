@@ -21,8 +21,8 @@ import com.vearad.vearatick.BottomSheetCallback
 import com.vearad.vearatick.DataBase.Employee
 import com.vearad.vearatick.DataBase.EmployeeInvestment
 import com.vearad.vearatick.DataBase.EmployeeInvestmentDao
-import com.vearad.vearatick.Dialog.SalaryShareholdersNewInvestmentBottomsheetFragment
-import com.vearad.vearatick.Dialog.SalaryShareholdersUpdateInvestmentBottomsheetFragment
+import com.vearad.vearatick.dialog.SalaryShareholdersNewInvestmentBottomsheetFragment
+import com.vearad.vearatick.dialog.SalaryShareholdersUpdateInvestmentBottomsheetFragment
 import com.vearad.vearatick.R
 import com.vearad.vearatick.ShareholdersInvestmentActivity
 import com.vearad.vearatick.adapter.SalaryShareholdersInvestmentAdapter

@@ -19,8 +19,8 @@ import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.CompanyReceipt
 import com.vearad.vearatick.DataBase.CompanyReceiptDao
 import com.vearad.vearatick.DataBase.FinancialReport
-import com.vearad.vearatick.Dialog.CompanyNewIncomeBottomsheetFragment
-import com.vearad.vearatick.Dialog.CompanyUpdateIncomeBottomsheetFragment
+import com.vearad.vearatick.dialog.CompanyNewIncomeBottomsheetFragment
+import com.vearad.vearatick.dialog.CompanyUpdateIncomeBottomsheetFragment
 import com.vearad.vearatick.adapter.CompanyReceiptAdapter
 import com.vearad.vearatick.databinding.ActivityCompanyReceiptBinding
 import com.vearad.vearatick.databinding.FragmentDialogDeleteCompanyReceiptBinding

@@ -19,8 +19,8 @@ import com.vearad.vearatick.BottomSheetCallback
 import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.CompanySkill
 import com.vearad.vearatick.DataBase.CompanySkillDao
-import com.vearad.vearatick.Dialog.CompanyNewSkillBottomsheetFragment
-import com.vearad.vearatick.Dialog.CompanyUpdateSkillBottomsheetFragment
+import com.vearad.vearatick.dialog.CompanyNewSkillBottomsheetFragment
+import com.vearad.vearatick.dialog.CompanyUpdateSkillBottomsheetFragment
 import com.vearad.vearatick.R
 import com.vearad.vearatick.adapter.CompanySkillAdapter
 import com.vearad.vearatick.databinding.FragmentCompanySkillBinding

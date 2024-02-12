@@ -1,4 +1,4 @@
-package com.vearad.vearatick.Dialog
+package com.vearad.vearatick.dialog
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -10,14 +10,15 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.vearad.vearatick.BottomSheetCallback
-import com.vearad.vearatick.CompanyReceiptActivity
+import com.vearad.vearatick.CompanyPaymentActivity
 import com.vearad.vearatick.DataBase.AppDatabase
-import com.vearad.vearatick.DataBase.CompanyReceipt
-import com.vearad.vearatick.DataBase.CompanyReceiptDao
+import com.vearad.vearatick.DataBase.Employee
+import com.vearad.vearatick.DataBase.EmployeeHarvest
+import com.vearad.vearatick.DataBase.EmployeeHarvestDao
 import com.vearad.vearatick.DataBase.FinancialReport
 import com.vearad.vearatick.R
-import com.vearad.vearatick.adapter.CompanyReceiptAdapter
-import com.vearad.vearatick.databinding.BottomsheetfragmentCompanyNewReceiptBinding
+import com.vearad.vearatick.adapter.SalaryApprenticesHarvestAdapter
+import com.vearad.vearatick.databinding.BottomsheetfragmentCompanyNewExpensesBinding
 import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints
 import com.xdev.arch.persiancalendar.datepicker.DateValidatorPointForward
 import com.xdev.arch.persiancalendar.datepicker.MaterialDatePicker
@@ -29,12 +30,13 @@ import java.text.DecimalFormatSymbols
 import java.util.Locale
 
 
-class CompanyNewIncomeBottomsheetFragment(
-    val companyReceiptDao: CompanyReceiptDao,
-    val companyReceiptAdapter: CompanyReceiptAdapter,
+class SalaryApprenticesNewHarvestBottomsheetFragment(
+    val employeeHarvestDao: EmployeeHarvestDao,
+    val apprenticesHarvestAdapter: SalaryApprenticesHarvestAdapter,
+    val employee: Employee
 ) : BottomSheetDialogFragment() {
 
-    lateinit var binding: BottomsheetfragmentCompanyNewReceiptBinding
+    lateinit var binding: BottomsheetfragmentCompanyNewExpensesBinding
     var valueCalendar : PersianCalendar? = null
     private var isUpdating = false
     private var callback: BottomSheetCallback? = null
@@ -44,7 +46,7 @@ class CompanyNewIncomeBottomsheetFragment(
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = BottomsheetfragmentCompanyNewReceiptBinding.inflate(layoutInflater, container, false)
+        binding = BottomsheetfragmentCompanyNewExpensesBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
@@ -54,6 +56,7 @@ class CompanyNewIncomeBottomsheetFragment(
         binding.btnCalendar.setOnClickListener {
             onCreateCalendar()
         }
+        binding.text.text = "برداشتی جدید رو وارد کن ."
         var formattedValue = "0"
         val decimalFormatSymbols = DecimalFormatSymbols(Locale("fa", "IR"))
         decimalFormatSymbols.groupingSeparator = ','
@@ -88,7 +91,7 @@ class CompanyNewIncomeBottomsheetFragment(
             }
         })
         binding.sheetBtnDone.setOnClickListener {
-            addNewIncome(formattedValue)
+            addNewReceipt(formattedValue)
         }
     }
     fun setCallback(callback: BottomSheetCallback) {
@@ -116,7 +119,7 @@ class CompanyNewIncomeBottomsheetFragment(
             .setTitleText("تاریخ را انتخاب کنید.")
             .setTheme(R.style.AppTheme_PersianCalendar)
             .setCalendarConstraints(constraints).build()
-        datePicker.show((activity as CompanyReceiptActivity).supportFragmentManager, "aTag")
+        datePicker.show((activity as CompanyPaymentActivity).supportFragmentManager, "aTag")
         datePicker.isCancelable
 
         datePicker.addOnPositiveButtonClickListener(
@@ -137,8 +140,7 @@ class CompanyNewIncomeBottomsheetFragment(
         val decimalFormat = DecimalFormat("#,###", decimalFormatSymbols)
         return decimalFormat.format(value) + " تومان"
     }
-
-    private fun addNewIncome(formattedValue: String) {
+    private fun addNewReceipt(formattedValue: String) {
         if (
             binding.edtReceipt.length() > 0 &&
             binding.txtDateReceipt.length() > 0 &&
@@ -146,17 +148,19 @@ class CompanyNewIncomeBottomsheetFragment(
         ) {
             var txtReceipt = binding.edtReceipt.text.toString()
             val txtDescription = binding.dialogEdtTozih.text.toString()
+
             txtReceipt = txtReceipt!!.replace(",", "")
 
-            val newReceipt = CompanyReceipt(
-                companyReceipt = txtReceipt.toLong(),
-                companyReceiptDescription = txtDescription,
-                companyReceiptDate = "${valueCalendar?.year}/${valueCalendar?.month!! + 1}/${valueCalendar?.day}",
-                monthCompanyReceipt = valueCalendar?.month!! + 1,
-                yearCompanyReceipt = valueCalendar?.year!!
+            val newEmployeeHarvest = EmployeeHarvest(
+                idEmployee = employee.idEmployee!!,
+                harvest = txtReceipt.toLong(),
+                harvestDescription = txtDescription,
+                harvestDate = "${valueCalendar?.year}/${valueCalendar?.month!! + 1}/${valueCalendar?.day}",
+                yearHarvest = valueCalendar?.year!!,
+                monthHarvest = valueCalendar?.month!! + 1
             )
-            companyReceiptDao.insert(newReceipt)
-            companyReceiptAdapter.addCompanyReceipt(newReceipt)
+            employeeHarvestDao.insert(newEmployeeHarvest)
+            apprenticesHarvestAdapter.addSalaryApprenticesInvestment(newEmployeeHarvest)
             onCompanyNewReceipt()
             onCompanyFinancialReport(txtReceipt)
             dismiss()
@@ -166,20 +170,21 @@ class CompanyNewIncomeBottomsheetFragment(
     }
 
     lateinit var newCompanyFinancialReport: FinancialReport
-    private fun onCompanyFinancialReport(income: String) {
+    private fun onCompanyFinancialReport(expense: String) {
 
         val financialReportDao = AppDatabase.getDataBase(binding.root.context).financialReportDao
         val financialReportYearAndMonth = financialReportDao.getFinancialReportYearAndMonthDao(valueCalendar!!.year , valueCalendar!!.month + 1)
 
         if (financialReportYearAndMonth != null) {
-            val agoIncome = financialReportYearAndMonth.income
-            val newIncome = agoIncome!!.toLong() + income.toLong()
+
+            val agoExpense = financialReportYearAndMonth.expense
+            val newExpense = agoExpense!!.toLong() + expense.toLong()
             newCompanyFinancialReport = FinancialReport(
                 idFinancialReport = financialReportYearAndMonth.idFinancialReport,
                 year = financialReportYearAndMonth.year,
                 month = financialReportYearAndMonth.month,
-                expense = financialReportYearAndMonth.expense,
-                income = newIncome,
+                expense = newExpense,
+                income = financialReportYearAndMonth.income,
                 profit = financialReportYearAndMonth.profit
             )
             financialReportDao.update(newCompanyFinancialReport)
@@ -187,7 +192,7 @@ class CompanyNewIncomeBottomsheetFragment(
             newCompanyFinancialReport = FinancialReport(
                 year = valueCalendar!!.year,
                 month = valueCalendar!!.month +1,
-                income = income.toLong(),
+                expense = expense.toLong(),
             )
             financialReportDao.insert(newCompanyFinancialReport)
         }

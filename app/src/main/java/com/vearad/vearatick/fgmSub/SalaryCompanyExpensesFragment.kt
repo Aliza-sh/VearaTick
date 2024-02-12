@@ -23,8 +23,8 @@ import com.vearad.vearatick.DataBase.AppDatabase
 import com.vearad.vearatick.DataBase.CompanyExpenses
 import com.vearad.vearatick.DataBase.CompanyExpensesDao
 import com.vearad.vearatick.DataBase.FinancialReport
-import com.vearad.vearatick.Dialog.CompanyNewExpensesBottomsheetFragment
-import com.vearad.vearatick.Dialog.CompanyUpdateExpensesBottomsheetFragment
+import com.vearad.vearatick.dialog.CompanyNewExpensesBottomsheetFragment
+import com.vearad.vearatick.dialog.CompanyUpdateExpensesBottomsheetFragment
 import com.vearad.vearatick.R
 import com.vearad.vearatick.adapter.CompanyExpensesAdapter
 import com.vearad.vearatick.databinding.FragmentDialogDeleteCompanyReceiptBinding

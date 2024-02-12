@@ -1,4 +1,4 @@
-package com.vearad.vearatick.Dialog
+package com.vearad.vearatick.dialog
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -29,10 +29,10 @@ import java.text.DecimalFormatSymbols
 import java.util.Locale
 
 
-class SalaryApprenticesUpdateHarvestBottomsheetFragment(
+class SalaryEmployeeUpdateHarvestBottomsheetFragment(
     val employee: Employee,
     val employeeHarvestDao: EmployeeHarvestDao,
-    val onClickApprenticesHarvest: EmployeeHarvest?,
+    val onClickEmployeeHarvest: EmployeeHarvest?,
     val position: Int,
 ) : BottomSheetDialogFragment() {
 
@@ -98,12 +98,12 @@ class SalaryApprenticesUpdateHarvestBottomsheetFragment(
     }
 
     private fun setdata() {
-        binding.edtReceipt.setText(onClickApprenticesHarvest!!.harvest.toString())
-        binding.txtDateReceipt.setText(onClickApprenticesHarvest.harvestDate.toString())
-        binding.dialogEdtTozih.setText(onClickApprenticesHarvest.harvestDescription)
-        binding.txtReceipt.setText(formatCurrency(onClickApprenticesHarvest.harvest))
-        month = onClickApprenticesHarvest.monthHarvest
-        year = onClickApprenticesHarvest.yearHarvest
+        binding.edtReceipt.setText(onClickEmployeeHarvest!!.harvest.toString())
+        binding.txtDateReceipt.setText(onClickEmployeeHarvest.harvestDate.toString())
+        binding.dialogEdtTozih.setText(onClickEmployeeHarvest.harvestDescription)
+        binding.txtReceipt.setText(formatCurrency(onClickEmployeeHarvest.harvest))
+        month = onClickEmployeeHarvest.monthHarvest
+        year = onClickEmployeeHarvest.yearHarvest
     }
 
     fun setCallback(callback: BottomSheetCallback) {
@@ -166,12 +166,11 @@ class SalaryApprenticesUpdateHarvestBottomsheetFragment(
             var txtReceipt = binding.edtReceipt.text.toString()
             val txtDescription = binding.dialogEdtTozih.text.toString()
             val txtDate = binding.txtDateReceipt.text
-
             txtReceipt = txtReceipt!!.replace(",", "")
 
 
             val newEmployeeHarvest = EmployeeHarvest(
-                idHarvest = onClickApprenticesHarvest!!.idHarvest,
+                idHarvest = onClickEmployeeHarvest!!.idHarvest,
                 idEmployee = employee.idEmployee!!,
                 harvest = txtReceipt.toLong(),
                 harvestDescription = txtDescription,
@@ -179,7 +178,7 @@ class SalaryApprenticesUpdateHarvestBottomsheetFragment(
                 yearHarvest =  year,
                 monthHarvest =month
             )
-            onCompanyFinancialReport(txtReceipt,onClickApprenticesHarvest.harvest!!)
+            onCompanyFinancialReport(txtReceipt,onClickEmployeeHarvest.harvest!!)
             employeeHarvestDao.update(newEmployeeHarvest)
             onCompanyNewReceipt()
             dismiss()
