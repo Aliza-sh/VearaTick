@@ -33,12 +33,6 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.next
 import com.kizitonwose.calendarview.utils.persian.*
 import com.kizitonwose.calendarview.utils.previous
-import com.vearad.vearatick.model.db.AppDatabase
-import com.vearad.vearatick.model.db.Day
-import com.vearad.vearatick.model.db.EfficiencyDao
-import com.vearad.vearatick.model.db.EfficiencyEmployee
-import com.vearad.vearatick.model.db.Employee
-import com.vearad.vearatick.model.db.Time
 import com.vearad.vearatick.R
 import com.vearad.vearatick.adapter.EntryExitEmployeeAdapter
 import com.vearad.vearatick.databinding.CalendarHeaderBinding
@@ -47,6 +41,12 @@ import com.vearad.vearatick.databinding.FragmentDialogEmployeeDoneEntryExitBindi
 import com.vearad.vearatick.databinding.FragmentDialogEmployeeEntryExitBinding
 import com.vearad.vearatick.databinding.FragmentEmployeePresenceBinding
 import com.vearad.vearatick.databinding.ItemCalendarDayBinding
+import com.vearad.vearatick.model.db.AppDatabase
+import com.vearad.vearatick.model.db.Day
+import com.vearad.vearatick.model.db.EfficiencyDao
+import com.vearad.vearatick.model.db.EfficiencyEmployee
+import com.vearad.vearatick.model.db.Employee
+import com.vearad.vearatick.model.db.Time
 import com.vearad.vearatick.ui.dayDao
 import com.vearad.vearatick.ui.inOutAdapter
 import com.vearad.vearatick.ui.timeDao
@@ -67,6 +67,7 @@ class EmployeePresenceFragment(
     lateinit var bindingDialogEmployeeEntryExit: FragmentDialogEmployeeEntryExitBinding
     lateinit var bindingDialogEmployeeDoneEntryExit: FragmentDialogEmployeeDoneEntryExitBinding
     lateinit var bindingDialogDeleteItemEmployeeEntryExit: FragmentDialogDeleteItemEmployeeEntryExitBinding
+    lateinit var itemCalendarDayBinding: ItemCalendarDayBinding
     private var selectedDate: LocalDate? = null
     var oldLayout: LinearLayout? = null
 
@@ -96,6 +97,8 @@ class EmployeePresenceFragment(
             FragmentDialogEmployeeDoneEntryExitBinding.inflate(layoutInflater, null, false)
         bindingDialogDeleteItemEmployeeEntryExit =
             FragmentDialogDeleteItemEmployeeEntryExitBinding.inflate(layoutInflater, null, false)
+        itemCalendarDayBinding =
+            ItemCalendarDayBinding.inflate(layoutInflater, null, false)
 
         return binding.root
     }
@@ -122,6 +125,13 @@ class EmployeePresenceFragment(
         else
             binding.clrEntExtEmp.scrollToMonth(currentMonth)
 
+        val day1 = PersianCalendar()
+        val nameDay = dayDao.getAllNameDay(
+            employee.idEmployee!!,
+            day1.persianYear.toString(),
+            day1.persianMonthName,
+            day1.persianWeekDayName
+        )
 
         class DayViewContainer(view: View) : ViewContainer(view) {
 
@@ -200,6 +210,7 @@ class EmployeePresenceFragment(
                                         dayExtEmp
                                     )
                                     binding.rcvInOut.adapter = inOutAdapter
+
                                 } else {
                                     val entryExitList = arrayListOf(
                                         Time(
@@ -272,11 +283,34 @@ class EmployeePresenceFragment(
                 val today = LocalDate.now().toPersianCalendar()
                 if (day.owner == DayOwner.THIS_MONTH
                 ) {
+
                     layout.setBackgroundResource(
                         if (selectedDate == day.date) R.drawable.shape_selected_bg
                         else if (day.persianCalendar.persianDay == today.persianDay) R.drawable.shape_selected_bg
                         else 0
                     )
+
+                    if (day.persianCalendar.persianDay == today.persianDay)
+                        binding.btnFabEntExt.setOnClickListener {
+                            if (nameDay?.nameday == today.persianWeekDayName) {
+                                showDoneEntryAndExitDialog(
+                                    employee.idEmployee,
+                                    day.persianCalendar.persianDay,
+                                    day.persianCalendar.persianWeekDayName,
+                                    day.persianCalendar.persianMonthName,
+                                    day.persianCalendar.persianYear,
+                                    container.dayEntEmp,
+                                    container.dayExtEmp
+                                )
+                            } else {
+                                Toast.makeText(
+                                    context,
+                                    "این روز برایه کارمند انتخاب نشده!!!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+
                     val arrivalDay = timeDao.getAllArrivalDay(
                         employee.idEmployee!!,
                         day.persianCalendar.persianYear.toString(),
@@ -934,15 +968,9 @@ class EmployeePresenceFragment(
                     timeDao.insert(newTime)
                 }
 
-                dayEntEmp.setBackgroundColor(
-                    bindingDialogDeleteItemEmployeeEntryExit.root.context.getColor(
-                        R.color.red_800
-                    )
-                )
+                dayEntEmp.setBackgroundColor(it.context.getColor(R.color.red_800))
                 dayExtEmp.setBackgroundColor(
-                    bindingDialogDeleteItemEmployeeEntryExit.root.context.getColor(
-                        R.color.red_800
-                    )
+                    it.context.getColor(R.color.red_800)
                 )
 
                 alertDialog.dismiss()
@@ -1002,9 +1030,7 @@ class EmployeePresenceFragment(
                         )
                     }
 
-
                 }
-
                 alertDialog.dismiss()
             }
 
