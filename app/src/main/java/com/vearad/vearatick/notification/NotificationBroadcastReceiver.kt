@@ -74,9 +74,9 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
 
         val notification = NotificationCompat
             .Builder(context, "presenceNotif")
-            .setSmallIcon(R.drawable.img_logo_3d_no_name)
+            .setSmallIcon(R.drawable.img_logo)
             .setLargeIcon(BitmapFactory.decodeResource(context.resources,
-                R.drawable.img_logo_3d_no_name
+                R.drawable.img_logo
             ))
             .setContentTitle("غیبت کارمند")
             .setContentText("${employee!!.name} ${employee.family} هنوز در شرکت حاظر نشده است!!!")
