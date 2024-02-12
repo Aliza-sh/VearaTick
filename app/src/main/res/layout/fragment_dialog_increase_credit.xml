@@ -18,7 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="برای استقاده از این بخش نیاز به خرید اشتراک است."
+            android:text="برای استفاده از این بخش نیاز به خرید اشتراک است."
             android:textColor="?attr/colorOnSecondary"
             android:textSize="16sp"
             android:textStyle="bold"
