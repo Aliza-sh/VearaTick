@@ -26,7 +26,7 @@ import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.android.material.snackbar.Snackbar
 import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.FragmentCompanyInformationBinding
-import com.vearad.vearatick.dialog.CompanyInfoBottomsheetFragment
+import com.vearad.vearatick.ui.dialog.CompanyInfoBottomsheetFragment
 import com.vearad.vearatick.model.db.AppDatabase
 import com.vearad.vearatick.model.db.CompanyInfo
 import com.vearad.vearatick.model.db.CompanyInfoDao
@@ -133,7 +133,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
         companyInfo = companyInfoDao.getCompanyInfoDao()
 
         if (companyInfo == null) {
-            val bottomsheet = CompanyInfoBottomsheetFragment()
+            val bottomsheet = com.vearad.vearatick.ui.dialog.CompanyInfoBottomsheetFragment()
             bottomsheet.setStyle(
                 R.style.BottomSheetStyle,
                 R.style.BottomSheetDialogTheme
@@ -194,7 +194,8 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
                 when (item.itemId) {
                     R.id.menu_edit_company -> {
                         //tapTargetSequence?.cancel()
-                        val bottomsheet = CompanyInfoBottomsheetFragment()
+                        val bottomsheet =
+                            com.vearad.vearatick.ui.dialog.CompanyInfoBottomsheetFragment()
                         bottomsheet.setStyle(
                             R.style.BottomSheetStyle,
                             R.style.BottomSheetDialogTheme

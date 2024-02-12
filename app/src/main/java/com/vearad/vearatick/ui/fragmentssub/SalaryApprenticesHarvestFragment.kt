@@ -16,19 +16,19 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.vearad.vearatick.utils.BottomSheetCallback
-import com.vearad.vearatick.ui.activitysub.CompanyPaymentActivity
+import com.vearad.vearatick.R
+import com.vearad.vearatick.adapter.SalaryApprenticesHarvestAdapter
+import com.vearad.vearatick.databinding.FragmentDialogDeleteCompanyReceiptBinding
+import com.vearad.vearatick.databinding.FragmentSalaryShareholdersHarvestBinding
 import com.vearad.vearatick.model.db.AppDatabase
 import com.vearad.vearatick.model.db.Employee
 import com.vearad.vearatick.model.db.EmployeeHarvest
 import com.vearad.vearatick.model.db.EmployeeHarvestDao
 import com.vearad.vearatick.model.db.FinancialReport
-import com.vearad.vearatick.dialog.SalaryApprenticesNewHarvestBottomsheetFragment
-import com.vearad.vearatick.dialog.SalaryApprenticesUpdateHarvestBottomsheetFragment
-import com.vearad.vearatick.R
-import com.vearad.vearatick.adapter.SalaryApprenticesHarvestAdapter
-import com.vearad.vearatick.databinding.FragmentDialogDeleteCompanyReceiptBinding
-import com.vearad.vearatick.databinding.FragmentSalaryShareholdersHarvestBinding
+import com.vearad.vearatick.ui.activitysub.CompanyPaymentActivity
+import com.vearad.vearatick.ui.dialog.SalaryApprenticesNewHarvestBottomsheetFragment
+import com.vearad.vearatick.ui.dialog.SalaryApprenticesUpdateHarvestBottomsheetFragment
+import com.vearad.vearatick.utils.BottomSheetCallback
 
 class SalaryApprenticesHarvestFragment(
     val employee: Employee,

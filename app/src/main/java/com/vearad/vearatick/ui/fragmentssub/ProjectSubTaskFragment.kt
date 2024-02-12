@@ -19,6 +19,12 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.utils.persian.PersianCalendar
+import com.vearad.vearatick.R
+import com.vearad.vearatick.adapter.SubTaskProjectAdapter
+import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
+import com.vearad.vearatick.databinding.FragmentDialogDeleteSubtaskProjectBinding
+import com.vearad.vearatick.databinding.FragmentProjectSubTaskBinding
+import com.vearad.vearatick.databinding.ItemSubTaskBinding
 import com.vearad.vearatick.model.db.AppDatabase
 import com.vearad.vearatick.model.db.EfficiencyDao
 import com.vearad.vearatick.model.db.Project
@@ -27,14 +33,8 @@ import com.vearad.vearatick.model.db.SubTaskProject
 import com.vearad.vearatick.model.db.SubTaskProjectDao
 import com.vearad.vearatick.model.db.TaskEmployee
 import com.vearad.vearatick.model.db.TeamSubTaskDao
-import com.vearad.vearatick.dialog.ProjectAddNewSubTaskBottomsheetFragment
-import com.vearad.vearatick.dialog.ProjectUpdateSubTaskFromSubTaskBottomsheetFragment
-import com.vearad.vearatick.R
-import com.vearad.vearatick.adapter.SubTaskProjectAdapter
-import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
-import com.vearad.vearatick.databinding.FragmentDialogDeleteSubtaskProjectBinding
-import com.vearad.vearatick.databinding.FragmentProjectSubTaskBinding
-import com.vearad.vearatick.databinding.ItemSubTaskBinding
+import com.vearad.vearatick.ui.dialog.ProjectAddNewSubTaskBottomsheetFragment
+import com.vearad.vearatick.ui.dialog.ProjectUpdateSubTaskFromSubTaskBottomsheetFragment
 import org.joda.time.DateTime
 import org.joda.time.Days
 

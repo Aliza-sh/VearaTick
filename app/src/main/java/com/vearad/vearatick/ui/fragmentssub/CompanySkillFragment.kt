@@ -1,7 +1,5 @@
 package com.vearad.vearatick.ui.fragmentssub
 
-import com.vearad.vearatick.utils.BottomMarginItemDecoration
-import com.vearad.vearatick.utils.TopMarginItemDecoration
 import android.app.AlertDialog
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -15,16 +13,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.vearad.vearatick.utils.BottomSheetCallback
-import com.vearad.vearatick.model.db.AppDatabase
-import com.vearad.vearatick.model.db.CompanySkill
-import com.vearad.vearatick.model.db.CompanySkillDao
-import com.vearad.vearatick.dialog.CompanyNewSkillBottomsheetFragment
-import com.vearad.vearatick.dialog.CompanyUpdateSkillBottomsheetFragment
 import com.vearad.vearatick.R
 import com.vearad.vearatick.adapter.CompanySkillAdapter
 import com.vearad.vearatick.databinding.FragmentCompanySkillBinding
 import com.vearad.vearatick.databinding.FragmentDialogDeleteSubtaskProjectBinding
+import com.vearad.vearatick.model.db.AppDatabase
+import com.vearad.vearatick.model.db.CompanySkill
+import com.vearad.vearatick.model.db.CompanySkillDao
+import com.vearad.vearatick.ui.dialog.CompanyNewSkillBottomsheetFragment
+import com.vearad.vearatick.ui.dialog.CompanyUpdateSkillBottomsheetFragment
+import com.vearad.vearatick.utils.BottomMarginItemDecoration
+import com.vearad.vearatick.utils.BottomSheetCallback
+import com.vearad.vearatick.utils.TopMarginItemDecoration
 
 class CompanySkillFragment : Fragment(), CompanySkillAdapter.CompanySkillEvent,
     BottomSheetCallback {

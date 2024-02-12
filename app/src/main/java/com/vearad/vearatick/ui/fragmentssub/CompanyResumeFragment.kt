@@ -1,7 +1,5 @@
 package com.vearad.vearatick.ui.fragmentssub
 
-import com.vearad.vearatick.utils.BottomMarginItemDecoration
-import com.vearad.vearatick.utils.TopMarginItemDecoration
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -12,16 +10,18 @@ import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.snackbar.Snackbar
-import com.vearad.vearatick.utils.BottomSheetCallback
-import com.vearad.vearatick.model.db.AppDatabase
-import com.vearad.vearatick.model.db.Project
-import com.vearad.vearatick.model.db.ProjectDao
-import com.vearad.vearatick.dialog.CompanyResumeSetLinkBottomsheetFragment
-import com.vearad.vearatick.ui.activitymain.ProAndEmpActivity
 import com.vearad.vearatick.R
 import com.vearad.vearatick.adapter.CompanyResumeAdapter
 import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
 import com.vearad.vearatick.databinding.FragmentCompanyResumeBinding
+import com.vearad.vearatick.model.db.AppDatabase
+import com.vearad.vearatick.model.db.Project
+import com.vearad.vearatick.model.db.ProjectDao
+import com.vearad.vearatick.ui.activitymain.ProAndEmpActivity
+import com.vearad.vearatick.ui.dialog.CompanyResumeSetLinkBottomsheetFragment
+import com.vearad.vearatick.utils.BottomMarginItemDecoration
+import com.vearad.vearatick.utils.BottomSheetCallback
+import com.vearad.vearatick.utils.TopMarginItemDecoration
 
 class CompanyResumeFragment : Fragment(), CompanyResumeAdapter.CompanyResumeEvent,
     BottomSheetCallback {

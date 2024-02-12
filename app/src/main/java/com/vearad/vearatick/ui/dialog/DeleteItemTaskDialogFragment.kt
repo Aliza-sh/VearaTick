@@ -1,4 +1,4 @@
-package com.vearad.vearatick.dialog
+package com.vearad.vearatick.ui.dialog
 
 import android.app.AlertDialog
 import android.app.Dialog

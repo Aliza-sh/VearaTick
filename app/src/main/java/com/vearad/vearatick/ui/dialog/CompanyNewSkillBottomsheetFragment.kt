@@ -1,4 +1,4 @@
-package com.vearad.vearatick.dialog
+package com.vearad.vearatick.ui.dialog
 
 import android.os.Bundle
 import android.view.LayoutInflater

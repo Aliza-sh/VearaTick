@@ -17,17 +17,17 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.vearad.vearatick.utils.BottomSheetCallback
-import com.vearad.vearatick.model.db.Employee
-import com.vearad.vearatick.model.db.EmployeeInvestment
-import com.vearad.vearatick.model.db.EmployeeInvestmentDao
-import com.vearad.vearatick.dialog.SalaryShareholdersNewInvestmentBottomsheetFragment
-import com.vearad.vearatick.dialog.SalaryShareholdersUpdateInvestmentBottomsheetFragment
 import com.vearad.vearatick.R
-import com.vearad.vearatick.ui.activitysub.ShareholdersInvestmentActivity
 import com.vearad.vearatick.adapter.SalaryShareholdersInvestmentAdapter
 import com.vearad.vearatick.databinding.FragmentDialogDeleteCompanyReceiptBinding
 import com.vearad.vearatick.databinding.FragmentSalaryShareholdersInvestmentBinding
+import com.vearad.vearatick.model.db.Employee
+import com.vearad.vearatick.model.db.EmployeeInvestment
+import com.vearad.vearatick.model.db.EmployeeInvestmentDao
+import com.vearad.vearatick.ui.activitysub.ShareholdersInvestmentActivity
+import com.vearad.vearatick.ui.dialog.SalaryShareholdersNewInvestmentBottomsheetFragment
+import com.vearad.vearatick.ui.dialog.SalaryShareholdersUpdateInvestmentBottomsheetFragment
+import com.vearad.vearatick.utils.BottomSheetCallback
 
 class SalaryShareholdersInvestmentFragment(
     val employee: Employee,

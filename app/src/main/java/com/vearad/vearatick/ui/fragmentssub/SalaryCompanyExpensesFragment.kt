@@ -17,18 +17,18 @@ import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.vearad.vearatick.utils.BottomSheetCallback
-import com.vearad.vearatick.ui.activitysub.CompanyPaymentActivity
-import com.vearad.vearatick.model.db.AppDatabase
-import com.vearad.vearatick.model.db.CompanyExpenses
-import com.vearad.vearatick.model.db.CompanyExpensesDao
-import com.vearad.vearatick.model.db.FinancialReport
-import com.vearad.vearatick.dialog.CompanyNewExpensesBottomsheetFragment
-import com.vearad.vearatick.dialog.CompanyUpdateExpensesBottomsheetFragment
 import com.vearad.vearatick.R
 import com.vearad.vearatick.adapter.CompanyExpensesAdapter
 import com.vearad.vearatick.databinding.FragmentDialogDeleteCompanyReceiptBinding
 import com.vearad.vearatick.databinding.FragmentSalaryCompanyExpensesBinding
+import com.vearad.vearatick.model.db.AppDatabase
+import com.vearad.vearatick.model.db.CompanyExpenses
+import com.vearad.vearatick.model.db.CompanyExpensesDao
+import com.vearad.vearatick.model.db.FinancialReport
+import com.vearad.vearatick.ui.activitysub.CompanyPaymentActivity
+import com.vearad.vearatick.ui.dialog.CompanyNewExpensesBottomsheetFragment
+import com.vearad.vearatick.ui.dialog.CompanyUpdateExpensesBottomsheetFragment
+import com.vearad.vearatick.utils.BottomSheetCallback
 
 class SalaryCompanyExpensesFragment : Fragment(), CompanyExpensesAdapter.CompanyExpensesEvents,
     BottomSheetCallback {

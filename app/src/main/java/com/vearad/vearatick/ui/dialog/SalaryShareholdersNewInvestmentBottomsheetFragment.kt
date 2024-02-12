@@ -1,4 +1,4 @@
-package com.vearad.vearatick.dialog
+package com.vearad.vearatick.ui.dialog
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -10,14 +10,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.vearad.vearatick.utils.BottomSheetCallback
-import com.vearad.vearatick.ui.activitysub.CompanyReceiptActivity
-import com.vearad.vearatick.model.db.AppDatabase
 import com.vearad.vearatick.model.db.Employee
-import com.vearad.vearatick.model.db.EmployeeHarvest
-import com.vearad.vearatick.model.db.EmployeeHarvestDao
-import com.vearad.vearatick.model.db.FinancialReport
+import com.vearad.vearatick.model.db.EmployeeInvestment
+import com.vearad.vearatick.model.db.EmployeeInvestmentDao
 import com.vearad.vearatick.R
-import com.vearad.vearatick.databinding.BottomsheetfragmentCompanyNewReceiptBinding
+import com.vearad.vearatick.ui.activitysub.ShareholdersInvestmentActivity
+import com.vearad.vearatick.adapter.SalaryShareholdersInvestmentAdapter
+import com.vearad.vearatick.databinding.BottomsheetfragmentCompanyNewExpensesBinding
 import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints
 import com.xdev.arch.persiancalendar.datepicker.DateValidatorPointForward
 import com.xdev.arch.persiancalendar.datepicker.MaterialDatePicker
@@ -29,36 +28,33 @@ import java.text.DecimalFormatSymbols
 import java.util.Locale
 
 
-class SalaryEmployeeUpdateHarvestBottomsheetFragment(
-    val employee: Employee,
-    val employeeHarvestDao: EmployeeHarvestDao,
-    val onClickEmployeeHarvest: EmployeeHarvest?,
-    val position: Int,
+class SalaryShareholdersNewInvestmentBottomsheetFragment(
+    val employeeInvestmentDao: EmployeeInvestmentDao,
+    val shareholdersInvestmentAdapter: SalaryShareholdersInvestmentAdapter,
+    val employee: Employee
 ) : BottomSheetDialogFragment() {
 
-    lateinit var binding: BottomsheetfragmentCompanyNewReceiptBinding
-    var valueCalendar: PersianCalendar? = null
+    lateinit var binding: BottomsheetfragmentCompanyNewExpensesBinding
+    var valueCalendar : PersianCalendar? = null
     private var isUpdating = false
     private var callback: BottomSheetCallback? = null
-    var month: Int = 0
-    var year: Int = 0
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding =
-            BottomsheetfragmentCompanyNewReceiptBinding.inflate(layoutInflater, container, false)
+        binding = BottomsheetfragmentCompanyNewExpensesBinding.inflate(layoutInflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        setdata()
-
+        valueCalendar = PersianCalendar()
+        binding.txtDateReceipt.text = "${valueCalendar!!.year}/${valueCalendar!!.month + 1}/${valueCalendar!!.day}"
         binding.btnCalendar.setOnClickListener {
             onCreateCalendar()
         }
-        binding.text.text = "دریافتی شرکت رو آپدیت کن ."
+        binding.text.text = "سرمایه گذاری جدید رو وارد کن ."
         var formattedValue = "0"
         val decimalFormatSymbols = DecimalFormatSymbols(Locale("fa", "IR"))
         decimalFormatSymbols.groupingSeparator = ','
@@ -96,20 +92,9 @@ class SalaryEmployeeUpdateHarvestBottomsheetFragment(
             addNewReceipt(formattedValue)
         }
     }
-
-    private fun setdata() {
-        binding.edtReceipt.setText(onClickEmployeeHarvest!!.harvest.toString())
-        binding.txtDateReceipt.setText(onClickEmployeeHarvest.harvestDate.toString())
-        binding.dialogEdtTozih.setText(onClickEmployeeHarvest.harvestDescription)
-        binding.txtReceipt.setText(formatCurrency(onClickEmployeeHarvest.harvest))
-        month = onClickEmployeeHarvest.monthHarvest
-        year = onClickEmployeeHarvest.yearHarvest
-    }
-
     fun setCallback(callback: BottomSheetCallback) {
         this.callback = callback
     }
-
     fun onCompanyNewReceipt() {
         callback?.onConfirmButtonClicked()
     }
@@ -132,7 +117,7 @@ class SalaryEmployeeUpdateHarvestBottomsheetFragment(
             .setTitleText("تاریخ را انتخاب کنید.")
             .setTheme(R.style.AppTheme_PersianCalendar)
             .setCalendarConstraints(constraints).build()
-        datePicker.show((activity as CompanyReceiptActivity).supportFragmentManager, "aTag")
+        datePicker.show((activity as ShareholdersInvestmentActivity).supportFragmentManager, "aTag")
         datePicker.isCancelable
 
         datePicker.addOnPositiveButtonClickListener(
@@ -142,21 +127,17 @@ class SalaryEmployeeUpdateHarvestBottomsheetFragment(
                     val date = PersianCalendar(selection!!)
                     valueCalendar = date
                     binding.txtDateReceipt.text = "${date.year}/${date.month + 1}/${date.day}"
-                    month = date.month + 1
-                    year = date.year
                 }
             }
         )
 
     }
-
     private fun formatCurrency(value: Long?): String {
         val decimalFormatSymbols = DecimalFormatSymbols(Locale("fa", "IR"))
         decimalFormatSymbols.groupingSeparator = ','
         val decimalFormat = DecimalFormat("#,###", decimalFormatSymbols)
         return decimalFormat.format(value) + " تومان"
     }
-
     private fun addNewReceipt(formattedValue: String) {
         if (
             binding.edtReceipt.length() > 0 &&
@@ -165,45 +146,22 @@ class SalaryEmployeeUpdateHarvestBottomsheetFragment(
         ) {
             var txtReceipt = binding.edtReceipt.text.toString()
             val txtDescription = binding.dialogEdtTozih.text.toString()
-            val txtDate = binding.txtDateReceipt.text
             txtReceipt = txtReceipt!!.replace(",", "")
 
 
-            val newEmployeeHarvest = EmployeeHarvest(
-                idHarvest = onClickEmployeeHarvest!!.idHarvest,
+            val newEmployeeInvestment = EmployeeInvestment(
                 idEmployee = employee.idEmployee!!,
-                harvest = txtReceipt.toLong(),
-                harvestDescription = txtDescription,
-                harvestDate = txtDate.toString(),
-                yearHarvest =  year,
-                monthHarvest =month
+                investment = txtReceipt.toLong(),
+                investmentDescription = txtDescription,
+                investmentDate = "${valueCalendar?.year}/${valueCalendar?.month!! + 1}/${valueCalendar?.day}"
             )
-            onCompanyFinancialReport(txtReceipt,onClickEmployeeHarvest.harvest!!)
-            employeeHarvestDao.update(newEmployeeHarvest)
+            employeeInvestmentDao.insert(newEmployeeInvestment)
+            shareholdersInvestmentAdapter.addSalaryShareholdersInvestment(newEmployeeInvestment)
             onCompanyNewReceipt()
             dismiss()
         } else {
             Toast.makeText(context, "لطفا همه مقادیر را وارد کنید", Toast.LENGTH_SHORT).show()
         }
-    }
-
-    lateinit var newCompanyFinancialReport: FinancialReport
-    private fun onCompanyFinancialReport(expense: String, oldCompanyExpenses: Long) {
-
-        val financialReportDao = AppDatabase.getDataBase(binding.root.context).financialReportDao
-        val financialReportYearAndMonth = financialReportDao.getFinancialReportYearAndMonthDao(year , month )
-
-        val agoExpense = financialReportYearAndMonth!!.expense
-        val newExpense = (agoExpense!!.toLong() - oldCompanyExpenses) + expense.toLong()
-        newCompanyFinancialReport = FinancialReport(
-            idFinancialReport = financialReportYearAndMonth.idFinancialReport,
-            year = year,
-            month = month,
-            expense = newExpense,
-            income = financialReportYearAndMonth.income,
-            profit = financialReportYearAndMonth.profit
-        )
-        financialReportDao.update(newCompanyFinancialReport)
     }
 
 }

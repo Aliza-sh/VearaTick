@@ -15,18 +15,18 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.vearad.vearatick.ui.MainActivity
 import com.vearad.vearatick.R
+import com.vearad.vearatick.adapter.CompanyReceiptAdapter
+import com.vearad.vearatick.databinding.ActivityCompanyReceiptBinding
+import com.vearad.vearatick.databinding.FragmentDialogDeleteCompanyReceiptBinding
 import com.vearad.vearatick.model.db.AppDatabase
 import com.vearad.vearatick.model.db.CompanyReceipt
 import com.vearad.vearatick.model.db.CompanyReceiptDao
 import com.vearad.vearatick.model.db.FinancialReport
-import com.vearad.vearatick.dialog.CompanyNewIncomeBottomsheetFragment
-import com.vearad.vearatick.dialog.CompanyUpdateIncomeBottomsheetFragment
-import com.vearad.vearatick.adapter.CompanyReceiptAdapter
+import com.vearad.vearatick.ui.MainActivity
+import com.vearad.vearatick.ui.dialog.CompanyNewIncomeBottomsheetFragment
+import com.vearad.vearatick.ui.dialog.CompanyUpdateIncomeBottomsheetFragment
 import com.vearad.vearatick.utils.BottomSheetCallback
-import com.vearad.vearatick.databinding.ActivityCompanyReceiptBinding
-import com.vearad.vearatick.databinding.FragmentDialogDeleteCompanyReceiptBinding
 
 class CompanyReceiptActivity : AppCompatActivity(), CompanyReceiptAdapter.CompanyReceiptEvents,
     BottomSheetCallback {
