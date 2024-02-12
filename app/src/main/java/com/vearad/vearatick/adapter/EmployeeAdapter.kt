@@ -10,9 +10,9 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.vearad.vearatick.DataBase.EfficiencyDao
-import com.vearad.vearatick.DataBase.EfficiencyEmployee
-import com.vearad.vearatick.DataBase.Employee
+import com.vearad.vearatick.model.db.EfficiencyDao
+import com.vearad.vearatick.model.db.EfficiencyEmployee
+import com.vearad.vearatick.model.db.Employee
 import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.ItemEmployeeBinding
 

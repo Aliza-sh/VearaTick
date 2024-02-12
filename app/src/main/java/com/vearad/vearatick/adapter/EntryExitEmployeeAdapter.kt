@@ -5,8 +5,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.vearad.vearatick.DataBase.Day
-import com.vearad.vearatick.DataBase.Time
+import com.vearad.vearatick.model.db.Day
+import com.vearad.vearatick.model.db.Time
 import com.vearad.vearatick.databinding.ItemEntryExitBinding
 
 class EntryExitEmployeeAdapter(

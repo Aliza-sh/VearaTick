@@ -4,12 +4,12 @@ import android.app.AlertDialog
 import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
-import com.vearad.vearatick.DataBase.AppDatabase
-import com.vearad.vearatick.DataBase.EfficiencyEmployee
-import com.vearad.vearatick.DataBase.TaskEmployee
+import com.vearad.vearatick.model.db.AppDatabase
+import com.vearad.vearatick.model.db.EfficiencyEmployee
+import com.vearad.vearatick.model.db.TaskEmployee
 import com.vearad.vearatick.databinding.FragmentDialogDeleteItemTaskBinding
-import com.vearad.vearatick.taskAdapter
-import com.vearad.vearatick.taskEmployeeDao
+import com.vearad.vearatick.ui.taskAdapter
+import com.vearad.vearatick.ui.taskEmployeeDao
 
 class DeleteItemTaskDialogFragment(private val task: TaskEmployee, private val position: Int) :
     DialogFragment() {

@@ -6,7 +6,7 @@
     android:background="?attr/colorOnPrimary"
     android:layout_height="match_parent"
     android:layoutDirection="ltr"
-    tools:context=".CompanyReceiptActivity">
+    tools:context=".ui.activitysub.CompanyReceiptActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout10"

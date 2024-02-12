@@ -6,7 +6,7 @@
     android:background="?attr/colorOnPrimary"
     android:layoutDirection="rtl"
     android:layout_height="match_parent"
-    tools:context=".fgmSub.CompanyEventFragment">
+    tools:context=".ui.fragmentssub.CompanyEventFragment">
 
     <FrameLayout
         android:id="@+id/btn_add_new_event"

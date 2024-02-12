@@ -10,13 +10,13 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.children
 import androidx.fragment.app.DialogFragment
 import com.kizitonwose.calendarview.model.CalendarMonth
-import com.vearad.vearatick.DataBase.Day
-import com.vearad.vearatick.DataBase.EfficiencyDao
-import com.vearad.vearatick.DataBase.EfficiencyEmployee
-import com.vearad.vearatick.DataBase.Employee
+import com.vearad.vearatick.model.db.Day
+import com.vearad.vearatick.model.db.EfficiencyDao
+import com.vearad.vearatick.model.db.EfficiencyEmployee
+import com.vearad.vearatick.model.db.Employee
 import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.FragmentDialogEntryExitBinding
-import com.vearad.vearatick.dayDao
+import com.vearad.vearatick.ui.dayDao
 
 class EntryAndExitDialogFragment(
     val month: CalendarMonth,

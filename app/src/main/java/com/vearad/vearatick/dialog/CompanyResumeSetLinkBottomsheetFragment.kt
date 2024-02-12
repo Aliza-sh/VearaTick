@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.vearad.vearatick.BottomSheetCallback
-import com.vearad.vearatick.DataBase.Project
-import com.vearad.vearatick.DataBase.ProjectDao
+import com.vearad.vearatick.utils.BottomSheetCallback
+import com.vearad.vearatick.model.db.Project
+import com.vearad.vearatick.model.db.ProjectDao
 import com.vearad.vearatick.databinding.BottomsheetfragmentCompanyResumeSetLinkBinding
 
 

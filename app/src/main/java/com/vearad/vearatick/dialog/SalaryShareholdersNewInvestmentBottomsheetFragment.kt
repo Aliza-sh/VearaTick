@@ -9,12 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.vearad.vearatick.BottomSheetCallback
-import com.vearad.vearatick.DataBase.Employee
-import com.vearad.vearatick.DataBase.EmployeeInvestment
-import com.vearad.vearatick.DataBase.EmployeeInvestmentDao
+import com.vearad.vearatick.utils.BottomSheetCallback
+import com.vearad.vearatick.model.db.Employee
+import com.vearad.vearatick.model.db.EmployeeInvestment
+import com.vearad.vearatick.model.db.EmployeeInvestmentDao
 import com.vearad.vearatick.R
-import com.vearad.vearatick.ShareholdersInvestmentActivity
+import com.vearad.vearatick.ui.activitysub.ShareholdersInvestmentActivity
 import com.vearad.vearatick.adapter.SalaryShareholdersInvestmentAdapter
 import com.vearad.vearatick.databinding.BottomsheetfragmentCompanyNewExpensesBinding
 import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints

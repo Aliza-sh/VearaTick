@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import com.vearad.vearatick.BottomSheetCallback
-import com.vearad.vearatick.DataBase.AppDatabase
-import com.vearad.vearatick.DataBase.CompanySkill
-import com.vearad.vearatick.DataBase.CompanySkillDao
+import com.vearad.vearatick.utils.BottomSheetCallback
+import com.vearad.vearatick.model.db.AppDatabase
+import com.vearad.vearatick.model.db.CompanySkill
+import com.vearad.vearatick.model.db.CompanySkillDao
 import com.vearad.vearatick.adapter.CompanySkillAdapter
 import com.vearad.vearatick.databinding.BottomsheetfragmentCompanyNewSkillBinding
 import java.util.Random

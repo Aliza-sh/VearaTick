@@ -7,14 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.vearad.vearatick.databinding.ItemEventBinding
-import com.vearad.vearatick.model.Events
+import com.vearad.vearatick.model.response.EventsResponse
 import saman.zamani.persiandate.PersianDate
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 
 class CompanyEventAdapter(
-    val data: List<Events.Event>,
+    val data: List<EventsResponse.Event>,
     val companyEvent: CompanyEventEvent,
 ) :
     RecyclerView.Adapter<CompanyEventAdapter.CompanyEventViewHolder>() {
@@ -88,7 +88,7 @@ class CompanyEventAdapter(
 
     interface CompanyEventEvent {
         fun onEventClicked(
-            companyEvent: Events.Event,
+            companyEvent: EventsResponse.Event,
             position: Int,
         )
 //        fun onMenuItemClick(

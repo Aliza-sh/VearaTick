@@ -13,11 +13,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.snackbar.Snackbar
-import com.vearad.vearatick.BottomSheetCallback
-import com.vearad.vearatick.DataBase.AppDatabase
-import com.vearad.vearatick.DataBase.CompanyInfo
-import com.vearad.vearatick.DataBase.CompanyInfoDao
-import com.vearad.vearatick.MainActivity
+import com.vearad.vearatick.utils.BottomSheetCallback
+import com.vearad.vearatick.model.db.AppDatabase
+import com.vearad.vearatick.model.db.CompanyInfo
+import com.vearad.vearatick.model.db.CompanyInfoDao
+import com.vearad.vearatick.ui.MainActivity
 import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.BottomsheetfragmentCompanyInfoBinding
 

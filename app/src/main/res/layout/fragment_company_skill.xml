@@ -6,7 +6,7 @@
     android:background="?attr/colorOnPrimary"
     android:layoutDirection="ltr"
     android:layout_height="match_parent"
-    tools:context=".fgmSub.CompanyResumeFragment">
+    tools:context=".fragmentssub.CompanyResumeFragment">
 
     <FrameLayout
         android:id="@+id/btn_add_company_skill"

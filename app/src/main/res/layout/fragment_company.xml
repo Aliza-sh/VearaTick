@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorOnPrimary"
     android:layoutDirection="rtl"
-    tools:context=".fgmMain.CompanyFragment">
+    tools:context=".ui.fragmentsmain.CompanyFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"

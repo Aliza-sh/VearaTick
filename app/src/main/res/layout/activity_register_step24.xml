@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/colorOnPrimary"
     android:layoutDirection="ltr"
-    tools:context=".RegisterStep24Activity"
+    tools:context=".ui.activitysub.RegisterStep24Activity"
     android:orientation="vertical">
 
     <LinearLayout

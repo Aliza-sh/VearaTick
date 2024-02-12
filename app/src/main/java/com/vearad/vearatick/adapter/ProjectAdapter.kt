@@ -11,9 +11,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kizitonwose.calendarview.utils.persian.toPersianCalendar
-import com.vearad.vearatick.DataBase.AppDatabase
-import com.vearad.vearatick.DataBase.Project
-import com.vearad.vearatick.DataBase.ProjectDao
+import com.vearad.vearatick.model.db.AppDatabase
+import com.vearad.vearatick.model.db.Project
+import com.vearad.vearatick.model.db.ProjectDao
 import com.vearad.vearatick.databinding.ItemProjectBinding
 import org.joda.time.DateTime
 import org.joda.time.Days

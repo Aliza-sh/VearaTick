@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
-        android:name=".MyApp"
+        android:name=".di.MyApp"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -22,14 +22,14 @@
         tools:targetApi="33">
 
         <receiver
-            android:name=".NotificationBroadcastReceiver"
+            android:name=".notification.NotificationBroadcastReceiver"
             android:enabled="true"
             android:exported="false" >
 
         </receiver>
 
         <activity
-            android:name=".SplashActivity"
+            android:name=".ui.activitymain.SplashActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -39,7 +39,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
@@ -58,7 +58,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ProAndEmpActivity"
+            android:name=".ui.activitymain.ProAndEmpActivity"
             android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
@@ -67,26 +67,26 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".CompanyFinancialReportActivity"
+            android:name=".ui.activitysub.CompanyFinancialReportActivity"
             android:exported="false" />
         <activity
-            android:name=".ShareholdersInvestmentActivity"
+            android:name=".ui.activitysub.ShareholdersInvestmentActivity"
             android:exported="false" />
         <activity
-            android:name=".CompanyPaymentActivity"
+            android:name=".ui.activitysub.CompanyPaymentActivity"
             android:exported="false" />
         <activity
-            android:name=".PoolakeyActivity"
+            android:name=".polaki.PoolakeyActivity"
             android:exported="false" />
         <activity
-            android:name=".CompanyReceiptActivity"
+            android:name=".ui.activitysub.CompanyReceiptActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginStep24Activity"
+            android:name=".ui.activitysub.LoginStep24Activity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".RegisterStep24Activity"
+            android:name=".ui.activitysub.RegisterStep24Activity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
         <activity
