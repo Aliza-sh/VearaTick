@@ -20,13 +20,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SherkatManage"
         tools:targetApi="33">
-
         <receiver
             android:name=".notification.NotificationBroadcastReceiver"
             android:enabled="true"
-            android:exported="false" >
-
-        </receiver>
+            android:exported="false" />
 
         <activity
             android:name=".ui.activitymain.SplashActivity"

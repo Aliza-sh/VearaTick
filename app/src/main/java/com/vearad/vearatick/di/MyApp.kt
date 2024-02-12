@@ -24,7 +24,7 @@ class MyApp : Application() {
         alarmManager.setInexactRepeating(
             AlarmManager.ELAPSED_REALTIME,
             SystemClock.elapsedRealtime(),
-            AlarmManager.INTERVAL_HOUR,
+            1,
             pendingIntent
         )
 

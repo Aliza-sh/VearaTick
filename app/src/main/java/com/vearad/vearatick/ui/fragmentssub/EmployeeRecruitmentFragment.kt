@@ -25,12 +25,12 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.kizitonwose.calendarview.utils.persian.PersianCalendar
-import com.vearad.vearatick.model.db.EfficiencyDao
-import com.vearad.vearatick.model.db.EfficiencyEmployee
-import com.vearad.vearatick.model.db.Employee
 import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
 import com.vearad.vearatick.databinding.FragmentEmployeeRecruitmentBinding
+import com.vearad.vearatick.model.db.EfficiencyDao
+import com.vearad.vearatick.model.db.EfficiencyEmployee
+import com.vearad.vearatick.model.db.Employee
 import com.vearad.vearatick.ui.employeeAdapter
 import com.vearad.vearatick.ui.employeeDao
 
@@ -106,14 +106,22 @@ class EmployeeRecruitmentFragment(
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     fragmentManager?.beginTransaction()?.detach(this@EmployeeRecruitmentFragment)
-                        ?.attach(EmployeeFragment(bindingActivityProAndEmpBinding))?.commit()
+                        ?.attach(EmployeeFragment(
+                            bindingActivityProAndEmpBinding,
+                            false,
+                            0
+                        ))?.commit()
                 }
             })
     }
 
     fun onRecruitment() {
         parentFragmentManager.beginTransaction().detach(this@EmployeeRecruitmentFragment)
-            .replace(R.id.frame_layout_sub, EmployeeFragment(bindingActivityProAndEmpBinding))
+            .replace(R.id.frame_layout_sub, EmployeeFragment(
+                bindingActivityProAndEmpBinding,
+                false,
+                0
+            ))
             .commit()
     }
 

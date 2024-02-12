@@ -102,7 +102,8 @@ class EmployeeTaskInDayFragment(
                         position,
                         employeeDao,
                         bindingActivityProAndEmpBinding,
-                        goToEmployeeTaskFragment
+                        goToEmployeeTaskFragment,
+                        false
                     )
                 ).commit()
         }
@@ -218,7 +219,8 @@ class EmployeeTaskInDayFragment(
                                 position,
                                 employeeDao,
                                 bindingActivityProAndEmpBinding,
-                                goToEmployeeTaskFragment
+                                goToEmployeeTaskFragment,
+                                false
                             )
                         )
                         .commit()

@@ -27,12 +27,12 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.vearad.vearatick.model.db.EfficiencyDao
-import com.vearad.vearatick.model.db.Employee
-import com.vearad.vearatick.model.db.EmployeeDao
 import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
 import com.vearad.vearatick.databinding.FragmentEmployeeInfoUpdateBinding
+import com.vearad.vearatick.model.db.EfficiencyDao
+import com.vearad.vearatick.model.db.Employee
+import com.vearad.vearatick.model.db.EmployeeDao
 import com.vearad.vearatick.ui.employeeAdapter
 
 private val PICK_IMAGE_REQUEST = 1
@@ -171,6 +171,7 @@ class EmployeeInfoUpdateFragment(
                                 employeeDao,
                                 bindingActivityProAndEmpBinding,
                                 goToEmployeeTaskFragment,
+                                false,
                             )
                         ).commit()
                 }
@@ -188,6 +189,7 @@ class EmployeeInfoUpdateFragment(
                     employeeDao,
                     bindingActivityProAndEmpBinding,
                     goToEmployeeTaskFragment,
+                    false,
                 )
             ).commit()
     }

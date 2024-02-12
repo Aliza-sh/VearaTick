@@ -26,16 +26,16 @@ import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.kizitonwose.calendarview.utils.persian.PersianCalendar
+import com.vearad.vearatick.R
+import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
+import com.vearad.vearatick.databinding.FragmentDialogDeleteItemEmployeeBinding
+import com.vearad.vearatick.databinding.FragmentEmployeeInformationBinding
 import com.vearad.vearatick.model.db.AppDatabase
 import com.vearad.vearatick.model.db.EfficiencyDao
 import com.vearad.vearatick.model.db.EfficiencyEmployee
 import com.vearad.vearatick.model.db.Employee
 import com.vearad.vearatick.model.db.EmployeeDao
 import com.vearad.vearatick.ui.activitymain.ProAndEmpActivity
-import com.vearad.vearatick.R
-import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
-import com.vearad.vearatick.databinding.FragmentDialogDeleteItemEmployeeBinding
-import com.vearad.vearatick.databinding.FragmentEmployeeInformationBinding
 import koleton.api.hideSkeleton
 import koleton.api.loadSkeleton
 import java.time.DayOfWeek
@@ -49,6 +49,7 @@ class EmployeeInformationFragment(
     val employeeDao: EmployeeDao,
     val bindingActivityProAndEmpBinding: ActivityProAndEmpBinding,
     val goToEmployeeTaskFragment: Boolean,
+    val goFromNotifToEmployeeFragment: Boolean,
 ) : Fragment() {
 
     lateinit var binding: FragmentEmployeeInformationBinding
@@ -68,11 +69,14 @@ class EmployeeInformationFragment(
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         onBackPressed()
-        firstRun(view)
         setData(employee, view)
         setTitleEmployee(view)
-
-        goTo(goToEmployeeTaskFragment,view)
+        if (goFromNotifToEmployeeFragment) {
+            btnCalendar(view)
+        } else {
+            firstRun(view)
+        }
+        goTo(goToEmployeeTaskFragment, view)
 
         binding.btnStatistics.setOnClickListener {
             btnStatistics(view)
@@ -90,7 +94,13 @@ class EmployeeInformationFragment(
 
         binding.btnBack.setOnClickListener {
             parentFragmentManager.beginTransaction().detach(this@EmployeeInformationFragment)
-                .replace(R.id.frame_layout_sub, EmployeeFragment(bindingActivityProAndEmpBinding))
+                .replace(
+                    R.id.frame_layout_sub, EmployeeFragment(
+                        bindingActivityProAndEmpBinding,
+                        false,
+                        0
+                    )
+                )
                 .commit()
         }
     }
@@ -308,7 +318,11 @@ class EmployeeInformationFragment(
                         .detach(this@EmployeeInformationFragment)
                         .replace(
                             R.id.frame_layout_sub,
-                            EmployeeFragment(bindingActivityProAndEmpBinding)
+                            EmployeeFragment(
+                                bindingActivityProAndEmpBinding,
+                                false,
+                                0
+                            )
                         ).commit()
                 }
             })
@@ -590,7 +604,13 @@ class EmployeeInformationFragment(
         dayDao.deleteDayByIdEmployee(employee.idEmployee!!)
         employeeDao.delete(employee)
         parentFragmentManager.beginTransaction().detach(this@EmployeeInformationFragment)
-            .replace(R.id.frame_layout_sub, EmployeeFragment(bindingActivityProAndEmpBinding))
+            .replace(
+                R.id.frame_layout_sub, EmployeeFragment(
+                    bindingActivityProAndEmpBinding,
+                    false,
+                    0
+                )
+            )
             .commit()
     }
 
