@@ -28,8 +28,8 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
             android:id="@+id/btn_no_date"
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
@@ -37,17 +37,18 @@
             android:gravity="center"
             android:layoutDirection="rtl"
             android:orientation="horizontal"
-            app:layout_constraintEnd_toEndOf="@+id/btn_entry"
-            app:layout_constraintStart_toStartOf="@+id/btn_exit"
+            app:layout_constraintEnd_toStartOf="@+id/btn_on_time"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView">
 
             <ImageView
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="15dp"
                 android:src="@drawable/ic_no_deadline" />
 
             <TextView
@@ -55,34 +56,72 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="20dp"
-                android:text="امروز نیومده"
+                android:text="امروز نیامد"
                 android:textColor="@color/white"
-                android:textSize="15sp" />
+                android:textSize="13sp" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/btn_exit"
+            android:id="@+id/btn_on_time"
+            style="@style/Widget.AppCompat.CompoundButton.CheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             android:background="@drawable/shape_background_deadline_blacke"
             android:gravity="center"
             android:layoutDirection="rtl"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/btn_no_date"
+            app:layout_constraintTop_toBottomOf="@+id/textView">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="15dp"
+                android:src="@drawable/ic_done"
+                app:tint="@color/white" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="20dp"
+                android:text="به موقع آمد"
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_exit"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_background_deadline_blacke"
+            android:gravity="center"
+            android:layoutDirection="rtl"
+            android:orientation="horizontal"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/btn_entry"
             app:layout_constraintTop_toTopOf="@+id/btn_entry">
 
             <ImageView
-                app:tint="@color/white"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
-                android:layout_marginEnd="10dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginBottom="15dp"
                 android:layout_marginTop="15dp"
-                android:src="@drawable/img_out" />
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="15dp"
+                android:src="@drawable/img_out"
+                app:tint="@color/white" />
 
             <TextView
                 android:id="@+id/txt_exit"
@@ -102,16 +141,17 @@
             android:id="@+id/btn_entry"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/shape_background_deadline_blacke"
             android:gravity="center"
-            android:layout_marginTop="24dp"
             android:layoutDirection="rtl"
             android:orientation="horizontal"
+            android:visibility="gone"
             app:layout_constraintEnd_toStartOf="@+id/btn_exit"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_no_date">
+            app:layout_constraintTop_toBottomOf="@+id/btn_on_time">
 
             <ImageView
                 android:layout_width="30dp"

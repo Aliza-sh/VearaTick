@@ -10,6 +10,8 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.LinearLayout
@@ -79,7 +81,8 @@ class EmployeePresenceFragment(
     var valueHourExit = ""
     var valueAllExit = ""
 
-    var valueBtnNoDate = false
+    var valueBtnNoTime = false
+    var valueBtnOnTime = false
     var valueBtnDoneEntry = false
     var valueBtnDoneExit = false
     var valueHourDoneEntry = 0
@@ -87,6 +90,8 @@ class EmployeePresenceFragment(
     var valueHourDoneExit = 0
     var valueHourDeleteDoneExit = 0
     var valueAllDoneExit = ""
+
+    var singleton = true
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -168,6 +173,10 @@ class EmployeePresenceFragment(
                                 selectedDate!!.toPersianCalendar().persianWeekDayName
                             )
                             binding.btnFabEntExt.setOnClickListener {
+                                valueBtnDoneEntry = false
+                                valueBtnDoneExit = false
+                                valueBtnOnTime = false
+                                valueBtnNoTime = false
                                 if (nameDay?.nameday == selectedDate?.toPersianCalendar()?.persianWeekDayName) {
                                     showDoneEntryAndExitDialog(
                                         employee.idEmployee,
@@ -275,6 +284,7 @@ class EmployeePresenceFragment(
         binding.clrEntExtEmp.dayBinder = object : DayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
+
                 Log.v("EmployeeInformationFragment", "DayBinder")
                 container.day = day
                 val textView = container.textView
@@ -290,15 +300,21 @@ class EmployeePresenceFragment(
                         else 0
                     )
 
-                    if (day.persianCalendar.persianDay == today.persianDay)
+                    if (day.persianCalendar.persianDay == today.persianDay && singleton) {
+                        singleton = false
+                        Log.v("setOnClickListener", "setOnClickListener")
                         binding.btnFabEntExt.setOnClickListener {
+                            valueBtnDoneEntry = false
+                            valueBtnDoneExit = false
+                            valueBtnOnTime = false
+                            valueBtnNoTime = false
                             if (nameDay?.nameday == today.persianWeekDayName) {
                                 showDoneEntryAndExitDialog(
                                     employee.idEmployee,
-                                    day.persianCalendar.persianDay,
-                                    day.persianCalendar.persianWeekDayName,
-                                    day.persianCalendar.persianMonthName,
-                                    day.persianCalendar.persianYear,
+                                    today.persianDay,
+                                    today.persianWeekDayName,
+                                    today.persianMonthName,
+                                    today.persianYear,
                                     container.dayEntEmp,
                                     container.dayExtEmp
                                 )
@@ -310,7 +326,7 @@ class EmployeePresenceFragment(
                                 ).show()
                             }
                         }
-
+                    }
                     val arrivalDay = timeDao.getAllArrivalDay(
                         employee.idEmployee!!,
                         day.persianCalendar.persianYear.toString(),
@@ -837,10 +853,10 @@ class EmployeePresenceFragment(
         dayEntEmp: View,
         dayExtEmp: View
     ) {
-        val dayOnClicke =
-            timeDao.getAllArrivalDay(employee.idEmployee!!, year.toString(), month, day.toString())
+        val dayOnClicke = timeDao.getAllArrivalDay(idEmployee!!, year.toString(), month, day.toString())
 
-        valueBtnNoDate = false
+        valueBtnNoTime = false
+        valueBtnOnTime = false
         valueBtnDoneEntry = false
         valueBtnDoneExit = false
         valueHourDoneEntry = 0
@@ -852,33 +868,50 @@ class EmployeePresenceFragment(
         bindingDialogEmployeeDoneEntryExit.btnNoDate.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
         bindingDialogEmployeeDoneEntryExit.btnEntry.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
         bindingDialogEmployeeDoneEntryExit.btnExit.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
+        bindingDialogEmployeeDoneEntryExit.btnOnTime.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
+        bindingDialogEmployeeDoneEntryExit.btnEntry.visibility = GONE
+        bindingDialogEmployeeDoneEntryExit.btnExit.visibility = GONE
+        Log.v("dayOnClicke", "dayOnClicke: ${dayOnClicke}")
 
         if (dayOnClicke != null) {
             if (dayOnClicke.exit != 0) {
                 valueBtnDoneEntry = true
                 valueBtnDoneExit = true
+                valueBtnOnTime = true
                 valueHourDoneEntry = dayOnClicke.entry
                 valueAllDoneEntry = dayOnClicke.entryAll
                 valueHourDoneExit = dayOnClicke.exit!!.toInt()
                 valueAllDoneExit = dayOnClicke.exitAll.toString()
                 bindingDialogEmployeeDoneEntryExit.txtEntry.text = valueAllDoneEntry
                 bindingDialogEmployeeDoneEntryExit.txtExit.text = valueAllDoneExit
+                bindingDialogEmployeeDoneEntryExit.btnOnTime.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
+                bindingDialogEmployeeDoneEntryExit.btnEntry.visibility = VISIBLE
+                bindingDialogEmployeeDoneEntryExit.btnExit.visibility = VISIBLE
                 bindingDialogEmployeeDoneEntryExit.btnEntry.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
                 bindingDialogEmployeeDoneEntryExit.btnExit.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
 
             } else if (dayOnClicke.entry != 0) {
+                valueBtnOnTime = true
                 valueBtnDoneEntry = true
                 valueHourDoneEntry = dayOnClicke.entry
                 valueAllDoneEntry = dayOnClicke.entryAll
                 bindingDialogEmployeeDoneEntryExit.txtEntry.text = valueAllDoneEntry
+                bindingDialogEmployeeDoneEntryExit.txtExit.text = "خروج"
+                bindingDialogEmployeeDoneEntryExit.btnOnTime.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
+                bindingDialogEmployeeDoneEntryExit.btnEntry.visibility = VISIBLE
+                bindingDialogEmployeeDoneEntryExit.btnExit.visibility = VISIBLE
                 bindingDialogEmployeeDoneEntryExit.btnEntry.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
 
             } else if (!dayOnClicke.arrival) {
                 bindingDialogEmployeeDoneEntryExit.btnNoDate.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
-                valueBtnNoDate = true
+                valueBtnNoTime = true
             }
-
         }
+
+        Log.v("Alll", "valueBtnNoTime: ${valueBtnNoTime}")
+        Log.v("Alll", "valueBtnOnTime: ${valueBtnOnTime}")
+        Log.v("Alll", "valueBtnDoneEntry: ${valueBtnDoneEntry}")
+        Log.v("Alll", "valueBtnDoneExit: ${valueBtnDoneExit}")
 
         val parent = bindingDialogEmployeeDoneEntryExit.root.parent as? ViewGroup
         parent?.removeView(bindingDialogEmployeeDoneEntryExit.root)
@@ -886,27 +919,51 @@ class EmployeePresenceFragment(
         dialogBuilder.setView(bindingDialogEmployeeDoneEntryExit.root)
 
         bindingDialogEmployeeDoneEntryExit.btnNoDate.setOnClickListener {
-            if (!valueBtnNoDate && !valueBtnDoneEntry && !valueBtnDoneExit) {
+            if (!valueBtnNoTime && !valueBtnOnTime) {
                 bindingDialogEmployeeDoneEntryExit.btnNoDate.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
-                valueBtnNoDate = true
+                valueBtnNoTime = true
             } else {
                 bindingDialogEmployeeDoneEntryExit.btnNoDate.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
-                valueBtnNoDate = false
+                valueBtnNoTime = false
+            }
+        }
+
+        bindingDialogEmployeeDoneEntryExit.btnOnTime.setOnClickListener {
+            if (!valueBtnNoTime && !valueBtnOnTime) {
+                bindingDialogEmployeeDoneEntryExit.btnOnTime.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
+                bindingDialogEmployeeDoneEntryExit.btnEntry.visibility = VISIBLE
+                bindingDialogEmployeeDoneEntryExit.btnExit.visibility = VISIBLE
+                valueBtnOnTime = true
+                valueBtnDoneEntry = true
+                valueBtnDoneExit = true
+
+                val dayOnClicke = dayDao.getAllNameDay(idEmployee!!, year.toString(), month, nameDay)
+
+                valueHourDoneEntry = dayOnClicke?.entry!!.toInt()
+                valueAllDoneEntry = dayOnClicke.entry.toString()
+                bindingDialogEmployeeDoneEntryExit.txtEntry.text = valueAllDoneEntry
+                bindingDialogEmployeeDoneEntryExit.btnEntry.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
+                valueHourDoneExit = dayOnClicke.exit!!.toInt()
+                valueAllDoneExit = dayOnClicke.exit.toString()
+                bindingDialogEmployeeDoneEntryExit.txtExit.text = valueAllDoneExit
+                bindingDialogEmployeeDoneEntryExit.btnExit.setBackgroundResource(R.drawable.shape_background_deadline_firoze)
+
+            } else {
+                bindingDialogEmployeeDoneEntryExit.btnOnTime.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
+                bindingDialogEmployeeDoneEntryExit.btnEntry.visibility = GONE
+                bindingDialogEmployeeDoneEntryExit.btnExit.visibility = GONE
+                valueBtnOnTime = false
+                valueBtnDoneEntry = false
+                valueBtnDoneExit = false
             }
         }
 
         bindingDialogEmployeeDoneEntryExit.btnEntry.setOnClickListener {
-            if (!valueBtnNoDate && !valueBtnDoneEntry) {
                 onCreatePickerDoneEntry()
-            } else {
-                bindingDialogEmployeeDoneEntryExit.btnEntry.setBackgroundResource(R.drawable.shape_background_deadline_blacke)
-                bindingDialogEmployeeDoneEntryExit.txtEntry.text = "ورود"
-                valueBtnDoneEntry = false
-            }
         }
 
         bindingDialogEmployeeDoneEntryExit.btnExit.setOnClickListener {
-            if (!valueBtnNoDate && !valueBtnDoneExit) {
+            if (!valueBtnNoTime && !valueBtnDoneExit) {
                 onCreatePickerDoneExit()
             } else {
                 valueHourDeleteDoneExit = valueHourDoneExit
@@ -924,11 +981,21 @@ class EmployeePresenceFragment(
         alertDialog.setCancelable(false)
         alertDialog.show()
         bindingDialogEmployeeDoneEntryExit.dialogBtnCansel.setOnClickListener {
+            valueBtnDoneEntry = false
+            valueBtnDoneExit = false
+            valueBtnOnTime = false
+            valueBtnNoTime = false
             alertDialog.dismiss()
         }
         bindingDialogEmployeeDoneEntryExit.dialogBtnSure.setOnClickListener {
 
-            if (!valueBtnNoDate && !valueBtnDoneEntry)
+            Log.v("dialogBtnSure", "valueBtnNoTime: ${valueBtnNoTime}")
+            Log.v("dialogBtnSure", "valueHourDoneEntry: ${valueHourDoneEntry}")
+
+            Log.v("valueHourDoneExit", "valueHourDoneExit: ${valueHourDoneExit}")
+            Log.v("valueHourDoneExit", "valueHourDoneEntry: ${valueHourDoneEntry}")
+
+            if (!valueBtnNoTime && valueHourDoneEntry == 0)
                 Toast.makeText(context, " لطفا تمام مقادیر را وارد کنید.", Toast.LENGTH_SHORT)
                     .show()
             else if (valueHourDoneExit != 0 && valueHourDoneExit.toInt() < valueHourDoneEntry.toInt())
@@ -937,7 +1004,7 @@ class EmployeePresenceFragment(
                     " چطور میشه که ساعت خروج قبل ساعت ورود باشه.",
                     Toast.LENGTH_SHORT
                 ).show()
-            else if (valueBtnNoDate) {
+            else if (valueBtnNoTime) {
 
                 val timeData = timeDao.getAllArrivalDay(idEmployee!!, year.toString(), month, day.toString())
                 val dayData = dayDao.getAllEntryExit(idEmployee, year.toString(), month, nameDay)
@@ -1033,7 +1100,6 @@ class EmployeePresenceFragment(
                 }
                 alertDialog.dismiss()
             }
-
         }
     }
 
