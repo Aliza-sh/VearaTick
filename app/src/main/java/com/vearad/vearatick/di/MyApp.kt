@@ -31,7 +31,6 @@ class MyApp : Application() {
         val pendingIntentPresence =
             PendingIntent.getBroadcast(this, 1001, intentPresence, PendingIntent.FLAG_IMMUTABLE)
         val alarmManagerPresence = getSystemService(ALARM_SERVICE) as AlarmManager
-
         alarmManagerPresence.setInexactRepeating(
             AlarmManager.RTC_WAKEUP,
             SystemClock.elapsedRealtime(),
@@ -45,7 +44,6 @@ class MyApp : Application() {
             PendingIntent.getBroadcast(this, 1002, intentProject, PendingIntent.FLAG_IMMUTABLE)
         val alarmManagerProject = getSystemService(ALARM_SERVICE) as AlarmManager
         // تنظیم آلارم برای ساعت 1 ظهر
-        // (12 * 60 * 60 * 1000)
         val alarmTime1 = getAlarmTime(13, 15)
         Log.v("alarmTime", "Here: ${alarmTime1}")
         alarmManagerProject.setInexactRepeating(

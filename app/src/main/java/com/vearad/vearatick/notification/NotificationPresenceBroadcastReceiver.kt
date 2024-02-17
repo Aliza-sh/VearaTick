@@ -17,7 +17,7 @@ import com.vearad.vearatick.model.db.EmployeeDao
 import com.vearad.vearatick.model.db.TimeDao
 import com.vearad.vearatick.ui.activitymain.ProAndEmpActivity
 
-class NotificationBroadcastReceiver : BroadcastReceiver() {
+class NotificationPresenceBroadcastReceiver : BroadcastReceiver() {
 
     lateinit var dayDao: DayDao
     lateinit var timeDao: TimeDao
@@ -83,7 +83,7 @@ class NotificationBroadcastReceiver : BroadcastReceiver() {
             .setContentIntent(pendingIntent)
             .build()
 
-        notificationManager.notify(i, notification)
+        notificationManager.notify(i+10, notification)
 
     }
     

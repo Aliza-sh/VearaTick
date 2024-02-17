@@ -25,8 +25,7 @@ import com.vearad.vearatick.utils.CustomTopMarginItemDecoration
 
 class EmployeeFragment(
     val bindingActivityProAndEmpBinding: ActivityProAndEmpBinding,
-    var goFromNotifToEmployeeFragment: Boolean,
-    val idEmployee: Int
+    val idNotifEmployee: Int
 ) : Fragment(),
     EmployeeAdapter.EmployeeEvents {
 
@@ -51,9 +50,9 @@ class EmployeeFragment(
         efficiencyEmployeeDao = AppDatabase.getDataBase(view.context).efficiencyDao
         employeeDao = AppDatabase.getDataBase(view.context).employeeDao
 
-        if (goFromNotifToEmployeeFragment) {
-            val employee = employeeDao.getEmployee(idEmployee)
-            onEmployeeNotification(employee!!, goFromNotifToEmployeeFragment)
+        if (idNotifEmployee!=0) {
+            val employee = employeeDao.getEmployee(idNotifEmployee)
+            onEmployeeNotification(employee!!, true)
         } else {
 
             employeeData = employeeDao.getAllEmployee()

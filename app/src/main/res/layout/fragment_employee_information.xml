@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorOnPrimary"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".fragmentssub.EmployeeInformationFragment">
+    tools:context=".ui.fragmentssub.EmployeeInformationFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cons_lyt"
@@ -164,7 +164,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/btn_calendar"
+                android:id="@+id/btn_presence"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"

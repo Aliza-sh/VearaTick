@@ -22,21 +22,20 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SherkatManage"
         tools:targetApi="33">
+
         <receiver
             android:name=".notification.NotificationPresenceBroadcastReceiver"
-            android:enabled="true"
             android:exported="false" >
             <intent-filter>
-                <action android:name="com.vearad.vearatick.notification.NotificationPresenceBroadcastReceiver" />
+                <action android:name="NotificationPresenceBroadcastReceiver" />
             </intent-filter>
         </receiver>
 
         <receiver
             android:name=".notification.NotificationProjectBroadcastReceiver"
-            android:enabled="true"
             android:exported="false" >
             <intent-filter>
-                <action android:name="com.vearad.vearatick.notification.NotificationProjectBroadcastReceiver" />
+                <action android:name="NotificationProjectBroadcastReceiver" />
             </intent-filter>
         </receiver>
 

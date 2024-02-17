@@ -33,21 +33,21 @@ class ProAndEmpActivity : AppCompatActivity() {
         if (idNotifEmployee != 0) {
             Log.v("notifemployee", "ProAndEmpActivity: ${idNotifEmployee}")
             goFromNotifToEmployeeFragment = true
-            goFromNotifToEmployeeFragment(goFromNotifToEmployeeFragment, idNotifEmployee)
+            goToEmployeeFragment(idNotifEmployee)
         } else if (idNotifProject != 0) {
             Log.v("idNotifProject", "idNotifProject: ${idNotifProject}")
             goFromNotifToProjectFragment = true
-            goToProjectFragment( idNotifProject)
+            goToProjectFragment(idNotifProject)
         } else {
 
             val itemClicked = intent.getIntExtra("itemClicked", 1)
             when (itemClicked) {
                 1 -> {
-                    goToProjectFragment(idNotifProject)
+                    goToProjectFragment(0)
                 }
 
                 2 -> {
-                    goToEmployeeFragment()
+                    goToEmployeeFragment(0)
                 }
             }
         }
@@ -90,7 +90,7 @@ class ProAndEmpActivity : AppCompatActivity() {
             )
             binding.txtProject.setTextColor(Color.parseColor("#929292"))
 
-            replaceFragment(EmployeeFragment(binding, false, idEmployee))
+            replaceFragment(EmployeeFragment(binding, 0))
         }
     }
 
@@ -109,24 +109,8 @@ class ProAndEmpActivity : AppCompatActivity() {
         binding.txtProject.setTextColor(Color.parseColor("#E600ADB5"))
     }
 
-    fun goToEmployeeFragment() {
-        replaceFragment(EmployeeFragment(binding, goFromNotifToEmployeeFragment, idEmployee))
-
-        binding.txtTitle.text = "کارکنان"
-        binding.icProject.setColorFilter(
-            ContextCompat.getColor(this, R.color.gray),
-            PorterDuff.Mode.SRC_IN
-        )
-        binding.txtProject.setTextColor(Color.parseColor("#929292"))
-        binding.icEmployee.setColorFilter(
-            ContextCompat.getColor(this, R.color.firoze),
-            PorterDuff.Mode.SRC_IN
-        )
-        binding.txtEmployee.setTextColor(Color.parseColor("#E600ADB5"))
-    }
-
-    fun goFromNotifToEmployeeFragment(goToEmployeeFragment: Boolean, idEmployee: Int) {
-        replaceFragment(EmployeeFragment(binding, goToEmployeeFragment, idEmployee))
+    fun goToEmployeeFragment(idNotifEmployee: Int) {
+        replaceFragment(EmployeeFragment(binding, idNotifEmployee))
 
         binding.txtTitle.text = "کارکنان"
         binding.icProject.setColorFilter(

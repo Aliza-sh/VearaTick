@@ -72,7 +72,7 @@ class EmployeeInformationFragment(
         setData(employee, view)
         setTitleEmployee(view)
         if (goFromNotifToEmployeeFragment) {
-            btnCalendar(view)
+            btnPresence(view)
         } else {
             firstRun(view)
         }
@@ -81,8 +81,8 @@ class EmployeeInformationFragment(
         binding.btnStatistics.setOnClickListener {
             btnStatistics(view)
         }
-        binding.btnCalendar.setOnClickListener {
-            btnCalendar(view)
+        binding.btnPresence.setOnClickListener {
+            btnPresence(view)
         }
         binding.btnTask.setOnClickListener {
             btnTask(view)
@@ -97,7 +97,6 @@ class EmployeeInformationFragment(
                 .replace(
                     R.id.frame_layout_sub, EmployeeFragment(
                         bindingActivityProAndEmpBinding,
-                        false,
                         0
                     )
                 )
@@ -215,7 +214,7 @@ class EmployeeInformationFragment(
         replaceFragment(EmployeeStatisticsFragment(employee, efficiencyEmployeeDao, position))
     }
 
-    private fun btnCalendar(view: View) {
+    private fun btnPresence(view: View) {
         setEfficiency(view)
         binding.txtCalendar.setTextColor(Color.parseColor("#E600ADB5"))
         binding.viewCalendar.visibility = VISIBLE
@@ -320,7 +319,6 @@ class EmployeeInformationFragment(
                             R.id.frame_layout_sub,
                             EmployeeFragment(
                                 bindingActivityProAndEmpBinding,
-                                false,
                                 0
                             )
                         ).commit()
@@ -607,7 +605,6 @@ class EmployeeInformationFragment(
             .replace(
                 R.id.frame_layout_sub, EmployeeFragment(
                     bindingActivityProAndEmpBinding,
-                    false,
                     0
                 )
             )

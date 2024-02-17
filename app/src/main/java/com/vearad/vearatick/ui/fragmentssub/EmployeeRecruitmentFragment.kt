@@ -108,7 +108,6 @@ class EmployeeRecruitmentFragment(
                     fragmentManager?.beginTransaction()?.detach(this@EmployeeRecruitmentFragment)
                         ?.attach(EmployeeFragment(
                             bindingActivityProAndEmpBinding,
-                            false,
                             0
                         ))?.commit()
                 }
@@ -119,7 +118,6 @@ class EmployeeRecruitmentFragment(
         parentFragmentManager.beginTransaction().detach(this@EmployeeRecruitmentFragment)
             .replace(R.id.frame_layout_sub, EmployeeFragment(
                 bindingActivityProAndEmpBinding,
-                false,
                 0
             ))
             .commit()

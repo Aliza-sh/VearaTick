@@ -125,7 +125,7 @@ class EmployeePresenceFragment(
         val endMonth = currentMonth.plusMonths(4)
         binding.clrEntExtEmp.setup(startMonth, endMonth, org.threeten.bp.DayOfWeek.SATURDAY)
         val today = LocalDate.now()
-        if (today.dayOfMonth > 15)
+        if (today.dayOfMonth < 15)
             binding.clrEntExtEmp.scrollToMonth(currentMonth.next)
         else
             binding.clrEntExtEmp.scrollToMonth(currentMonth)
@@ -416,9 +416,12 @@ class EmployeePresenceFragment(
                                         "\u062c\u0645\u0639\u0647" // jome
                                 }
 
-                                val dayData =
-                                    dayDao.getDay(("${tv.id}${employee.idEmployee!!}").toLong())
-                                if ((dayData?.idDay) == ("${tv.id}${employee.idEmployee}").toLong() && dayData.idEmployee == employee.idEmployee) {
+                                val dayData = dayDao.getDay(("${tv.id}${employee.idEmployee!!}").toLong())
+                                if ((dayData?.idDay) == ("${tv.id}${employee.idEmployee}").toLong() &&
+                                    dayData.idEmployee == employee.idEmployee &&
+                                    dayData.year.toInt() == month.persianCalendar.persianYear &&
+                                    dayData.month == month.persianCalendar.persianMonthName
+                                    ) {
                                     tv.setBackgroundColor(
                                         ContextCompat.getColor(
                                             view.context, R.color.firoze
