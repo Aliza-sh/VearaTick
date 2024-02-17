@@ -10,16 +10,16 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.vearad.vearatick.R
+import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
+import com.vearad.vearatick.databinding.FragmentProjectAddNewTeamBinding
+import com.vearad.vearatick.databinding.ItemAddEmployeeToProjectBinding
 import com.vearad.vearatick.model.db.AppDatabase
 import com.vearad.vearatick.model.db.Employee
 import com.vearad.vearatick.model.db.Project
 import com.vearad.vearatick.model.db.ProjectDao
 import com.vearad.vearatick.model.db.SubTaskProjectDao
 import com.vearad.vearatick.model.db.TeamProject
-import com.vearad.vearatick.R
-import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
-import com.vearad.vearatick.databinding.FragmentProjectAddNewTeamBinding
-import com.vearad.vearatick.databinding.ItemAddEmployeeToProjectBinding
 
 class ProjectAddNewTeamFragment(
     val project: Project,
@@ -54,7 +54,7 @@ class ProjectAddNewTeamFragment(
                         subTaskProjectDao,
                         projectDao,
                         position,
-                        bindingActivityProAndEmp,false
+                        bindingActivityProAndEmp, false
                     )
                 ).commit()
         }
@@ -176,7 +176,8 @@ class ProjectAddNewTeamFragment(
                                 subTaskProjectDao,
                                 projectDao,
                                 position,
-                                bindingActivityProAndEmp,false
+                                bindingActivityProAndEmp,
+                                false,
                             )
                         )
                         .commit()

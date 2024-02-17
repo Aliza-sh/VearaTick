@@ -9,6 +9,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+
     <application
         android:name=".di.MyApp"
         android:allowBackup="true"
@@ -21,9 +23,22 @@
         android:theme="@style/Theme.SherkatManage"
         tools:targetApi="33">
         <receiver
-            android:name=".notification.NotificationBroadcastReceiver"
+            android:name=".notification.NotificationPresenceBroadcastReceiver"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.vearad.vearatick.notification.NotificationPresenceBroadcastReceiver" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".notification.NotificationProjectBroadcastReceiver"
+            android:enabled="true"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.vearad.vearatick.notification.NotificationProjectBroadcastReceiver" />
+            </intent-filter>
+        </receiver>
 
         <activity
             android:name=".ui.activitymain.SplashActivity"

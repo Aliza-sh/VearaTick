@@ -145,7 +145,9 @@ class ProjectUpdateSubTaskFromInfoBottomsheetFragment(
                     project,
                     subTaskProjectDao,
                     projectDao,
-                    position, bindingActivityProAndEmp,false
+                    position,
+                    bindingActivityProAndEmp,
+                    false,
                 )
             ).commit()
     }

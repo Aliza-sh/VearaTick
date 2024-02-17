@@ -1,8 +1,5 @@
 package com.vearad.vearatick.ui.fragmentssub
 
-import com.vearad.vearatick.utils.BottomMarginItemDecoration
-import com.vearad.vearatick.utils.CustomBottomMarginItemDecoration
-import com.vearad.vearatick.utils.CustomTopMarginItemDecoration
 import android.content.Intent
 import android.graphics.Typeface
 import android.os.Bundle
@@ -14,20 +11,26 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
+import com.vearad.vearatick.R
+import com.vearad.vearatick.adapter.ProjectAdapter
+import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
+import com.vearad.vearatick.databinding.FragmentProjectBinding
 import com.vearad.vearatick.model.db.AppDatabase
 import com.vearad.vearatick.model.db.Project
 import com.vearad.vearatick.model.db.ProjectDao
 import com.vearad.vearatick.model.db.SubTaskProjectDao
 import com.vearad.vearatick.ui.MainActivity
 import com.vearad.vearatick.ui.activitymain.ProAndEmpActivity
-import com.vearad.vearatick.R
-import com.vearad.vearatick.adapter.ProjectAdapter
-import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
-import com.vearad.vearatick.databinding.FragmentProjectBinding
 import com.vearad.vearatick.ui.projectAdapter
+import com.vearad.vearatick.utils.BottomMarginItemDecoration
+import com.vearad.vearatick.utils.CustomBottomMarginItemDecoration
+import com.vearad.vearatick.utils.CustomTopMarginItemDecoration
 
 
-class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : Fragment(),
+class ProjectFragment(
+    val bindingActivityProAndEmp: ActivityProAndEmpBinding,
+    val idNotifProject: Int
+) : Fragment(),
     ProjectAdapter.ProjectNearEvents {
 
     lateinit var binding: FragmentProjectBinding
@@ -47,36 +50,58 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         onBackPressed()
-
         projectDao = AppDatabase.getDataBase(view.context).projectDao
-        projectNearData = projectDao.getAllProject()
-        projectAdapter = ProjectAdapter(ArrayList(projectNearData), this, projectDao)
-        val companySkillDao = AppDatabase.getDataBase(view.context).companySkillDao
-
-        val tapTargetSequence = tapTargetSequence()
-        if (companySkillDao.getAllListCompanySkillDao().isEmpty())
-            tapTargetSequence?.start()
-
-        binding.recyclerViewProject.adapter = projectAdapter
-        binding.recyclerViewProject.layoutManager = GridLayoutManager(context, 2)
-        val topMargin = 30 // اندازه مارجین بالا را از منابع دریافت کنید
-        val itemDecoratio = CustomTopMarginItemDecoration(topMargin)
-        binding.recyclerViewProject.addItemDecoration(itemDecoratio)
-
-        val itemCount = projectNearData.size // تعداد آیتم‌های موجود در لیست را دریافت کنید
-        if (itemCount % 2 == 0) {
-            val bottomMargin = 200 // اندازه مارجین پایین را از منابع دریافت کنید
-            val itemDecoration = CustomBottomMarginItemDecoration(bottomMargin)
-            binding.recyclerViewProject.addItemDecoration(itemDecoration)
-        } else {
-            val bottomMargin = 200 // اندازه مارجین پایین را از منابع دریافت کنید
-            val itemDecoration = BottomMarginItemDecoration(bottomMargin)
-            binding.recyclerViewProject.addItemDecoration(itemDecoration)
-        }
-
         subTaskProjectDao = AppDatabase.getDataBase(view.context).subTaskProjectDao
 
-        onFabClicked()
+        if (idNotifProject != 0) {
+            val project = projectDao.getProject(idNotifProject)
+            onProjectNotification(project!!)
+        } else {
+
+            projectNearData = projectDao.getAllProject()
+            projectAdapter = ProjectAdapter(ArrayList(projectNearData), this, projectDao)
+            val companySkillDao = AppDatabase.getDataBase(view.context).companySkillDao
+
+            val tapTargetSequence = tapTargetSequence()
+            if (companySkillDao.getAllListCompanySkillDao().isEmpty())
+                tapTargetSequence?.start()
+
+            binding.recyclerViewProject.adapter = projectAdapter
+            binding.recyclerViewProject.layoutManager = GridLayoutManager(context, 2)
+            val topMargin = 30 // اندازه مارجین بالا را از منابع دریافت کنید
+            val itemDecoratio = CustomTopMarginItemDecoration(topMargin)
+            binding.recyclerViewProject.addItemDecoration(itemDecoratio)
+
+            val itemCount = projectNearData.size // تعداد آیتم‌های موجود در لیست را دریافت کنید
+            if (itemCount % 2 == 0) {
+                val bottomMargin = 200 // اندازه مارجین پایین را از منابع دریافت کنید
+                val itemDecoration = CustomBottomMarginItemDecoration(bottomMargin)
+                binding.recyclerViewProject.addItemDecoration(itemDecoration)
+            } else {
+                val bottomMargin = 200 // اندازه مارجین پایین را از منابع دریافت کنید
+                val itemDecoration = BottomMarginItemDecoration(bottomMargin)
+                binding.recyclerViewProject.addItemDecoration(itemDecoration)
+            }
+
+            onFabClicked()
+        }
+    }
+
+    fun onProjectNotification(project: Project) {
+        val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
+        transaction.hide(this@ProjectFragment)
+        transaction.replace(
+            R.id.layout_pro_and_emp,
+            ProjectInformationFragment(
+                project,
+                subTaskProjectDao,
+                projectDao,
+                0,
+                bindingActivityProAndEmp,
+                false
+            )
+        )
+            .commit()
     }
 
     fun onBackPressed() {
@@ -171,8 +196,12 @@ class ProjectFragment(val bindingActivityProAndEmp: ActivityProAndEmpBinding) : 
         transaction.detach(this@ProjectFragment)
         transaction.add(
             R.id.layout_pro_and_emp, ProjectInformationFragment(
-                project, subTaskProjectDao,
-                projectDao, position, bindingActivityProAndEmp, false
+                project,
+                subTaskProjectDao,
+                projectDao,
+                position,
+                bindingActivityProAndEmp,
+                false
             )
         )
             .addToBackStack(null)

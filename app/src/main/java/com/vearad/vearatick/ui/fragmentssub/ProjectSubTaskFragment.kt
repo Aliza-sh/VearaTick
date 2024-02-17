@@ -84,7 +84,7 @@ class ProjectSubTaskFragment(
                         subTaskProjectDao,
                         projectDao,
                         position,
-                        bindingActivityProAndEmp,false
+                        bindingActivityProAndEmp, false
                     )
                 ).commit()
         }
@@ -193,8 +193,8 @@ class ProjectSubTaskFragment(
                                 subTaskProjectDao,
                                 projectDao,
                                 position,
-                                bindingActivityProAndEmp,false
-                            )
+                                bindingActivityProAndEmp,
+                                false)
                         )
                         .commit()
                 }

@@ -17,14 +17,14 @@ import androidx.activity.OnBackPressedCallback
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.Fragment
-import com.vearad.vearatick.model.db.AppDatabase
-import com.vearad.vearatick.model.db.Project
-import com.vearad.vearatick.model.db.ProjectDao
-import com.vearad.vearatick.ui.activitymain.ProAndEmpActivity
 import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
 import com.vearad.vearatick.databinding.FragmentDialogDeadlineBinding
 import com.vearad.vearatick.databinding.FragmentNewProjectBinding
+import com.vearad.vearatick.model.db.AppDatabase
+import com.vearad.vearatick.model.db.Project
+import com.vearad.vearatick.model.db.ProjectDao
+import com.vearad.vearatick.ui.activitymain.ProAndEmpActivity
 import com.vearad.vearatick.ui.projectAdapter
 import com.xdev.arch.persiancalendar.datepicker.*
 import com.xdev.arch.persiancalendar.datepicker.calendar.PersianCalendar
@@ -254,14 +254,20 @@ class ProjectNewFragment(
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     parentFragmentManager.beginTransaction().detach(this@ProjectNewFragment)
-                        .attach(ProjectFragment(bindingActivityProAndEmp)).commit()
+                        .attach(ProjectFragment(
+                            bindingActivityProAndEmp,
+                            0
+                        )).commit()
                 }
             })
     }
 
     fun onNewProject() {
         parentFragmentManager.beginTransaction().detach(this@ProjectNewFragment)
-            .replace(R.id.frame_layout_sub, ProjectFragment(bindingActivityProAndEmp))
+            .replace(R.id.frame_layout_sub, ProjectFragment(
+                bindingActivityProAndEmp,
+                0
+            ))
             .commit()
     }
 

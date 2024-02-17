@@ -19,6 +19,7 @@ class ProAndEmpActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityProAndEmpBinding
     var goFromNotifToEmployeeFragment = false
+    var goFromNotifToProjectFragment = false
     var idEmployee = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,17 +28,22 @@ class ProAndEmpActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val idNotifEmployee = intent.getIntExtra("IDEMPLOYEE", 0)
-        Log.v("notifemployee", "ProAndEmpActivity: ${idNotifEmployee}")
+        val idNotifProject = intent.getIntExtra("PROJECT", 0)
 
         if (idNotifEmployee != 0) {
+            Log.v("notifemployee", "ProAndEmpActivity: ${idNotifEmployee}")
             goFromNotifToEmployeeFragment = true
             goFromNotifToEmployeeFragment(goFromNotifToEmployeeFragment, idNotifEmployee)
+        } else if (idNotifProject != 0) {
+            Log.v("idNotifProject", "idNotifProject: ${idNotifProject}")
+            goFromNotifToProjectFragment = true
+            goToProjectFragment( idNotifProject)
         } else {
 
             val itemClicked = intent.getIntExtra("itemClicked", 1)
             when (itemClicked) {
                 1 -> {
-                    goToProjectFragment()
+                    goToProjectFragment(idNotifProject)
                 }
 
                 2 -> {
@@ -67,7 +73,7 @@ class ProAndEmpActivity : AppCompatActivity() {
             )
             binding.txtEmployee.setTextColor(Color.parseColor("#929292"))
 
-            replaceFragment(ProjectFragment(binding))
+            replaceFragment(ProjectFragment(binding, 0))
         }
 
         binding.btnEmployee.setOnClickListener() {
@@ -94,8 +100,8 @@ class ProAndEmpActivity : AppCompatActivity() {
             .commit()
     }
 
-    fun goToProjectFragment() {
-        replaceFragment(ProjectFragment(binding))
+    fun goToProjectFragment(idNotifProject: Int) {
+        replaceFragment(ProjectFragment(binding, idNotifProject))
         binding.icProject.setColorFilter(
             ContextCompat.getColor(this, R.color.firoze),
             PorterDuff.Mode.SRC_IN

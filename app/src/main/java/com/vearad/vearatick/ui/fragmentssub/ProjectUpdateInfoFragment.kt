@@ -17,15 +17,15 @@ import androidx.activity.OnBackPressedCallback
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.fragment.app.Fragment
+import com.vearad.vearatick.R
+import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
+import com.vearad.vearatick.databinding.FragmentDialogDeadlineBinding
+import com.vearad.vearatick.databinding.FragmentProjectUpdateInfoBinding
 import com.vearad.vearatick.model.db.AppDatabase
 import com.vearad.vearatick.model.db.Project
 import com.vearad.vearatick.model.db.ProjectDao
 import com.vearad.vearatick.model.db.SubTaskProjectDao
 import com.vearad.vearatick.ui.activitymain.ProAndEmpActivity
-import com.vearad.vearatick.R
-import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
-import com.vearad.vearatick.databinding.FragmentDialogDeadlineBinding
-import com.vearad.vearatick.databinding.FragmentProjectUpdateInfoBinding
 import com.vearad.vearatick.ui.projectAdapter
 import com.xdev.arch.persiancalendar.datepicker.CalendarConstraints
 import com.xdev.arch.persiancalendar.datepicker.DateValidatorPointForward
@@ -173,8 +173,8 @@ class ProjectUpdateInfoFragment(
                                 subTaskProjectDao,
                                 projectDao,
                                 position,
-                                bindingActivityProAndEmp,false
-                            )
+                                bindingActivityProAndEmp,
+                                false)
                         ).commit()
                 }
             })
@@ -279,7 +279,7 @@ class ProjectUpdateInfoFragment(
                     subTaskProjectDao,
                     projectDao,
                     position,
-                    bindingActivityProAndEmp,false
+                    bindingActivityProAndEmp, false
                 )
             ).commit()
     }

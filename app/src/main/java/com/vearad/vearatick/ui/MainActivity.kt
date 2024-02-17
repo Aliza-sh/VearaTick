@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import androidx.appcompat.app.AppCompatActivity
@@ -27,7 +28,8 @@ import com.vearad.vearatick.model.db.DayDao
 import com.vearad.vearatick.model.db.EmployeeDao
 import com.vearad.vearatick.model.db.TaskEmployeeDao
 import com.vearad.vearatick.model.db.TimeDao
-import com.vearad.vearatick.notification.NotificationBroadcastReceiver
+import com.vearad.vearatick.notification.NotificationPresenceBroadcastReceiver
+import com.vearad.vearatick.notification.NotificationProjectBroadcastReceiver
 import com.vearad.vearatick.ui.activitymain.ProAndEmpActivity
 import com.vearad.vearatick.ui.activitysub.RegisterStep24Activity
 import com.vearad.vearatick.ui.fragmentsmain.CompanyFragment
@@ -36,6 +38,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.Calendar
 
 
 lateinit var employeeDao: EmployeeDao
@@ -140,25 +143,57 @@ class MainActivity : AppCompatActivity() {
 
         if (requestCode == 1) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                // کاربر مجوز را داده است
-                // ذخیره وضعیت مجوز در حافظه
-                val preferences = getSharedPreferences("app_preferences", Context.MODE_PRIVATE)
-                preferences.edit().putBoolean("has_post_notifications_permission", true).apply()
 
-                val intent = Intent(this, NotificationBroadcastReceiver::class.java)
-                val pendingIntent = PendingIntent.getBroadcast(this, 1001, intent, PendingIntent.FLAG_IMMUTABLE)
-                val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+                serAlarm()
 
-                alarmManager.setInexactRepeating(
-                    AlarmManager.ELAPSED_REALTIME_WAKEUP,
-                    SystemClock.elapsedRealtime(),
-                    AlarmManager.INTERVAL_HOUR,
-                    pendingIntent
-                )
             } else {
                 // کاربر مجوز را رد کرد
             }
         }
+    }
+
+    private fun serAlarm() {
+        val intent = Intent(this, NotificationPresenceBroadcastReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(this, 1001, intent, PendingIntent.FLAG_IMMUTABLE)
+        val alarmManager = getSystemService(ALARM_SERVICE) as AlarmManager
+
+        alarmManager.setInexactRepeating(
+            AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            SystemClock.elapsedRealtime(),
+            AlarmManager.INTERVAL_HOUR,
+            pendingIntent
+        )
+
+        val intentProject = Intent(this, NotificationProjectBroadcastReceiver::class.java)
+        val pendingIntentProject =
+            PendingIntent.getBroadcast(this, 1002, intentProject, PendingIntent.FLAG_IMMUTABLE)
+        val alarmManagerProject = getSystemService(ALARM_SERVICE) as AlarmManager
+        // تنظیم آلارم برای ساعت 1 ظهر
+        // (12 * 60 * 60 * 1000)
+        val alarmTime1 = getAlarmTime(13, 15)
+        Log.v("alarmTime", "Here: ${alarmTime1}")
+        alarmManagerProject.setInexactRepeating(
+            AlarmManager.RTC_WAKEUP,
+            alarmTime1,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntentProject
+        )
+        // تنظیم آلارم برای ساعت 7 شب
+        val alarmTime2 = getAlarmTime(19, 15)
+        alarmManagerProject.setInexactRepeating(
+            AlarmManager.RTC_WAKEUP,
+            alarmTime2,
+            AlarmManager.INTERVAL_DAY,
+            pendingIntentProject
+        )
+    }
+    // تابع برای دریافت زمان به میلی ثانیه
+    fun getAlarmTime(hour: Int, minute: Int): Long {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, hour)
+        calendar.set(Calendar.MINUTE, minute)
+        calendar.set(Calendar.SECOND, 0)
+        return calendar.timeInMillis
     }
 
     private fun createApiService() {

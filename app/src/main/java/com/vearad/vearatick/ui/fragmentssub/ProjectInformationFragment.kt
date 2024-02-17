@@ -111,7 +111,10 @@ class ProjectInformationFragment(
         else
             binding.btnBck.setOnClickListener {
                 parentFragmentManager.beginTransaction().detach(this@ProjectInformationFragment)
-                    .replace(R.id.frame_layout_sub, ProjectFragment(bindingActivityProAndEmp))
+                    .replace(R.id.frame_layout_sub, ProjectFragment(
+                        bindingActivityProAndEmp,
+                        0
+                    ))
                     .commit()
             }
 
@@ -368,7 +371,10 @@ class ProjectInformationFragment(
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
                     parentFragmentManager.beginTransaction().detach(this@ProjectInformationFragment)
-                        .replace(R.id.frame_layout_sub, ProjectFragment(bindingActivityProAndEmp))
+                        .replace(R.id.frame_layout_sub, ProjectFragment(
+                            bindingActivityProAndEmp,
+                            0
+                        ))
                         .commit()
                 }
             })
@@ -796,7 +802,10 @@ class ProjectInformationFragment(
         subTaskProjectDao.deleteSubTasksByProjectId(project.idProject!!)
         projectDao.delete(project)
         parentFragmentManager.beginTransaction().detach(this@ProjectInformationFragment)
-            .replace(R.id.frame_layout_sub, ProjectFragment(bindingActivityProAndEmp))
+            .replace(R.id.frame_layout_sub, ProjectFragment(
+                bindingActivityProAndEmp,
+                0
+            ))
             .commit()
     }
 
