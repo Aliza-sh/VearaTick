@@ -10,6 +10,7 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
+import com.vearad.vearatick.workers.AutomaticPresenceWorker
 import com.vearad.vearatick.workers.NotificationPresenceWorker
 import com.vearad.vearatick.workers.NotificationProjectWorker
 import com.vearad.vearatick.workers.NotificationTaskEmployeeWorker
@@ -29,6 +30,7 @@ class MyApp : Application() {
         workerPresence()
         workerProject()
         workerTaskEmployee()
+        workerAutomaticPresence()
         onCreateNotifications()
     }
 
@@ -76,6 +78,22 @@ class MyApp : Application() {
             )
         }
     }
+    private fun workerAutomaticPresence() {
+        val targetHours = arrayOf(22)
+
+        for (hour in targetHours) {
+            Log.v("AutoPresenceWorker", "$hour: ${calculateTimeDifferenceInMillis(hour,15)}")
+            val notificationTaskWorker =
+                OneTimeWorkRequest.Builder(AutomaticPresenceWorker::class.java)
+                    .setInitialDelay(calculateTimeDifferenceInMillis(hour,15), TimeUnit.MILLISECONDS)
+                    .build()
+            workManager.enqueueUniqueWork(
+                "AutomaticPresence",
+                ExistingWorkPolicy.REPLACE,
+                notificationTaskWorker
+            )
+        }
+    }
     fun calculateTimeDifferenceInMillis(targetHour: Int, targetMinute: Int): Long {
         val currentTime = Calendar.getInstance()
         val targetTime = Calendar.getInstance()
@@ -91,7 +109,6 @@ class MyApp : Application() {
 
         return targetTime.timeInMillis - currentTime.timeInMillis
     }
-
     private fun onCreateNotifications() {
 
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
