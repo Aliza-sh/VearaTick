@@ -1,73 +1,95 @@
 package com.vearad.vearatick.di
 
 import android.annotation.SuppressLint
-import android.app.AlarmManager
 import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Intent
-import android.os.SystemClock
 import android.util.Log
-import com.vearad.vearatick.notification.NotificationPresenceBroadcastReceiver
-import com.vearad.vearatick.notification.NotificationProjectBroadcastReceiver
+import androidx.work.ExistingPeriodicWorkPolicy
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
+import com.vearad.vearatick.workers.NotificationPresenceWorker
+import com.vearad.vearatick.workers.NotificationProjectWorker
+import com.vearad.vearatick.workers.NotificationTaskEmployeeWorker
 import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 class MyApp : Application() {
 
+    lateinit var workManager: WorkManager
     lateinit var channels: ArrayList<NotificationChannel>
 
     @SuppressLint("ScheduleExactAlarm")
     override fun onCreate() {
         super.onCreate()
 
-        alarmPresence()
-        alarmProject()
+        workManager = WorkManager.getInstance(this)
+        workerPresence()
+        workerProject()
+        workerTaskEmployee()
         onCreateNotifications()
+    }
 
-    }
-    private fun alarmPresence() {
-        val intentPresence = Intent(this, NotificationPresenceBroadcastReceiver::class.java)
-        val pendingIntentPresence =
-            PendingIntent.getBroadcast(this, 1001, intentPresence, PendingIntent.FLAG_IMMUTABLE)
-        val alarmManagerPresence = getSystemService(ALARM_SERVICE) as AlarmManager
-        alarmManagerPresence.setInexactRepeating(
-            AlarmManager.RTC_WAKEUP,
-            SystemClock.elapsedRealtime(),
-            AlarmManager.INTERVAL_HOUR,
-            pendingIntentPresence
+    private fun workerPresence() {
+        val notificationPresenceWorker = PeriodicWorkRequestBuilder<NotificationPresenceWorker>(
+            1, TimeUnit.HOURS,
+            15,TimeUnit.MINUTES
+        )
+            .build()
+        workManager.enqueueUniquePeriodicWork(
+            "PresenceWorker",
+            ExistingPeriodicWorkPolicy.REPLACE,
+            notificationPresenceWorker
         )
     }
-    private fun alarmProject() {
-        val intentProject = Intent(this, NotificationProjectBroadcastReceiver::class.java)
-        val pendingIntentProject =
-            PendingIntent.getBroadcast(this, 1002, intentProject, PendingIntent.FLAG_IMMUTABLE)
-        val alarmManagerProject = getSystemService(ALARM_SERVICE) as AlarmManager
-        // تنظیم آلارم برای ساعت 1 ظهر
-        val alarmTime1 = getAlarmTime(13, 15)
-        Log.v("alarmTime", "Here: ${alarmTime1}")
-        alarmManagerProject.setInexactRepeating(
-            AlarmManager.RTC_WAKEUP,
-            alarmTime1,
-            AlarmManager.INTERVAL_DAY,
-            pendingIntentProject
-        )
-        // تنظیم آلارم برای ساعت 7 شب
-        val alarmTime2 = getAlarmTime(19, 15)
-        alarmManagerProject.setInexactRepeating(
-            AlarmManager.RTC_WAKEUP,
-            alarmTime2,
-            AlarmManager.INTERVAL_DAY,
-            pendingIntentProject
-        )
+
+    private fun workerProject() {
+        val targetHours = arrayOf(13, 19)
+        for (hour in targetHours) {
+            Log.v("ProjectWorker", "$hour: ${calculateTimeDifferenceInMillis(hour,15)}")
+            val notificationProjectWorker =
+                    OneTimeWorkRequest.Builder(NotificationProjectWorker::class.java)
+                        .setInitialDelay(calculateTimeDifferenceInMillis(hour,15), TimeUnit.MILLISECONDS)
+                        .build()
+                workManager.enqueueUniqueWork(
+                    "ProjectWorker$hour",
+                    ExistingWorkPolicy.REPLACE,
+                    notificationProjectWorker
+                )
+        }
     }
-    // تابع برای دریافت زمان به میلی ثانیه
-    fun getAlarmTime(hour: Int, minute: Int): Long {
-        val calendar = Calendar.getInstance()
-        calendar.set(Calendar.HOUR_OF_DAY, hour)
-        calendar.set(Calendar.MINUTE, minute)
-        calendar.set(Calendar.SECOND, 0)
-        return calendar.timeInMillis
+    private fun workerTaskEmployee() {
+        val targetHours = arrayOf(10,15)
+
+        for (hour in targetHours) {
+            Log.v("TaskWorker", "$hour: ${calculateTimeDifferenceInMillis(hour,15)}")
+            val notificationTaskWorker =
+                OneTimeWorkRequest.Builder(NotificationTaskEmployeeWorker::class.java)
+                    .setInitialDelay(calculateTimeDifferenceInMillis(hour,15), TimeUnit.MILLISECONDS)
+                    .build()
+            workManager.enqueueUniqueWork(
+                "TaskWorker$hour",
+                ExistingWorkPolicy.REPLACE,
+                notificationTaskWorker
+            )
+        }
+    }
+    fun calculateTimeDifferenceInMillis(targetHour: Int, targetMinute: Int): Long {
+        val currentTime = Calendar.getInstance()
+        val targetTime = Calendar.getInstance()
+
+        targetTime.set(Calendar.HOUR_OF_DAY, targetHour)
+        targetTime.set(Calendar.MINUTE, targetMinute)
+        targetTime.set(Calendar.SECOND, 0)
+
+        if (targetTime.before(currentTime)) {
+            // If the target time is in the past, add one day
+            targetTime.add(Calendar.DAY_OF_MONTH, 1)
+        }
+
+        return targetTime.timeInMillis - currentTime.timeInMillis
     }
 
     private fun onCreateNotifications() {
@@ -90,7 +112,7 @@ class MyApp : Application() {
         channels.add(notificationProjectChannel)
 
         val notificationTaskChannel = NotificationChannel(
-            "taskNotif",
+            "taskEmployeeNotif",
             "Task Notification",
             NotificationManager.IMPORTANCE_HIGH
         )
