@@ -23,22 +23,6 @@
         android:theme="@style/Theme.SherkatManage"
         tools:targetApi="33">
 
-        <receiver
-            android:name=".notification.NotificationPresenceBroadcastReceiver"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="NotificationPresenceBroadcastReceiver" />
-            </intent-filter>
-        </receiver>
-
-        <receiver
-            android:name=".notification.NotificationProjectBroadcastReceiver"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="NotificationProjectBroadcastReceiver" />
-            </intent-filter>
-        </receiver>
-
         <activity
             android:name=".ui.activitymain.SplashActivity"
             android:exported="true"

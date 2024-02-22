@@ -127,8 +127,8 @@ class EmployeePresenceFragment(
         val today = LocalDate.now()
         if (today.dayOfMonth < 15)
             binding.clrEntExtEmp.scrollToMonth(currentMonth.next)
-        else
-            binding.clrEntExtEmp.scrollToMonth(currentMonth)
+        else if (today.dayOfMonth > 20)
+            binding.clrEntExtEmp.scrollToMonth(currentMonth.next)
 
         val day1 = PersianCalendar()
         val nameDay = dayDao.getAllNameDay(

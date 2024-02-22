@@ -49,7 +49,8 @@ class EmployeeInformationFragment(
     val employeeDao: EmployeeDao,
     val bindingActivityProAndEmpBinding: ActivityProAndEmpBinding,
     val goToEmployeeTaskFragment: Boolean,
-    val goFromNotifToEmployeeFragment: Boolean,
+    val goFromNotifToPresenceEmployeeFragment: Boolean,
+    val goFromNotifToTaskEmployeeFragment: Boolean,
 ) : Fragment() {
 
     lateinit var binding: FragmentEmployeeInformationBinding
@@ -71,8 +72,10 @@ class EmployeeInformationFragment(
         onBackPressed()
         setData(employee, view)
         setTitleEmployee(view)
-        if (goFromNotifToEmployeeFragment) {
+        if (goFromNotifToPresenceEmployeeFragment) {
             btnPresence(view)
+        } else if (goFromNotifToTaskEmployeeFragment){
+            btnTask(view)
         } else {
             firstRun(view)
         }
@@ -97,6 +100,7 @@ class EmployeeInformationFragment(
                 .replace(
                     R.id.frame_layout_sub, EmployeeFragment(
                         bindingActivityProAndEmpBinding,
+                        0,
                         0
                     )
                 )
@@ -319,6 +323,7 @@ class EmployeeInformationFragment(
                             R.id.frame_layout_sub,
                             EmployeeFragment(
                                 bindingActivityProAndEmpBinding,
+                                0,
                                 0
                             )
                         ).commit()
@@ -605,6 +610,7 @@ class EmployeeInformationFragment(
             .replace(
                 R.id.frame_layout_sub, EmployeeFragment(
                     bindingActivityProAndEmpBinding,
+                    0,
                     0
                 )
             )

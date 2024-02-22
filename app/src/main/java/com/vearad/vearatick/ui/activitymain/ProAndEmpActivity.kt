@@ -29,15 +29,20 @@ class ProAndEmpActivity : AppCompatActivity() {
 
         val idNotifEmployee = intent.getIntExtra("IDEMPLOYEE", 0)
         val idNotifProject = intent.getIntExtra("PROJECT", 0)
+        val idNotifTaskEmployee = intent.getIntExtra("TASKEMPLOYEE", 0)
 
         if (idNotifEmployee != 0) {
-            Log.v("notifemployee", "ProAndEmpActivity: ${idNotifEmployee}")
+            Log.v("notifemployee", "idNotifEmployee: ${idNotifEmployee}")
             goFromNotifToEmployeeFragment = true
-            goToEmployeeFragment(idNotifEmployee)
+            goToEmployeeFragment(idNotifEmployee, 0)
         } else if (idNotifProject != 0) {
             Log.v("idNotifProject", "idNotifProject: ${idNotifProject}")
             goFromNotifToProjectFragment = true
             goToProjectFragment(idNotifProject)
+        } else if (idNotifTaskEmployee != 0) {
+            Log.v("notiftaskemployee", "idNotifTaskEmployee: ${idNotifTaskEmployee}")
+            goFromNotifToEmployeeFragment = true
+            goToEmployeeFragment(0, idNotifTaskEmployee)
         } else {
 
             val itemClicked = intent.getIntExtra("itemClicked", 1)
@@ -47,7 +52,7 @@ class ProAndEmpActivity : AppCompatActivity() {
                 }
 
                 2 -> {
-                    goToEmployeeFragment(0)
+                    goToEmployeeFragment(0, 0)
                 }
             }
         }
@@ -90,7 +95,7 @@ class ProAndEmpActivity : AppCompatActivity() {
             )
             binding.txtProject.setTextColor(Color.parseColor("#929292"))
 
-            replaceFragment(EmployeeFragment(binding, 0))
+            replaceFragment(EmployeeFragment(binding, 0, idNotifTaskEmployee))
         }
     }
 
@@ -109,8 +114,8 @@ class ProAndEmpActivity : AppCompatActivity() {
         binding.txtProject.setTextColor(Color.parseColor("#E600ADB5"))
     }
 
-    fun goToEmployeeFragment(idNotifEmployee: Int) {
-        replaceFragment(EmployeeFragment(binding, idNotifEmployee))
+    fun goToEmployeeFragment(idNotifEmployee: Int, idNotifTaskEmployee: Int) {
+        replaceFragment(EmployeeFragment(binding, idNotifEmployee, idNotifTaskEmployee))
 
         binding.txtTitle.text = "کارکنان"
         binding.icProject.setColorFilter(

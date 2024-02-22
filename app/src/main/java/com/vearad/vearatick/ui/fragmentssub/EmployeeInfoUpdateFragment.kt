@@ -172,6 +172,7 @@ class EmployeeInfoUpdateFragment(
                                 bindingActivityProAndEmpBinding,
                                 goToEmployeeTaskFragment,
                                 false,
+                                false,
                             )
                         ).commit()
                 }
@@ -189,6 +190,7 @@ class EmployeeInfoUpdateFragment(
                     employeeDao,
                     bindingActivityProAndEmpBinding,
                     goToEmployeeTaskFragment,
+                    false,
                     false,
                 )
             ).commit()

@@ -25,7 +25,8 @@ import com.vearad.vearatick.utils.CustomTopMarginItemDecoration
 
 class EmployeeFragment(
     val bindingActivityProAndEmpBinding: ActivityProAndEmpBinding,
-    val idNotifEmployee: Int
+    val idNotifEmployee: Int,
+    val idNotifTaskEmployee: Int
 ) : Fragment(),
     EmployeeAdapter.EmployeeEvents {
 
@@ -50,9 +51,12 @@ class EmployeeFragment(
         efficiencyEmployeeDao = AppDatabase.getDataBase(view.context).efficiencyDao
         employeeDao = AppDatabase.getDataBase(view.context).employeeDao
 
-        if (idNotifEmployee!=0) {
+        if (idNotifEmployee != 0) {
             val employee = employeeDao.getEmployee(idNotifEmployee)
-            onEmployeeNotification(employee!!, true)
+            onEmployeeNotification(employee!!, true, false)
+        } else if (idNotifTaskEmployee != 0) {
+            val employee = employeeDao.getEmployee(idNotifTaskEmployee)
+            onEmployeeNotification(employee!!, false, true)
         } else {
 
             employeeData = employeeDao.getAllEmployee()
@@ -120,7 +124,11 @@ class EmployeeFragment(
         }
     }
 
-    fun onEmployeeNotification(employee: Employee, goFromNotifToEmployeeFragment: Boolean) {
+    fun onEmployeeNotification(
+        employee: Employee,
+        goFromNotifToPresenceEmployeeFragment: Boolean,
+        goFromNotifToTaskEmployeeFragment: Boolean
+    ) {
         val transaction = (activity as ProAndEmpActivity).supportFragmentManager.beginTransaction()
         transaction.hide(this@EmployeeFragment)
         transaction.replace(
@@ -131,7 +139,9 @@ class EmployeeFragment(
                 0,
                 employeeDao,
                 bindingActivityProAndEmpBinding,
-                goToEmployeeTaskFragment, goFromNotifToEmployeeFragment
+                goToEmployeeTaskFragment,
+                goFromNotifToPresenceEmployeeFragment,
+                goFromNotifToTaskEmployeeFragment
             )
         )
             .commit()
@@ -149,7 +159,7 @@ class EmployeeFragment(
                 employeeDao,
                 bindingActivityProAndEmpBinding,
                 goToEmployeeTaskFragment,
-                false
+                false, false
             )
         )
             .commit()
