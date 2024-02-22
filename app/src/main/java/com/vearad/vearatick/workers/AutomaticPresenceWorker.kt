@@ -1,23 +1,20 @@
 package com.vearad.vearatick.workers
 
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.app.Service
 import android.content.Context
-import android.content.Intent
-import android.graphics.BitmapFactory
 import android.util.Log
-import androidx.core.app.NotificationCompat
+import androidx.work.ExistingWorkPolicy
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.kizitonwose.calendarview.utils.persian.PersianCalendar
-import com.vearad.vearatick.R
 import com.vearad.vearatick.model.db.AppDatabase
 import com.vearad.vearatick.model.db.DayDao
 import com.vearad.vearatick.model.db.EmployeeDao
 import com.vearad.vearatick.model.db.Time
 import com.vearad.vearatick.model.db.TimeDao
-import com.vearad.vearatick.ui.activitymain.ProAndEmpActivity
+import java.util.Calendar
+import java.util.concurrent.TimeUnit
 
 class AutomaticPresenceWorker(val context: Context, workerParams: WorkerParameters) :
     Worker(context, workerParams) {
@@ -29,11 +26,44 @@ class AutomaticPresenceWorker(val context: Context, workerParams: WorkerParamete
 
         return try {
             presenceAuto(context)
+            workerAutomaticPresence()
             Result.success()
         } catch (ex: Exception) {
             Result.failure()
         }
 
+    }
+
+    private fun workerAutomaticPresence() {
+        val workManager = WorkManager.getInstance(context)
+
+        Log.v("AutoPresenceWorker", "22: ${calculateTimeDifferenceInMillis(22, 15)}")
+        val notificationTaskWorker =
+            OneTimeWorkRequest.Builder(AutomaticPresenceWorker::class.java)
+                .setInitialDelay(calculateTimeDifferenceInMillis(22, 15), TimeUnit.MILLISECONDS)
+                .build()
+        workManager.enqueueUniqueWork(
+            "AutomaticPresence",
+            ExistingWorkPolicy.REPLACE,
+            notificationTaskWorker
+        )
+
+    }
+
+    fun calculateTimeDifferenceInMillis(targetHour: Int, targetMinute: Int): Long {
+        val currentTime = Calendar.getInstance()
+        val targetTime = Calendar.getInstance()
+
+        targetTime.set(Calendar.HOUR_OF_DAY, targetHour)
+        targetTime.set(Calendar.MINUTE, targetMinute)
+        targetTime.set(Calendar.SECOND, 0)
+
+        if (targetTime.before(currentTime)) {
+            // If the target time is in the past, add one day
+            targetTime.add(Calendar.DAY_OF_MONTH, 1)
+        }
+
+        return targetTime.timeInMillis - currentTime.timeInMillis
     }
 
     private fun presenceAuto(context: Context) {
@@ -85,38 +115,6 @@ class AutomaticPresenceWorker(val context: Context, workerParams: WorkerParamete
                 }
             }
         }
-    }
-
-    private fun createPresenceNotification(i: Int, context: Context) {
-        employeeDao = AppDatabase.getDataBase(context).employeeDao
-        val employee = employeeDao.getEmployee(i)
-
-        val intent = Intent(context, ProAndEmpActivity::class.java)
-        intent.putExtra("IDEMPLOYEE", employee?.idEmployee)
-        Log.v("PresenceWorker", "NotificationBroadcastReceiver: ${employee?.idEmployee}")
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK.or(Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        val pendingIntent =
-            PendingIntent.getActivity(context, 1, intent, PendingIntent.FLAG_IMMUTABLE)
-
-        val notificationManager =
-            context.getSystemService(Service.NOTIFICATION_SERVICE) as NotificationManager
-
-        val notification = NotificationCompat
-            .Builder(context, "presenceNotif")
-            .setSmallIcon(R.drawable.img_logo)
-            .setLargeIcon(
-                BitmapFactory.decodeResource(
-                    context.resources,
-                    R.drawable.img_logo
-                )
-            )
-            .setContentTitle("غیبت کارمند")
-            .setContentText("${employee!!.name} ${employee.family} هنوز در شرکت حاظر نشده است!!!")
-            .setContentIntent(pendingIntent)
-            .build()
-
-        notificationManager.notify(i + 10, notification)
-
     }
 
 }

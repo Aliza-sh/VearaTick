@@ -79,20 +79,18 @@ class MyApp : Application() {
         }
     }
     private fun workerAutomaticPresence() {
-        val targetHours = arrayOf(22)
 
-        for (hour in targetHours) {
-            Log.v("AutoPresenceWorker", "$hour: ${calculateTimeDifferenceInMillis(hour,15)}")
+            Log.v("AutoPresenceWorker", "22: ${calculateTimeDifferenceInMillis(22, 15)}")
             val notificationTaskWorker =
                 OneTimeWorkRequest.Builder(AutomaticPresenceWorker::class.java)
-                    .setInitialDelay(calculateTimeDifferenceInMillis(hour,15), TimeUnit.MILLISECONDS)
+                    .setInitialDelay(calculateTimeDifferenceInMillis(22, 15), TimeUnit.MILLISECONDS)
                     .build()
             workManager.enqueueUniqueWork(
                 "AutomaticPresence",
                 ExistingWorkPolicy.REPLACE,
                 notificationTaskWorker
             )
-        }
+
     }
     fun calculateTimeDifferenceInMillis(targetHour: Int, targetMinute: Int): Long {
         val currentTime = Calendar.getInstance()
