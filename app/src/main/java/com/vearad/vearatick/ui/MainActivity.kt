@@ -2,8 +2,6 @@ package com.vearad.vearatick.ui
 
 import ApiService
 import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -18,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequest
+import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
 import com.google.gson.GsonBuilder
@@ -83,17 +82,21 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     lateinit var workManager: WorkManager
-    lateinit var channels: ArrayList<NotificationChannel>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        workManager = WorkManager.getInstance(this)
         firstRun()
         createApiService()
 
+        workManager = WorkManager.getInstance(this)
         if (ContextCompat.checkSelfPermission(applicationContext,  Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS),1)
+        }else{
+            workerPresence()
+            workerProject()
+            workerTaskEmployee()
+            workerAutomaticPresence()
         }
 
         employeeDao = AppDatabase.getDataBase(this).employeeDao
@@ -121,7 +124,7 @@ class MainActivity : AppCompatActivity() {
                         val firstRun = true
                         intent.putExtra("FIRSTRUN", firstRun)
                         startActivity(intent)
-                        android.util.Log.v("firstRun", "MainActivity: ${firstRun}")
+                        Log.v("firstRun", "MainActivity: ${firstRun}")
                         overridePendingTransition(R.anim.slide_from_left, R.anim.slide_to_right)
                     }else {
 
@@ -157,7 +160,6 @@ class MainActivity : AppCompatActivity() {
                 workerProject()
                 workerTaskEmployee()
                 workerAutomaticPresence()
-                onCreateNotifications()
 
             } else {
                 // کاربر مجوز را رد کرد
@@ -166,63 +168,58 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun workerPresence() {
-        val notificationPresenceWorker = PeriodicWorkRequestBuilder<NotificationPresenceWorker>(
-            1, TimeUnit.HOURS,
-            15, TimeUnit.MINUTES
-        )
-            .build()
         workManager.enqueueUniquePeriodicWork(
             "PresenceWorker",
             ExistingPeriodicWorkPolicy.REPLACE,
-            notificationPresenceWorker
+            PeriodicWorkRequestBuilder<NotificationPresenceWorker>(
+                1, TimeUnit.HOURS,
+                15,TimeUnit.MINUTES
+            )
+                .addTag("PresenceWorker")
+                .build()
         )
     }
 
     private fun workerProject() {
-        val targetHours = arrayOf(13, 19)
+        val targetHours = arrayOf(12, 18)
         for (hour in targetHours) {
-            Log.v("ProjectWorker", "$hour: ${calculateTimeDifferenceInMillis(hour,15)}")
-            val notificationProjectWorker =
-                OneTimeWorkRequest.Builder(NotificationProjectWorker::class.java)
-                    .setInitialDelay(calculateTimeDifferenceInMillis(hour,15), TimeUnit.MILLISECONDS)
-                    .build()
+            Log.v("ProjectWorker", "MyApp$hour: ${calculateTimeDifferenceInMillis(hour,15)}")
             workManager.enqueueUniqueWork(
                 "ProjectWorker$hour",
                 ExistingWorkPolicy.REPLACE,
-                notificationProjectWorker
+                OneTimeWorkRequestBuilder<NotificationProjectWorker>()
+                    .setInitialDelay(calculateTimeDifferenceInMillis(hour,15)  , TimeUnit.MILLISECONDS)
+                    .addTag("ProjectWorker$hour")
+                    .build()
             )
         }
     }
     private fun workerTaskEmployee() {
         val targetHours = arrayOf(10,15)
-
         for (hour in targetHours) {
-            Log.v("TaskWorker", "$hour: ${calculateTimeDifferenceInMillis(hour,15)}")
-            val notificationTaskWorker =
-                OneTimeWorkRequest.Builder(NotificationTaskEmployeeWorker::class.java)
-                    .setInitialDelay(calculateTimeDifferenceInMillis(hour,15), TimeUnit.MILLISECONDS)
-                    .build()
+            Log.v("TaskWorker", "MyApp$hour: ${calculateTimeDifferenceInMillis(hour,15)}")
             workManager.enqueueUniqueWork(
                 "TaskWorker$hour",
                 ExistingWorkPolicy.REPLACE,
-                notificationTaskWorker
+                OneTimeWorkRequest.Builder(NotificationTaskEmployeeWorker::class.java)
+                    .setInitialDelay(calculateTimeDifferenceInMillis(hour,15), TimeUnit.MILLISECONDS)
+                    .addTag("TaskWorker$hour")
+                    .build()
             )
         }
     }
     private fun workerAutomaticPresence() {
-        val targetHours = arrayOf(22)
 
-        for (hour in targetHours) {
-            Log.v("AutomaticPresenceWorker", "$hour: ${calculateTimeDifferenceInMillis(hour,15)}")
-            val notificationTaskWorker =
-                OneTimeWorkRequest.Builder(AutomaticPresenceWorker::class.java)
-                    .build()
-            workManager.enqueueUniqueWork(
-                "AutomaticPresence",
-                ExistingWorkPolicy.REPLACE,
-                notificationTaskWorker
-            )
-        }
+        Log.v("AutoPresenceWorker", "MyApp22: ${calculateTimeDifferenceInMillis(22, 15)}")
+        workManager.enqueueUniqueWork(
+            "AutoPresenceWorker",
+            ExistingWorkPolicy.REPLACE,
+            OneTimeWorkRequest.Builder(AutomaticPresenceWorker::class.java)
+                .setInitialDelay(calculateTimeDifferenceInMillis(22, 15), TimeUnit.MILLISECONDS)
+                .addTag("AutoPresenceWorker")
+                .build()
+        )
+
     }
     fun calculateTimeDifferenceInMillis(targetHour: Int, targetMinute: Int): Long {
         val currentTime = Calendar.getInstance()
@@ -238,43 +235,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         return targetTime.timeInMillis - currentTime.timeInMillis
-    }
-    private fun onCreateNotifications() {
-
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        channels = ArrayList<NotificationChannel>()
-
-        val notificationPresenceChannel = NotificationChannel(
-            "presenceNotif",
-            "Presence Notification",
-            NotificationManager.IMPORTANCE_HIGH
-        )
-        channels.add(notificationPresenceChannel)
-
-        val notificationProjectChannel = NotificationChannel(
-            "projectNotif",
-            "Project Notification",
-            NotificationManager.IMPORTANCE_HIGH
-        )
-        channels.add(notificationProjectChannel)
-
-        val notificationTaskChannel = NotificationChannel(
-            "taskEmployeeNotif",
-            "Task Notification",
-            NotificationManager.IMPORTANCE_HIGH
-        )
-        channels.add(notificationTaskChannel)
-
-        val notificationEventChannel = NotificationChannel(
-            "eventNotif",
-            "Event Notification",
-            NotificationManager.IMPORTANCE_HIGH
-        )
-        channels.add(notificationEventChannel)
-
-        Log.v("channels", "Here: ${channels}")
-
-        notificationManager.createNotificationChannels(channels)
     }
 
     private fun createApiService() {

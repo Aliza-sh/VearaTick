@@ -7,6 +7,7 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import androidx.work.Worker
 import androidx.work.WorkerParameters
+import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kizitonwose.calendarview.utils.persian.PersianCalendar
 import com.vearad.vearatick.model.db.AppDatabase
 import com.vearad.vearatick.model.db.DayDao
@@ -22,30 +23,31 @@ class AutomaticPresenceWorker(val context: Context, workerParams: WorkerParamete
     lateinit var timeDao: TimeDao
     lateinit var employeeDao: EmployeeDao
     override fun doWork(): Result {
-        Log.v("PresenceWorker", "Here: Presence")
-
+        AndroidThreeTen.init(context)
+        Log.v("AutoPresenceWorker", "Here: Presence")
         return try {
             presenceAuto(context)
             workerAutomaticPresence()
             Result.success()
         } catch (ex: Exception) {
+            Log.v("AutoPresenceWorker", "error: ${ex.message}")
             Result.failure()
         }
-
     }
 
     private fun workerAutomaticPresence() {
         val workManager = WorkManager.getInstance(context)
 
         Log.v("AutoPresenceWorker", "22: ${calculateTimeDifferenceInMillis(22, 15)}")
-        val notificationTaskWorker =
+        val automaticPresenceWorker =
             OneTimeWorkRequest.Builder(AutomaticPresenceWorker::class.java)
                 .setInitialDelay(calculateTimeDifferenceInMillis(22, 15), TimeUnit.MILLISECONDS)
+                .addTag("AutoPresenceWorker")
                 .build()
         workManager.enqueueUniqueWork(
-            "AutomaticPresence",
+            "AutoPresenceWorker",
             ExistingWorkPolicy.REPLACE,
-            notificationTaskWorker
+            automaticPresenceWorker
         )
 
     }

@@ -31,12 +31,13 @@ class NotificationProjectWorker(val context: Context, workerParams: WorkerParame
     lateinit var projectDao: ProjectDao
     override fun doWork(): Result {
         AndroidThreeTen.init(context)
-        workerProject()
         Log.v("ProjectWorker", "Here: Project")
         return try {
             presenceNotification(context)
+            workerProject()
             Result.success()
         } catch (ex: Exception) {
+            Log.v("ProjectWorker", "error: ${ex.message}")
             Result.failure()
         }
 
@@ -44,13 +45,13 @@ class NotificationProjectWorker(val context: Context, workerParams: WorkerParame
 
     private fun workerProject() {
         val workManager = WorkManager.getInstance(context)
-        val targetHours = arrayOf(13, 19)
-
+        val targetHours = arrayOf(12, 18)
         for (hour in targetHours) {
             Log.v("ProjectWorker", "$hour: ${calculateTimeDifferenceInMillis(hour,15)}")
             val notificationProjectWorker =
                 OneTimeWorkRequest.Builder(NotificationProjectWorker::class.java)
                     .setInitialDelay(calculateTimeDifferenceInMillis(hour,15), TimeUnit.MILLISECONDS)
+                    .addTag("ProjectWorker$hour")
                     .build()
             workManager.enqueueUniqueWork(
                 "ProjectWorker$hour",

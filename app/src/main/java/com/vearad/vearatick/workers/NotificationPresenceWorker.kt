@@ -14,6 +14,7 @@ import com.kizitonwose.calendarview.utils.persian.PersianCalendar
 import com.vearad.vearatick.R
 import com.vearad.vearatick.model.db.AppDatabase
 import com.vearad.vearatick.model.db.DayDao
+import com.vearad.vearatick.model.db.Employee
 import com.vearad.vearatick.model.db.EmployeeDao
 import com.vearad.vearatick.model.db.TimeDao
 import com.vearad.vearatick.ui.activitymain.ProAndEmpActivity
@@ -30,6 +31,7 @@ class NotificationPresenceWorker(val context: Context, workerParams: WorkerParam
             presenceNotification(context)
             Result.success()
         } catch (ex: Exception) {
+            Log.v("PresenceWorker", "error: ${ex.message}")
             Result.failure()
         }
 
@@ -40,44 +42,45 @@ class NotificationPresenceWorker(val context: Context, workerParams: WorkerParam
 
         dayDao = AppDatabase.getDataBase(context).dayDao
         timeDao = AppDatabase.getDataBase(context).timeDao
+        employeeDao = AppDatabase.getDataBase(context).employeeDao
+        val employees = employeeDao.getAllEmployee()
         val today = PersianCalendar()
-        val numberDay = dayDao.getAllDay().size
 
-        for (i in 0..numberDay) {
+        for (employee in employees) {
 
             val dayEmployee = dayDao.getAllEntryExit(
-                i,
+                employee.idEmployee!!,
                 today.persianYear.toString(),
                 today.persianMonthName,
                 today.persianWeekDayName
             )
             Log.v("PresenceWorker", "dayEmployee: ${dayEmployee}")
+            if (dayEmployee != null) {
 
-            val timeEmployee = timeDao.getAllArrivalDay(
-                i,
-                today.persianYear.toString(),
-                today.persianMonthName.toString(),
-                today.persianDay.toString()
-            )
-            Log.v("PresenceWorker", "timeEmployee: ${timeEmployee}")
-            Log.v("PresenceWorker", "hours: ${today.time.hours}")
-            Log.v("PresenceWorker", "entry: ${dayEmployee?.entry}")
-            if (timeEmployee == null && dayEmployee != null && dayEmployee.entry!!.toInt() <= today.time.hours) {
-
+                val timeEmployee = timeDao.getAllArrivalDay(
+                    employee.idEmployee!!,
+                    today.persianYear.toString(),
+                    today.persianMonthName.toString(),
+                    today.persianDay.toString()
+                )
+                Log.v("PresenceWorker", "timeEmployee: ${timeEmployee}")
                 Log.v("PresenceWorker", "hours: ${today.time.hours}")
                 Log.v("PresenceWorker", "entry: ${dayEmployee?.entry}")
+                if (timeEmployee == null && dayEmployee.entry!!.toInt() <= today.time.hours) {
 
-                createPresenceNotification(i,context)
+                    Log.v("PresenceWorker", "hours: ${today.time.hours}")
+                    Log.v("PresenceWorker", "entry: ${dayEmployee?.entry}")
+
+                    createPresenceNotification(employee, context)
+                }
             }
         }
     }
-    private fun createPresenceNotification(i: Int,context: Context) {
-        employeeDao = AppDatabase.getDataBase(context).employeeDao
-        val employee = employeeDao.getEmployee(i)
+    private fun createPresenceNotification(employee: Employee, context: Context) {
 
         val intent = Intent(context, ProAndEmpActivity::class.java)
-        intent.putExtra("IDEMPLOYEE", employee?.idEmployee)
-        Log.v("PresenceWorker", "NotificationBroadcastReceiver: ${employee?.idEmployee}")
+        intent.putExtra("IDEMPLOYEE", employee.idEmployee)
+        Log.v("PresenceWorker", "NotificationBroadcastReceiver: ${employee.idEmployee}")
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK.or(Intent.FLAG_ACTIVITY_CLEAR_TASK)
         val pendingIntent = PendingIntent.getActivity(context,1,intent, PendingIntent.FLAG_IMMUTABLE)
 
@@ -95,7 +98,7 @@ class NotificationPresenceWorker(val context: Context, workerParams: WorkerParam
             .setContentIntent(pendingIntent)
             .build()
 
-        notificationManager.notify(i+10, notification)
+        notificationManager.notify(employee.idEmployee!! + 10, notification)
 
     }
 
