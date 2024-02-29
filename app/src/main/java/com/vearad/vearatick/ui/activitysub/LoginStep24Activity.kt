@@ -13,6 +13,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
+import com.vearad.vearatick.R
+import com.vearad.vearatick.adapter.CompanyEventAdapter
+import com.vearad.vearatick.databinding.ActivityLoginStep24Binding
+import com.vearad.vearatick.model.response.EventsResponse
+import com.vearad.vearatick.model.response.LoginData
+import com.vearad.vearatick.model.response.LoginResponse
+import com.vearad.vearatick.model.response.UserResponse
 import com.vearad.vearatick.ui.ACCESSTOKEN
 import com.vearad.vearatick.ui.EXPIRATIONACCESSTOKEN
 import com.vearad.vearatick.ui.FIRSTRUN
@@ -21,15 +28,8 @@ import com.vearad.vearatick.ui.KEYEXPIRATIONACCESSTOKEN
 import com.vearad.vearatick.ui.KEYUFIRSTRUN
 import com.vearad.vearatick.ui.KEYUSER
 import com.vearad.vearatick.ui.MainActivity
-import com.vearad.vearatick.R
 import com.vearad.vearatick.ui.USER
-import com.vearad.vearatick.adapter.CompanyEventAdapter
 import com.vearad.vearatick.ui.apiService
-import com.vearad.vearatick.databinding.ActivityLoginStep24Binding
-import com.vearad.vearatick.model.response.EventsResponse
-import com.vearad.vearatick.model.response.LoginData
-import com.vearad.vearatick.model.response.LoginResponse
-import com.vearad.vearatick.model.response.UserResponse
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -276,9 +276,7 @@ class LoginStep24Activity : AppCompatActivity() {
                 // Handle the error
             }
 
-            override fun onEventClicked(companyEvent: EventsResponse.Event, position: Int) {
-                TODO("Not yet implemented")
-            }
+            override fun onEventClicked(companyEvent: EventsResponse.Event, position: Int) {}
 
         })
 

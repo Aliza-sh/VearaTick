@@ -211,13 +211,9 @@ class ProjectSubTaskFragment(
         project = projectDao.getProject(project.idProject!!)!!
     }
 
-    override fun onSubTaskClicked(task: SubTaskProject, position: Int) {
-        TODO("Not yet implemented")
-    }
+    override fun onSubTaskClicked(task: SubTaskProject, position: Int) {}
 
-    override fun onSubTaskLongClicked(subTask: SubTaskProject, position: Int) {
-        TODO("Not yet implemented")
-    }
+    override fun onSubTaskLongClicked(subTask: SubTaskProject, position: Int) {}
 
     override fun onMenuItemClick(subTask: SubTaskProject, position: Int) {
 
