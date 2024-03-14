@@ -2,16 +2,15 @@ package com.vearad.vearatick.ui
 
 import ApiService
 import android.Manifest
-import android.app.AlarmManager
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
-import android.os.SystemClock
 import android.util.Log
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -34,10 +33,6 @@ import com.vearad.vearatick.model.db.DayDao
 import com.vearad.vearatick.model.db.EmployeeDao
 import com.vearad.vearatick.model.db.TaskEmployeeDao
 import com.vearad.vearatick.model.db.TimeDao
-import com.vearad.vearatick.receiver.AutomaticPresenceBroadcastReceiver
-import com.vearad.vearatick.receiver.NotificationPresenceBroadcastReceiver
-import com.vearad.vearatick.receiver.NotificationProjectBroadcastReceiver
-import com.vearad.vearatick.receiver.NotificationTaskEmployeeBroadcastReceiver
 import com.vearad.vearatick.ui.activitymain.ProAndEmpActivity
 import com.vearad.vearatick.ui.activitysub.RegisterStep24Activity
 import com.vearad.vearatick.ui.fragmentsmain.CompanyFragment
@@ -52,7 +47,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.Calendar
 import java.util.concurrent.TimeUnit
-
 
 lateinit var employeeDao: EmployeeDao
 lateinit var dayDao: DayDao
@@ -88,6 +82,7 @@ const val KEYUFIRSTRUN = "keyFirstRun"
 class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
+    lateinit var workManager: WorkManager
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -95,13 +90,14 @@ class MainActivity : AppCompatActivity() {
         firstRun()
         createApiService()
 
+        workManager = WorkManager.getInstance(this)
         if (ContextCompat.checkSelfPermission(applicationContext,  Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS),1)
         }else{
-            alarmPresence()
-            alarmProject()
-            alarmTaskEmployee()
-            alarmAutomaticPresence()
+            workerPresence()
+            workerProject()
+            workerTaskEmployee()
+            workerAutomaticPresence()
         }
 
         employeeDao = AppDatabase.getDataBase(this).employeeDao
@@ -161,10 +157,10 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == 1) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                alarmPresence()
-                alarmProject()
-                alarmTaskEmployee()
-                alarmAutomaticPresence()
+                workerPresence()
+                workerProject()
+                workerTaskEmployee()
+                workerAutomaticPresence()
 
             } else {
                 // کاربر مجوز را رد کرد
@@ -172,67 +168,56 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun alarmPresence() {
-        val alarmManagerPresence = getSystemService(ALARM_SERVICE) as AlarmManager
-
-        val intentPresence = Intent(this, NotificationPresenceBroadcastReceiver::class.java)
-        val pendingIntentPresence =
-            PendingIntent.getBroadcast(this, 1001, intentPresence, PendingIntent.FLAG_IMMUTABLE)
-        alarmManagerPresence.setInexactRepeating(
-            AlarmManager.RTC_WAKEUP,
-            SystemClock.elapsedRealtime(),
-            AlarmManager.INTERVAL_HOUR,
-            pendingIntentPresence
+    private fun workerPresence() {
+        workManager.enqueueUniquePeriodicWork(
+            "PresenceWorker",
+            ExistingPeriodicWorkPolicy.UPDATE,
+            PeriodicWorkRequestBuilder<NotificationPresenceWorker>(
+                1, TimeUnit.HOURS,
+            )
+                .addTag("PresenceWorker")
+                .build()
         )
     }
-    private fun alarmProject() {
-        val alarmManagerProject = getSystemService(ALARM_SERVICE) as AlarmManager
 
-        val intentProject = Intent(this, NotificationProjectBroadcastReceiver::class.java)
-        val pendingIntentProject =
-            PendingIntent.getBroadcast(this, 1002, intentProject, PendingIntent.FLAG_IMMUTABLE)
-        val targetHours = arrayOf(12,18)
+    private fun workerProject() {
+        val targetHours = arrayOf(12, 18)
         for (hour in targetHours) {
-            Log.v("alarmProject", "alarmProject: ${calculateTimeDifferenceInMillis(hour,15)}")
-            alarmManagerProject.setInexactRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calculateTimeDifferenceInMillis(hour,15),
-                AlarmManager.INTERVAL_DAY,
-                pendingIntentProject
+            Log.v("ProjectWorker", "MyApp$hour: ${calculateTimeDifferenceInMillis(hour,15)}")
+            workManager.enqueueUniqueWork(
+                "ProjectWorker$hour",
+                ExistingWorkPolicy.REPLACE,
+                OneTimeWorkRequestBuilder<NotificationProjectWorker>()
+                    .setInitialDelay(calculateTimeDifferenceInMillis(hour,15)  , TimeUnit.MILLISECONDS)
+                    .addTag("ProjectWorker$hour")
+                    .build()
             )
         }
     }
-    private fun alarmTaskEmployee() {
-        val alarmManagerTaskEmployee = getSystemService(ALARM_SERVICE) as AlarmManager
-
-        val intentTaskEmployee = Intent(this, NotificationTaskEmployeeBroadcastReceiver::class.java)
-        val pendingIntentTaskEmployee =
-            PendingIntent.getBroadcast(this, 100999, intentTaskEmployee, PendingIntent.FLAG_IMMUTABLE)
-
+    private fun workerTaskEmployee() {
         val targetHours = arrayOf(10,15)
         for (hour in targetHours) {
-            Log.v("alarmTaskEmployee", "alarmTaskEmployee: ${calculateTimeDifferenceInMillis(hour,15)}")
-            alarmManagerTaskEmployee.setInexactRepeating(
-                AlarmManager.RTC_WAKEUP,
-                calculateTimeDifferenceInMillis(hour,15),
-                AlarmManager.INTERVAL_DAY,
-                pendingIntentTaskEmployee
+            Log.v("TaskWorker", "MyApp$hour: ${calculateTimeDifferenceInMillis(hour,15)}")
+            workManager.enqueueUniqueWork(
+                "TaskWorker$hour",
+                ExistingWorkPolicy.REPLACE,
+                OneTimeWorkRequest.Builder(NotificationTaskEmployeeWorker::class.java)
+                    .setInitialDelay(calculateTimeDifferenceInMillis(hour,15), TimeUnit.MILLISECONDS)
+                    .addTag("TaskWorker$hour")
+                    .build()
             )
         }
     }
-    private fun alarmAutomaticPresence() {
-        val alarmManagerAutomaticPresence = getSystemService(ALARM_SERVICE) as AlarmManager
+    private fun workerAutomaticPresence() {
 
-        val intentAutomaticPresence = Intent(this, AutomaticPresenceBroadcastReceiver::class.java)
-        val pendingIntentAutomaticPresence =
-            PendingIntent.getBroadcast(this, 1004, intentAutomaticPresence, PendingIntent.FLAG_IMMUTABLE)
-
-        Log.v("alarmAutomaticPresence", "alarmAutomaticPresence: ${calculateTimeDifferenceInMillis(22,15)}")
-        alarmManagerAutomaticPresence.setInexactRepeating(
-            AlarmManager.RTC_WAKEUP,
-            calculateTimeDifferenceInMillis(22,15),
-            AlarmManager.INTERVAL_DAY,
-            pendingIntentAutomaticPresence
+        Log.v("AutoPresenceWorker", "MyApp22: ${calculateTimeDifferenceInMillis(22, 15)}")
+        workManager.enqueueUniqueWork(
+            "AutoPresenceWorker",
+            ExistingWorkPolicy.REPLACE,
+            OneTimeWorkRequest.Builder(AutomaticPresenceWorker::class.java)
+                .setInitialDelay(calculateTimeDifferenceInMillis(22, 15), TimeUnit.MILLISECONDS)
+                .addTag("AutoPresenceWorker")
+                .build()
         )
 
     }

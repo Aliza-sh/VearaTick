@@ -26,7 +26,6 @@ import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.google.android.material.snackbar.Snackbar
 import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.FragmentCompanyInformationBinding
-import com.vearad.vearatick.ui.dialog.CompanyInfoBottomsheetFragment
 import com.vearad.vearatick.model.db.AppDatabase
 import com.vearad.vearatick.model.db.CompanyInfo
 import com.vearad.vearatick.model.db.CompanyInfoDao
@@ -89,8 +88,7 @@ class CompanyInformationFragment : Fragment(), BottomSheetCallback {
         super.onViewCreated(view, savedInstanceState)
         firstRun(view)
         setData(view)
-        sharedPreferencesMiniSite =
-            requireActivity().getSharedPreferences(SHAREDMINISITE, Context.MODE_PRIVATE)
+        sharedPreferencesMiniSite = requireActivity().getSharedPreferences(SHAREDMINISITE, Context.MODE_PRIVATE)
         nameMiniSite =
             sharedPreferencesMiniSite?.getString(KEYMINISITE, "")!!
 
