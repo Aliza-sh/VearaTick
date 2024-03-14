@@ -8,13 +8,13 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kizitonwose.calendarview.utils.persian.toPersianCalendar
+import com.vearad.vearatick.R
+import com.vearad.vearatick.databinding.ItemSubTaskBinding
 import com.vearad.vearatick.model.db.AppDatabase
 import com.vearad.vearatick.model.db.Project
 import com.vearad.vearatick.model.db.ProjectDao
 import com.vearad.vearatick.model.db.SubTaskProject
 import com.vearad.vearatick.model.db.SubTaskProjectDao
-import com.vearad.vearatick.R
-import com.vearad.vearatick.databinding.ItemSubTaskBinding
 import org.joda.time.DateTime
 import org.joda.time.Days
 import org.threeten.bp.LocalDate
@@ -48,10 +48,10 @@ class SubTaskProjectAdapter(
             }
             else {
                 val startDate =
-                    DateTime(today.persianYear, today.persianMonth , today.persianDay, 0, 0, 0)
+                    DateTime(today.persianYear, today.persianMonth+1 , today.persianDay, 0, 0, 0)
                 val endDate = DateTime(
                     data[position].yearDeadline,
-                    data[position].monthDeadline,
+                    data[position].monthDeadline+1,
                     data[position].dayDeadline,
                     0,
                     0,

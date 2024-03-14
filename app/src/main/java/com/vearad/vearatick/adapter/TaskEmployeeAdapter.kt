@@ -10,12 +10,12 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.utils.persian.PersianCalendar
+import com.vearad.vearatick.R
+import com.vearad.vearatick.databinding.ItemEmployeeTaskBinding
 import com.vearad.vearatick.model.db.EfficiencyDao
 import com.vearad.vearatick.model.db.Employee
 import com.vearad.vearatick.model.db.TaskEmployee
 import com.vearad.vearatick.model.db.TaskEmployeeDao
-import com.vearad.vearatick.R
-import com.vearad.vearatick.databinding.ItemEmployeeTaskBinding
 import org.joda.time.DateTime
 import org.joda.time.Days
 
@@ -65,10 +65,10 @@ class TaskEmployeeAdapter(
                 binding.imgDone.visibility = View.VISIBLE
             } else {
                 val startDate =
-                    DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
+                    DateTime(today.persianYear, today.persianMonth+1, today.persianDay, 0, 0, 0)
                 val endDate = DateTime(
                     data[position].yearDeadline,
-                    data[position].monthDeadline,
+                    data[position].monthDeadline+1,
                     data[position].dayDeadline,
                     0,
                     0,

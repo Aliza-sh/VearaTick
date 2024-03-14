@@ -79,10 +79,10 @@ class ProjectAdapter(
                 if (!data[position].noDeadlineProject!!) {
                     val today = LocalDate.now().toPersianCalendar()
                     val startDate =
-                        DateTime(today.persianYear, today.persianMonth , today.persianDay, 0, 0, 0)
+                        DateTime(today.persianYear, today.persianMonth +1 , today.persianDay, 0, 0, 0)
                     val endDate = DateTime(
                         data[position].yearCreation,
-                        data[position].monthCreation,
+                        data[position].monthCreation+1,
                         data[position].dayCreation,
                         0,
                         0,

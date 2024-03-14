@@ -166,7 +166,7 @@ class ProjectUpdateSubTaskFromInfoBottomsheetFragment(
             val startDate =
                 DateTime(
                     subTaskProject.yearCreation,
-                    subTaskProject.monthCreation,
+                    subTaskProject.monthCreation+1,
                     subTaskProject.dayCreation,
                     0,
                     0,

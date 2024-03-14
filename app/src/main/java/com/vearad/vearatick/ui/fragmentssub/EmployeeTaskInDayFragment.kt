@@ -77,10 +77,10 @@ class EmployeeTaskInDayFragment(
         setData()
 
         val startDate =
-            DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
+            DateTime(today.persianYear, today.persianMonth+1, today.persianDay, 0, 0, 0)
         val endDate = DateTime(
             selectedDate.persianYear,
-            selectedDate.persianMonth,
+            selectedDate.persianMonth+1,
             selectedDate.persianDay,
             0,
             0,
@@ -348,10 +348,10 @@ class EmployeeTaskInDayFragment(
             bindingItemSubTask.imgDone.visibility = View.VISIBLE
 
             val startDate =
-                DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
+                DateTime(today.persianYear, today.persianMonth+1, today.persianDay, 0, 0, 0)
             val endDate = DateTime(
                 onClickSubTask.yearDeadline,
-                onClickSubTask.monthDeadline,
+                onClickSubTask.monthDeadline+1,
                 onClickSubTask.dayDeadline,
                 0,
                 0,

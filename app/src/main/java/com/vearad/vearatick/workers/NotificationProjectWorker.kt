@@ -85,10 +85,10 @@ class NotificationProjectWorker(val context: Context, workerParams: WorkerParame
         for (project in projects) {
 
             val startDate =
-                DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
+                DateTime(today.persianYear, today.persianMonth+1, today.persianDay, 0, 0, 0)
             val endDate = DateTime(
                 project.yearCreation,
-                project.monthCreation,
+                project.monthCreation+1,
                 project.dayCreation,
                 0,
                 0,

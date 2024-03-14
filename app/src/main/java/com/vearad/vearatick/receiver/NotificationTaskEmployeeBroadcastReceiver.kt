@@ -75,10 +75,10 @@ class NotificationTaskEmployeeBroadcastReceiver : BroadcastReceiver() {
             val taskEmployee = taskEmployeeDao.getOnClickTaskEmployee(employee.idEmployee!!)
 
             val startDate =
-                DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
+                DateTime(today.persianYear, today.persianMonth+1, today.persianDay, 0, 0, 0)
             val endDate = DateTime(
                 taskEmployee!!.yearDeadline,
-                taskEmployee.monthDeadline,
+                taskEmployee.monthDeadline+1,
                 taskEmployee.dayDeadline,
                 0,
                 0,

@@ -216,10 +216,10 @@ class ProjectInformationFragment(
             if (!project.noDeadlineProject!!) {
                 val today = LocalDate.now().toPersianCalendar()
                 val startDate =
-                    DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
+                    DateTime(today.persianYear, today.persianMonth+1, today.persianDay, 0, 0, 0)
                 val endDate = DateTime(
                     project.yearCreation,
-                    project.monthCreation,
+                    project.monthCreation+1,
                     project.dayCreation,
                     0,
                     0,
@@ -574,10 +574,10 @@ class ProjectInformationFragment(
 
                 val today = LocalDate.now().toPersianCalendar()
                 val startDate =
-                    DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
+                    DateTime(today.persianYear, today.persianMonth+1, today.persianDay, 0, 0, 0)
                 val endDate = DateTime(
                     project.yearCreation,
-                    project.monthCreation,
+                    project.monthCreation+1,
                     project.dayCreation,
                     0,
                     0,
@@ -1118,10 +1118,10 @@ class ProjectInformationFragment(
                         employeeSubTaskProject.idEmployee!!,employeeSubTaskProject.idSubTask)
 
                     val startDate =
-                        DateTime(today.persianYear, today.persianMonth, today.persianDay, 0, 0, 0)
+                        DateTime(today.persianYear, today.persianMonth+1, today.persianDay, 0, 0, 0)
                     val endDate = DateTime(
                         onClickSubTask.yearCreation,
-                        onClickSubTask.monthCreation,
+                        onClickSubTask.monthCreation+1,
                         onClickSubTask.dayCreation,
                         0,
                         0,
