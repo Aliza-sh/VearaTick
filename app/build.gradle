@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace 'com.vearad.vearatick'
-    compileSdk 33
+    compileSdk 34
 
     buildFeatures {
         viewBinding true
@@ -17,7 +17,7 @@ android {
     defaultConfig {
         applicationId "com.vearad.vearatick"
         minSdk 26
-        targetSdk 33
+        targetSdk 34
         versionCode 6
         versionName "1.1.3"
 
@@ -58,9 +58,22 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     //WorkManager
-    def work_version = "2.7.0"
+    def work_version = "2.9.0"
     implementation("androidx.work:work-runtime-ktx:$work_version")
-
+    //Room
+    def room_version = "2.6.1"
+    implementation "androidx.room:room-runtime:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+    // Kotlin Extensions and Coroutines support for Room
+    implementation "androidx.room:room-ktx:2.2.5"
+    //retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
+    implementation 'com.google.code.gson:gson:2.8.9'
+    // polaki
+    implementation "com.github.cafebazaar.Poolakey:poolakey:2.1.0"
     // circularprogressbar
     implementation 'com.github.fornewid:neumorphism:0.3.2'
     implementation 'com.mikhaellopez:circularprogressbar:3.1.0'
@@ -87,24 +100,10 @@ dependencies {
     // Wheel
     implementation 'com.github.gzu-liyujiang.AndroidPicker:WheelView:4.1.11'
 
-    def room_version = "2.4.3"
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-
-    //retrofit
-    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
-    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
-    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.1'
-    implementation 'com.google.code.gson:gson:2.8.9'
-
     //volley
     implementation 'com.android.volley:volley:1.2.1'
     //taptargetview
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.13.3'
-
-    // Kotlin Extensions and Coroutines support for Room
-    implementation "androidx.room:room-ktx:2.2.5"
 
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7'
@@ -132,8 +131,5 @@ dependencies {
     androidTestImplementation("androidx.navigation:navigation-testing:$nav_version")
     // Jetpack Compose Integration
     implementation("androidx.navigation:navigation-compose:$nav_version")
-
-    // polaki
-    implementation "com.github.cafebazaar.Poolakey:poolakey:2.1.0"
 
 }
