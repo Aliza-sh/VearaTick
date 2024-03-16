@@ -30,6 +30,7 @@ class NotificationTaskEmployeeBroadcastReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         AndroidThreeTen.init(context)
         taskEmployeeNotification(context)
+        abortBroadcast()
         //alarmTaskEmployee(context,intent)
     }
     private fun alarmTaskEmployee(context: Context, intent: Intent) {

@@ -26,8 +26,8 @@ class NotificationPresenceBroadcastReceiver : BroadcastReceiver() {
     lateinit var employeeDao: EmployeeDao
     override fun onReceive(context: Context, intent: Intent) {
         presenceNotification(context)
+        abortBroadcast()
     }
-
     private fun presenceNotification(context: Context) {
         Log.v("PresenceWorker", "Here: go to work presence")
         AndroidThreeTen.init(context)

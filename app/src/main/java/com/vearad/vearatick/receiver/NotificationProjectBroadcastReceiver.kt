@@ -7,7 +7,6 @@ import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.BitmapFactory
 import android.util.Log
 import androidx.core.app.NotificationCompat
@@ -27,13 +26,10 @@ import java.util.Calendar
 class NotificationProjectBroadcastReceiver : BroadcastReceiver() {
 
     lateinit var projectDao: ProjectDao
-    private val sharedPreferences: SharedPreferences? = null
-
     override fun onReceive(context: Context, intent: Intent) {
         AndroidThreeTen.init(context)
         presenceNotification(context)
         abortBroadcast()
-        //alarmProject(context,intent)
     }
     private fun alarmProject(context: Context, intent: Intent) {
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -52,7 +48,6 @@ class NotificationProjectBroadcastReceiver : BroadcastReceiver() {
             )
         }
     }
-
     fun calculateTimeDifferenceInMillis(targetHour: Int, targetMinute: Int): Long {
         val currentTime = Calendar.getInstance()
         val targetTime = Calendar.getInstance()

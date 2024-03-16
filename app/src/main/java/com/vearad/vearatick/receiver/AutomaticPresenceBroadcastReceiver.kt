@@ -42,7 +42,6 @@ class AutomaticPresenceBroadcastReceiver : BroadcastReceiver() {
         )
 
     }
-
     fun calculateTimeDifferenceInMillis(targetHour: Int, targetMinute: Int): Long {
         val currentTime = Calendar.getInstance()
         val targetTime = Calendar.getInstance()
