@@ -124,12 +124,12 @@ class EmployeePresenceFragment(
         val startMonth = currentMonth.minusMonths(4)
         val endMonth = currentMonth.plusMonths(4)
         binding.clrEntExtEmp.setup(startMonth, endMonth, org.threeten.bp.DayOfWeek.SATURDAY)
-        val today = LocalDate.now()
-        //val today1 = 16
+        /* val today = LocalDate.now()
+        val today1 = 16
         if (today.dayOfMonth <= 15)
             binding.clrEntExtEmp.scrollToMonth(currentMonth)
-        else
-            binding.clrEntExtEmp.scrollToMonth(currentMonth.next)
+        else */
+        binding.clrEntExtEmp.scrollToMonth(currentMonth)
 
         val day1 = PersianCalendar()
         val nameDay = dayDao.getAllNameDay(

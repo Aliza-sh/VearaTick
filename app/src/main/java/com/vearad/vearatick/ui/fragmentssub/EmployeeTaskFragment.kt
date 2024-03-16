@@ -21,16 +21,16 @@ import com.kizitonwose.calendarview.ui.ViewContainer
 import com.kizitonwose.calendarview.utils.next
 import com.kizitonwose.calendarview.utils.persian.*
 import com.kizitonwose.calendarview.utils.previous
-import com.vearad.vearatick.model.db.AppDatabase
-import com.vearad.vearatick.model.db.EfficiencyDao
-import com.vearad.vearatick.model.db.Employee
-import com.vearad.vearatick.model.db.EmployeeDao
-import com.vearad.vearatick.ui.activitymain.ProAndEmpActivity
 import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.ActivityProAndEmpBinding
 import com.vearad.vearatick.databinding.CalendarHeaderBinding
 import com.vearad.vearatick.databinding.FragmentEmployeeTaskBinding
 import com.vearad.vearatick.databinding.ItemCalendarDayEmployeeTaskBinding
+import com.vearad.vearatick.model.db.AppDatabase
+import com.vearad.vearatick.model.db.EfficiencyDao
+import com.vearad.vearatick.model.db.Employee
+import com.vearad.vearatick.model.db.EmployeeDao
+import com.vearad.vearatick.ui.activitymain.ProAndEmpActivity
 import com.vearad.vearatick.ui.dayDao
 import com.vearad.vearatick.ui.taskEmployeeDao
 import com.vearad.vearatick.ui.timeDao
@@ -83,10 +83,10 @@ class EmployeeTaskFragment(
         val startMonth = currentMonth.minusMonths(4)
         val endMonth = currentMonth.plusMonths(4)
         binding.clrTaskEmp.setup(startMonth, endMonth,org.threeten.bp.DayOfWeek.SATURDAY)
-        val today = LocalDate.now()
+        /*val today = LocalDate.now()
         if (today.dayOfMonth > 15)
             binding.clrTaskEmp.scrollToMonth(currentMonth.next)
-        else
+        else*/
             binding.clrTaskEmp.scrollToMonth(currentMonth)
         class DayViewContainer(view: View) : ViewContainer(view) {
             lateinit var day: CalendarDay // Will be set when this container is bound.
