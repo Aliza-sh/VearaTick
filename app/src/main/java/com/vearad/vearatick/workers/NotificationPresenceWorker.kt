@@ -94,7 +94,7 @@ class NotificationPresenceWorker(val context: Context, workerParams: WorkerParam
                 R.drawable.img_logo
             ))
             .setContentTitle("غیبت کارمند")
-            .setContentText("${employee!!.name} ${employee.family} هنوز در شرکت حاظر نشده است!!!")
+            .setContentText("${employee!!.name} ${employee.family} هنوز در شرکت حاضر نشده است!!!")
             .setContentIntent(pendingIntent)
             .build()
 
