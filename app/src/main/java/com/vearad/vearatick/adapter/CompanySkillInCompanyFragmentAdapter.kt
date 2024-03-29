@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.vearad.vearatick.DataBase.CompanySkill
+import com.vearad.vearatick.model.db.CompanySkill
 import com.vearad.vearatick.databinding.ItemSkillInCompanyFragmentBinding
 
 class CompanySkillInCompanyFragmentAdapter(

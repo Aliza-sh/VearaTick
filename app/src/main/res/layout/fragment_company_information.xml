@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorOnPrimary"
     android:layoutDirection="ltr"
-    tools:context=".fgmMain.CompanyInformationFragment">
+    tools:context=".ui.fragmentsmain.CompanyInformationFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/background_icon_company"

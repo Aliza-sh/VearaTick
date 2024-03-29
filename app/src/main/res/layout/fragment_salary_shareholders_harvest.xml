@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorOnPrimary"
     android:layoutDirection="ltr"
-    tools:context=".fgmSub.SalaryCompanyExpensesFragment">
+    tools:context=".fragmentssub.SalaryCompanyExpensesFragment">
 
     <LinearLayout
         android:id="@+id/LinearLayout"

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorOnPrimary"
     android:layoutDirection="ltr"
-    tools:context=".fgmSub.CompanyEmployeeResumeFragment">
+    tools:context=".ui.fragmentssub.CompanyEmployeeResumeFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcv_employee_resume"

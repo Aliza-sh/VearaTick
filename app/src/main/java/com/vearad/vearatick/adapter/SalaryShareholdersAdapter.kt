@@ -8,8 +8,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.vearad.vearatick.DataBase.Employee
-import com.vearad.vearatick.DataBase.EmployeeHarvestDao
+import com.vearad.vearatick.model.db.Employee
+import com.vearad.vearatick.model.db.EmployeeHarvestDao
 import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.ItemPaymentShareholdersBinding
 import java.text.DecimalFormat

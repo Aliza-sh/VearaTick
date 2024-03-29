@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorOnPrimary"
     android:layoutDirection="ltr"
-    tools:context=".CompanyPaymentActivity">
+    tools:context=".ui.activitysub.CompanyPaymentActivity">
 
     <FrameLayout
         android:id="@+id/layout_company_payment"

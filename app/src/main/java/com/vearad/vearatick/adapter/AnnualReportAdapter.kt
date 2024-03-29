@@ -1,7 +1,7 @@
 package com.vearad.vearatick.adapter
 
-import BottomMarginItemDecoration
-import TopMarginItemDecoration
+import com.vearad.vearatick.utils.BottomMarginItemDecoration
+import com.vearad.vearatick.utils.TopMarginItemDecoration
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
@@ -10,9 +10,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.kizitonwose.calendarview.utils.persian.PersianCalendar
-import com.vearad.vearatick.DataBase.AppDatabase
-import com.vearad.vearatick.DataBase.FinancialReport
-import com.vearad.vearatick.DataBase.FinancialReportDao
+import com.vearad.vearatick.model.db.AppDatabase
+import com.vearad.vearatick.model.db.FinancialReport
+import com.vearad.vearatick.model.db.FinancialReportDao
 import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.ActivityCompanyFinancialReportBinding
 import com.vearad.vearatick.databinding.ItemMonthBinding

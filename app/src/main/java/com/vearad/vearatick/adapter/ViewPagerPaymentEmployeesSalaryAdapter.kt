@@ -2,9 +2,9 @@ package com.vearad.vearatick.adapter
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.vearad.vearatick.fgmSub.SalaryApprenticesFragment
-import com.vearad.vearatick.fgmSub.SalaryEmployeeFragment
-import com.vearad.vearatick.fgmSub.SalaryShareholdersFragment
+import com.vearad.vearatick.ui.fragmentssub.SalaryApprenticesFragment
+import com.vearad.vearatick.ui.fragmentssub.SalaryEmployeeFragment
+import com.vearad.vearatick.ui.fragmentssub.SalaryShareholdersFragment
 
 class ViewPagerPaymentEmployeesSalaryAdapter(
     fragment: Fragment,

@@ -7,7 +7,7 @@
     android:layoutDirection="ltr"
     android:background="@drawable/shape_back_bottomsheet"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Dialog.EmployeeTaskBottomsheetFragment">
+    tools:context=".dialog.EmployeeTaskBottomsheetFragment">
 
     <ImageView
         android:layout_marginTop="-20dp"

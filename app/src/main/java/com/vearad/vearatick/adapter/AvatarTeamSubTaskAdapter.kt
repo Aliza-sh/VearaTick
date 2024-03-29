@@ -7,8 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.vearad.vearatick.DataBase.AppDatabase
-import com.vearad.vearatick.DataBase.TeamSubTask
+import com.vearad.vearatick.model.db.AppDatabase
+import com.vearad.vearatick.model.db.TeamSubTask
 import com.vearad.vearatick.R
 import com.vearad.vearatick.databinding.ItemAvatarBigBinding
 

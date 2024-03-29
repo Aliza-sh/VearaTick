@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="?attr/colorOnPrimary"
     android:layoutDirection="ltr"
-    tools:context=".fgmSub.CompanyResumeFragment">
+    tools:context=".fragmentssub.CompanyResumeFragment">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcv_resume"

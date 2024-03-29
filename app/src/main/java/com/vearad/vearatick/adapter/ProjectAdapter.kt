@@ -11,9 +11,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.jakewharton.threetenabp.AndroidThreeTen
 import com.kizitonwose.calendarview.utils.persian.toPersianCalendar
-import com.vearad.vearatick.DataBase.AppDatabase
-import com.vearad.vearatick.DataBase.Project
-import com.vearad.vearatick.DataBase.ProjectDao
+import com.vearad.vearatick.model.db.AppDatabase
+import com.vearad.vearatick.model.db.Project
+import com.vearad.vearatick.model.db.ProjectDao
 import com.vearad.vearatick.databinding.ItemProjectBinding
 import org.joda.time.DateTime
 import org.joda.time.Days
@@ -79,10 +79,10 @@ class ProjectAdapter(
                 if (!data[position].noDeadlineProject!!) {
                     val today = LocalDate.now().toPersianCalendar()
                     val startDate =
-                        DateTime(today.persianYear, today.persianMonth , today.persianDay, 0, 0, 0)
+                        DateTime(today.persianYear, today.persianMonth +1 , today.persianDay, 0, 0, 0)
                     val endDate = DateTime(
                         data[position].yearCreation,
-                        data[position].monthCreation,
+                        data[position].monthCreation+1,
                         data[position].dayCreation,
                         0,
                         0,
